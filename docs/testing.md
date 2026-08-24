@@ -91,13 +91,96 @@ Integration testing answers:
 
 Purpose: prove a meaningful user-visible or externally observable path through the system.
 
-Use this layer when the implementation spans multiple architectural boundaries, gateways, persistence surfaces, processes, or runtime components.
+Use this layer when the implementation spans multiple architectural boundaries, gateways, persistence surfaces, processes, runtime components, **or any frontend/UI behavior**.
 
 A vertical test should exercise the real application entry point where practical and verify the final observable result. Genuine external systems may still be substituted at their external boundary.
 
 End-to-end testing answers:
 
 > Can the implemented system deliver the intended behavior through its real production path?
+
+## Frontend / UI Test Mandate
+
+Any change that creates, modifies, or can regress user-visible frontend behavior requires executable browser-based UI verification before completion.
+
+**Mandatory rule:**
+
+> Frontend code is not complete until the changed UI path has been exercised in a real browser.
+
+This applies to changes involving, for example:
+- React/Vue/Svelte components
+- routes, pages, dialogs, menus, forms, tables, graphs, canvases, and visualization surfaces
+- CSS/layout/theme behavior that affects user interaction or visibility
+- frontend state management that changes rendered behavior
+- frontend/backend wiring that changes what the user can see or do
+- keyboard, pointer, focus, navigation, accessibility, or responsive interaction behavior
+
+### Preferred Browser Harness
+
+When a remote-debuggable Chrome instance is available, **prefer connecting to Chrome DevTools Protocol on port `9222`** rather than launching an isolated browser instance.
+
+Preferred endpoint:
+
+```text
+http://127.0.0.1:9222
+```
+
+The browser test should reuse the real running application/session through that Chrome instance when practical. This is preferred because it validates the actual local runtime, authenticated/session state, browser environment, and visible integration path instead of a synthetic test-only browser setup.
+
+Browser-test priority:
+
+```text
+1. Existing remote Chrome on 127.0.0.1:9222
+2. Project-standard real-browser harness (Playwright/Puppeteer/etc.)
+3. Fresh local browser instance if remote Chrome is unavailable
+```
+
+Do **not** silently downgrade a required UI test into jsdom, snapshot-only, shallow-render, mocked component, or source-inspection evidence.
+
+If `9222` is unavailable, record that fact and use the next real-browser option. Lack of remote Chrome is not permission to skip UI verification.
+
+### UI Test Requirements
+
+UI completion evidence must:
+- run against a real browser engine
+- navigate through the changed user-visible path
+- use the real frontend bundle and real in-repo frontend components
+- use the real backend/integration path where that behavior is part of the change
+- exercise meaningful user interaction, not only page load
+- assert the final visible or interactive outcome
+- verify browser console/runtime errors are absent for the tested flow where practical
+- capture screenshot, DOM state, accessibility state, or equivalent evidence when useful for the change
+- be observed failing when the UI behavior or wiring is incomplete, then passing after the implementation
+
+For visual-only changes, browser verification must inspect the rendered result at the relevant viewport(s); a unit test that merely checks CSS class names is not sufficient completion evidence.
+
+For interaction changes, the browser test must execute the interaction itself: click, type, select, drag, keyboard navigation, route change, graph interaction, etc.
+
+### What Does Not Count as UI Completion Evidence
+
+```text
+NOT SUFFICIENT
+React component unit test with mocked children
+```
+
+```text
+NOT SUFFICIENT
+jsdom test asserting className="active"
+```
+
+```text
+NOT SUFFICIENT
+snapshot changed and test passes
+```
+
+```text
+SUFFICIENT SHAPE
+real Chrome
+  -> real app route
+  -> real rendered component tree
+  -> real user interaction
+  -> visible final state
+```
 
 ## Completion Gate
 
@@ -113,9 +196,14 @@ Before an architectural implementation is marked complete:
 - [ ] at least one integration test was observed failing because the implementation or wiring was incomplete
 - [ ] the integration suite passes after implementation
 - [ ] a vertical / E2E test exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
+- [ ] **any frontend/UI change has real-browser UI test evidence**
+- [ ] **remote Chrome at `127.0.0.1:9222` was preferred when available**
+- [ ] **UI tests exercise the changed user-visible interaction through the real rendered application**
 - [ ] all relevant existing tests still pass
 
 If a plan cannot satisfy the integration gate because a required internal dependency is missing, the dependency must be installed or implemented first. Mocking the missing production component is not a substitute for completing the prerequisite.
+
+If a frontend plan cannot satisfy the UI gate because no browser is available, browser availability is a test-environment prerequisite. Do not replace the browser gate with mocked component tests and call the work complete.
 
 ## Integration Contract in Implementation Plans
 
@@ -136,6 +224,11 @@ integration_contract:
     - ComponentA
     - ComponentB
     - RepositoryC
+
+  ui_test:
+    required: true
+    preferred_browser_endpoint: http://127.0.0.1:9222
+    fallback: project_standard_real_browser
 ```
 
 This prevents an implementation agent from silently replacing an inconvenient dependency with a test double and then claiming the design is complete.

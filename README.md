@@ -58,31 +58,29 @@ https://github.com/chris-han/superpowers.git
 
 ### Claude Code
 
-Superpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)
+#### Fork Marketplace
 
-#### Official Marketplace
+This fork contains its own Claude marketplace manifest at `.claude-plugin/marketplace.json`. Register this repository directly so installation resolves to the fork rather than the upstream Superpowers marketplace:
 
-- Install the plugin from Anthropic's official marketplace:
+```bash
+/plugin marketplace add chris-han/superpowers
+```
 
-  ```bash
-  /plugin install superpowers@claude-plugins-official
-  ```
+Install Superpowers from the fork marketplace:
 
-#### Superpowers Marketplace
+```bash
+/plugin install superpowers@superpowers-dev
+```
 
-The Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.
+#### Optional: Anthropic Official Marketplace
 
-- Register the marketplace:
+Anthropic's official marketplace installs the upstream published Superpowers package rather than this fork:
 
-  ```bash
-  /plugin marketplace add obra/superpowers-marketplace
-  ```
+```bash
+/plugin install superpowers@claude-plugins-official
+```
 
-- Install the plugin from this marketplace:
-
-  ```bash
-  /plugin install superpowers@superpowers-marketplace
-  ```
+Use the fork marketplace above when you want the `chris-han/superpowers` version.
 
 ### Antigravity
 
@@ -175,17 +173,19 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 
 ### GitHub Copilot CLI
 
-- Register the marketplace:
+Register this fork as the plugin marketplace source:
 
-  ```bash
-  copilot plugin marketplace add obra/superpowers-marketplace
-  ```
+```bash
+copilot plugin marketplace add chris-han/superpowers
+```
 
-- Install the plugin:
+Install Superpowers from the marketplace exposed by this repository:
 
-  ```bash
-  copilot plugin install superpowers@superpowers-marketplace
-  ```
+```bash
+copilot plugin install superpowers@superpowers-dev
+```
+
+Do not register `obra/superpowers-marketplace` if you want the forked implementation.
 
 ### Grok Build CLI
 

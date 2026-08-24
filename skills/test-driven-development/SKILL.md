@@ -13,6 +13,8 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Architectural principle:** Passing local tests does not prove the production components are actually connected. Architectural work also requires real-component integration evidence.
 
+**Frontend principle:** Frontend work is not complete until the changed UI behavior has been exercised in a real browser.
+
 **Violating the letter of the rules is violating the spirit of the rules.**
 
 ## When to Use
@@ -240,7 +242,53 @@ real workflow -> real external-provider adapter -> local HTTP stub for third-par
 
 If a required internal dependency does not exist or is not installed, that is a prerequisite failure. Implement or install it first. Do not mock past the missing dependency and call the design complete.
 
-Read [writing-good-tests.md](writing-good-tests.md) for the detailed integration gate and mock rules. See [../../docs/testing.md](../../docs/testing.md) for the repository-wide L1/L2/L3 strategy.
+## Frontend / UI Gate
+
+Any frontend or UI change requires real-browser verification before completion.
+
+**Mandatory rule:**
+
+```
+FRONTEND CHANGE -> REAL BROWSER UI TEST -> FAIL THEN PASS
+```
+
+Use this gate for changes to pages, routes, components, forms, dialogs, menus, tables, graphs, visualizations, styles that affect behavior/visibility, frontend state, navigation, focus, keyboard/pointer interaction, or frontend/backend wiring.
+
+### Preferred browser connection
+
+When available, prefer an already-running remote-debuggable Chrome instance at:
+
+```text
+http://127.0.0.1:9222
+```
+
+Use the Chrome DevTools Protocol / browser automation tooling available in the current harness to attach to that instance and exercise the real running application/session.
+
+Browser priority:
+
+```text
+1. remote Chrome on 127.0.0.1:9222
+2. project-standard real browser harness (Playwright/Puppeteer/etc.)
+3. fresh local browser instance
+```
+
+If `9222` is unavailable, record that and use the next real-browser option. Do not silently replace browser verification with jsdom, snapshots, shallow rendering, mocked children, source inspection, or CSS-class assertions.
+
+The UI test must:
+- navigate to the real changed UI path
+- render the real frontend bundle and changed in-repo components
+- perform the meaningful user interaction when the change is interactive
+- use the real backend/integration path when that path is part of the behavior under test
+- assert the visible or interactive final result
+- check for browser/runtime console errors where practical
+- use screenshots/DOM/accessibility state when useful as evidence
+- be observed failing when the UI or wiring is incomplete, then passing after implementation
+
+For visual-only changes, inspect the rendered browser result at the relevant viewport(s). A unit test asserting `className` is not sufficient completion evidence.
+
+For interaction changes, execute the real interaction: click, type, select, drag, keyboard navigation, route transition, graph action, etc.
+
+Read [writing-good-tests.md](writing-good-tests.md) for detailed mock and browser-evidence rules. See [../../docs/testing.md](../../docs/testing.md) for the repository-wide L1/L2/L3 and UI strategy.
 
 ## Good Tests
 
@@ -256,6 +304,7 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - Keep test-only code in test utilities, out of production classes
 - Understand a dependency's side effects before mocking it
 - Require real-component integration for architectural completion
+- Require real-browser UI evidence for frontend work
 
 ## Common Rationalizations
 
@@ -274,6 +323,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 | "Existing code has no tests" | You're improving it. Add tests for existing code. |
 | "The mocked integration test passes" | A mocked internal architecture proves only the mock contract, not the implemented design. |
 | "Dependency isn't ready, so I'll fake it" | Missing internal dependency is a prerequisite failure, not permission to bypass the architecture. |
+| "Component tests pass, so the UI is done" | Component tests do not prove the real browser can render and execute the user path. |
+| "Chrome 9222 isn't running" | Use another real browser; browser unavailability is not permission to skip UI verification. |
 
 ## Red Flags - STOP and Start Over
 
@@ -291,6 +342,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - "TDD is dogmatic, I'm being pragmatic"
 - Internal architectural components exist only as mocks on the completion path
 - Missing production dependency replaced with fake implementation for test convenience
+- Frontend change completed without a real-browser interaction/render test
+- UI completion evidence consists only of snapshots, jsdom, shallow render, mocked children, or source inspection
 
 ## Example: Bug Fix
 
@@ -344,10 +397,15 @@ Before marking work complete:
 - [ ] Required external substitutions are explicitly identified and occur at the external boundary
 - [ ] Integration test was observed failing on incomplete implementation/wiring and passing after the fix
 - [ ] Vertical/E2E coverage exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
+- [ ] Any frontend/UI change has real-browser UI test evidence
+- [ ] Remote Chrome at `127.0.0.1:9222` was preferred when available
+- [ ] UI test exercised the changed rendered interaction/path and verified the final visible result
 
 Can't check the TDD boxes? You skipped TDD. Start over.
 
 Can't check the integration boxes for architectural work? The implementation is not complete.
+
+Can't check the UI boxes for frontend work? The frontend implementation is not complete.
 
 ## When Stuck
 
@@ -358,12 +416,15 @@ Can't check the integration boxes for architectural work? The implementation is 
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 | Integration requires unavailable internal dependency | Treat it as prerequisite; install/implement it before completion. |
+| Remote Chrome unavailable | Use project-standard real browser or fresh local browser; do not downgrade to mock-only UI tests. |
 
 ## Debugging Integration
 
 Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
 
 If the bug occurs at a component boundary, add or strengthen the real-component integration test that reproduces the broken wiring as well.
+
+If the bug is user-visible, reproduce it in the browser test path as well.
 
 Never fix bugs without a test.
 
@@ -372,6 +433,7 @@ Never fix bugs without a test.
 ```
 Local behavior: production code -> failing test first -> green
 Architecture: changed real components -> real integration path -> failing then green
+Frontend: changed UI -> real browser -> failing then green
 Otherwise -> not complete
 ```
 

@@ -5,17 +5,23 @@ adding cleanup/helper methods for tests.
 
 ## Overview
 
-A test exists to catch a specific break. Two principles govern everything
+A test exists to catch a specific break. Three principles govern everything
 here:
 
 ```
 1. Every test names the break it catches
 2. Every test exercises the real thing
+3. Architectural completion requires real-component integration
 ```
 
-Strict TDD produces both naturally: a test written first and watched
+Strict TDD produces the first two naturally: a test written first and watched
 failing against real code has already proven it can fail, and only earns
 a mock when the real dependency proves slow or external.
+
+The third principle closes a different failure mode: a set of locally correct
+components can still be miswired, omitted, or replaced with mocks. Unit-level
+TDD cannot prove the production architecture exists. Real-component integration
+must do that.
 
 ## Principle 1: Name the Break
 
@@ -48,19 +54,17 @@ retried 5 times and the 6th attempt never happens."
 contains an exact line proves only that the source is the source. Run
 scripts against controlled inputs and assert outputs, side effects, or
 exit codes. Documents that instruct agents are tested by the consuming
-agent's behavior (superpowers:writing-skills); prose for humans earns no
-test at all.
+agent's behavior; prose for humans earns no test at all.
 
 **Your code, not the framework.** Test the contract your code makes at
 its boundaries — the route you register, the query you emit, the payload
-you produce. Upstream mechanics are their maintainers' tests to write
-(the classic: asserting your router invokes a registered handler — that
-is the framework's test, not yours). When upstream behavior genuinely
-surprised you, write one narrow characterization test naming the
-assumption. The same boundary applies inside your code: constructors,
-getters, constants, and trivial forwarding earn tests only when they
-validate, normalize, default, derive, enforce, or cause side effects —
-otherwise assert the first consumer-visible result that depends on them.
+you produce. Upstream mechanics are their maintainers' tests to write.
+When upstream behavior genuinely surprised you, write one narrow
+characterization test naming the assumption. The same boundary applies
+inside your code: constructors, getters, constants, and trivial forwarding
+earn tests only when they validate, normalize, default, derive, enforce,
+or cause side effects — otherwise assert the first consumer-visible result
+that depends on them.
 
 ### Gate Function
 
@@ -93,9 +97,6 @@ expect(screen.getByRole('navigation')).toBeInTheDocument();
 expect(screen.getByTestId('sidebar-mock')).toBeInTheDocument();
 ```
 
-**your human partner's correction:** "Are we testing the behavior of a
-mock?"
-
 **Mock at the right level.** Learn every side effect of the real method
 before replacing it; mock the slow or external operation and keep what
 the test depends on real. When unsure, run the test against the real
@@ -113,8 +114,8 @@ vi.mock('MCPServerManager');
 
 **Make doubles specific.** When arguments, call counts, or ordering are
 part of the contract, assert them — a fake that accepts anything verifies
-nothing. Give each branch (success, error, malformed) its own fixture or
-spy, so the wrong branch cannot satisfy the expectation.
+nothing. Give each branch its own fixture or spy, so the wrong branch
+cannot satisfy the expectation.
 
 **Mirror real data completely.** Mock the complete structure as it exists
 in reality — all documented fields — not just the ones your test reads.
@@ -129,8 +130,7 @@ class own this resource's lifecycle? Wrong answers → test utility.
 **Prefer real components over complex mocks.** When mock setup outgrows
 the test logic, mocks miss methods the real components have, or tests
 break when the mock changes, switch to an integration test with real
-components. **your human partner's question:** "Do we need to be using a
-mock here?"
+components.
 
 ### Gate Function
 
@@ -147,12 +147,64 @@ BEFORE adding a mock or test helper:
     Unmock it or delete the assertion.
 ```
 
+## Principle 3: Prove the Architecture Exists
+
+A passing unit suite can still describe a system that does not exist in production.
+For architectural work, test doubles must not replace the very components the design
+claims to connect.
+
+**Mandatory integration rule:**
+
+> Every in-repo production component introduced, modified, or relied upon by the implementation must participate in at least one test using its real implementation.
+
+The integration test should follow the changed production path through real wiring,
+real adapters, real repositories, and real persistence where those are part of the
+feature. Substitute only true external boundaries.
+
+```text
+✅ Integration evidence
+real route -> real service -> real evaluator -> real repository -> temp SQLite
+
+❌ Not integration evidence
+real route -> MockService -> expected response
+```
+
+A fake database may be acceptable only when the database itself is not part of the
+behavior under test and the repository remains real. If persistence semantics matter,
+use a real test instance: temporary SQLite, ephemeral filesystem, containerized service,
+or equivalent.
+
+When an internal dependency is missing, do not mock past the gap. Treat it as a
+prerequisite: install or implement the dependency, then run the real-component test.
+
+### Integration Gate Function
+
+```
+FOR each changed production path:
+  List every in-repo component on that path.
+  Mark each one REAL or SUBSTITUTED.
+
+  Any in-repo component SUBSTITUTED?
+    → integration evidence invalid unless the component itself is the external boundary
+
+  Any external dependency substituted?
+    → keep the in-repo adapter/client real; substitute the remote side
+
+  Did the integration test fail because wiring/implementation was incomplete?
+    no  → prove the test can catch the missing/broken connection
+
+  Does it now pass through production wiring?
+    yes → integration gate satisfied
+```
+
 ## Tests Ship With the Implementation
 
 The TDD cycle — failing test, minimal implementation, refactor — is what
-"complete" means. Ship the tests the behavior needs and only those:
-trivial code and human prose earn none, and a test written to satisfy
-process costs maintenance forever.
+local behavioral correctness means. Architectural completeness requires the
+integration gate in addition to local TDD.
+
+Ship the tests the behavior needs and only those: trivial code and human prose
+earn none, and a test written solely to satisfy process costs maintenance forever.
 
 ## The Mutation Check
 
@@ -164,6 +216,8 @@ should fail for each realistic mutation:
 - Missing state change or side effect
 - Empty or default return
 - Missing validation for zero, empty, nil, unauthorized, or malformed input
+- Internal production component disconnected or replaced with a stub
+- Production DI/routing points to the wrong implementation
 
 A mutation nothing catches marks the behavior as unprotected — or the
 test as tautological.
@@ -181,6 +235,8 @@ test as tautological.
 | Build a mock response | Mirror the real structure completely |
 | Need cleanup only tests use | Put it in test utilities |
 | Watch mock setup balloon | Switch to an integration test with real components |
+| Finish architectural work | Run at least one real-component integration path |
+| A required internal dependency is missing | Implement/install it; do not mock past it |
 | Finish a test file | Run the mutation check |
 
 ## Warning Signs
@@ -196,3 +252,6 @@ test as tautological.
 - A method is called only from test files
 - Mock setup is more than half the test, or you can't explain why the mock is needed
 - Mocking "just to be safe"
+- An architectural component exists only as a mock in tests
+- The integration test bypasses production DI, routing, repository, or service wiring
+- A missing dependency was replaced by a fake so the plan could be marked complete

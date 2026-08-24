@@ -1,19 +1,17 @@
 {
-  "name": "superpowers-dev",
-  "description": "Development marketplace for Superpowers core skills library",
+  "name": "livingware-engineer",
+  "description": "Marketplace for the Livingware Engineer coding-agent methodology",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "chris-han"
   },
   "plugins": [
     {
-      "name": "superpowers",
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
+      "name": "livingware-engineer",
+      "description": "Governed planning, TDD, integration verification, debugging, and delivery workflows for coding agents",
       "version": "6.3.0",
       "source": "./",
       "author": {
-        "name": "Jesse Vincent",
-        "email": "jesse@fsck.com"
+        "name": "chris-han"
       }
     }
   ]

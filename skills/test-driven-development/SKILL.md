@@ -254,9 +254,11 @@ FRONTEND CHANGE -> REAL BROWSER UI TEST -> FAIL THEN PASS
 
 Use this gate for changes to pages, routes, components, forms, dialogs, menus, tables, graphs, visualizations, styles that affect behavior/visibility, frontend state, navigation, focus, keyboard/pointer interaction, or frontend/backend wiring.
 
-### Preferred browser connection
+### Preferred browser connection for WSL development
 
-When available, prefer an already-running remote-debuggable Chrome instance at:
+The normal coding environment is WSL and may intentionally have **no local Chrome installed**. Do not assume a Linux browser is available and do not install one merely to bypass the preferred test path.
+
+Prefer the Windows-host Chrome DevTools endpoint:
 
 ```text
 http://127.0.0.1:9222
@@ -267,12 +269,52 @@ Use the Chrome DevTools Protocol / browser automation tooling available in the c
 Browser priority:
 
 ```text
-1. remote Chrome on 127.0.0.1:9222
-2. project-standard real browser harness (Playwright/Puppeteer/etc.)
-3. fresh local browser instance
+1. Windows-host Chrome reachable from WSL on port 9222
+2. project-standard real browser harness, if the project already provides one
+3. fresh local browser only if the coding environment actually has one installed
 ```
 
-If `9222` is unavailable, record that and use the next real-browser option. Do not silently replace browser verification with jsdom, snapshots, shallow rendering, mocked children, source inspection, or CSS-class assertions.
+### If `9222` is unavailable: stop and instruct the user
+
+First probe the endpoint:
+
+```bash
+curl -fsS http://127.0.0.1:9222/json/version
+```
+
+If this fails, **do not silently fall back and do not claim frontend completion**. Treat Windows Chrome availability as a user-provided test prerequisite.
+
+Tell the user to start a separate Windows Chrome debug instance and provide these instructions.
+
+Recommended Windows PowerShell command:
+
+```powershell
+Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
+  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
+```
+
+If Chrome is installed under the x86 Program Files directory:
+
+```powershell
+Start-Process "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe" `
+  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
+```
+
+Command Prompt equivalent when `chrome.exe` is available on `PATH`:
+
+```cmd
+start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
+```
+
+Explain that the separate `--user-data-dir` is intentional: modern Chrome does not honor remote-debugging switches against the default Chrome data directory, and the debug profile must remain isolated from the user's normal profile.
+
+Then ask the user to confirm the debug Chrome window is open and retry:
+
+```bash
+curl -fsS http://127.0.0.1:9222/json/version
+```
+
+If Windows Chrome is open but the WSL process still cannot reach `127.0.0.1:9222`, report a WSL/Windows host-network reachability problem. Do not install Chrome in WSL or substitute a mock browser test as a workaround; resolve reachability first.
 
 The UI test must:
 - navigate to the real changed UI path
@@ -324,7 +366,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 | "The mocked integration test passes" | A mocked internal architecture proves only the mock contract, not the implemented design. |
 | "Dependency isn't ready, so I'll fake it" | Missing internal dependency is a prerequisite failure, not permission to bypass the architecture. |
 | "Component tests pass, so the UI is done" | Component tests do not prove the real browser can render and execute the user path. |
-| "Chrome 9222 isn't running" | Use another real browser; browser unavailability is not permission to skip UI verification. |
+| "Chrome 9222 isn't running" | In WSL, remind the user to start Windows Chrome in debug mode and keep completion blocked until the real browser is reachable. |
+| "I'll install Chrome in WSL instead" | Do not replace the designated Windows-host browser prerequisite just to make the gate easier to pass. |
 
 ## Red Flags - STOP and Start Over
 
@@ -344,6 +387,7 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - Missing production dependency replaced with fake implementation for test convenience
 - Frontend change completed without a real-browser interaction/render test
 - UI completion evidence consists only of snapshots, jsdom, shallow render, mocked children, or source inspection
+- WSL frontend work marked complete while Windows Chrome `9222` remained unavailable
 
 ## Example: Bug Fix
 
@@ -398,7 +442,9 @@ Before marking work complete:
 - [ ] Integration test was observed failing on incomplete implementation/wiring and passing after the fix
 - [ ] Vertical/E2E coverage exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 - [ ] Any frontend/UI change has real-browser UI test evidence
-- [ ] Remote Chrome at `127.0.0.1:9222` was preferred when available
+- [ ] For WSL frontend work, Windows Chrome on `127.0.0.1:9222` was attempted first
+- [ ] If `9222` was unavailable, the user was given the Windows debug-mode launch commands
+- [ ] Frontend completion remained blocked until a real browser endpoint was reachable and the UI test ran
 - [ ] UI test exercised the changed rendered interaction/path and verified the final visible result
 
 Can't check the TDD boxes? You skipped TDD. Start over.
@@ -416,7 +462,7 @@ Can't check the UI boxes for frontend work? The frontend implementation is not c
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 | Integration requires unavailable internal dependency | Treat it as prerequisite; install/implement it before completion. |
-| Remote Chrome unavailable | Use project-standard real browser or fresh local browser; do not downgrade to mock-only UI tests. |
+| WSL cannot reach Chrome `9222` | Remind the user to launch Windows Chrome with the supplied debug command, then retry. Do not install Chrome in WSL or downgrade the UI gate. |
 
 ## Debugging Integration
 
@@ -433,7 +479,7 @@ Never fix bugs without a test.
 ```
 Local behavior: production code -> failing test first -> green
 Architecture: changed real components -> real integration path -> failing then green
-Frontend: changed UI -> real browser -> failing then green
+Frontend: changed UI -> Windows Chrome/CDP from WSL -> failing then green
 Otherwise -> not complete
 ```
 

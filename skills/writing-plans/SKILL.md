@@ -18,9 +18,11 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
-## MVL Is the Planning Unit
+## MVL Is the Feature-Development Unit
 
 For product features, plan a **Minimum Viable Loop (MVL)**, not merely an implementation slice.
+
+**MVL is the feature-development unit, not a test unit.** Unit tests, integration tests, browser tests, and E2E tests are verification evidence inside the implementation of an MVL.
 
 The same feature contract must survive every later phase:
 
@@ -30,7 +32,7 @@ Target user + job + value hypothesis
   -> realistic trial inputs
   -> implementation
   -> TDD
-  -> real-component integration
+  -> real-component integration when impact radius requires it
   -> real-browser UI verification when applicable
   -> technical + UX measurement
   -> feedback / diagnosis
@@ -38,7 +40,7 @@ Target user + job + value hypothesis
   -> comparable re-test
 ```
 
-Do not create a plan whose terminal state is only "code complete" or "tests pass" when the work is a product feature. Implementation correctness is necessary evidence inside the MVL; it is not the feature unit itself.
+Do not create a plan whose terminal state is only "code complete" or "tests pass" when the work is a product feature. Implementation correctness is necessary evidence inside the MVL; it is not the feature-development unit itself.
 
 Every feature plan MUST define, near the top:
 
@@ -56,6 +58,33 @@ Every feature plan MUST define, near the top:
 These are not a separate skill or optional appendix. They are part of the plan contract and constrain task design, test design, integration scope, and completion evidence.
 
 For non-product maintenance work where no user-learning loop exists, state `MVL: not applicable — <reason>` rather than inventing one.
+
+## Impact Radius Before Test Scope
+
+Do **not** choose integration/E2E scope from diff size or intuition alone.
+
+When `codebase-memory-mcp` is available, use it before finalizing the Integration Contract. If the repository is not indexed, run `index_repository` first. Prefer graph-oriented tools such as:
+
+- `search_graph`
+- `trace_path`
+- `query_graph`
+- `search_code`
+- `get_code_snippet`
+
+Assess the changed production surface for callers, callees, downstream consumers, DI/factory wiring, routes, persistence/schema edges, async/event boundaries, trust boundaries, frontend consumers, and user paths.
+
+Classify the observed radius:
+
+```text
+R0 local only        -> focused TDD / unit-level behavior test
+R1 one seam          -> focused integration across that seam
+R2 multi-component   -> real-component integration through affected path
+R3 user/cross-boundary/UI -> vertical/E2E + real-browser verification for UI
+```
+
+Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0.
+
+Read `../test-driven-development/impact-radius-testing.md` for the detailed policy.
 
 ## Scope Check
 
@@ -76,7 +105,7 @@ This structure informs the task decomposition. Each task should produce self-con
 
 ## Task Right-Sizing
 
-A task is the smallest unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
+A task is the smallest implementation unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
 
 Task boundaries MUST preserve the MVL journey. Do not decompose the work in a way that leaves the final integration task reconstructing a user path from mutually inconsistent local assumptions.
 
@@ -119,11 +148,25 @@ Task boundaries MUST preserve the MVL journey. Do not decompose the work in a wa
 **Re-test surface:** [repeatable benchmark/user journey]
 **Stopping criterion:** [what closes this iteration]
 
+## Impact Radius
+
+**Source:** codebase-memory-mcp | equivalent | manual fallback
+**Indexed:** [true/false/not-applicable]
+**Changed surfaces:** [symbols/files/routes/schema/config]
+**Direct consumers:** [callers/consumers]
+**Affected boundaries:** [DI/routes/persistence/events/trust/UI/etc.]
+**User paths at risk:** [if any]
+**Graph evidence:** [relevant search_graph / trace_path / query_graph findings]
+**Radius:** R0 | R1 | R2 | R3
+
 ## Integration Contract
 
+**Required scope:** local | focused_integration | real_component_integration | vertical_e2e
 **Real components required:** [changed/relied-upon in-repo components that must appear real in integration]
 **Permitted substitutes:** [true external/nondeterministic boundaries only]
 **Forbidden mocks:** [internal components on the completion path]
+**Existing tests to run:** [focused existing coverage]
+**New tests required:** [only gaps not already covered]
 **UI test:** [required? preferred Chrome CDP endpoint if applicable]
 
 ## Global Constraints
@@ -133,7 +176,7 @@ Task boundaries MUST preserve the MVL journey. Do not decompose the work in a wa
 ---
 ```
 
-For maintenance/non-product work, replace the MVL Contract block with `MVL: not applicable — <reason>` but keep the Integration Contract whenever architectural wiring is involved.
+For maintenance/non-product work, replace the MVL Contract block with `MVL: not applicable — <reason>` but still perform Impact Radius assessment and keep the Integration Contract whenever production wiring may be affected.
 
 ## Task Structure
 
@@ -186,16 +229,18 @@ git commit -m "feat: add specific feature"
 
 ## Mandatory Closure Tasks for Product Features
 
-The plan must contain explicit closure work for the MVL, not leave it implicit:
+The plan must contain only the closure work justified by the observed impact radius plus the product-learning work required by the MVL:
 
-1. **Real-component integration** — run the smallest real journey through required production components with no internal completion-path mocks.
-2. **Real-browser UI verification** — mandatory for frontend/UI behavior; prefer the configured Chrome CDP endpoint (commonly `127.0.0.1:9222`) when available.
-3. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
-4. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.
-5. **Improvement cycle** — make at least one evidence-driven change when the iteration requires MVL closure.
-6. **Comparable re-test** — rerun the same evaluation surface and record before/after evidence.
+1. **TDD/local behavior** — always for changed behavior.
+2. **Focused or real-component integration** — only when R1/R2/R3 impact requires it; exercise the smallest affected production path with no internal completion-path mocks.
+3. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; prefer the configured Chrome CDP endpoint (commonly `127.0.0.1:9222`).
+4. **Vertical/E2E** — when R3 impact or the MVL's smallest real journey crosses architectural boundaries.
+5. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
+6. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.
+7. **Improvement cycle** — make at least one evidence-driven change when the iteration requires MVL closure.
+8. **Comparable re-test** — rerun the same evaluation surface and record before/after evidence.
 
-A plan that ends after integration or E2E testing is implementation-complete, not MVL-complete.
+A plan that ends after technical verification is implementation-complete, not MVL-complete.
 
 ## No Placeholders
 
@@ -213,13 +258,15 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
 
-**2. MVL continuity:** Can you trace the same target user, smallest journey, trial inputs, metrics, feedback surface, improvement lever, and re-test criterion from the plan header into concrete tasks and closure evidence? If not, the feature unit fragmented during planning.
+**2. MVL continuity:** Can you trace the same target user, smallest journey, trial inputs, metrics, feedback surface, improvement lever, and re-test criterion from the plan header into concrete tasks and closure evidence? If not, the feature-development unit fragmented during planning.
 
-**3. Integration credibility:** Does every changed/relied-upon internal production component appear in the Integration Contract as real, and is there a task that exercises the production path without mocking those components?
+**3. Impact-radius evidence:** Did you use `codebase-memory-mcp` when available, index first if needed, and record concrete callers/consumers/boundaries rather than inferring blast radius from diff size?
 
-**4. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+**4. Integration credibility:** Does required test scope match R0/R1/R2/R3? Are existing focused tests reused before adding overlapping tests? For R1+, do affected internal production components appear real where required?
 
-**5. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+**5. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+
+**6. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement or MVL contract item with no task/evidence path, add it.
 
@@ -243,4 +290,4 @@ After saving the plan, offer execution choice:
 **If Inline Execution chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
 - Batch execution with checkpoints for review
-- Preserve the MVL Contract and Integration Contract unchanged unless the spec itself is revised.
+- Preserve the MVL Contract, Impact Radius, and Integration Contract unless new codebase evidence or a spec revision requires an explicit update.

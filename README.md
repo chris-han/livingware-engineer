@@ -1,8 +1,74 @@
 # Livingware Engineer
 
-Livingware Engineer is an agentic software-engineering methodology and composable skills framework for coding agents. It is derived from [Superpowers](https://github.com/obra/superpowers) and intentionally keeps many upstream skill IDs and internal compatibility surfaces so upstream improvements remain mergeable.
+Livingware Engineer is an agentic software-engineering methodology and composable skills framework for coding agents. It is derived from [Superpowers](https://github.com/obra/superpowers), while extending the upstream workflow around one idea:
 
-Livingware Engineer extends the upstream methodology toward governed implementation: explicit prerequisites, dependency readiness, real-component integration verification, architecture/spec conformance, evidence-backed completion, and Minimum Viable Loop (MVL) product learning.
+> **Software is not a sequence of completed tasks. It is living infrastructure that must keep producing useful learning as requirements, users, dependencies, and architecture change.**
+
+A good implementation therefore needs more than locally correct code. It must preserve a coherent feature journey, prove the real architecture exists, expose the real user experience, keep dependencies intentional, and leave behind evidence that tells the next iteration what to change.
+
+Livingware Engineer is designed around six principles:
+
+1. **MVL is the feature-development unit.** A product feature is developed as a Minimum Viable Loop: the smallest real user journey that can be built, tried, measured, improved, and re-tested. MVL is not a test unit; unit tests, integration tests, browser tests, and E2E tests are evidence inside the implementation of an MVL.
+2. **Reuse before invention.** During brainstorming, explicitly decide whether to reuse code already in the repository, use the standard library or platform, use an installed dependency, adopt a mature open-source dependency, or build custom code. Prefer the lowest rung that genuinely satisfies the design while keeping product semantics and governing boundaries under local control.
+3. **Dependencies are architecture, not setup trivia.** Any new dependency must be discussed during design, declared and pinned in the plan, installed as a prerequisite, and smoke/contract-tested before feature code depends on it.
+4. **Test scope follows impact radius, not diff size.** Use `codebase-memory-mcp` when available to inspect callers, consumers, dependency edges, persistence, routes, trust boundaries, and user paths. Escalate from local TDD to focused integration, real-component integration, or vertical/E2E only when the observed production radius requires it.
+5. **Mocks cannot prove architecture exists.** Changed in-repo production components that matter to the completion path must appear as their real implementations in at least one integration path. True external systems may be substituted at their explicit boundary.
+6. **User-visible frontend work requires a real browser.** In the standard WSL workflow, prefer Windows-host Chrome through CDP on port `9222`. If Chrome is unavailable, the browser gate remains blocked until the user starts the debug instance; mock-only UI tests are not completion evidence.
+
+The methodology keeps many upstream skill IDs and internal compatibility surfaces so Superpowers improvements can still be merged selectively.
+
+## Why "Livingware"?
+
+Traditional software processes tend to treat implementation as a terminal state: requirements become tasks, tasks become code, tests turn green, and the feature is declared done.
+
+Livingware treats implementation as one state in a feedback system:
+
+```text
+Intent / hypothesis
+        ↓
+Smallest real user journey
+        ↓
+Design: reuse / adopt / build
+        ↓
+Dependency + environment readiness
+        ↓
+Implementation with TDD
+        ↓
+Impact-radius-driven verification
+        ↓
+Real integration / browser / E2E evidence as required
+        ↓
+Try with realistic inputs
+        ↓
+Technical + UX measurement
+        ↓
+Feedback / diagnosis
+        ↓
+Improve
+        ↓
+Comparable re-test
+        └──────────────→ next iteration
+```
+
+The objective is not maximal process. It is the **smallest credible loop that produces reliable product learning without creating an architectural dead end**.
+
+This is why Livingware distinguishes three different claims:
+
+```text
+Task complete
+  = local deliverable + local evidence
+
+Implementation complete
+  = the required TDD / integration / browser / E2E evidence is green
+
+MVL / feature complete
+  = implementation credibility
+  + technical measurement
+  + UX measurement
+  + feedback
+  + required evidence-driven improvement
+  + comparable re-test
+```
 
 ## Installation
 
@@ -18,11 +84,6 @@ Register this repository as its own marketplace:
 
 ```bash
 /plugin marketplace add chris-han/livingware-engineer
-```
-
-Install the plugin:
-
-```bash
 /plugin install livingware-engineer@livingware-engineer
 ```
 
@@ -84,8 +145,6 @@ copilot plugin install livingware-engineer@livingware-engineer
 
 ### Kimi Code
 
-Install directly from this repository:
-
 ```text
 /plugins install https://github.com/chris-han/livingware-engineer.git
 ```
@@ -93,8 +152,6 @@ Install directly from this repository:
 Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
 
 ### OpenCode
-
-Tell OpenCode:
 
 ```text
 Fetch and follow instructions from https://raw.githubusercontent.com/chris-han/livingware-engineer/refs/heads/main/.opencode/INSTALL.md
@@ -118,26 +175,29 @@ hermes plugins install chris-han/livingware-engineer --enable
 
 Restart active Hermes sessions after installation.
 
-## Basic Workflow
+## Development Workflow
 
-MVL is not a separate skill. For product features, it is the **unit of work carried across the existing workflow**.
+MVL is not a separate skill. For product features, it is the **feature-development unit carried through the existing workflow**.
 
-1. **brainstorming / design** — define the target user, job-to-be-done, value hypothesis, and smallest real user journey.
-2. **using-git-worktrees** — create an isolated workspace and establish a clean baseline.
-3. **writing-plans** — compile the approved design into an implementation plan that carries the same MVL contract: realistic trial inputs, technical/UX metrics, feedback capture, improvement levers, re-test surface, stopping criterion, and integration contract.
-4. **subagent-driven-development** or **executing-plans** — implement bounded tasks without redefining the feature unit locally.
-5. **test-driven-development** — enforce RED → GREEN → REFACTOR for local behavior derived from the planned journey.
-6. **real-component integration verification** — prove the same smallest real journey through changed in-repo production components; internal completion-path mocks are forbidden.
-7. **real-browser UI verification** — mandatory for frontend work; prefer Chrome CDP on port `9222`, and in WSL require the Windows-host Chrome prerequisite rather than silently downgrading to mock-only UI tests.
-8. **vertical / end-to-end verification** — execute the feature's smallest real user journey through the real application path when it crosses architecture boundaries.
-9. **technical + UX measurement / feedback / improvement / re-test** — use the same journey and realistic inputs to generate comparable product-learning evidence.
-10. **requesting-code-review** — verify spec compliance and code quality.
-11. **verification-before-completion** — distinguish task completion, implementation completion, and MVL/feature completion using fresh evidence.
-12. **finishing-a-development-branch** — close the implementation lifecycle cleanly.
+1. **brainstorming / design** — define the target user, job-to-be-done, value hypothesis, and smallest real user journey. For each meaningful capability, explicitly discuss reuse vs open-source adoption vs custom implementation.
+2. **dependency decision** — identify existing repo capabilities, standard-library/platform options, installed packages, OSS candidates, or justified custom code. Record important trade-offs such as fit, maintenance, license, security, lock-in, adapter cost, and whether the dependency actually shrinks the MVL.
+3. **using-git-worktrees** — create an isolated workspace and establish a clean baseline.
+4. **writing-plans** — compile the approved design into an implementation plan carrying the same MVL contract, dependency prerequisites, impact-radius evidence, integration contract, realistic trial inputs, metrics, feedback surface, re-test method, and stopping criterion.
+5. **dependency readiness** — install/pin any new package or service prerequisite, exercise the real capability the feature needs, and run affected baseline tests before downstream tasks consume it.
+6. **subagent-driven-development** or **executing-plans** — implement bounded tasks without redefining the feature locally.
+7. **test-driven-development** — enforce RED → GREEN → REFACTOR for changed local behavior.
+8. **impact-radius assessment** — use `codebase-memory-mcp` when available (`index_repository`, `search_graph`, `trace_path`, `query_graph`, `search_code`, `get_code_snippet`) to determine the smallest sufficient verification scope.
+9. **focused / real-component integration verification** — when the observed impact radius crosses production seams, prove the affected path with real changed in-repo components and production wiring.
+10. **real-browser UI verification** — mandatory when frontend behavior is affected; for WSL prefer Windows-host Chrome CDP on `127.0.0.1:9222`.
+11. **vertical / end-to-end verification** — when the impact radius or MVL journey crosses architectural boundaries, execute the smallest real journey through the real application path.
+12. **technical + UX measurement / feedback / improvement / re-test** — use the same journey and realistic inputs to generate comparable product-learning evidence.
+13. **requesting-code-review** — verify specification compliance and code quality.
+14. **verification-before-completion** — distinguish task completion, implementation completion, and feature/MVL completion using fresh evidence.
+15. **finishing-a-development-branch** — close the implementation lifecycle cleanly.
 
-## MVL as the Cross-Cutting Feature Contract
+## MVL: The Feature-Development Unit
 
-For a product feature, every phase must preserve one contract:
+For a product feature, every phase preserves one contract:
 
 ```text
 Target user + JTBD + value hypothesis
@@ -149,16 +209,19 @@ Smallest real user journey
 Realistic trial inputs
               |
               v
-Plan + implementation tasks
+Reuse / adopt / build decision
               |
               v
-TDD behavior evidence
+Plan + dependency readiness
               |
               v
-Real-component integration
+Implementation tasks + local TDD
               |
               v
-Real-browser / vertical E2E evidence
+Impact-radius-driven verification
+              |
+              v
+Integration / browser / vertical E2E as required
               |
               v
 Technical + UX measurement
@@ -170,9 +233,9 @@ Feedback -> Diagnose -> Improve
 Comparable re-test
 ```
 
-The feature unit must not fragment as work moves between agents or phases. A task may implement only one component, but it does not get to invent a different user path, success criterion, fixture semantics, or integration story just to make its local tests pass.
+The feature must not fragment as work moves between skills or agents. A task may implement one component, but it does not get to invent a different user path, success criterion, fixture semantics, or integration story merely to make local tests pass.
 
-Every product implementation plan therefore carries an **MVL Contract** with:
+A product implementation plan therefore carries an **MVL Contract** containing:
 
 - target user and job-to-be-done
 - value hypothesis
@@ -185,65 +248,154 @@ Every product implementation plan therefore carries an **MVL Contract** with:
 - re-evaluation surface
 - stopping criterion
 
-The same plan also carries an **Integration Contract** that names:
+For maintenance work with no product-learning loop, the plan may state `MVL: not applicable — <reason>` instead of inventing one.
 
-- real in-repo components required on the completion path
-- true external/nondeterministic boundaries that may be substituted
-- internal components forbidden from being mocked as completion evidence
-- real-browser requirement and preferred Chrome CDP endpoint when frontend work is involved
+## Reuse Before Build
 
-For maintenance work with no product-learning loop, the plan may state `MVL: not applicable — <reason>` rather than inventing one.
-
-## Livingware Extension Principle
-
-TDD alone proves local behavior; it does not prove that the designed system actually exists. Livingware Engineer therefore treats testing as layered evidence inside the MVL:
+Livingware incorporates the practical idea behind Ponytail's dependency ladder: **stop at the first rung that genuinely holds**.
 
 ```text
-Task TDD
-  RED -> GREEN -> REFACTOR
-       |
-       v
-Real-component integration
-  same planned user journey
-  real internal dependencies
-       |
-       v
-Real-browser UI test (when frontend)
-  same planned user journey
-  real rendered interaction
-       |
-       v
-Vertical / end-to-end slice
-  production wiring
-       |
-       v
-Credible working prototype
-       |
-       v
-Try -> Measure -> Feedback -> Diagnose -> Improve -> Re-test
+1. Do not build the capability if it is unnecessary
+2. Reuse code already in the repository
+3. Use the standard library or native platform
+4. Use an already-installed dependency
+5. Adopt a suitable open-source dependency
+6. Write the minimum custom code only when the earlier rungs fail
 ```
 
-An architectural task should not be considered complete merely because mocked unit tests pass. Each changed or newly relied-upon in-repo production component should participate in at least one integration path using its real implementation.
+This is a brainstorming/design decision, not an implementation shortcut.
 
-A product feature should not be considered complete merely because its implementation passes all technical gates.
+When evaluating a new open-source dependency, consider:
+
+- fit to the smallest real user journey
+- maturity and maintenance activity
+- API stability and upgrade cost
+- license compatibility
+- security and supply-chain exposure
+- transitive dependency weight
+- runtime/platform compatibility
+- performance and operational footprint
+- adapter complexity
+- vendor/project lock-in
+- whether it removes more complexity than it introduces
+
+Keep locally owned code around product semantics, authority, governance, trust, policy, and irreversible boundaries even when OSS supplies lower-level mechanics.
+
+## Dependencies Are Explicit Prerequisites
+
+A new dependency is not ready merely because it appears in a manifest or lockfile.
+
+Plans should make dependency readiness explicit:
 
 ```text
-Task complete
-  = local deliverable + local evidence
-
-Implementation complete
-  = TDD + real integration + real browser when UI + vertical/E2E when needed
-
-MVL / feature complete
-  = implementation credibility
-  + technical measurement
-  + UX measurement
-  + feedback
-  + required evidence-driven improvement
-  + comparable re-test
+select dependency
+  -> pin / declare
+  -> install / sync
+  -> run smoke or contract test against the real API needed by the feature
+  -> run affected baseline tests
+  -> only then allow feature code to consume it
 ```
 
-For knowledge- or data-backed features, the supporting asset belongs inside the same learning loop rather than being treated as unrelated infrastructure:
+The plan should record the package/service name, version or commit pin, declaration file, install command, configuration, compatibility constraints, verification command, and cleanup/replacement implications.
+
+Dependency verification answers:
+
+> Can this dependency actually provide the capability the design assumes in this environment?
+
+It is separate from integration testing, which asks whether our own production components work together correctly.
+
+## Impact-Radius-Driven Testing
+
+Livingware deliberately avoids the rule:
+
+```text
+any code change -> all integration tests -> full E2E
+```
+
+Instead:
+
+```text
+changed production surface
+      ↓
+codebase-memory-mcp impact analysis
+      ↓
+affected seams / consumers / user paths
+      ↓
+smallest sufficient verification
+```
+
+When `codebase-memory-mcp` is available, index the repository if needed and use graph-oriented discovery such as `search_graph`, `trace_path`, `query_graph`, `search_code`, and `get_code_snippet`.
+
+Suggested impact classes:
+
+```text
+R0 — local behavior only
+     -> focused TDD / unit-level behavior test
+
+R1 — one production seam
+     -> focused integration across that seam
+
+R2 — multi-component production path
+     -> real-component integration
+
+R3 — user journey / cross-process / UI path
+     -> vertical/E2E + real-browser verification when UI is involved
+```
+
+These are test-scope classes, not feature units. **MVL remains the feature-development unit.**
+
+See [skills/test-driven-development/impact-radius-testing.md](skills/test-driven-development/impact-radius-testing.md).
+
+## Real-Component Integration
+
+TDD proves local behavior; it does not prove the production architecture actually exists.
+
+When impact radius requires integration, changed or newly relied-upon in-repo production components on the completion path should participate through their real implementations.
+
+```text
+GOOD
+real route
+  -> real service
+  -> real evaluator
+  -> real repository
+  -> real test persistence
+
+NOT COMPLETION EVIDENCE
+real route
+  -> MockService
+  -> expected response
+```
+
+Mocks, fakes, and stubs remain appropriate at true external or nondeterministic boundaries. When substituting an external service, keep the in-repo adapter/client real and substitute the remote side where possible.
+
+## Real-Browser Frontend Verification
+
+Any frontend/UI change requires browser-level verification because DOM simulators and component tests cannot prove the actual rendering, CSS/layout, focus, routing, canvas/graph behavior, or frontend/backend interaction.
+
+For the standard WSL development environment, prefer Windows-host Chrome over CDP:
+
+```text
+http://127.0.0.1:9222
+```
+
+If it is unavailable, frontend completion remains blocked. The user should start a separate Windows Chrome debug profile rather than the agent installing a substitute browser inside WSL or downgrading to jsdom/mock-only evidence.
+
+Recommended PowerShell command:
+
+```powershell
+Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
+  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
+```
+
+Then verify from WSL:
+
+```bash
+curl -fsS http://127.0.0.1:9222/json/version
+```
+
+## Knowledge- and Data-Backed Features
+
+When feature performance materially depends on a knowledge or data asset, that asset belongs inside the same MVL rather than being treated as unrelated infrastructure.
 
 ```text
 Ground/acquire source
@@ -255,7 +407,19 @@ Ground/acquire source
   -> Re-run
 ```
 
-The objective is the smallest loop that produces reliable product learning, while preserving architectural boundaries needed to avoid an obvious dead end.
+The supporting asset does not need to be perfect before the user can try the feature. It needs to be inspectable and correctable enough to support reliable learning.
+
+## What Livingware Optimizes For
+
+Livingware Engineer is intentionally opinionated about several trade-offs:
+
+- **Learning speed over premature completeness** — build the smallest credible loop that can produce an aha moment and measurable evidence.
+- **Real architecture over mocked confidence** — use mocks where they isolate true external uncertainty, not where they hide missing internal implementation.
+- **Targeted evidence over ritual testing** — use impact radius to choose the narrowest test surface that proves the changed production behavior.
+- **Reuse over reinvention** — prefer existing code, platform capabilities, and mature OSS when they simplify the feature without surrendering product semantics or governing boundaries.
+- **Explicit prerequisites over hidden setup** — dependencies and environment assumptions belong in the plan and must be proven before downstream work relies on them.
+- **Continuity over task fragmentation** — preserve one user journey and one feature contract across design, planning, implementation, integration, evaluation, and re-test.
+- **Evidence over completion language** — no success claim outruns the evidence actually collected.
 
 ## Upstream Compatibility
 
@@ -291,7 +455,11 @@ Some internal names still contain `superpowers`, including the `using-superpower
 
 Livingware Engineer is derived from **Superpowers**, created by Jesse Vincent / Prime Radiant. The upstream project is available at `obra/superpowers`.
 
-The cross-cutting **Minimum Viable Loop (MVL)** feature-unit methodology is adapted from the Semantier `mvl-feature-development` approach, but in Livingware Engineer it is intentionally embedded across planning, implementation, integration, browser/E2E verification, measurement, feedback, and re-test rather than exposed as a separate optional skill.
+Livingware-specific additions include the cross-cutting MVL feature-development contract, dependency readiness and build-vs-adopt decisions, impact-radius-driven test selection, real-component integration requirements, and real-browser frontend verification.
+
+The MVL feature-development approach was adapted from the Semantier development methodology and embedded across the existing lifecycle rather than exposed as a separate optional skill.
+
+The reuse-before-build discussion is influenced by Ponytail's dependency ladder and generalized here as a design-phase decision framework.
 
 Livingware-specific changes and distribution are maintained in this repository.
 

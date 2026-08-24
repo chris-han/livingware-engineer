@@ -11,6 +11,8 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
+**Architectural principle:** Passing local tests does not prove the production components are actually connected. Architectural work also requires real-component integration evidence.
+
 **Violating the letter of the rules is violating the spirit of the rules.**
 
 ## When to Use
@@ -59,9 +61,9 @@ digraph tdd_cycle {
     red -> verify_red;
     verify_red -> green [label="yes"];
     verify_red -> red [label="wrong\nfailure"];
-    green -> verify_green;
-    verify_green -> refactor [label="yes"];
+    green -> verify_green [label="yes"];
     verify_green -> green [label="no"];
+    verify_green -> refactor [label="yes"];
     refactor -> verify_green [label="stay\ngreen"];
     verify_green -> next;
     next -> red;
@@ -133,7 +135,7 @@ Write simplest code to pass the test.
 
 <Good>
 ```typescript
-async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
+async function retryOperation<T>(fn: () => Promise<T>) {
   for (let i = 0; i < 3; i++) {
     try {
       return await fn();
@@ -156,7 +158,7 @@ async function retryOperation<T>(
     backoff?: 'linear' | 'exponential';
     onRetry?: (attempt: number) => void;
   }
-): Promise<T> {
+) {
   // YAGNI
 }
 ```
@@ -195,6 +197,51 @@ Keep tests green. Don't add behavior.
 
 Next failing test for next feature.
 
+## Integration Gate After TDD
+
+TDD proves local behavior. It does not prove that the implementation uses the real production architecture.
+
+For any change that introduces, modifies, or depends on multiple in-repo production components, run a real-component integration test before claiming completion.
+
+**Mandatory rule:**
+
+```
+EVERY CHANGED IN-REPO PRODUCTION COMPONENT
+MUST APPEAR REAL IN AT LEAST ONE INTEGRATION PATH
+```
+
+The integration path must:
+- use real in-repo services, adapters, repositories, evaluators, handlers, and other changed components
+- use production wiring, DI, routing, or factories where practical
+- use real test persistence when persistence semantics are part of the feature
+- substitute only true external or nondeterministic boundaries
+- keep the in-repo adapter/client real even when the external remote side is substituted
+- be observed failing when the implementation or wiring is incomplete, then passing after the fix
+
+**Not valid integration evidence:**
+
+```text
+real route -> MockService -> expected result
+```
+
+```text
+real DecisionService -> FakeMatcher(return="expected")
+```
+
+**Valid integration evidence:**
+
+```text
+real route -> real service -> real evaluator -> real repository -> temp SQLite
+```
+
+```text
+real workflow -> real external-provider adapter -> local HTTP stub for third-party service
+```
+
+If a required internal dependency does not exist or is not installed, that is a prerequisite failure. Implement or install it first. Do not mock past the missing dependency and call the design complete.
+
+Read [writing-good-tests.md](writing-good-tests.md) for the detailed integration gate and mock rules. See [../../docs/testing.md](../../docs/testing.md) for the repository-wide L1/L2/L3 strategy.
+
 ## Good Tests
 
 | Quality | Good | Bad |
@@ -208,22 +255,25 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - Assert on real behavior, never on mock behavior
 - Keep test-only code in test utilities, out of production classes
 - Understand a dependency's side effects before mocking it
+- Require real-component integration for architectural completion
 
 ## Common Rationalizations
 
 | Excuse | Reality |
 |--------|---------|
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
-| "I'll test after" | Tests written after pass immediately — which proves nothing. They may test the wrong thing, test the implementation instead of the behavior, or miss the edge case you forgot. You never watched it fail, so you never proved it can catch the bug. Test-first forces that failure. |
-| "Tests after achieve same goals (spirit not ritual)" | Tests-after answer "what does this do?"; tests-first answer "what should this do?" Tests written after are biased by the code you already wrote — you verify the cases you remembered, not the ones you'd have discovered. Coverage without proof the tests work. |
-| "Already manually tested" | Manual testing is ad-hoc: no record of what you covered, no way to re-run it when the code changes, easy to forget cases under pressure. "Worked when I tried it" ≠ comprehensive. Automated tests run the same way every time. |
-| "Deleting X hours is wasteful" | Sunk cost fallacy — that time is already spent either way. The real choice: rewrite with TDD (high confidence) vs. keep it and bolt tests on after (low confidence, likely bugs). Keeping code you can't trust is the waste. |
+| "I'll test after" | Tests written after pass immediately — which proves nothing. |
+| "Tests after achieve same goals" | Tests-after answer "what does this do?"; tests-first answer "what should this do?" |
+| "Already manually tested" | Manual testing is ad-hoc and not repeatable. |
+| "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping code you can't trust is the waste. |
 | "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
 | "Need to explore first" | Fine. Throw away exploration, start with TDD. |
 | "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
-| "TDD will slow me down" | TDD IS the pragmatic path: catches bugs before commit, prevents regressions, lets you refactor without fear. "Pragmatic" shortcuts mean debugging in production — slower, not faster. |
-| "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
+| "TDD will slow me down" | TDD catches bugs before commit and prevents regressions. |
+| "Manual test faster" | Manual doesn't prove edge cases. |
 | "Existing code has no tests" | You're improving it. Add tests for existing code. |
+| "The mocked integration test passes" | A mocked internal architecture proves only the mock contract, not the implemented design. |
+| "Dependency isn't ready, so I'll fake it" | Missing internal dependency is a prerequisite failure, not permission to bypass the architecture. |
 
 ## Red Flags - STOP and Start Over
 
@@ -239,9 +289,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - "Keep as reference" or "adapt existing code"
 - "Already spent X hours, deleting is wasteful"
 - "TDD is dogmatic, I'm being pragmatic"
-- "This is different because..."
-
-**All of these mean: Delete code. Start over with TDD.**
+- Internal architectural components exist only as mocks on the completion path
+- Missing production dependency replaced with fake implementation for test convenience
 
 ## Example: Bug Fix
 
@@ -277,23 +326,28 @@ $ npm test
 PASS
 ```
 
-**REFACTOR**
-Extract validation for multiple fields if needed.
-
 ## Verification Checklist
 
 Before marking work complete:
 
-- [ ] Every new function/method has a test
-- [ ] Watched each test fail before implementing
-- [ ] Each test failed for expected reason (feature missing, not typo)
+- [ ] Every new function/method with meaningful behavior has a test
+- [ ] Watched each new test fail before implementing
+- [ ] Each test failed for the expected reason
 - [ ] Wrote minimal code to pass each test
-- [ ] All tests pass
+- [ ] All local tests pass
 - [ ] Output pristine (no errors, warnings)
-- [ ] Tests use real code (mocks only if unavoidable)
+- [ ] Tests use real code (mocks only when justified)
 - [ ] Edge cases and errors covered
+- [ ] Every changed in-repo production component appears real in at least one integration path when the change is architectural
+- [ ] No changed in-repo component is mocked on the integration path used as completion evidence
+- [ ] Integration test uses production wiring/DI/routing where practical
+- [ ] Required external substitutions are explicitly identified and occur at the external boundary
+- [ ] Integration test was observed failing on incomplete implementation/wiring and passing after the fix
+- [ ] Vertical/E2E coverage exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 
-Can't check all boxes? You skipped TDD. Start over.
+Can't check the TDD boxes? You skipped TDD. Start over.
+
+Can't check the integration boxes for architectural work? The implementation is not complete.
 
 ## When Stuck
 
@@ -303,18 +357,22 @@ Can't check all boxes? You skipped TDD. Start over.
 | Test too complicated | Design too complicated. Simplify interface. |
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
+| Integration requires unavailable internal dependency | Treat it as prerequisite; install/implement it before completion. |
 
 ## Debugging Integration
 
 Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
+
+If the bug occurs at a component boundary, add or strengthen the real-component integration test that reproduces the broken wiring as well.
 
 Never fix bugs without a test.
 
 ## Final Rule
 
 ```
-Production code → test exists and failed first
-Otherwise → not TDD
+Local behavior: production code -> failing test first -> green
+Architecture: changed real components -> real integration path -> failing then green
+Otherwise -> not complete
 ```
 
 No exceptions without your human partner's permission.

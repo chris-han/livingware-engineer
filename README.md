@@ -1,352 +1,194 @@
-# Superpowers
+# Livingware Engineer
 
-Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
+Livingware Engineer is an agentic software-engineering methodology and composable skills framework for coding agents. It is derived from [Superpowers](https://github.com/obra/superpowers) and intentionally keeps many upstream skill IDs and internal compatibility surfaces so upstream improvements remain mergeable.
 
-## Table of Contents
-
-- [How it works](#how-it-works)
-- [Commercial Services](#commercial-services)
-- [Getting Started](#installation)
-  - [Claude Code](#claude-code)
-  - [Antigravity](#antigravity)
-  - [Codex App](#codex-app)
-  - [Codex CLI](#codex-cli)
-  - [Cursor](#cursor)
-  - [Devin CLI](#devin-cli)
-  - [Factory Droid](#factory-droid)
-  - [Gemini CLI](#gemini-cli)
-  - [GitHub Copilot CLI](#github-copilot-cli)
-  - [Grok Build CLI](#grok-build-cli)
-  - [Kimi Code](#kimi-code)
-  - [OpenCode](#opencode)
-  - [Pi](#pi)
-  - [Hermes Agent](#hermes-agent)
-- [The Basic Workflow](#the-basic-workflow)
-- [Community](#community)
-- [What's Inside](#whats-inside)
-- [Philosophy](#philosophy)
-- [Contributing](#contributing)
-- [Updating](#updating)
-- [License](#license)
-- [Visual companion telemetry](#visual-companion-telemetry)
-
-## How it works
-
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
-
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
-
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
-
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
-
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
-
-## Commercial Services
-
-If you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.
+Livingware Engineer extends the upstream methodology toward governed implementation: explicit prerequisites, dependency readiness, real-component integration verification, architecture/spec conformance, and evidence-backed completion.
 
 ## Installation
 
-Installation differs by harness. If you use more than one, install Superpowers separately for each one.
-
-Direct repository installs in this fork should use:
+Install this repository when you want **Livingware Engineer** rather than the upstream `superpowers` package:
 
 ```text
-https://github.com/chris-han/superpowers.git
+https://github.com/chris-han/livingware-engineer.git
 ```
 
 ### Claude Code
 
-#### Fork Marketplace
-
-This fork contains its own Claude marketplace manifest at `.claude-plugin/marketplace.json`. Register this repository directly so installation resolves to the fork rather than the upstream Superpowers marketplace:
+Register this repository as its own marketplace:
 
 ```bash
-/plugin marketplace add chris-han/superpowers
+/plugin marketplace add chris-han/livingware-engineer
 ```
 
-Install Superpowers from the fork marketplace:
+Install the plugin:
 
 ```bash
-/plugin install superpowers@superpowers-dev
+/plugin install livingware-engineer@livingware-engineer
 ```
 
-#### Optional: Anthropic Official Marketplace
-
-Anthropic's official marketplace installs the upstream published Superpowers package rather than this fork:
-
-```bash
-/plugin install superpowers@claude-plugins-official
-```
-
-Use the fork marketplace above when you want the `chris-han/superpowers` version.
+The Anthropic official `superpowers` marketplace entry is the upstream package, not Livingware Engineer.
 
 ### Antigravity
 
-Install Superpowers as a plugin from this repository:
-
 ```bash
-agy plugin install https://github.com/chris-han/superpowers.git
+agy plugin install https://github.com/chris-han/livingware-engineer.git
 ```
 
-Antigravity runs the plugin's session-start hook, so Superpowers is active from
-the first message. Reinstall with the same command to update.
+### Codex App / Codex CLI
 
-### Codex App
-
-Superpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).
-
-- In the Codex app, click on Plugins in the sidebar.
-- You should see `Superpowers` in the Coding section.
-- Click the `+` next to Superpowers and follow the prompts.
-
-### Codex CLI
-
-Superpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).
-
-- Open the plugin search interface:
-
-  ```bash
-  /plugins
-  ```
-
-- Search for Superpowers:
-
-  ```bash
-  superpowers
-  ```
-
-- Select `Install Plugin`.
+For a repository-based install, use this repository's `.codex-plugin/plugin.json` rather than the official `superpowers` marketplace package. The plugin identity is `livingware-engineer`.
 
 ### Cursor
 
-- In Cursor Agent chat, install from marketplace:
-
-  ```text
-  /add-plugin superpowers
-  ```
-
-- Or search for "superpowers" in the plugin marketplace.
+Install the plugin from this repository when using repository/plugin development flows. The manifest at `.cursor-plugin/plugin.json` identifies the plugin as `livingware-engineer`.
 
 ### Devin CLI
 
-- Install the plugin from this repository:
+```bash
+devin plugins install chris-han/livingware-engineer
+```
 
-  ```bash
-  devin plugins install chris-han/superpowers
-  ```
+Update later with:
 
-- Update to the latest version with:
-
-  ```bash
-  devin plugins update superpowers
-  ```
+```bash
+devin plugins update livingware-engineer
+```
 
 ### Factory Droid
 
-- Register the marketplace:
-
-  ```bash
-  droid plugin marketplace add https://github.com/chris-han/superpowers.git
-  ```
-
-- Install the plugin:
-
-  ```bash
-  droid plugin install superpowers@superpowers
-  ```
+```bash
+droid plugin marketplace add https://github.com/chris-han/livingware-engineer.git
+droid plugin install livingware-engineer@livingware-engineer
+```
 
 ### Gemini CLI
 
-- Install the extension:
+```bash
+gemini extensions install https://github.com/chris-han/livingware-engineer.git
+```
 
-  ```bash
-  gemini extensions install https://github.com/chris-han/superpowers.git
-  ```
+Update later with:
 
-- Update later:
-
-  ```bash
-  gemini extensions update superpowers
-  ```
+```bash
+gemini extensions update livingware-engineer
+```
 
 ### GitHub Copilot CLI
 
-Register this fork as the plugin marketplace source:
+Register this repository rather than the upstream Superpowers marketplace:
 
 ```bash
-copilot plugin marketplace add chris-han/superpowers
+copilot plugin marketplace add chris-han/livingware-engineer
+copilot plugin install livingware-engineer@livingware-engineer
 ```
-
-Install Superpowers from the marketplace exposed by this repository:
-
-```bash
-copilot plugin install superpowers@superpowers-dev
-```
-
-Do not register `obra/superpowers-marketplace` if you want the forked implementation.
-
-### Grok Build CLI
-
-Superpowers is available via the [official Grok plugin marketplace](https://github.com/xai-org/plugin-marketplace).
-
-- Install the plugin from xAI's official marketplace:
-
-  ```bash
-  grok plugin install superpowers@xai-official --trust
-  ```
-
-- Or open the marketplace in the TUI, search for Superpowers, and install it:
-
-  ```text
-  /marketplace
-  ```
 
 ### Kimi Code
 
-Superpowers is available in Kimi Code's plugin marketplace.
+Install directly from this repository:
 
-- Open Kimi Code's plugin manager:
+```text
+/plugins install https://github.com/chris-han/livingware-engineer.git
+```
 
-  ```text
-  /plugins
-  ```
-
-- Go to `Marketplace` > `Superpowers` and install it.
-
-- Or install directly from this repository:
-
-  ```text
-  /plugins install https://github.com/chris-han/superpowers.git
-  ```
-
-- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
+Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
 
 ### OpenCode
 
-OpenCode uses its own plugin install; install Superpowers separately even if you
-already use it in another harness.
+Tell OpenCode:
 
-- Tell OpenCode:
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/chris-han/livingware-engineer/refs/heads/main/.opencode/INSTALL.md
+```
 
-  ```
-  Fetch and follow instructions from https://raw.githubusercontent.com/chris-han/superpowers/refs/heads/main/.opencode/INSTALL.md
-  ```
-
-- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
+Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
 
 ### Pi
 
-Install Superpowers as a Pi package from this repository:
-
 ```bash
-pi install git:github.com/chris-han/superpowers
+pi install git:github.com/chris-han/livingware-engineer
 ```
 
-For local development, run Pi with this checkout loaded as a temporary package:
-
-```bash
-pi -e /path/to/superpowers
-```
-
-The Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.
+The package intentionally continues loading the upstream-compatible internal extension path `.pi/extensions/superpowers.ts`.
 
 ### Hermes Agent
 
-Install Superpowers as a Hermes plugin from this repository:
-
 ```bash
-hermes plugins install chris-han/superpowers --enable
+hermes plugins install chris-han/livingware-engineer --enable
 ```
 
-Restart any active Hermes sessions after installing. Note: Hermes has no
-post-compaction hook, so a very long session that compacts over its first
-turn loses the bootstrap — start a fresh session if skills stop triggering.
+Restart active Hermes sessions after installation.
 
-## The Basic Workflow
+## Basic Workflow
 
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.
+1. **brainstorming** — refine requirements and design before coding.
+2. **using-git-worktrees** — create an isolated workspace and establish a clean baseline.
+3. **writing-plans** — compile the approved design into executable implementation tasks.
+4. **subagent-driven-development** or **executing-plans** — implement bounded tasks with review checkpoints.
+5. **test-driven-development** — enforce RED → GREEN → REFACTOR for local behavior.
+6. **real-component integration verification** — prove changed in-repo components are wired through their production implementations; mocks are allowed only at explicitly permitted external boundaries.
+7. **requesting-code-review** — verify spec compliance and code quality.
+8. **verification-before-completion** — require current evidence before claiming completion.
+9. **finishing-a-development-branch** — close the implementation lifecycle cleanly.
 
-2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
+## Livingware Extension Principle
 
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
+TDD alone proves local behavior; it does not prove that the designed system actually exists. Livingware Engineer therefore treats testing as layered evidence:
 
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.
+```text
+Task TDD
+  RED -> GREEN -> REFACTOR
+       |
+       v
+Real-component integration
+  real internal dependencies
+       |
+       v
+Vertical / end-to-end slice
+  production wiring
+       |
+       v
+Architecture + spec closure
+       |
+       v
+Evidence-backed completion
+```
 
-5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
+An architectural task should not be considered complete merely because mocked unit tests pass. Each changed or newly relied-upon in-repo production component should participate in at least one integration path using its real implementation.
 
-6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.
+## Upstream Compatibility
 
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
+Livingware Engineer remains a GitHub fork of `obra/superpowers`. Renaming the repository and plugin does not remove fork ancestry or prevent upstream synchronization.
 
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
+Recommended remotes for a local clone:
 
-## Community
+```bash
+git remote set-url origin https://github.com/chris-han/livingware-engineer.git
+git remote add upstream https://github.com/obra/superpowers.git
+```
 
-Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).
+If `upstream` already exists:
 
-- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions
+```bash
+git remote set-url upstream https://github.com/obra/superpowers.git
+```
 
-## What's Inside
+To review upstream changes:
 
-### Skills Library
+```bash
+git fetch upstream
+git log --oneline main..upstream/main
+```
 
-**Testing**
-- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
+Then merge or selectively adapt upstream changes rather than blindly overwriting Livingware-specific governance behavior.
 
-**Debugging**
-- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
-- **verification-before-completion** - Ensure it's actually fixed
+## Compatibility Naming
 
-**Collaboration** 
-- **brainstorming** - Socratic design refinement
-- **writing-plans** - Detailed implementation plans
-- **executing-plans** - Batch execution with checkpoints
-- **dispatching-parallel-agents** - Concurrent subagent workflows
-- **requesting-code-review** - Pre-review checklist
-- **receiving-code-review** - Responding to feedback
-- **using-git-worktrees** - Parallel development branches
-- **finishing-a-development-branch** - Merge/PR decision workflow
-- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+Some internal names still contain `superpowers`, including the `using-superpowers` skill and some runtime filenames. These are intentionally retained for upstream compatibility. They are implementation details; the distributed plugin/package identity is **Livingware Engineer**.
 
-**Meta**
-- **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
+## Provenance
 
-## Philosophy
-
-- **Test-Driven Development** - Write tests first, always
-- **Systematic over ad-hoc** - Process over guessing
-- **Complexity reduction** - Simplicity as primary goal
-- **Evidence over claims** - Verify before declaring success
-
-Read [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).
-
-## Contributing
-
-The general contribution process for Superpowers is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.
-
-1. Fork the repository
-2. Switch to the 'dev' branch
-3. Create a branch for your work
-4. Follow the `writing-skills` skill for creating and testing new and modified skills
-5. Submit a PR, being sure to fill in the pull request template.
-
-Skill-behavior tests use the drill eval harness from [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Plugin-infrastructure tests live at `tests/` and run via the relevant `run-*.sh` or `npm test`.
-
-See `skills/writing-skills/SKILL.md` for the complete guide.
-
-## Updating
-
-Superpowers updates are somewhat coding-agent dependent, but are often automatic.
+Livingware Engineer is derived from **Superpowers**, created by Jesse Vincent / Prime Radiant. The upstream project is available at `obra/superpowers`. Livingware-specific changes and distribution are maintained in this repository.
 
 ## License
 
-MIT License - see LICENSE file for details
-
-## Visual companion telemetry
-
-Because skills and plugins don't provide any feedback to creators, we have no idea how many of you are using Superpowers. By default, the Prime Radiant logo on brainstorming's optional visual companion feature is loaded from our website. It includes the version of Superpowers in use. It does not include any details about your project, prompt, or coding agent. We don't see your clicks or anything about what you're building. This helps us have a rough idea of how many folks are using Superpowers and which version of Superpowers they're using. It's 100% optional. To disable this, set the environment variable `SUPERPOWERS_DISABLE_TELEMETRY` to any true value. Superpowers also honors Claude Code's `DISABLE_TELEMETRY` and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` opt-outs.
+MIT License — see [LICENSE](LICENSE).

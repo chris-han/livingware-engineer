@@ -50,6 +50,12 @@ If you're using Superpowers in enterprise and could benefit from commercial supp
 
 Installation differs by harness. If you use more than one, install Superpowers separately for each one.
 
+Direct repository installs in this fork should use:
+
+```text
+https://github.com/chris-han/superpowers.git
+```
+
 ### Claude Code
 
 Superpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)
@@ -83,7 +89,7 @@ The Superpowers marketplace provides Superpowers and some other related plugins 
 Install Superpowers as a plugin from this repository:
 
 ```bash
-agy plugin install https://github.com/obra/superpowers
+agy plugin install https://github.com/chris-han/superpowers.git
 ```
 
 Antigravity runs the plugin's session-start hook, so Superpowers is active from
@@ -130,7 +136,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the plugin from this repository:
 
   ```bash
-  devin plugins install obra/superpowers
+  devin plugins install chris-han/superpowers
   ```
 
 - Update to the latest version with:
@@ -144,7 +150,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Register the marketplace:
 
   ```bash
-  droid plugin marketplace add https://github.com/obra/superpowers
+  droid plugin marketplace add https://github.com/chris-han/superpowers.git
   ```
 
 - Install the plugin:
@@ -158,7 +164,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the extension:
 
   ```bash
-  gemini extensions install https://github.com/obra/superpowers
+  gemini extensions install https://github.com/chris-han/superpowers.git
   ```
 
 - Update later:
@@ -212,7 +218,7 @@ Superpowers is available in Kimi Code's plugin marketplace.
 - Or install directly from this repository:
 
   ```text
-  /plugins install https://github.com/obra/superpowers
+  /plugins install https://github.com/chris-han/superpowers.git
   ```
 
 - Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
@@ -225,7 +231,7 @@ already use it in another harness.
 - Tell OpenCode:
 
   ```
-  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/chris-han/superpowers/refs/heads/main/.opencode/INSTALL.md
   ```
 
 - Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
@@ -235,7 +241,7 @@ already use it in another harness.
 Install Superpowers as a Pi package from this repository:
 
 ```bash
-pi install git:github.com/obra/superpowers
+pi install git:github.com/chris-han/superpowers
 ```
 
 For local development, run Pi with this checkout loaded as a temporary package:
@@ -251,7 +257,7 @@ The Pi package loads the Superpowers skills and a small extension that injects t
 Install Superpowers as a Hermes plugin from this repository:
 
 ```bash
-hermes plugins install obra/superpowers --enable
+hermes plugins install chris-han/superpowers --enable
 ```
 
 Restart any active Hermes sessions after installing. Note: Hermes has no

@@ -2,6 +2,8 @@
 
 Livingware Engineer uses three distinct test layers. A feature is not complete merely because local TDD tests pass.
 
+For product features, all test layers are evidence inside one **Minimum Viable Loop (MVL)**. They must verify the same smallest real user journey declared by the plan rather than becoming disconnected component exercises.
+
 ## Test Strategy
 
 ### L1 — TDD Behavior Tests
@@ -14,6 +16,7 @@ Requirements:
 - assert observable behavior, not mock call existence
 - use real production code wherever practical
 - mocks are allowed only at slow, nondeterministic, or genuinely external boundaries
+- for product features, derive behavior from the plan's MVL journey and realistic trial inputs rather than inventing test-only semantics
 
 TDD answers:
 
@@ -23,11 +26,20 @@ It does **not** prove that the production architecture is actually wired togethe
 
 ### L2 — Real-Component Integration Tests
 
-Purpose: prove that the production components introduced, modified, or relied upon by the implementation actually work together.
+Purpose: prove that the production components introduced, modified, or relied upon by the implementation actually work together **for the same smallest real journey defined by the MVL plan**.
 
 **Mandatory rule:**
 
 > Any in-repo production component introduced, modified, or relied upon by an implementation plan must participate in at least one integration test using its real production implementation.
+
+For product features, the integration test must also preserve the plan's MVL contract:
+- same target user / job-to-be-done
+- same smallest real journey
+- same realistic trial inputs or a documented representative subset
+- same user-visible or externally observable outcome
+- same critical technical success conditions
+
+Do not create an integration test that merely proves components can call one another if it does not exercise the feature journey the user is supposed to try.
 
 Integration tests must:
 - traverse the changed production path through real in-repo components
@@ -42,6 +54,7 @@ Integration tests must not:
 - assert only that mocks were called
 - recreate the production path entirely inside test fixtures
 - treat a mocked internal architecture as evidence that the design was implemented
+- substitute a synthetic test journey for the MVL journey merely because it is easier to automate
 
 Permitted substitutions are limited to true external or nondeterministic boundaries, for example:
 - remote LLM providers
@@ -85,13 +98,15 @@ real DecisionService
 
 Integration testing answers:
 
-> Does the architecture described by the implementation actually exist and work as connected production code?
+> Does the architecture described by the implementation actually exist and work as connected production code for the feature journey we intend users to try?
 
 ### L3 — Vertical / End-to-End Tests
 
 Purpose: prove a meaningful user-visible or externally observable path through the system.
 
 Use this layer when the implementation spans multiple architectural boundaries, gateways, persistence surfaces, processes, runtime components, **or any frontend/UI behavior**.
+
+For product features, the vertical/E2E test is the executable form of the MVL's smallest real user journey. Do not choose a different happy path solely because it is easier to automate.
 
 A vertical test should exercise the real application entry point where practical and verify the final observable result. Genuine external systems may still be substituted at their external boundary.
 
@@ -106,6 +121,8 @@ Any change that creates, modifies, or can regress user-visible frontend behavior
 **Mandatory rule:**
 
 > Frontend code is not complete until the changed UI path has been exercised in a real browser.
+
+For a product feature, the browser path should be the same user journey named in the MVL contract, not a separate UI-only demonstration.
 
 This applies to changes involving, for example:
 - React/Vue/Svelte components
@@ -228,6 +245,41 @@ real Windows Chrome over CDP
   -> visible final state
 ```
 
+## MVL Test Alignment
+
+For product features, the plan's MVL Contract is the shared source of truth for all completion evidence.
+
+Before writing integration, browser, or E2E tests, compare the test against the plan:
+
+```text
+MVL plan                         Test evidence
+---------------------------------------------------------------
+Target user / JTBD          ->   test actor / scenario
+Smallest real journey       ->   integration/E2E path
+Realistic trial inputs      ->   fixtures / seeded data
+Technical success metrics   ->   assertions / measured outputs
+UX success metrics          ->   browser/user-task observations
+Feedback capture            ->   telemetry/correction assertions
+Re-test surface             ->   stable repeatable test/eval command
+```
+
+If those columns no longer describe the same feature, stop and reconcile the plan or test. Do not let local implementation convenience redefine the MVL.
+
+The test suite establishes **implementation credibility**. Product learning then uses the same journey and trial inputs for technical/UX measurement, feedback, diagnosis, improvement, and comparable re-test.
+
+```text
+Implementation credible
+  = TDD + real integration + real browser when UI + vertical/E2E when needed
+
+MVL complete
+  = credible implementation
+  + technical measurement
+  + UX measurement
+  + feedback
+  + required evidence-driven improvement
+  + comparable re-test
+```
+
 ## Completion Gate
 
 Before an architectural implementation is marked complete:
@@ -241,6 +293,7 @@ Before an architectural implementation is marked complete:
 - [ ] external substitutions are explicitly identified and occur only at true external boundaries
 - [ ] at least one integration test was observed failing because the implementation or wiring was incomplete
 - [ ] the integration suite passes after implementation
+- [ ] for product features, integration/E2E evidence exercises the same smallest real journey and realistic inputs declared by the MVL plan
 - [ ] a vertical / E2E test exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 - [ ] **any frontend/UI change has real-browser UI test evidence**
 - [ ] **Windows Chrome on port `9222` was preferred for WSL frontend work**
@@ -254,9 +307,19 @@ If a frontend plan cannot satisfy the UI gate because Windows Chrome is not reac
 
 ## Integration Contract in Implementation Plans
 
-Implementation plans should explicitly declare their integration contract before coding begins:
+Implementation plans should explicitly declare their integration contract before coding begins and tie it to the MVL contract:
 
 ```yaml
+mvl_contract:
+  target_user: ...
+  job_to_be_done: ...
+  smallest_real_journey: ...
+  realistic_trial_inputs: ...
+  technical_metrics: ...
+  ux_metrics: ...
+  feedback_capture: ...
+  re_test_surface: ...
+
 integration_contract:
   real_components_required:
     - ComponentA
@@ -281,7 +344,7 @@ integration_contract:
     completion_blocked_until_browser_verified: true
 ```
 
-This prevents an implementation agent from silently replacing an inconvenient dependency or unavailable browser with a test double and then claiming the design is complete.
+This prevents an implementation agent from silently replacing an inconvenient dependency, unavailable browser, or intended user journey with an easier test double/scenario and then claiming the design is complete.
 
 ## Existing Repository Test Surfaces
 

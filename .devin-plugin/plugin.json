@@ -1,13 +1,12 @@
 {
-  "name": "superpowers",
+  "name": "livingware-engineer",
   "version": "6.3.0",
-  "description": "An agentic skills framework & software development methodology that works: planning, TDD, debugging, and collaboration workflows.",
+  "description": "Livingware Engineer: governed planning, TDD, integration verification, debugging, and collaboration workflows.",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "chris-han"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/chris-han/livingware-engineer",
+  "repository": "https://github.com/chris-han/livingware-engineer",
   "license": "MIT",
   "keywords": [
     "brainstorming",
@@ -15,6 +14,7 @@
     "skills",
     "planning",
     "tdd",
+    "integration-testing",
     "debugging",
     "code-review",
     "workflow"

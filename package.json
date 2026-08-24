@@ -1,13 +1,14 @@
 {
-  "name": "superpowers",
+  "name": "livingware-engineer",
   "version": "6.3.0",
-  "description": "Superpowers skills and runtime bootstrap for coding agents",
+  "description": "Livingware Engineer skills and governed runtime bootstrap for coding agents",
   "type": "module",
   "main": ".opencode/plugins/superpowers.js",
   "keywords": [
     "pi-package",
     "skills",
     "tdd",
+    "integration-testing",
     "debugging",
     "collaboration",
     "workflow"

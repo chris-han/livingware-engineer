@@ -120,23 +120,83 @@ Restart active Hermes sessions after installation.
 
 ## Basic Workflow
 
-1. **brainstorming** — refine requirements and design before coding.
-2. **mvl-feature-development** — define the smallest learnable user journey, technical/UX metrics, baseline, feedback mechanism, improvement levers, and re-test criterion.
-3. **using-git-worktrees** — create an isolated workspace and establish a clean baseline.
-4. **writing-plans** — compile the approved design and MVL contract into executable implementation tasks.
-5. **subagent-driven-development** or **executing-plans** — implement bounded tasks with review checkpoints.
-6. **test-driven-development** — enforce RED → GREEN → REFACTOR for local behavior.
-7. **real-component integration verification** — prove changed in-repo components are wired through their production implementations; mocks are allowed only at explicitly permitted external boundaries.
-8. **real-browser UI verification** — mandatory for frontend work; prefer Chrome CDP on port `9222`, and in WSL require the Windows-host Chrome prerequisite rather than silently downgrading to mock-only UI tests.
-9. **vertical / end-to-end verification** — prove the meaningful user-visible path when the change crosses architectural boundaries.
-10. **MVL evaluation** — run the realistic trial, measure technical and UX outcomes, capture feedback, improve, and re-run the same evaluation surface.
-11. **requesting-code-review** — verify spec compliance and code quality.
-12. **verification-before-completion** — require current evidence before claiming completion.
-13. **finishing-a-development-branch** — close the implementation lifecycle cleanly.
+MVL is not a separate skill. For product features, it is the **unit of work carried across the existing workflow**.
+
+1. **brainstorming / design** — define the target user, job-to-be-done, value hypothesis, and smallest real user journey.
+2. **using-git-worktrees** — create an isolated workspace and establish a clean baseline.
+3. **writing-plans** — compile the approved design into an implementation plan that carries the same MVL contract: realistic trial inputs, technical/UX metrics, feedback capture, improvement levers, re-test surface, stopping criterion, and integration contract.
+4. **subagent-driven-development** or **executing-plans** — implement bounded tasks without redefining the feature unit locally.
+5. **test-driven-development** — enforce RED → GREEN → REFACTOR for local behavior derived from the planned journey.
+6. **real-component integration verification** — prove the same smallest real journey through changed in-repo production components; internal completion-path mocks are forbidden.
+7. **real-browser UI verification** — mandatory for frontend work; prefer Chrome CDP on port `9222`, and in WSL require the Windows-host Chrome prerequisite rather than silently downgrading to mock-only UI tests.
+8. **vertical / end-to-end verification** — execute the feature's smallest real user journey through the real application path when it crosses architecture boundaries.
+9. **technical + UX measurement / feedback / improvement / re-test** — use the same journey and realistic inputs to generate comparable product-learning evidence.
+10. **requesting-code-review** — verify spec compliance and code quality.
+11. **verification-before-completion** — distinguish task completion, implementation completion, and MVL/feature completion using fresh evidence.
+12. **finishing-a-development-branch** — close the implementation lifecycle cleanly.
+
+## MVL as the Cross-Cutting Feature Contract
+
+For a product feature, every phase must preserve one contract:
+
+```text
+Target user + JTBD + value hypothesis
+              |
+              v
+Smallest real user journey
+              |
+              v
+Realistic trial inputs
+              |
+              v
+Plan + implementation tasks
+              |
+              v
+TDD behavior evidence
+              |
+              v
+Real-component integration
+              |
+              v
+Real-browser / vertical E2E evidence
+              |
+              v
+Technical + UX measurement
+              |
+              v
+Feedback -> Diagnose -> Improve
+              |
+              v
+Comparable re-test
+```
+
+The feature unit must not fragment as work moves between agents or phases. A task may implement only one component, but it does not get to invent a different user path, success criterion, fixture semantics, or integration story just to make its local tests pass.
+
+Every product implementation plan therefore carries an **MVL Contract** with:
+
+- target user and job-to-be-done
+- value hypothesis
+- smallest real user journey
+- realistic trial inputs
+- technical success metrics
+- UX success metrics
+- feedback and telemetry capture
+- improvement levers
+- re-evaluation surface
+- stopping criterion
+
+The same plan also carries an **Integration Contract** that names:
+
+- real in-repo components required on the completion path
+- true external/nondeterministic boundaries that may be substituted
+- internal components forbidden from being mocked as completion evidence
+- real-browser requirement and preferred Chrome CDP endpoint when frontend work is involved
+
+For maintenance work with no product-learning loop, the plan may state `MVL: not applicable — <reason>` rather than inventing one.
 
 ## Livingware Extension Principle
 
-TDD alone proves local behavior; it does not prove that the designed system actually exists. Livingware Engineer therefore treats testing as layered evidence, and feature development as a learning loop above that evidence:
+TDD alone proves local behavior; it does not prove that the designed system actually exists. Livingware Engineer therefore treats testing as layered evidence inside the MVL:
 
 ```text
 Task TDD
@@ -144,10 +204,12 @@ Task TDD
        |
        v
 Real-component integration
+  same planned user journey
   real internal dependencies
        |
        v
 Real-browser UI test (when frontend)
+  same planned user journey
   real rendered interaction
        |
        v
@@ -155,46 +217,33 @@ Vertical / end-to-end slice
   production wiring
        |
        v
-Architecture + spec closure
-       |
-       v
 Credible working prototype
        |
        v
 Try -> Measure -> Feedback -> Diagnose -> Improve -> Re-test
-       |
-       v
-MVL-complete feature iteration
 ```
 
 An architectural task should not be considered complete merely because mocked unit tests pass. Each changed or newly relied-upon in-repo production component should participate in at least one integration path using its real implementation.
 
-A feature should not be considered complete merely because its implementation passes all technical gates. **Implementation completion and feature completion are different claims.** The `mvl-feature-development` skill requires a real target user journey, technical and UX evaluation, feedback capture, at least one explicit improvement, and a comparable re-test.
-
-## Minimum Viable Loop (MVL)
-
-Livingware Engineer includes `skills/mvl-feature-development/SKILL.md`, generalized from the Semantier MVL methodology.
-
-Canonical loop:
+A product feature should not be considered complete merely because its implementation passes all technical gates.
 
 ```text
-Prototype -> Try -> Measure -> Feedback -> Diagnose -> Improve -> Re-test
+Task complete
+  = local deliverable + local evidence
+
+Implementation complete
+  = TDD + real integration + real browser when UI + vertical/E2E when needed
+
+MVL / feature complete
+  = implementation credibility
+  + technical measurement
+  + UX measurement
+  + feedback
+  + required evidence-driven improvement
+  + comparable re-test
 ```
 
-An MVL plan should identify:
-
-- target user and job-to-be-done
-- smallest working prototype journey
-- realistic trial inputs
-- technical success metrics
-- UX success metrics
-- baseline / initial benchmark
-- feedback and telemetry capture
-- improvement levers
-- re-evaluation method
-- stopping criterion
-
-For knowledge- or data-backed features, the supporting asset belongs inside the learning loop rather than being treated as unrelated infrastructure:
+For knowledge- or data-backed features, the supporting asset belongs inside the same learning loop rather than being treated as unrelated infrastructure:
 
 ```text
 Ground/acquire source
@@ -242,7 +291,7 @@ Some internal names still contain `superpowers`, including the `using-superpower
 
 Livingware Engineer is derived from **Superpowers**, created by Jesse Vincent / Prime Radiant. The upstream project is available at `obra/superpowers`.
 
-The **Minimum Viable Loop (MVL)** feature-development layer is adapted from the Semantier `mvl-feature-development` methodology and generalized for use across product codebases.
+The cross-cutting **Minimum Viable Loop (MVL)** feature-unit methodology is adapted from the Semantier `mvl-feature-development` approach, but in Livingware Engineer it is intentionally embedded across planning, implementation, integration, browser/E2E verification, measurement, feedback, and re-test rather than exposed as a separate optional skill.
 
 Livingware-specific changes and distribution are maintained in this repository.
 

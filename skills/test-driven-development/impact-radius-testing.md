@@ -8,7 +8,17 @@ Use this reference when deciding how far a code change should escalate beyond lo
 
 A one-line change can require integration or E2E coverage if it changes a boundary used by multiple production consumers. A large pure-function refactor may require only focused local tests if its observable contract is unchanged.
 
-When Codebase MCP or an equivalent code graph is available, use it before deciding the required test surface.
+When **`codebase-memory-mcp`** is available, prefer it before deciding the required test surface. If the repository is not indexed, run `index_repository` first.
+
+Use the graph-oriented tools exposed by `codebase-memory-mcp` where applicable:
+
+- `search_graph` — discover related symbols/components and graph neighborhoods
+- `trace_path` — inspect concrete dependency/call paths between relevant surfaces
+- `query_graph` — query structural relationships and consumers
+- `search_code` — find code-level references when graph queries need support
+- `get_code_snippet` — inspect the relevant implementation without broad file reading
+
+An equivalent code graph may be used only when `codebase-memory-mcp` is unavailable.
 
 ## Impact-Radius Assessment
 
@@ -25,7 +35,7 @@ For each changed symbol, file, route, schema, dependency, or configuration surfa
 - frontend routes, components, state consumers, and user interaction paths
 - shared libraries or abstractions with broad fan-out
 
-Prefer Codebase MCP queries that expose call graph, dependency graph, references, consumers, or impact analysis. Record the materially affected production path rather than relying on file proximity.
+Prefer graph evidence over file proximity. Record the materially affected production path and the consumers that make the radius meaningful.
 
 ## Test-Scope Decision
 
@@ -86,7 +96,7 @@ Use this instead:
 
 ```text
 changed production surface
-  -> Codebase MCP impact radius
+  -> codebase-memory-mcp impact radius
   -> affected seams and consumers
   -> narrowest sufficient verification
 ```
@@ -101,7 +111,8 @@ For implementation plans, record impact analysis before declaring the Integratio
 
 ```yaml
 impact_radius:
-  source: codebase_mcp
+  source: codebase-memory-mcp
+  indexed: true
   changed_surfaces:
     - ...
   direct_consumers:
@@ -110,6 +121,9 @@ impact_radius:
     - ...
   user_paths_at_risk:
     - ...
+  graph_evidence:
+    - search_graph: ...
+    - trace_path: ...
   radius: R0|R1|R2|R3
 
 integration_contract:
@@ -122,7 +136,7 @@ integration_contract:
     - ...
 ```
 
-If Codebase MCP is unavailable, use the best available static references, search, call hierarchy, dependency graph, route map, and repository knowledge, and record that the impact assessment is lower confidence.
+If `codebase-memory-mcp` is unavailable, use the best available static references, search, call hierarchy, dependency graph, route map, and repository knowledge, and record that the impact assessment is lower confidence.
 
 ## Final Principle
 

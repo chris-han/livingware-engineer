@@ -153,25 +153,57 @@ Any frontend/UI change requires browser-level verification because DOM simulator
 
 > If the user can see it or interact with it, the changed path must be exercised in a real browser before completion.
 
-### Prefer Remote Chrome on Port 9222
+### Prefer Windows-host Chrome on Port 9222 for WSL
 
-When available, attach to the existing Chrome DevTools endpoint:
+The normal coding environment may be WSL with no Linux Chrome installed. In that environment, prefer the developer's Windows-host Chrome through CDP rather than installing a separate browser inside WSL.
+
+Preferred endpoint:
 
 ```text
 http://127.0.0.1:9222
 ```
 
-Prefer that browser because it can preserve the real local runtime, authentication/session state, extensions, cookies, application state, viewport, and environment the developer is actually using.
-
 Browser priority:
 
 ```text
-1. existing Chrome via CDP at 127.0.0.1:9222
-2. project-standard real-browser runner such as Playwright/Puppeteer
-3. fresh local browser instance
+1. Windows-host Chrome via CDP at 127.0.0.1:9222
+2. project-standard real-browser runner already provided by the project
+3. fresh local browser only if one is actually installed in the coding environment
 ```
 
-If port `9222` is unavailable, record that and use the next real-browser option. Do not downgrade to jsdom, snapshots, shallow rendering, mocked child trees, or source inspection.
+### When `9222` is unavailable
+
+Probe first:
+
+```bash
+curl -fsS http://127.0.0.1:9222/json/version
+```
+
+If the probe fails, **do not silently fall back to mock-only UI evidence and do not mark the frontend complete**. Remind the user that Windows Chrome must be started with remote debugging enabled.
+
+Provide these instructions:
+
+```powershell
+Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
+  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
+```
+
+If Chrome is under the x86 Program Files directory:
+
+```powershell
+Start-Process "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe" `
+  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
+```
+
+Command Prompt equivalent when Chrome is on `PATH`:
+
+```cmd
+start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
+```
+
+Explain that the separate `--user-data-dir` is required for modern Chrome remote debugging and intentionally isolates the debug browser from the user's normal profile.
+
+After the user starts Chrome, retry the WSL probe. If Windows Chrome is running but WSL still cannot reach `127.0.0.1:9222`, report a WSL/Windows host-network reachability issue. Do not install Chrome inside WSL merely to bypass this configured test prerequisite.
 
 ### UI Evidence Rules
 
@@ -192,7 +224,7 @@ For interactive changes, perform the actual interaction: click, type, select, dr
 
 ```text
 ✅ UI completion evidence
-real Chrome -> real app -> real route -> real component tree -> real interaction -> visible final state
+Windows Chrome via CDP -> real app -> real route -> real component tree -> real interaction -> visible final state
 
 ❌ Not sufficient
 jsdom -> mocked child components -> expect(className).toContain('active')
@@ -202,9 +234,10 @@ jsdom -> mocked child components -> expect(className).toContain('active')
 
 ```
 IF production change affects frontend/UI:
-  Is remote Chrome on 127.0.0.1:9222 available?
-    yes → prefer attaching to it
-    no  → use project-standard real browser or launch one
+  Is Windows Chrome on 127.0.0.1:9222 reachable from WSL?
+    yes → attach and run browser verification
+    no  → instruct user to start Windows Chrome in debug mode
+          and keep completion BLOCKED
 
   Does the test load the real app?
     no → invalid UI completion evidence
@@ -259,8 +292,8 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 | Finish architectural work | Run at least one real-component integration path |
 | A required internal dependency is missing | Implement/install it; do not mock past it |
 | Change frontend/UI behavior | Run a real-browser UI test |
-| Browser available at port 9222 | Prefer attaching to that Chrome instance |
-| 9222 unavailable | Use another real browser; never downgrade to mock-only UI evidence |
+| Windows Chrome reachable at `9222` | Attach to it from WSL |
+| `9222` unavailable in WSL | Instruct the user to start Windows Chrome in debug mode; keep completion blocked |
 | Finish a test file | Run the mutation check |
 
 ## Warning Signs
@@ -281,4 +314,5 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 - A missing dependency was replaced by a fake so the plan could be marked complete
 - Frontend work completed with no browser test
 - UI evidence is only jsdom, snapshots, shallow rendering, mocked components, source inspection, or CSS class assertions
-- Remote Chrome is available at `9222` but ignored in favor of a synthetic browser without reason
+- WSL frontend work marked complete while Windows Chrome `9222` remained unavailable
+- A Linux browser was installed solely to bypass the configured Windows-host Chrome prerequisite

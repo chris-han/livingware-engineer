@@ -1,17 +1,18 @@
 {
-  "name": "superpowers",
-  "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
+  "name": "livingware-engineer",
+  "description": "Livingware Engineer: governed planning, TDD, debugging, integration verification, and delivery workflows for coding agents",
   "version": "6.3.0",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "chris-han",
+    "url": "https://github.com/chris-han"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/chris-han/livingware-engineer",
+  "repository": "https://github.com/chris-han/livingware-engineer",
   "license": "MIT",
   "keywords": [
     "skills",
     "tdd",
+    "integration-testing",
     "debugging",
     "collaboration",
     "best-practices",

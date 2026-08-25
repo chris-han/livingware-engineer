@@ -1,11 +1,11 @@
 {
-  "name": "superpowers-dev",
+  "name": "livingware-engineer",
   "interface": {
-    "displayName": "Superpowers Dev"
+    "displayName": "Livingware Engineer"
   },
   "plugins": [
     {
-      "name": "superpowers",
+      "name": "livingware-engineer",
       "source": {
         "source": "url",
         "url": "./"

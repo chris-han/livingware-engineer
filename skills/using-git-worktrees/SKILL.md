@@ -7,11 +7,11 @@ description: Use when starting feature work that needs isolation from current wo
 
 ## Overview
 
-Ensure work happens in an isolated workspace. Prefer your platform's native worktree tools. Fall back to manual git worktrees only when no native tool is available.
+Choose workspace isolation in proportion to the change's impact radius. Keep small, reversible work in a clean checkout; use a worktree when isolation materially reduces coordination or rollback risk. Prefer your platform's native worktree tools when isolation is needed, and fall back to manual git worktrees only when no native tool is available.
 
-**Core principle:** Detect existing isolation first. Then use native tools. Then fall back to git. Never fight the harness.
+**Core principle:** Detect existing isolation and repository state first. Then choose in-place or isolated work from observable impact signals. Never add branch ceremony that does not reduce meaningful risk.
 
-**Announce at start:** "I'm using the using-git-worktrees skill to set up an isolated workspace."
+**Announce at start:** "I'm using the using-git-worktrees skill to choose the workspace strategy from the change's impact radius."
 
 ## Step 0: Detect Existing Isolation
 
@@ -36,9 +36,25 @@ Report with branch state:
 - On a branch: "Already in isolated workspace at `<path>` on branch `<name>`."
 - Detached HEAD: "Already in isolated workspace at `<path>` (detached HEAD, externally managed). Branch creation needed at finish time."
 
-**If `GIT_DIR == GIT_COMMON` (or in a submodule):** You are in a normal repo checkout.
+**If `GIT_DIR == GIT_COMMON` (or in a submodule):** You are in a normal repo checkout. Check cleanliness before choosing a strategy:
 
-Has the user already indicated their worktree preference in your instructions? If not, ask for consent before creating a worktree:
+```bash
+git status --short
+```
+
+### Impact-radius decision
+
+Work in place without asking about a branch or worktree only when every condition below is true:
+
+- the checkout is clean;
+- the task is confined to one repository and an existing component or flow;
+- it changes no public API/contract, persistence schema or migration, dependency, deployment/runtime configuration, generated artifact, or cross-repository pin;
+- the change and its focused test are straightforward to review and revert;
+- the user has not requested isolation.
+
+Use isolation when any of these signals is present: multiple repositories or independently coordinated tasks, governed implementation-plan execution, public contracts, persistence/migrations, dependencies, deployment/runtime configuration, generated artifacts, risky refactoring, a dirty checkout that may overlap, or uncertainty about the impact radius.
+
+If isolation is indicated and the user has not already expressed a worktree preference, ask for consent before creating one:
 
 > "Would you like me to set up an isolated worktree? It protects your current branch from changes."
 
@@ -145,6 +161,8 @@ Ready to implement <feature-name>
 |-----------|--------|
 | Already in linked worktree | Skip creation (Step 0) |
 | In a submodule | Treat as normal repo (Step 0 guard) |
+| Clean, single-repo, reversible, boundary-preserving change | Work in place without asking |
+| Cross-repo, plan-driven, boundary-changing, dirty, or uncertain change | Use isolation; ask consent if preference is unknown |
 | Native worktree tool available | Use it (Step 1a) |
 | No native tool | Git worktree fallback (Step 1b) |
 | `.worktrees/` exists | Use it (verify ignored) |
@@ -161,6 +179,8 @@ Ready to implement <feature-name>
 | Excuse | Reality |
 |--------|---------|
 | "I'm obviously not in a worktree — no need to check" | Run Step 0. Harness-created isolation and submodules both fool eyeballing; the detection commands settle it. |
+| "Every code change is safer in a worktree" | Isolation has coordination and cleanup cost. For a clean, bounded, reversible change with no boundary impact, work in place. |
+| "It only touches one file, so it is low impact" | File count is not impact radius. Contracts, schemas, dependencies, runtime configuration, generated artifacts, and cross-repository pins require isolation even with a tiny diff. |
 | "`git worktree add` is quicker than hunting for a native tool" | A native tool (e.g. `EnterWorktree`) owns placement, branching, and cleanup. Bypassing it is the #1 mistake — it creates phantom state your harness can't see or manage. |
 | "The worktree directory is surely ignored already" | Run `git check-ignore`. An unignored worktree directory commits the whole tree into the repo. |
 | "Any directory name works" | Explicit instructions beat an existing project-local directory, which beats the `.worktrees/` default. |

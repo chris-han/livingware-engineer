@@ -274,6 +274,16 @@ Browser priority:
 3. fresh local browser only if the coding environment actually has one installed
 ```
 
+### Persistent Chrome is shared state
+
+When attaching to an already-running Chrome, preserve its natural viewport and operator-owned tabs. Use a dedicated fixture-owned page, never mutate the shared viewport/window for a screenshot, and always clean up owned pages, CDP sessions, emulation overrides, and the automation client in `finally`.
+
+If an exact synthetic viewport is required, launch an isolated browser/profile instead. A persistent endpoint is not a disposable test fixture.
+
+When `9222` is reachable from WSL, keep diagnostics and cleanup in WSL/CDP. Do not invoke PowerShell merely because Chrome is Windows-hosted; host launch instructions apply only when the endpoint is unavailable.
+
+Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) before automating a shared browser. It defines the required ownership, natural-viewport, diagnostic, and cleanup contract.
+
 ### If `9222` is unavailable: stop and instruct the user
 
 First probe the endpoint:
@@ -326,7 +336,7 @@ The UI test must:
 - use screenshots/DOM/accessibility state when useful as evidence
 - be observed failing when the UI or wiring is incomplete, then passing after implementation
 
-For visual-only changes, inspect the rendered browser result at the relevant viewport(s). A unit test asserting `className` is not sufficient completion evidence.
+For visual-only changes, inspect the rendered browser result at the natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. A unit test asserting `className` is not sufficient completion evidence.
 
 For interaction changes, execute the real interaction: click, type, select, drag, keyboard navigation, route transition, graph action, etc.
 

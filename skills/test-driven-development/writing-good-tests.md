@@ -171,6 +171,14 @@ Browser priority:
 3. fresh local browser only if one is actually installed in the coding environment
 ```
 
+### Preserve the natural viewport on shared Chrome
+
+The persistent `9222` browser is shared operator state, not a disposable fixture. Create a fixture-owned page; do not reuse existing tabs or call viewport/window override APIs. Put cleanup in `finally`: clear fixture-created device metrics, detach sessions, close only fixture-owned pages, disconnect the client transport, and ensure the automation process exits.
+
+If exact viewport coverage is required, use an isolated browser/profile. When `9222` is reachable, remain in WSL/CDP for diagnostics and cleanup; PowerShell is only a user-facing launch instruction for an unavailable endpoint.
+
+Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) for the complete safety and diagnosis procedure.
+
 ### When `9222` is unavailable
 
 Probe first:
@@ -218,7 +226,7 @@ A UI test used as completion evidence must:
 - capture screenshot, rendered DOM, accessibility tree, or equivalent evidence when useful
 - prove it can fail on incomplete UI behavior or wiring, then pass after the implementation
 
-For visual changes, verify the rendered result at the relevant viewport(s). Testing only class names, props, tokens, or snapshots is insufficient.
+For visual changes, verify the rendered result at the shared browser's natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. Testing only class names, props, tokens, or snapshots is insufficient.
 
 For interactive changes, perform the actual interaction: click, type, select, drag, focus, keyboard navigation, route transition, graph/canvas action, etc.
 
@@ -235,7 +243,8 @@ jsdom -> mocked child components -> expect(className).toContain('active')
 ```
 IF production change affects frontend/UI:
   Is Windows Chrome on 127.0.0.1:9222 reachable from WSL?
-    yes → attach and run browser verification
+    yes → attach with a fixture-owned page; preserve natural viewport;
+          clean up sessions, overrides, page, and client in finally
     no  → instruct user to start Windows Chrome in debug mode
           and keep completion BLOCKED
 

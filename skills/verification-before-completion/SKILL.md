@@ -86,6 +86,7 @@ Skip any step = not verified.
 | Requirements met | Line-by-line checklist | Tests passing |
 | Architecture implemented | Real-component integration through production wiring | Unit tests with internal mocks |
 | Frontend complete | Real-browser verification of changed user path | jsdom, snapshots, mocked children |
+| Shared-browser UI evidence | Natural viewport, fixture-owned page, cleanup proof, shared Chrome still reachable | Screenshot from an overridden or stale automation target |
 | Implementation complete | TDD + integration + browser/E2E as applicable | One green test layer |
 | MVL / feature complete | Implementation credibility + measurement + feedback + required improvement + comparable re-test | E2E passing |
 
@@ -116,6 +117,7 @@ If the right side does not match the left side, do not claim MVL completion. Eit
 - About to commit/push/PR without verification
 - Trusting agent success reports
 - Relying on partial verification
+- Treating a screenshot as valid without verifying shared-browser viewport and cleanup state
 - Thinking "just this once"
 - Tired and wanting work over
 - Calling a product feature complete because integration/E2E is green while measurement/feedback/re-test are still open
@@ -148,6 +150,14 @@ If the right side does not match the left side, do not claim MVL completion. Eit
 ✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
 ❌ "I've written a regression test" (without red-green verification)
 ```
+
+**Shared Chrome browser evidence:**
+```
+✅ Same target measured and captured → natural viewport confirmed → no active fixture override → owned page/session/client cleaned → shared endpoint still reachable
+❌ Screenshot captured after setViewportSize → stale automation process left attached → operator tabs or browser state changed
+```
+
+Use the lifecycle checklist in [../test-driven-development/remote-cdp-browser-lifecycle.md](../test-driven-development/remote-cdp-browser-lifecycle.md) whenever completion evidence attaches to a persistent browser.
 
 **Build:**
 ```

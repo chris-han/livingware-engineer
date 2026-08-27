@@ -152,6 +152,16 @@ Browser-test priority:
 
 For the standard WSL workflow, do **not** assume Chrome is installed inside WSL and do not install another browser merely to bypass the preferred Windows Chrome test path.
 
+### Shared Chrome Lifecycle
+
+The persistent `9222` instance is operator-owned shared state. Browser tests must use a dedicated fixture-owned page, preserve the natural viewport/window, and avoid `setViewportSize`, device-metrics emulation, or window-bound mutations. Exact synthetic viewport coverage belongs in an isolated browser/profile.
+
+Cleanup must run in `finally`: clear fixture-created metrics overrides, detach CDP sessions, close only fixture-owned pages, disconnect the client transport, and ensure the automation process exits. Completion evidence must confirm the shared endpoint remains reachable and operator tabs remain intact.
+
+When `9222` is reachable from WSL, use WSL/CDP for probing, diagnostics, and cleanup. Do not execute PowerShell merely because Chrome is Windows-hosted. The PowerShell commands below are user-facing launch instructions only for an unavailable endpoint.
+
+If DOM geometry says the app fills `innerWidth` but a screenshot shows unexplained blank space, compare in-page metrics, `Page.getLayoutMetrics`, screenshot pixel dimensions, per-origin site zoom, CDP targets, and stale automation processes before changing CSS. See [the shared Chrome lifecycle reference](../skills/test-driven-development/remote-cdp-browser-lifecycle.md).
+
 ### If Chrome on `9222` Is Unavailable
 
 If the agent cannot reach the Chrome DevTools endpoint, it must treat browser availability as a **user-provided test prerequisite**, not silently downgrade the test.
@@ -215,7 +225,7 @@ UI completion evidence must:
 - capture screenshot, DOM state, accessibility state, or equivalent evidence when useful for the change
 - be observed failing when the UI behavior or wiring is incomplete, then passing after the implementation
 
-For visual-only changes, browser verification must inspect the rendered result at the relevant viewport(s); a unit test that merely checks CSS class names is not sufficient completion evidence.
+For visual-only changes, browser verification must inspect the rendered result at the natural viewport; use an isolated browser/profile for exact synthetic viewport coverage. A unit test that merely checks CSS class names is not sufficient completion evidence.
 
 For interaction changes, the browser test must execute the interaction itself: click, type, select, drag, keyboard navigation, route change, graph interaction, etc.
 

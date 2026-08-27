@@ -378,6 +378,10 @@ For the standard WSL development environment, prefer Windows-host Chrome over CD
 http://127.0.0.1:9222
 ```
 
+Treat a persistent CDP browser as shared operator state. Use a fixture-owned page, preserve the natural viewport and existing tabs, and clean up device-metrics overrides, CDP sessions, owned pages, and the automation client in `finally`. Exact synthetic viewports require an isolated browser/profile.
+
+If DOM geometry and the screenshot disagree, inspect protocol layout metrics, screenshot dimensions, site zoom, CDP targets, and stale automation clients before changing CSS. When `9222` is reachable from WSL, keep this work in WSL/CDP; PowerShell is only a launch instruction for an unavailable endpoint. The full contract is in [Shared Chrome CDP Lifecycle](skills/test-driven-development/remote-cdp-browser-lifecycle.md).
+
 If it is unavailable, frontend completion remains blocked. The user should start a separate Windows Chrome debug profile rather than the agent installing a substitute browser inside WSL or downgrading to jsdom/mock-only evidence.
 
 Recommended PowerShell command:

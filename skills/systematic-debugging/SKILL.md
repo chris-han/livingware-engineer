@@ -117,6 +117,19 @@ You MUST complete each phase before proceeding to the next.
    - Keep tracing up until you find the source
    - Fix at source, not at symptom
 
+6. **Separate Browser Layout From Capture State**
+
+   **WHEN a real-browser screenshot disagrees with DOM geometry:**
+
+   - Do not change CSS yet. Equality between the document right edge and `innerWidth` proves only that the app fills the current CSS viewport.
+   - On the same target, compare in-page viewport/rectangle values, protocol-level `Page.getLayoutMetrics`, and the screenshot's actual pixel dimensions.
+   - Inspect per-origin site zoom, active CDP targets, and stale Node/Playwright/Puppeteer clients that may own an emulation override.
+   - Change one variable at a time. Terminate only a proven stale owner; never broadly kill browser or automation processes.
+   - When a Windows-host Chrome endpoint is reachable from WSL, diagnose and clean up through WSL/CDP. Do not invoke PowerShell merely because Chrome runs on Windows.
+   - Use a fixture-owned page and unconditional cleanup. Clear owned device-metrics overrides, detach sessions, close only owned pages, and disconnect the client.
+
+   Read [../test-driven-development/remote-cdp-browser-lifecycle.md](../test-driven-development/remote-cdp-browser-lifecycle.md) for the shared-browser lifecycle contract.
+
 ### Phase 2: Pattern Analysis
 
 **Find the pattern before fixing:**
@@ -223,6 +236,8 @@ If you catch yourself thinking:
 - "Pattern says X but I'll adapt it differently"
 - "Here are the main problems: [lists fixes without investigation]"
 - Proposing solutions before tracing data flow
+- Changing CSS after DOM geometry is already correct without checking screenshot, zoom, CDP, and stale-client state
+- Mutating a persistent browser's viewport for a quick screenshot
 - **"One more fix attempt" (when already tried 2+)**
 - **Each fix reveals new problem in different place**
 

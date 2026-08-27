@@ -122,6 +122,14 @@ RED-GREEN-REFACTOR validation for the using-git-worktrees skill (~5 minutes):
 - PRESSURE: same as GREEN under urgency framing with pre-existing `.worktrees/`
 - Drill scenario `worktree-creation-under-pressure.yaml` covers the PRESSURE phase only
 
+#### test-remote-cdp-lifecycle.sh
+Behavioral regression for shared persistent Chrome debugging (~5 minutes):
+- separates DOM/CSS layout from screenshot and capture-surface state
+- checks protocol layout metrics, screenshot dimensions, site zoom, and stale automation clients
+- preserves the natural viewport and operator-owned tabs
+- requires fixture-owned pages and unconditional CDP/client cleanup
+- keeps WSL diagnostics in WSL/CDP while `9222` is reachable
+
 ## Adding New Tests
 
 1. Create new test file: `test-<skill-name>.sh`

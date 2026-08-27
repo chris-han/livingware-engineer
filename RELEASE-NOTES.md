@@ -1,5 +1,13 @@
 # Superpowers Release Notes
 
+## v6.3.1 (2026-08-27)
+
+### Real-Browser Verification
+
+- **Persistent Chrome is now treated as shared operator state.** Browser tests attach through a fixture-owned page, preserve the natural viewport and existing tabs, and clean up device-metrics overrides, CDP sessions, owned pages, and the automation client unconditionally. Exact synthetic viewport checks use an isolated browser/profile.
+- **Screenshot geometry is diagnosed before CSS is changed.** When DOM bounds and screenshots disagree, the debugging workflow now compares in-page values, protocol layout metrics, screenshot dimensions, site zoom, CDP targets, and stale automation clients.
+- **WSL stays on the WSL/CDP path while Chrome is reachable.** PowerShell is a user-facing launch instruction only when the Windows-host debug endpoint is unavailable.
+
 ## v6.3.0 (2026-08-12)
 
 ### Harness Support

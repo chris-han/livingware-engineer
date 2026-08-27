@@ -2,7 +2,7 @@
   "name": "livingware-engineer",
   "displayName": "Livingware Engineer",
   "description": "Governed planning, TDD, integration verification, debugging, and delivery workflows",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "author": {
     "name": "chris-han"
   },

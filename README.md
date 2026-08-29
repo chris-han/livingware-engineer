@@ -175,6 +175,10 @@ hermes plugins install chris-han/livingware-engineer --enable
 
 Restart active Hermes sessions after installation.
 
+## Frontend Design
+
+Livingware Engineer includes a general `frontend-design` skill for product UI work. It composes the engineering workflow with a pinned upstream Impeccable skill for visual craft and anti-slop review. When a project already has a `DESIGN.md`, that project document remains the design authority: its visual language, information architecture, component conventions, and stated consistency objectives override generic design taste. A design-system replacement happens only when the task explicitly calls for one.
+
 ## Development Workflow
 
 MVL is not a separate skill. For product features, it is the **feature-development unit carried through the existing workflow**.

@@ -1,6 +1,6 @@
 name: livingware-engineer
-version: 6.3.1
-description: Livingware Engineer skills and governed workflow bootstrap for Hermes Agent
+version: 6.4.0
+description: Livingware Engineer workflow and frontend-design skills for Hermes Agent
 author: chris-han
 provides_hooks:
   - pre_llm_call

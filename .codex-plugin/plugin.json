@@ -1,7 +1,7 @@
 {
   "name": "livingware-engineer",
-  "version": "6.3.1",
-  "description": "Livingware Engineer: governed planning, TDD, integration verification, debugging, and collaboration workflows.",
+  "version": "6.4.0",
+  "description": "Livingware Engineer: governed planning, frontend design, TDD, integration verification, debugging, and collaboration workflows.",
   "author": {
     "name": "chris-han",
     "url": "https://github.com/chris-han"
@@ -16,6 +16,7 @@
     "planning",
     "tdd",
     "integration-testing",
+    "frontend-design",
     "debugging",
     "code-review",
     "workflow"
@@ -24,8 +25,8 @@
   "hooks": {},
   "interface": {
     "displayName": "Livingware Engineer",
-    "shortDescription": "Governed planning, TDD, integration verification, and delivery workflows",
-    "longDescription": "Use Livingware Engineer to guide agent work through brainstorming, implementation planning, test-driven development, real-component integration verification, systematic debugging, code review, and evidence-backed completion.",
+    "shortDescription": "Governed planning, frontend design, TDD, integration verification, and delivery workflows",
+    "longDescription": "Use Livingware Engineer to guide agent work through brainstorming, frontend design, implementation planning, test-driven development, real-component integration verification, systematic debugging, code review, and evidence-backed completion.",
     "developerName": "chris-han",
     "category": "Developer Tools",
     "capabilities": [

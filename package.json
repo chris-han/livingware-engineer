@@ -1,7 +1,7 @@
 {
   "name": "livingware-engineer",
-  "version": "6.3.1",
-  "description": "Livingware Engineer skills and governed runtime bootstrap for coding agents",
+  "version": "6.4.0",
+  "description": "Livingware Engineer skills for governed software delivery, frontend design, and runtime bootstrap",
   "type": "module",
   "main": ".opencode/plugins/superpowers.js",
   "keywords": [
@@ -10,6 +10,7 @@
     "tdd",
     "integration-testing",
     "debugging",
+    "frontend-design",
     "collaboration",
     "workflow"
   ],

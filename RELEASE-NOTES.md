@@ -1,5 +1,12 @@
 # Superpowers Release Notes
 
+## v6.4.0 (2026-08-29)
+
+### Frontend Design
+
+- **Livingware now includes a general `frontend-design` skill.** UI design work reads the project's existing `DESIGN.md`, tokens, components, representative screens, and supplied references before applying generic design guidance. When a project already defines its design system, that project context remains authoritative and a redesign requires an explicit request.
+- **Impeccable is bundled as a pinned design-craft and anti-slop sub-skill.** The upstream `pbakaus/impeccable` skill is vendored at commit `b0594c72d18006b5865c70eb3a97e8b04064e600` with Apache-2.0 license/notice and deterministic provenance metadata. The same `skills/` tree is available to Codex and Hermes through their existing Livingware plugin loaders.
+
 ## v6.3.1 (2026-08-27)
 
 ### Real-Browser Verification

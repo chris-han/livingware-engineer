@@ -1,6 +1,6 @@
 {
   "name": "livingware-engineer",
   "description": "Livingware Engineer: governed planning, TDD, integration verification, debugging, and delivery workflows",
-  "version": "6.3.1",
+  "version": "6.4.0",
   "contextFileName": "GEMINI.md"
 }

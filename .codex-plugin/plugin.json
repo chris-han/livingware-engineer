@@ -1,6 +1,6 @@
 {
   "name": "livingware-engineer",
-  "version": "6.5.1",
+  "version": "6.5.2",
   "description": "Livingware Engineer: governed planning, frontend design, TDD, integration verification, debugging, and collaboration workflows.",
   "author": {
     "name": "chris-han",
@@ -29,15 +29,8 @@
     "longDescription": "Use Livingware Engineer to guide agent work through brainstorming, frontend design, implementation planning, test-driven development, real-component integration verification, systematic debugging, code review, and evidence-backed completion.",
     "developerName": "chris-han",
     "category": "Developer Tools",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
-    "defaultPrompt": [
-      "I've got an idea for something I'd like to build.",
-      "Let's add a feature to this project."
-    ],
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": ["I've got an idea for something I'd like to build.", "Let's add a feature to this project."],
     "websiteURL": "https://github.com/chris-han/livingware-engineer",
     "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
     "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",

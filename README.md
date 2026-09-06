@@ -1,5 +1,7 @@
 # Livingware Engineer
 
+**Design law:** [MVL Law 1 — Fast-to-Aha](docs/mvl-laws.md): governance should be ambient by default and interruptive only by exception.
+
 Livingware Engineer is an agentic software-engineering methodology and composable skills framework for coding agents. It is derived from [Superpowers](https://github.com/obra/superpowers), while extending the upstream workflow around one idea:
 
 > **Software is not a sequence of completed tasks. It is living infrastructure that must keep producing useful learning as requirements, users, dependencies, and architecture change.**

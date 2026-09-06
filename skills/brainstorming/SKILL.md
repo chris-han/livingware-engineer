@@ -13,6 +13,10 @@ Start by classifying how much process the request needs, then work through your 
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have told your human partner what you intend and they have approved it. This applies to EVERY task on EVERY path below — the ceremony scales with the task; the approval gate never does.
 </HARD-GATE>
 
+<PRODUCT-GOVERNANCE-LAW>
+This engineering design-approval gate is a development-process boundary, not a product runtime governance model. When designing product workflows, apply MVL Law 1: governance is ambient/default-pass for low-risk exploration, context formation, comparison, preview, and reversible transitions; explicit interruption is reserved for real safety, authority, consequential-action, or irreversibility triggers. Never copy this skill's blanket pre-implementation approval ceremony into the product UX.
+</PRODUCT-GOVERNANCE-LAW>
+
 ## Three Paths
 
 Before your first question, classify the request and say the classification out loud — "this looks bounded, so I'll present a short design here rather than write a spec" — so your human partner can override it:

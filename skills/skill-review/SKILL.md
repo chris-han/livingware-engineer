@@ -22,6 +22,8 @@ The goal is not brevity for its own sake. Minimize always-loaded instruction cos
 
 ## Principles
 
+- Apply MVL Law 1 first: flag unconditional workflow stops that could remain recorded and inspectable while defaulting to pass-through. Preserve true security, authority, destructive-operation, and irreversible-external-action boundaries.
+
 - Keep skill descriptions as short as possible while still discriminating when the skill should be used.
 - Avoid overlapping activation surfaces unless the distinction is obvious from the descriptions.
 - Prefer progressive disclosure. Multi-workflow skills should use the root `SKILL.md` as a minimal router into references, scripts, or workflow-specific files.

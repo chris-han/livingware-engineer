@@ -5,6 +5,10 @@ description: Use when designing, implementing, refactoring, reviewing, auditing,
 
 # Frontend Design
 
+## MVL Law 1 — Fast-to-Aha
+
+**REQUIRED:** Apply `docs/mvl-laws.md` MVL Law 1 first. Preserve governance boundaries, but keep normal low-risk product paths default-pass. Flag approval ceremony that delays the first useful result without changing risk.
+
 ## Overview
 
 Use Livingware's engineering workflow for the work process and Impeccable for frontend craft. Existing project design context is evidence and constraint, not optional inspiration.

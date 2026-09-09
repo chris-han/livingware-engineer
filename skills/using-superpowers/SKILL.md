@@ -15,7 +15,7 @@ Choose the smallest change and verification surface that satisfies the request. 
 
 - **Explanation, inspection, or review:** answer or inspect within the requested scope. Do not automatically start brainstorming, planning, implementation, or delegation.
 - **Bug diagnosis or repair:** use systematic-debugging; a diagnosis request alone does not authorize implementing a fix.
-- **Implementation:** use brainstorming to resolve material design choices; an explicit, fully specified, reversible bounded change can use its existing authorization. Use TDD for behavior changes.
+- **Implementation:** use brainstorming to resolve material design choices; an explicit, fully specified, reversible bounded change can use its existing authorization. Use the TDD/testing workflow for behavior changes, bug fixes, and behavior-preserving refactors.
 - **Approved multi-step plan:** use the authorized execution workflow. Preserve detailed steps and the plan's sprint integration/review units.
 - **Completion or integration:** use verification-before-completion for required scope and valid result reuse, then finishing-a-development-branch for the authorized integration action.
 

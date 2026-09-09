@@ -49,12 +49,36 @@ assert_contains() {
     fi
 }
 
-assert_not_contains() {
+assert_no_positive_chrome_execution() {
     local haystack="$1"
-    local pattern="$2"
-    local description="$3"
-    if printf '%s\n' "$haystack" | grep -Eiq "$pattern"; then
+    local description="$2"
+    local offending
+    offending=$(printf '%s\n' "$haystack" \
+        | grep -Ei '(Chrome|9222)' \
+        | grep -Ei '(use|run|execute|test|verify|attach|connect)' \
+        | grep -Eiv '(do not|don.t|not |no need|not needed|not required|unnecessary|skip|avoid|leave .*alone|leave .*untouched|rendering only|only for rendering)' \
+        || true)
+    if [ -n "$offending" ]; then
         echo "[FAIL] $description"
+        printf '%s\n' "$offending" | sed 's/^/  offending: /'
+        failures=$((failures + 1))
+    else
+        echo "[PASS] $description"
+    fi
+}
+
+assert_no_dual_execution() {
+    local haystack="$1"
+    local description="$2"
+    local offending
+    offending=$(printf '%s\n' "$haystack" \
+        | grep -Ei '(both|Lightpanda.*(and|plus).*Chrome|Chrome.*(and|plus).*Lightpanda)' \
+        | grep -Ei '(run|execute|test|verify|use)' \
+        | grep -Eiv '(do not|don.t|not |no need|not needed|not required|unnecessary|skip|avoid)' \
+        || true)
+    if [ -n "$offending" ]; then
+        echo "[FAIL] $description"
+        printf '%s\n' "$offending" | sed 's/^/  offending: /'
         failures=$((failures + 1))
     else
         echo "[PASS] $description"
@@ -76,10 +100,10 @@ assert_contains "$output" "affected|filter" \
 
 # Negative controls: mentioning Chrome to explain why it is unnecessary is valid.
 # Fail only when Codex positively proposes executing Chrome for this behavior-only
-# acceptance criterion, or proposes executing both browser lanes.
-assert_not_contains "$output" "(?:use|run|execute|test|verify|attach to|connect to).{0,40}(?:Chrome|9222)|(?:Chrome|9222).{0,40}(?:use|run|execute|test|verify|attach|connect)(?![^.\n]{0,40}(?:not|no need|unnecessary|skip|avoid))" \
+# acceptance criterion, or positively proposes executing both browser lanes.
+assert_no_positive_chrome_execution "$output" \
     "keep the behavior-only execution on the Lightpanda lane"
-assert_not_contains "$output" "(?:run|execute|test|verify).{0,40}(?:both|Lightpanda.{0,30}(?:and|plus).{0,30}Chrome|Chrome.{0,30}(?:and|plus).{0,30}Lightpanda)" \
+assert_no_dual_execution "$output" \
     "avoid duplicate execution in both engines"
 
 if [ "$failures" -gt 0 ]; then

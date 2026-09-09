@@ -49,6 +49,18 @@ assert_contains() {
     fi
 }
 
+assert_not_contains() {
+    local haystack="$1"
+    local pattern="$2"
+    local description="$3"
+    if printf '%s\n' "$haystack" | grep -Eiq "$pattern"; then
+        echo "[FAIL] $description"
+        failures=$((failures + 1))
+    else
+        echo "[PASS] $description"
+    fi
+}
+
 assert_contains "$output" "Lightpanda" \
     "choose Lightpanda for behavior verification"
 assert_contains "$output" "9223" \
@@ -62,12 +74,12 @@ assert_contains "$output" "stop only|kill only|only.*started|leave.*running" \
 assert_contains "$output" "affected|filter" \
     "run the affected browser test rather than broad duplicate coverage"
 
-# These are intentionally semantic positive checks rather than brittle wording
-# requirements such as "do not use Chrome". Mentioning Chrome while explaining why
-# it is unnecessary is correct behavior and must not fail the eval.
-assert_contains "$output" "Lightpanda.*(only|sole|single)|(?:only|sole|single).*Lightpanda|Chrome.*(unnecessary|not required|unused|untouched|not needed)|(?:skip|avoid|leave).*Chrome" \
+# Negative controls: mentioning Chrome to explain why it is unnecessary is valid.
+# Fail only when Codex positively proposes executing Chrome for this behavior-only
+# acceptance criterion, or proposes executing both browser lanes.
+assert_not_contains "$output" "(?:use|run|execute|test|verify|attach to|connect to).{0,40}(?:Chrome|9222)|(?:Chrome|9222).{0,40}(?:use|run|execute|test|verify|attach|connect)(?![^.\n]{0,40}(?:not|no need|unnecessary|skip|avoid))" \
     "keep the behavior-only execution on the Lightpanda lane"
-assert_contains "$output" "(?:one|single|only|sole).*(?:browser|lane|engine)|(?:browser|lane|engine).*(?:one|single|only|sole)|Lightpanda.*(?:without|instead of).*Chrome|Chrome.*(?:not needed|not required|unnecessary)" \
+assert_not_contains "$output" "(?:run|execute|test|verify).{0,40}(?:both|Lightpanda.{0,30}(?:and|plus).{0,30}Chrome|Chrome.{0,30}(?:and|plus).{0,30}Lightpanda)" \
     "avoid duplicate execution in both engines"
 
 if [ "$failures" -gt 0 ]; then

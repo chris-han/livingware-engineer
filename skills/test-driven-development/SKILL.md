@@ -65,6 +65,7 @@ digraph tdd_cycle {
     verify_red -> red [label="wrong\nfailure"];
     green -> verify_green [label="yes"];
     verify_green -> green [label="no"];
+    verify_green -> verify_green [style=invis];
     verify_green -> refactor [label="yes"];
     refactor -> verify_green [label="stay\ngreen"];
     verify_green -> next;
@@ -249,54 +250,59 @@ Any frontend or UI change requires real-browser verification before completion.
 **Mandatory rule:**
 
 ```
-FRONTEND CHANGE -> REAL BROWSER UI TEST -> FAIL THEN PASS
+FRONTEND CHANGE -> AFFECTED REAL-BROWSER TEST -> FAIL THEN PASS
 ```
 
 Use this gate for changes to pages, routes, components, forms, dialogs, menus, tables, graphs, visualizations, styles that affect behavior/visibility, frontend state, navigation, focus, keyboard/pointer interaction, or frontend/backend wiring.
 
-### Preferred browser connection for WSL development
+### Choose the browser by what the test proves
 
-The normal coding environment is WSL and may intentionally have **no local Chrome installed**. Do not assume a Linux browser is available and do not install one merely to bypass the preferred test path.
-
-Prefer the Windows-host Chrome DevTools endpoint:
+Do not treat every frontend test as a Chrome test. Follow `AGENTS.md` and select one browser lane by evidence type:
 
 ```text
-http://127.0.0.1:9222
+BEHAVIOR  -> Lightpanda     http://127.0.0.1:9223
+RENDERING -> Windows Chrome http://127.0.0.1:9222
 ```
 
-Use the Chrome DevTools Protocol / browser automation tooling available in the current harness to attach to that instance and exercise the real running application/session.
+**BEHAVIOR** includes interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript. Use Lightpanda by default.
 
-Browser priority:
+**RENDERING** includes visual appearance, layout, paint, fonts, screenshots, canvas/WebGL/WebGPU output, and Chromium-specific rendering behavior. Use Windows-host Chrome.
 
-```text
-1. Windows-host Chrome reachable from WSL on port 9222
-2. project-standard real browser harness, if the project already provides one
-3. fresh local browser only if the coding environment actually has one installed
+Run only the affected browser tests unless project instructions require broader coverage. Do not run the same scenario in both engines unless the acceptance criterion actually requires both behavioral and rendering evidence or a browser-specific compatibility question is under investigation.
+
+Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) before browser automation. It defines engine selection, process ownership, shared-Chrome state, viewport, diagnostics, and cleanup.
+
+### Lightpanda behavior lane
+
+Probe the designated endpoint:
+
+```bash
+curl -fsS http://127.0.0.1:9223/json/version
 ```
 
-### Persistent Chrome is shared state
+If it is unavailable and the `lightpanda` binary is installed, start it automatically rather than asking the user to remember the prerequisite:
+
+```bash
+lightpanda serve --host 127.0.0.1 --port 9223
+```
+
+A harness may background that command, record the PID, wait until `/json/version` responds, and then run the affected behavior tests. If the harness started Lightpanda, stop only that recorded process in unconditional cleanup. If Lightpanda was already running, leave it running. Never kill a process merely by executable name or port.
+
+If the Lightpanda binary itself is unavailable, report the missing behavior-test prerequisite. Do not silently substitute Windows Chrome as a generic behavior fallback.
+
+Lightpanda has no graphical rendering surface, so behavior evidence from it does not prove rendering correctness.
+
+### Windows Chrome rendering lane
+
+Windows-host Chrome at `127.0.0.1:9222` is persistent shared operator state. Use it only when rendering or Chromium-specific evidence is required.
 
 When attaching to an already-running Chrome, preserve its natural viewport and operator-owned tabs. Use a dedicated fixture-owned page, never mutate the shared viewport/window for a screenshot, and always clean up owned pages, CDP sessions, emulation overrides, and the automation client in `finally`.
 
 If an exact synthetic viewport is required, launch an isolated browser/profile instead. A persistent endpoint is not a disposable test fixture.
 
-When `9222` is reachable from WSL, keep diagnostics and cleanup in WSL/CDP. Do not invoke PowerShell merely because Chrome is Windows-hosted; host launch instructions apply only when the endpoint is unavailable.
+When `9222` is reachable from WSL, keep diagnostics and cleanup in WSL/CDP. Do not invoke PowerShell merely because Chrome is Windows-hosted.
 
-Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) before automating a shared browser. It defines the required ownership, natural-viewport, diagnostic, and cleanup contract.
-
-### If `9222` is unavailable: stop and instruct the user
-
-First probe the endpoint:
-
-```bash
-curl -fsS http://127.0.0.1:9222/json/version
-```
-
-If this fails, **do not silently fall back and do not claim frontend completion**. Treat Windows Chrome availability as a user-provided test prerequisite.
-
-Tell the user to start a separate Windows Chrome debug instance and provide these instructions.
-
-Recommended Windows PowerShell command:
+If a RENDERING test requires Chrome and `9222` is unavailable, tell the user to start a separate Windows Chrome debug instance. Recommended PowerShell command:
 
 ```powershell
 Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
@@ -316,15 +322,9 @@ Command Prompt equivalent when `chrome.exe` is available on `PATH`:
 start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
 ```
 
-Explain that the separate `--user-data-dir` is intentional: modern Chrome does not honor remote-debugging switches against the default Chrome data directory, and the debug profile must remain isolated from the user's normal profile.
+The separate `--user-data-dir` is intentional: the debug profile must remain isolated from the user's normal Chrome profile.
 
-Then ask the user to confirm the debug Chrome window is open and retry:
-
-```bash
-curl -fsS http://127.0.0.1:9222/json/version
-```
-
-If Windows Chrome is open but the WSL process still cannot reach `127.0.0.1:9222`, report a WSL/Windows host-network reachability problem. Do not install Chrome in WSL or substitute a mock browser test as a workaround; resolve reachability first.
+Chrome availability must not block a BEHAVIOR test that belongs on Lightpanda.
 
 The UI test must:
 - navigate to the real changed UI path
@@ -336,9 +336,9 @@ The UI test must:
 - use screenshots/DOM/accessibility state when useful as evidence
 - be observed failing when the UI or wiring is incomplete, then passing after implementation
 
-For visual-only changes, inspect the rendered browser result at the natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. A unit test asserting `className` is not sufficient completion evidence.
+For visual-only changes, inspect the rendered Chrome result at the natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. A unit test asserting `className` is not sufficient completion evidence.
 
-For interaction changes, execute the real interaction: click, type, select, drag, keyboard navigation, route transition, graph action, etc.
+For interaction changes that do not depend on rendered pixels, execute the real interaction through Lightpanda: click, type, select, route transition, DOM/state changes, and other supported browser behavior.
 
 Read [writing-good-tests.md](writing-good-tests.md) for detailed mock and browser-evidence rules. See [../../docs/testing.md](../../docs/testing.md) for the repository-wide L1/L2/L3 and UI strategy.
 
@@ -376,8 +376,9 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 | "The mocked integration test passes" | A mocked internal architecture proves only the mock contract, not the implemented design. |
 | "Dependency isn't ready, so I'll fake it" | Missing internal dependency is a prerequisite failure, not permission to bypass the architecture. |
 | "Component tests pass, so the UI is done" | Component tests do not prove the real browser can render and execute the user path. |
-| "Chrome 9222 isn't running" | In WSL, remind the user to start Windows Chrome in debug mode and keep completion blocked until the real browser is reachable. |
-| "I'll install Chrome in WSL instead" | Do not replace the designated Windows-host browser prerequisite just to make the gate easier to pass. |
+| "Lightpanda 9223 isn't running" | Start the installed Lightpanda CDP server, record ownership, run the behavior test, and stop only the process the test started. |
+| "Chrome is already open, so I'll use it for behavior too" | Browser choice follows the evidence type. Do not spend Chrome rendering capacity on ordinary behavior verification. |
+| "I'll run both to be safe" | Duplicate browser runs add cost without evidence. Run both only when the acceptance criterion needs both behavior and rendering proof. |
 
 ## Red Flags - STOP and Start Over
 
@@ -397,7 +398,9 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 - Missing production dependency replaced with fake implementation for test convenience
 - Frontend change completed without a real-browser interaction/render test
 - UI completion evidence consists only of snapshots, jsdom, shallow render, mocked children, or source inspection
-- WSL frontend work marked complete while Windows Chrome `9222` remained unavailable
+- Behavior-only frontend work routed to Chrome merely because Lightpanda was not already running
+- Rendering correctness claimed from Lightpanda behavior evidence
+- The same browser scenario run in both engines without an acceptance or compatibility reason
 
 ## Example: Bug Fix
 
@@ -452,10 +455,13 @@ Before marking work complete:
 - [ ] Integration test was observed failing on incomplete implementation/wiring and passing after the fix
 - [ ] Vertical/E2E coverage exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 - [ ] Any frontend/UI change has real-browser UI test evidence
-- [ ] For WSL frontend work, Windows Chrome on `127.0.0.1:9222` was attempted first
-- [ ] If `9222` was unavailable, the user was given the Windows debug-mode launch commands
-- [ ] Frontend completion remained blocked until a real browser endpoint was reachable and the UI test ran
-- [ ] UI test exercised the changed rendered interaction/path and verified the final visible result
+- [ ] Browser lane was chosen from the acceptance evidence: Lightpanda for BEHAVIOR, Windows Chrome for RENDERING
+- [ ] Lightpanda on `127.0.0.1:9223` was auto-started when a behavior test needed it and the installed service was not already running
+- [ ] Only a fixture-owned Lightpanda process was stopped during cleanup
+- [ ] Windows Chrome `127.0.0.1:9222` was required only when rendering or Chromium-specific evidence was needed
+- [ ] Shared Chrome state was preserved when Chrome was used
+- [ ] The same scenario was not run in both browsers without an explicit evidence reason
+- [ ] UI test exercised the changed rendered interaction/path and verified the final result appropriate to its evidence type
 
 Can't check the TDD boxes? You skipped TDD. Start over.
 
@@ -472,7 +478,8 @@ Can't check the UI boxes for frontend work? The frontend implementation is not c
 | Must mock everything | Code too coupled. Use dependency injection. |
 | Test setup huge | Extract helpers. Still complex? Simplify design. |
 | Integration requires unavailable internal dependency | Treat it as prerequisite; install/implement it before completion. |
-| WSL cannot reach Chrome `9222` | Remind the user to launch Windows Chrome with the supplied debug command, then retry. Do not install Chrome in WSL or downgrade the UI gate. |
+| Lightpanda `9223` is not reachable | If the binary is installed, start `lightpanda serve --host 127.0.0.1 --port 9223`, record ownership, wait for CDP, and run the behavior test. |
+| Rendering test cannot reach Chrome `9222` | Ask the user to launch the isolated Windows Chrome debug profile, then retry. Do not downgrade rendering evidence to Lightpanda. |
 
 ## Debugging Integration
 
@@ -489,7 +496,9 @@ Never fix bugs without a test.
 ```
 Local behavior: production code -> failing test first -> green
 Architecture: changed real components -> real integration path -> failing then green
-Frontend: changed UI -> Windows Chrome/CDP from WSL -> failing then green
+Frontend behavior: changed UI behavior -> Lightpanda/CDP 9223 -> failing then green
+Frontend rendering: changed pixels/layout/rendering -> Windows Chrome/CDP 9222 -> failing then green
+Do not run both unless the evidence requires both
 Otherwise -> not complete
 ```
 

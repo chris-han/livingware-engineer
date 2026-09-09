@@ -20,11 +20,16 @@ workspace:
 1. AGENTS.md
 2. skills/test-driven-development/SKILL.md
 
-Do not rely on one file as a substitute for the other. If either file cannot be read,
-say so and report NO for that layer below rather than pretending it was checked.
+Do not rely on one file as a substitute for the other. You may use read-only shell
+commands such as cat or sed solely to read these two files if an app-backed file
+reader cannot access the current workspace. Do not use shell commands for any other
+purpose in this eval. If either file still cannot be read, say so and report NO for
+that layer below rather than pretending it was checked.
 
 Explain which real browser you will use, how you will make it available, what you
-will run, and how you will clean up. Do not modify files or actually run commands.
+will run, and how you will clean up. Do not start browsers, run tests, modify files,
+or execute any command other than read-only commands needed to inspect the two
+instruction files above.
 
 End your answer with exactly these three machine-readable lines, once each:
 READ_AGENTS=<YES|NO>
@@ -43,9 +48,9 @@ if ! command -v codex >/dev/null 2>&1; then
     exit 127
 fi
 
-# Root the Codex subprocess explicitly in the repository. The parent shell's cwd is
-# not sufficient evidence that Codex's own file-reading workspace resolves to this
-# checkout, especially when connectors or app-backed readers have their own roots.
+# Root the Codex subprocess explicitly in the repository. App-backed file readers
+# may still enforce independent roots, so the scenario permits read-only shell
+# access to the two instruction files as the repository-native fallback.
 output=$(timeout 300 codex exec --cd "$REPO_ROOT" --sandbox read-only "$SCENARIO")
 
 echo "Agent output:"

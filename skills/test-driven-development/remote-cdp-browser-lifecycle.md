@@ -1,8 +1,41 @@
-# Shared Chrome CDP Lifecycle
+# Browser CDP Lifecycle: Lightpanda and Shared Chrome
 
-Use this contract when attaching automation to a developer-owned persistent Chrome, including Windows-host Chrome at `127.0.0.1:9222` from WSL.
+Use this contract for real-browser verification from WSL. Select the browser by the evidence the test must prove rather than treating every frontend test as a Chrome test.
 
-## Preserve Shared Browser State
+## Select the Browser by Evidence
+
+- **BEHAVIOR tests** — interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript — use Lightpanda at `http://127.0.0.1:9223` by default.
+- **RENDERING tests** — visual appearance, layout, paint, fonts, screenshots, canvas/WebGL/WebGPU output, or Chromium-specific rendering behavior — use Windows-host Chrome at `http://127.0.0.1:9222`.
+- Run the affected browser tests only, unless project instructions require a broader surface.
+- Do not run the same scenario in both browsers unless the acceptance criterion actually requires both behavioral and rendering evidence, or a browser-specific compatibility question is under investigation.
+- Never use Chrome merely because Lightpanda is not already running. Start Lightpanda when the behavior lane needs it.
+
+## Lightpanda Behavior Lifecycle
+
+Probe the designated Lightpanda endpoint first:
+
+```bash
+curl -fsS http://127.0.0.1:9223/json/version
+```
+
+If it is unavailable and the `lightpanda` binary is installed, start the CDP server instead of asking the user to remember the browser prerequisite:
+
+```bash
+lightpanda serve --host 127.0.0.1 --port 9223
+```
+
+Automation or a fixture may background that command, record its PID, wait until `/json/version` responds, and then run the test. Ownership is strict:
+
+- If Lightpanda was already reachable, treat it as developer-owned and do not stop it.
+- If the test fixture started Lightpanda, stop only that recorded process during unconditional cleanup.
+- Do not kill Lightpanda by name or port; terminate only the process whose ownership the fixture can prove.
+- If the binary is unavailable, report the missing behavior-test prerequisite. Do not silently substitute Windows Chrome as a generic behavior fallback.
+
+Lightpanda is headless and has no graphical rendering surface. Passing behavior tests therefore does not constitute rendering evidence.
+
+## Preserve Shared Chrome State
+
+Windows Chrome on `127.0.0.1:9222` is the rendering lane and is persistent operator-owned state.
 
 - Treat the existing browser, contexts, windows, tabs, zoom, and natural viewport as operator-owned state.
 - Create a dedicated fixture-owned page for the test. Never reuse the first existing page merely because it is convenient.
@@ -28,17 +61,26 @@ Equality between a document's right edge and `innerWidth` proves only that the a
 
 ## WSL Host Boundary
 
-When `http://127.0.0.1:9222` is reachable from WSL, keep probing, diagnostics, automation, and cleanup in WSL/CDP. Do not invoke PowerShell merely because Chrome runs on Windows.
+Keep Lightpanda behavior testing and Chrome rendering diagnostics in WSL/CDP while their designated endpoints are reachable. Do not invoke PowerShell merely because the rendering browser runs on Windows.
 
-Only when the endpoint is unavailable should you ask the user to start the Windows debug instance with a host-side command. After it is reachable, return to the WSL/CDP path.
+Only when a RENDERING test actually requires Windows Chrome and `http://127.0.0.1:9222` is unavailable should you ask the user to start the Windows debug instance with a host-side command. Chrome availability must not block a BEHAVIOR test that belongs on Lightpanda.
 
 ## Cleanup Evidence
 
-Before completion, verify all of the following:
+Before completion, verify the lifecycle appropriate to the browser that was actually used.
+
+For Lightpanda:
+
+- the behavior test ran through `127.0.0.1:9223`;
+- a pre-existing Lightpanda process was left running;
+- or, if the fixture started Lightpanda, only that recorded process was stopped;
+- the automation client exited cleanly.
+
+For shared Chrome:
 
 - the shared Chrome endpoint is still reachable;
 - no device-metrics override from the fixture remains active;
 - fixture-owned pages and CDP sessions are gone;
 - the automation process has exited;
 - operator-owned tabs remain open;
-- the final evidence was captured at the natural viewport, or in a separately launched isolated browser when an exact viewport was required.
+- the final rendering evidence was captured at the natural viewport, or in a separately launched isolated browser when an exact viewport was required.

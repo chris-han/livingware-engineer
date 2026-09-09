@@ -35,7 +35,11 @@ MVL complete
 NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+Freshness is tied to the verified state, not the message boundary. Reuse an observed passing result when the relevant code, tests, dependencies, configuration, fixtures, and execution environment are unchanged and the result/output is available to inspect. If any relevant state changed or its identity is uncertain, rerun the affected checks. Live or time-sensitive external claims require a current check.
+
+Run focused tests during implementation and expensive integration at coherent sprint exits, with earlier checks for demonstrated boundary risk. Before claiming integrated completion, verify the final assembled state with the required affected integration/browser checks. A focused pass is not a full-suite pass.
+
+Use test output and version history as development evidence. Report the outcome, verification scope/results, and remaining gaps concisely. Do not create duplicate evidence packages, intermediate reports, or status ledgers unless the user or repository explicitly requires them. Required product audit/replay, persistence, and recovery contracts remain intact.
 
 For a product feature, if the plan declares an MVL Contract, you also cannot claim the **feature/MVL** is complete merely because implementation tests pass.
 
@@ -51,7 +55,9 @@ BEFORE claiming any status or expressing satisfaction:
 
 2. IDENTIFY: What evidence proves that claim?
 
-3. RUN: Execute the FULL command(s) / evaluation surface fresh.
+3. RUN OR REUSE: Execute the required affected checks, or inspect an existing
+   result that meets the unchanged-state rule above. Run the full selected
+   command; do not extrapolate from partial output or narrower coverage.
 
 4. READ: Full output, check exit codes, failures, and measured results.
 
@@ -77,7 +83,7 @@ Skip any step = not verified.
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Tests pass | Observed output: 0 failures for the claimed scope and unchanged verified state | Stale or unavailable result, "should pass" |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
@@ -134,7 +140,7 @@ If the right side does not match the left side, do not claim MVL completion. Eit
 | "Linter passed" | Linter ≠ compiler |
 | "Agent said success" | Verify independently |
 | "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
+| "Partial check is enough" | A focused check proves only its covered scope, not untested boundaries or a full-suite claim |
 | "The E2E test passes, so the feature is done" | E2E proves the path works; MVL completion also requires learning-loop evidence declared by the plan |
 
 ## Key Patterns

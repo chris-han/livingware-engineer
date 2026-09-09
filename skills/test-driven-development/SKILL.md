@@ -179,7 +179,7 @@ npm test path/to/test.test.ts
 
 Confirm:
 - Test passes
-- Other tests still pass
+- Affected focused regression tests still pass
 - Output pristine (no errors, warnings)
 
 **Test fails?** Fix code, not test.
@@ -203,12 +203,18 @@ Next failing test for next feature.
 
 TDD proves local behavior. It does not prove that the implementation uses the real production architecture.
 
-For any change that introduces, modifies, or depends on multiple in-repo production components, run a real-component integration test before claiming completion.
+For any change that introduces, modifies, or depends on multiple in-repo production components, run a real-component integration test before claiming integrated completion.
+
+**Cadence:** keep the RED-GREEN loop focused on each changed behavior. Group related implementation steps into a coherent sprint and run expensive real-component integration at its exit, rather than after every small step. Run focused seam tests as boundaries change; run broader integration earlier when wiring, persistence, authorization, dependency changes, or uncertainty create a concrete risk. Local task progress is not a claim that the assembled feature is complete.
+
+After a fix, rerun the affected regression tests and invalidated integration checks. Reuse other results only under `superpowers:verification-before-completion`. Existing tests that cover the required behavior need not be duplicated at every layer. Add coverage for actual gaps and preserve a defect-reproducing negative control for new regression tests.
+
+Test output is the default development evidence. Give a concise outcome, commands/results, and remaining gaps; do not generate separate evidence files or intermediate reports unless explicitly required by the user or repository. Product-required runtime records are a separate correctness requirement, not development paperwork.
 
 **Mandatory rule:**
 
 ```
-EVERY CHANGED IN-REPO PRODUCTION COMPONENT
+FOR ARCHITECTURAL CHANGES, EVERY CHANGED IN-REPO PRODUCTION COMPONENT
 MUST APPEAR REAL IN AT LEAST ONE INTEGRATION PATH
 ```
 
@@ -443,7 +449,7 @@ Before marking work complete:
 - [ ] Watched each new test fail before implementing
 - [ ] Each test failed for the expected reason
 - [ ] Wrote minimal code to pass each test
-- [ ] All local tests pass
+- [ ] Affected local regression tests pass; required sprint-exit integration checks pass before integrated completion
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only when justified)
 - [ ] Edge cases and errors covered

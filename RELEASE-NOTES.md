@@ -1,5 +1,12 @@
 # Superpowers Release Notes
 
+## v6.5.15 (2026-09-10)
+
+- Preserve detailed step-by-step plans while referencing existing contracts and fixtures instead of duplicating them.
+- Run focused regression tests per step and expensive integration at coherent sprint exits, with earlier checks for boundary risk.
+- Reuse inspected test results only while verification-relevant state is unchanged; retain real integration and product integrity requirements.
+- Avoid duplicate development evidence reports and unnecessary execution handoffs. Synchronize all declared plugin versions.
+
 ## v6.5.5 (2026-09-09)
 
 ### Codex In-place Plugin Update

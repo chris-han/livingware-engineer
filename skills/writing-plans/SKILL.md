@@ -13,6 +13,8 @@ For product MVLs where governance is in the path, treat time-to-first-useful-res
 
 Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
 
+Keep useful step-by-step detail; eliminate duplicated work, not implementation steps. Reference existing specifications, interfaces, fixtures, and shared procedures by exact path and symbol/section. Include inline code when it resolves a real ambiguity, rather than copying an existing implementation or contract into each task.
+
 Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
@@ -158,13 +160,28 @@ This structure informs the task decomposition. Each task should produce self-con
 
 ## Task Right-Sizing
 
-A task is the smallest implementation unit that carries its own test cycle and is worth a fresh reviewer's gate. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where a reviewer could meaningfully reject one task while approving its neighbor. Each task ends with an independently testable deliverable.
+A task is the smallest implementation unit that carries its own focused test cycle and an independently testable deliverable. Fold setup, configuration, scaffolding, and documentation into the task whose deliverable needs them. Group related tasks for integrated sprint review; use an earlier task review when its risk or an explicit repository requirement warrants it. Small implementation steps are not separate review gates.
 
 **Exception for feature prerequisites:** if a new dependency is load-bearing for multiple later tasks, make dependency declaration/install/verification an explicit prerequisite task before those consumers. Do not duplicate install steps in every downstream task.
 
 Task boundaries MUST preserve the MVL journey. Do not decompose the work in a way that leaves the final integration task reconstructing a user path from mutually inconsistent local assumptions.
 
 ## Bite-Sized Task Granularity
+
+### Sprint Integration Cadence
+
+Group related tasks into a coherent sprint: a bounded, integrated deliverable, not necessarily a calendar interval. State its real user or contract path, owned files, dependencies, and exit checks once. Keep the detailed implementation steps within that sprint.
+
+- **Each step:** run focused TDD/regression tests for the behavior being changed.
+- **During the sprint:** run focused seam tests when interfaces, wiring, persistence, authorization, or other boundaries change. Run expensive integration earlier when uncertainty or a demonstrated risk requires it.
+- **Sprint exit:** run the affected real-component integration path and browser/E2E checks required by the impact radius. A locally green task may advance inside the sprint; it is not integrated or feature-complete until these checks pass.
+- **After a fix:** rerun tests invalidated by that fix and the affected sprint-exit checks. Reuse results for unaffected paths under `superpowers:verification-before-completion`; do not rerun an expensive suite after every small step merely for ceremony.
+
+Assign one owner per overlapping edit surface. Parallelize only independent work when delegation is authorized. Resolve shared contracts once; reopen them when implementation evidence contradicts them. Review the integrated deliverable, then scope fix reviews to changed code and affected behavior rather than repeatedly reviewing unchanged helpers.
+
+Use the existing plan/task tracker as the coordination record. Test output and version history are sufficient development evidence; do not add duplicate ledgers, evidence packages, or intermediate reports. If the user or repository explicitly requires a durable record, maintain it once and reference it. This does not remove product-required persistence, audit, recovery, or replay guarantees.
+
+### Implementation Steps
 
 **Each step is one action (2-5 minutes):**
 - "Write the failing test" - step
@@ -340,10 +357,10 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - "TBD", "TODO", "implement later", "fill in details"
 - "Install dependencies" without exact package/version/declaration/install/verification details
 - "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
+- "Write tests for the above" without a concrete behavior/assertion and test location or an exact existing test reference
+- "Similar to Task N" without an exact reference and the differences this task must implement
+- Steps too vague to execute; use concrete actions and acceptance criteria, with inline code where needed to resolve ambiguity
+- References to types, functions, or methods not defined in a task or an exact cited source/specification
 
 ## Self-Review
 
@@ -367,7 +384,7 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan, continue with the execution approach already authorized by the user. If no approach has been selected and the choice materially affects coordination, offer:
 
 **"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
 
@@ -379,7 +396,7 @@ After saving the plan, offer execution choice:
 
 **If Subagent-Driven chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
+- Delegate bounded implementation units; preserve the sprint's integration and review cadence rather than turning every implementation step into a fresh handoff
 - The controller owns MVL continuity and prerequisite readiness across task boundaries; individual implementers do not redefine the feature contract or install undeclared dependencies ad hoc.
 
 **If Inline Execution chosen:**

@@ -43,7 +43,10 @@ if ! command -v codex >/dev/null 2>&1; then
     exit 127
 fi
 
-output=$(timeout 300 codex exec --sandbox read-only "$SCENARIO")
+# Root the Codex subprocess explicitly in the repository. The parent shell's cwd is
+# not sufficient evidence that Codex's own file-reading workspace resolves to this
+# checkout, especially when connectors or app-backed readers have their own roots.
+output=$(timeout 300 codex exec --cd "$REPO_ROOT" --sandbox read-only "$SCENARIO")
 
 echo "Agent output:"
 echo "$output"

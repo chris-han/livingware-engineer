@@ -101,6 +101,23 @@ agy plugin install https://github.com/chris-han/livingware-engineer.git
 
 For a repository-based install, use this repository's `.codex-plugin/plugin.json` rather than the official `superpowers` marketplace package. The plugin identity is `livingware-engineer`.
 
+Update an already installed Livingware Engineer plugin without removing it first:
+
+```bash
+codex plugin marketplace upgrade livingware-engineer
+codex plugin add livingware-engineer@livingware-engineer
+```
+
+The first command refreshes the Git marketplace snapshot; the second reinstalls the plugin in place from that refreshed snapshot. No `codex plugin remove` step is required.
+
+If you are working from a clone of this repository, the same flow is wrapped by:
+
+```bash
+./scripts/update-installed-codex-plugin.sh
+```
+
+After an update, start a new Codex thread/session so new skills and plugin content are loaded.
+
 ### Cursor
 
 Install the plugin from this repository when using repository/plugin development flows. The manifest at `.cursor-plugin/plugin.json` identifies the plugin as `livingware-engineer`.

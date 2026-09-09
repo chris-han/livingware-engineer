@@ -1,5 +1,14 @@
 # Superpowers Release Notes
 
+## v6.5.5 (2026-09-09)
+
+### Codex In-place Plugin Update
+
+- Added `scripts/update-installed-codex-plugin.sh`, which refreshes the configured Git marketplace and re-runs `codex plugin add` for the installed Livingware Engineer plugin without requiring an explicit uninstall.
+- Documented the native Codex in-place update flow: `codex plugin marketplace upgrade livingware-engineer` followed by `codex plugin add livingware-engineer@livingware-engineer`.
+- The updater deliberately uses Codex's native marketplace/install primitives and adds no custom cache or update state.
+- Updated all declared package/plugin version surfaces from `6.5.4` to `6.5.5`.
+
 ## v6.5.4 (2026-09-09)
 
 ### Minimum Sufficient Change

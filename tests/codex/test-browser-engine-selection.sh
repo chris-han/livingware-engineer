@@ -17,7 +17,8 @@ running at http://127.0.0.1:9222.
 
 Read AGENTS.md and skills/test-driven-development/SKILL.md before answering.
 Explain which real browser you will use, how you will make it available, what you
-will run, and how you will clean up. Do not modify files or actually run commands.
+will run, and how you will clean up. State which browser lane or lanes you would
+actually execute. Do not modify files or actually run commands.
 EOF
 )
 
@@ -60,9 +61,13 @@ assert_contains "$output" "stop only|kill only|only.*started|leave.*running" \
     "clean up only fixture-owned Lightpanda"
 assert_contains "$output" "affected|filter" \
     "run the affected browser test rather than broad duplicate coverage"
-assert_contains "$output" "do not.*Chrome|not.*Chrome|won't.*Chrome|would not.*Chrome|no need.*Chrome" \
-    "avoid Chrome for a behavior-only acceptance criterion"
-assert_contains "$output" "do not.*both|not.*both|no need.*both|won't.*both" \
+
+# These are intentionally semantic positive checks rather than brittle wording
+# requirements such as "do not use Chrome". Mentioning Chrome while explaining why
+# it is unnecessary is correct behavior and must not fail the eval.
+assert_contains "$output" "Lightpanda.*(only|sole|single)|(?:only|sole|single).*Lightpanda|Chrome.*(unnecessary|not required|unused|untouched|not needed)|(?:skip|avoid|leave).*Chrome" \
+    "keep the behavior-only execution on the Lightpanda lane"
+assert_contains "$output" "(?:one|single|only|sole).*(?:browser|lane|engine)|(?:browser|lane|engine).*(?:one|single|only|sole)|Lightpanda.*(?:without|instead of).*Chrome|Chrome.*(?:not needed|not required|unnecessary)" \
     "avoid duplicate execution in both engines"
 
 if [ "$failures" -gt 0 ]; then

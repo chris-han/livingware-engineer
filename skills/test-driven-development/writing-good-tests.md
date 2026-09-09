@@ -138,8 +138,9 @@ FOR each changed production path:
   Any external dependency substituted?
     → keep the in-repo adapter/client real; substitute the remote side
 
-  Did the integration test fail because wiring/implementation was incomplete?
-    no  → prove the test can catch the missing/broken connection
+  Apply the test cycle selected by test-driven-development:
+    new behavior/defect → observe the intended failure, then green
+    behavior-preserving refactor → adequate baseline remains green
 
   Does it now pass through production wiring?
     yes → integration gate satisfied
@@ -153,65 +154,9 @@ Any frontend/UI change requires browser-level verification because DOM simulator
 
 > If the user can see it or interact with it, the changed path must be exercised in a real browser before completion.
 
-### Prefer Windows-host Chrome on Port 9222 for WSL
+### Browser Selection and Lifecycle
 
-The normal coding environment may be WSL with no Linux Chrome installed. In that environment, prefer the developer's Windows-host Chrome through CDP rather than installing a separate browser inside WSL.
-
-Preferred endpoint:
-
-```text
-http://127.0.0.1:9222
-```
-
-Browser priority:
-
-```text
-1. Windows-host Chrome via CDP at 127.0.0.1:9222
-2. project-standard real-browser runner already provided by the project
-3. fresh local browser only if one is actually installed in the coding environment
-```
-
-### Preserve the natural viewport on shared Chrome
-
-The persistent `9222` browser is shared operator state, not a disposable fixture. Create a fixture-owned page; do not reuse existing tabs or call viewport/window override APIs. Put cleanup in `finally`: clear fixture-created device metrics, detach sessions, close only fixture-owned pages, disconnect the client transport, and ensure the automation process exits.
-
-If exact viewport coverage is required, use an isolated browser/profile. When `9222` is reachable, remain in WSL/CDP for diagnostics and cleanup; PowerShell is only a user-facing launch instruction for an unavailable endpoint.
-
-Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) for the complete safety and diagnosis procedure.
-
-### When `9222` is unavailable
-
-Probe first:
-
-```bash
-curl -fsS http://127.0.0.1:9222/json/version
-```
-
-If the probe fails, **do not silently fall back to mock-only UI evidence and do not mark the frontend complete**. Remind the user that Windows Chrome must be started with remote debugging enabled.
-
-Provide these instructions:
-
-```powershell
-Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-If Chrome is under the x86 Program Files directory:
-
-```powershell
-Start-Process "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-Command Prompt equivalent when Chrome is on `PATH`:
-
-```cmd
-start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
-```
-
-Explain that the separate `--user-data-dir` is required for modern Chrome remote debugging and intentionally isolates the debug browser from the user's normal profile.
-
-After the user starts Chrome, retry the WSL probe. If Windows Chrome is running but WSL still cannot reach `127.0.0.1:9222`, report a WSL/Windows host-network reachability issue. Do not install Chrome inside WSL merely to bypass this configured test prerequisite.
+Follow [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) for the required evidence lane, endpoint setup, process ownership, and cleanup. Only the selected lane's missing browser can block its gate.
 
 ### UI Evidence Rules
 
@@ -224,7 +169,7 @@ A UI test used as completion evidence must:
 - assert a visible or interactive final outcome
 - check browser console/runtime failures where practical
 - capture screenshot, rendered DOM, accessibility tree, or equivalent evidence when useful
-- prove it can fail on incomplete UI behavior or wiring, then pass after the implementation
+- use the test cycle selected by test-driven-development: fail-then-pass for new behavior/defects, adequate green-before/green-after coverage for behavior-preserving refactors
 
 For visual changes, verify the rendered result at the shared browser's natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. Testing only class names, props, tokens, or snapshots is insufficient.
 
@@ -232,7 +177,7 @@ For interactive changes, perform the actual interaction: click, type, select, dr
 
 ```text
 ✅ UI completion evidence
-Windows Chrome via CDP -> real app -> real route -> real component tree -> real interaction -> visible final state
+Browser selected for the evidence lane -> real app -> real route -> real component tree -> real interaction -> observable final state
 
 ❌ Not sufficient
 jsdom -> mocked child components -> expect(className).toContain('active')
@@ -242,11 +187,9 @@ jsdom -> mocked child components -> expect(className).toContain('active')
 
 ```
 IF production change affects frontend/UI:
-  Is Windows Chrome on 127.0.0.1:9222 reachable from WSL?
-    yes → attach with a fixture-owned page; preserve natural viewport;
-          clean up sessions, overrides, page, and client in finally
-    no  → instruct user to start Windows Chrome in debug mode
-          and keep completion BLOCKED
+  Select the required browser using remote-cdp-browser-lifecycle.
+  Start/connect and clean up according to that lane.
+  Missing required browser → keep that gate unverified.
 
   Does the test load the real app?
     no → invalid UI completion evidence
@@ -257,13 +200,13 @@ IF production change affects frontend/UI:
   Are changed in-repo UI components mocked?
     yes → invalid completion evidence
 
-  Did the browser test prove the broken/incomplete behavior can fail?
-    no → strengthen it before claiming completion
+  Does coverage satisfy the selected behavior-change or preservation cycle?
+    no → close that gap before claiming completion
 ```
 
 ## Tests Ship With the Implementation
 
-The TDD cycle — failing test, minimal implementation, refactor — is what local behavioral correctness means. Architectural completeness requires the integration gate in addition to local TDD. Frontend completeness additionally requires the real-browser gate.
+Use the change-specific test cycle in [test-driven-development](SKILL.md): new behavior and bug fixes need a meaningful failure; behavior-preserving refactors need adequate passing coverage before and after. Architectural and frontend completion additionally require their affected real integration/browser gates.
 
 Ship the tests the behavior needs and only those: trivial code and human prose earn none, and a test written solely to satisfy process costs maintenance forever.
 
@@ -301,8 +244,7 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 | Finish architectural work | Run at least one real-component integration path |
 | A required internal dependency is missing | Implement/install it; do not mock past it |
 | Change frontend/UI behavior | Run a real-browser UI test |
-| Windows Chrome reachable at `9222` | Attach to it from WSL |
-| `9222` unavailable in WSL | Instruct the user to start Windows Chrome in debug mode; keep completion blocked |
+| Select or start a browser | Follow the canonical browser selection/lifecycle contract |
 | Finish a test file | Run the mutation check |
 
 ## Warning Signs
@@ -323,5 +265,5 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 - A missing dependency was replaced by a fake so the plan could be marked complete
 - Frontend work completed with no browser test
 - UI evidence is only jsdom, snapshots, shallow rendering, mocked components, source inspection, or CSS class assertions
-- WSL frontend work marked complete while Windows Chrome `9222` remained unavailable
-- A Linux browser was installed solely to bypass the configured Windows-host Chrome prerequisite
+- Required browser evidence claimed while its selected lane remained unavailable
+- A browser installed merely to bypass the configured evidence-lane contract

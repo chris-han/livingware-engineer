@@ -149,7 +149,7 @@ UI completion evidence must:
 - assert the final visible or interactive outcome
 - verify browser console/runtime errors are absent for the tested flow where practical
 - capture screenshot, DOM state, accessibility state, or equivalent evidence when useful for the change
-- be observed failing when the UI behavior or wiring is incomplete, then passing after the implementation
+- follow the selected test cycle: fail-then-pass for new behavior/defects; adequate green-before/green-after coverage for behavior-preserving refactors
 
 For visual-only changes, browser verification must inspect the rendered result at the natural viewport; use an isolated browser/profile for exact synthetic viewport coverage. A unit test that merely checks CSS class names is not sufficient completion evidence.
 
@@ -174,9 +174,9 @@ snapshot changed and test passes
 
 ```text
 SUFFICIENT SHAPE
-real Windows Chrome over CDP
+real browser selected for the required evidence lane
   -> real app route
-  -> real rendered component tree
+  -> real component tree / DOM
   -> real user interaction
   -> visible final state
 ```
@@ -221,13 +221,13 @@ MVL complete
 Before an architectural implementation is marked complete:
 
 - [ ] L1 TDD behavior tests exist for changed behavior
-- [ ] each new TDD test was observed failing before implementation
+- [ ] the change-specific test cycle in test-driven-development is satisfied
 - [ ] all changed in-repo production components are exercised by at least one real-component integration test
 - [ ] no changed in-repo component is mocked on the integration path being used as completion evidence
 - [ ] production wiring / DI / routing is used where practical
 - [ ] persistence behavior uses a real test store when persistence is part of the feature
 - [ ] external substitutions are explicitly identified and occur only at true external boundaries
-- [ ] at least one integration test was observed failing because the implementation or wiring was incomplete
+- [ ] new behavior/wiring defects have a failing integration control; behavior-preserving refactors retain adequate passing integration coverage
 - [ ] the integration suite passes after implementation
 - [ ] for product features, integration/E2E evidence exercises the same smallest real journey and realistic inputs declared by the MVL plan
 - [ ] a vertical / E2E test exists when the change crosses multiple architectural boundaries or delivers user-visible behavior

@@ -7,9 +7,9 @@ description: Use when implementing any feature or bugfix, before writing impleme
 
 ## Overview
 
-Write the test first. Watch it fail. Write minimal code to pass.
+For new behavior and bug fixes, establish the failing behavioral test first, then implement the minimum change to pass. For behavior-preserving refactors, establish adequate passing coverage first and keep it green.
 
-**Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
+**Core principle:** Use an oracle that distinguishes the intended change: a meaningful failure for new behavior or a defect, and adequate before/after coverage for behavior preservation.
 
 **Architectural principle:** Passing local tests does not prove the production components are actually connected. Architectural work also requires real-component integration evidence.
 
@@ -19,11 +19,15 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 ## When to Use
 
-**Always:**
-- New features
-- Bug fixes
-- Refactoring
-- Behavior changes
+**Choose the test cycle by the intended change:**
+
+- **New or changed behavior:** failing behavioral test → implementation → green.
+- **Bug fix:** defect reproducer or defect-restoring negative control → fix → green. Unrelated passing tests do not prove the defect is fixed.
+- **Behavior-preserving refactor:** establish adequate passing characterization/regression coverage → refactor → the same coverage remains green. Reuse existing tests; add characterization only for uncovered behavior. Do not manufacture a failing test or delete valid refactoring merely to create a RED phase.
+
+A refactor preserves observable contracts, including errors, side effects, ordering, and persistence semantics—not just return values. If the change intentionally alters any required behavior, use the new/changed-behavior cycle for that part. Select integration/browser coverage by impact radius in every case.
+
+If a refactor has already been made without a verified baseline, preserve the work and verify the same relevant coverage against the pre-change version and current version in isolation. Until that comparison is available, report preservation as unverified; do not invent a RED result.
 
 **Exceptions (ask your human partner):**
 - Throwaway prototypes
@@ -35,16 +39,18 @@ Thinking "skip TDD just this once"? Stop. That's rationalization.
 ## The Iron Law
 
 ```
-NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST
+NO NEW OR CHANGED BEHAVIOR WITHOUT A FAILING BEHAVIORAL TEST FIRST
 ```
 
-Write code before the test? Delete it. Start over.
+The following RED-first rules apply to new/changed behavior and bug fixes, not behavior-preserving refactors. The refactor path above uses a passing baseline and regression comparison.
+
+Write new behavior before its test? Restart that change from a meaningful failing test. Preserve user-owned and unrelated work.
 
 **No exceptions:**
 - Don't keep it as "reference"
 - Don't "adapt" it while writing tests
 - Don't look at it
-- Delete means delete
+- Do not claim RED evidence without observing the intended failure
 
 Implement fresh from tests. Period.
 
@@ -128,6 +134,8 @@ Confirm:
 - Fails because feature missing (not typos)
 
 **Test passes?** You're testing existing behavior. Fix test.
+
+For a characterization test before a behavior-preserving refactor, passing is expected: verify that it asserts the behavior at risk, then preserve it through the refactor.
 
 **Test errors?** Fix error, re-run until it fails correctly.
 
@@ -224,7 +232,7 @@ The integration path must:
 - use real test persistence when persistence semantics are part of the feature
 - substitute only true external or nondeterministic boundaries
 - keep the in-repo adapter/client real even when the external remote side is substituted
-- be observed failing when the implementation or wiring is incomplete, then passing after the fix
+- for new behavior or wiring defects, fail on the missing/broken behavior and pass after the fix; for behavior-preserving refactors, preserve the passing affected integration baseline
 
 **Not valid integration evidence:**
 
@@ -255,7 +263,7 @@ Any frontend or UI change requires real-browser verification before completion.
 **Mandatory rule:**
 
 ```
-FRONTEND CHANGE -> AFFECTED REAL-BROWSER TEST -> FAIL THEN PASS
+FRONTEND CHANGE -> AFFECTED REAL-BROWSER TEST -> SELECTED TEST CYCLE
 ```
 
 Use this gate for changes to pages, routes, components, forms, dialogs, menus, tables, graphs, visualizations, styles that affect behavior/visibility, frontend state, navigation, focus, keyboard/pointer interaction, or frontend/backend wiring.
@@ -339,7 +347,7 @@ The UI test must:
 - assert the visible or interactive final result
 - check for browser/runtime console errors where practical
 - use screenshots/DOM/accessibility state when useful as evidence
-- be observed failing when the UI or wiring is incomplete, then passing after implementation
+- use fail-then-pass for new UI behavior or wiring defects, and green-before/green-after for behavior-preserving refactors
 
 For visual-only changes, inspect the rendered Chrome result at the natural viewport. Use an isolated browser/profile for exact synthetic viewport coverage. A unit test asserting `className` is not sufficient completion evidence.
 
@@ -365,6 +373,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 
 ## Common Rationalizations
 
+The RED-first rationalizations below concern new/changed behavior and bug fixes. Passing characterization coverage is the required starting point for a behavior-preserving refactor, not a rationalization.
+
 | Excuse | Reality |
 |--------|---------|
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
@@ -372,7 +382,7 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 | "Tests after achieve same goals" | Tests-after answer "what does this do?"; tests-first answer "what should this do?" |
 | "Already manually tested" | Manual testing is ad-hoc and not repeatable. |
 | "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping code you can't trust is the waste. |
-| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
+| "Keep new behavior as reference, write tests first" | Do not call that test-first development; establish the missing-behavior failure before reimplementing. |
 | "Need to explore first" | Fine. Throw away exploration, start with TDD. |
 | "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
 | "TDD will slow me down" | TDD catches bugs before commit and prevents regressions. |
@@ -386,6 +396,8 @@ When writing or changing any test, read [writing-good-tests.md](writing-good-tes
 | "I'll run both to be safe" | Duplicate browser runs add cost without evidence. Run both only when the acceptance criterion needs both behavior and rendering proof. |
 
 ## Red Flags - STOP and Start Over
+
+Apply RED-first flags to new/changed behavior and bug fixes. For behavior-preserving refactors, stop for missing baseline coverage or changed behavior—not merely because a test passes.
 
 - Code before test
 - Test after implementation
@@ -446,9 +458,9 @@ PASS
 Before marking work complete:
 
 - [ ] Every new function/method with meaningful behavior has a test
-- [ ] Watched each new test fail before implementing
-- [ ] Each test failed for the expected reason
-- [ ] Wrote minimal code to pass each test
+- [ ] New/changed behavior and bug fixes: observed the behavioral test or defect control fail for the intended reason before implementing the fix
+- [ ] Behavior-preserving refactors: adequate characterization/regression coverage passes before and after; no unacknowledged observable behavior change
+- [ ] Wrote only the code needed for the selected behavior or preservation contract
 - [ ] Affected local regression tests pass; required sprint-exit integration checks pass before integrated completion
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only when justified)
@@ -457,7 +469,7 @@ Before marking work complete:
 - [ ] No changed in-repo component is mocked on the integration path used as completion evidence
 - [ ] Integration test uses production wiring/DI/routing where practical
 - [ ] Required external substitutions are explicitly identified and occur at the external boundary
-- [ ] Integration test was observed failing on incomplete implementation/wiring and passing after the fix
+- [ ] New integration behavior or wiring defects: observed fail then pass; behavior-preserving refactors: affected real integration coverage stays green
 - [ ] Vertical/E2E coverage exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 - [ ] Any frontend/UI change has real-browser UI test evidence
 - [ ] Browser lane was chosen from the acceptance evidence: Lightpanda for BEHAVIOR, Windows Chrome for RENDERING
@@ -468,7 +480,7 @@ Before marking work complete:
 - [ ] The same scenario was not run in both browsers without an explicit evidence reason
 - [ ] UI test exercised the changed rendered interaction/path and verified the final result appropriate to its evidence type
 
-Can't check the TDD boxes? You skipped TDD. Start over.
+Can't satisfy the selected test cycle? Report the verification gap and close it before claiming completion. A refactor's green-before/green-after cycle does not require artificial RED evidence.
 
 Can't check the integration boxes for architectural work? The implementation is not complete.
 
@@ -499,10 +511,10 @@ Never fix bugs without a test.
 ## Final Rule
 
 ```
-Local behavior: production code -> failing test first -> green
-Architecture: changed real components -> real integration path -> failing then green
-Frontend behavior: changed UI behavior -> Lightpanda/CDP 9223 -> failing then green
-Frontend rendering: changed pixels/layout/rendering -> Windows Chrome/CDP 9222 -> failing then green
+New/changed behavior or bug fix: meaningful failing test/control -> implementation -> green
+Behavior-preserving refactor: adequate green baseline -> refactor -> same coverage green
+Architecture: real components on the affected integration path; use the selected cycle above
+Frontend: real browser selected by required evidence lane; use the selected cycle above
 Do not run both unless the evidence requires both
 Otherwise -> not complete
 ```

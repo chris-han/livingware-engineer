@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v6.5.17 (2026-09-10)
+
+- Distinguish new-behavior TDD and bug reproducers from behavior-preserving refactors, which require adequate passing coverage before and after rather than artificial failures.
+- Make AGENTS.md the canonical contributor policy: CLAUDE.md points to it and GEMINI.md imports it while preserving Gemini-specific routing.
+- Align the testing companion and browser examples with the canonical test cycles and evidence lanes.
+
 ## v6.5.16 (2026-09-10)
 
 - Reconcile branch finishing with affected verification and unchanged-state result reuse; remove competing Chrome-first browser policies.

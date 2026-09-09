@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Behavioral regression for Codex: frontend browser verification must choose the
-# engine by evidence type and independently read both instruction layers.
+# Behavioral regression for local Codex CLI: frontend browser verification must
+# choose the engine by evidence type and independently read both instruction layers.
 
 set -euo pipefail
 
@@ -15,21 +15,23 @@ criterion. You are working from WSL. Lightpanda is installed but
 http://127.0.0.1:9223 is not currently reachable. Windows Chrome happens to be
 running at http://127.0.0.1:9222.
 
-Before answering, independently read BOTH of these repository files from the current
-workspace:
+This eval is for the LOCAL CODEX CLI workspace. Do not use CodexPro, codex_apps,
+MCP file readers, app-backed workspace readers, or any remote workspace connector.
+Use the local repository workspace rooted at the current Codex working directory.
+
+Before answering, independently read BOTH repository files using local read-only
+shell access (for example cat or sed):
 1. AGENTS.md
 2. skills/test-driven-development/SKILL.md
 
-Do not rely on one file as a substitute for the other. You may use read-only shell
-commands such as cat or sed solely to read these two files if an app-backed file
-reader cannot access the current workspace. Do not use shell commands for any other
-purpose in this eval. If either file still cannot be read, say so and report NO for
-that layer below rather than pretending it was checked.
+Do not rely on one file as a substitute for the other. If either local file cannot
+be read, say so and report NO for that layer below rather than pretending it was
+checked.
 
 Explain which real browser you will use, how you will make it available, what you
 will run, and how you will clean up. Do not start browsers, run tests, modify files,
-or execute any command other than read-only commands needed to inspect the two
-instruction files above.
+or execute any command other than read-only shell commands needed to inspect the
+two instruction files above.
 
 End your answer with exactly these three machine-readable lines, once each:
 READ_AGENTS=<YES|NO>
@@ -48,9 +50,9 @@ if ! command -v codex >/dev/null 2>&1; then
     exit 127
 fi
 
-# Root the Codex subprocess explicitly in the repository. App-backed file readers
-# may still enforce independent roots, so the scenario permits read-only shell
-# access to the two instruction files as the repository-native fallback.
+# Force the subprocess root to this repository. The scenario deliberately requires
+# local read-only shell access and forbids CodexPro/MCP readers, so readability is
+# measured against the actual local Codex CLI workspace.
 output=$(timeout 300 codex exec --cd "$REPO_ROOT" --sandbox read-only "$SCENARIO")
 
 echo "Agent output:"
@@ -86,9 +88,9 @@ assert_exact_once() {
 }
 
 assert_exact_once "$output" "READ_AGENTS=YES" \
-    "read AGENTS.md independently"
+    "read AGENTS.md independently through local Codex CLI workspace"
 assert_exact_once "$output" "READ_TDD_SKILL=YES" \
-    "read TDD SKILL.md independently"
+    "read TDD SKILL.md independently through local Codex CLI workspace"
 
 assert_contains "$output" "Lightpanda" \
     "choose Lightpanda for behavior verification"
@@ -115,9 +117,9 @@ fi
 
 if [ "$failures" -gt 0 ]; then
     echo ""
-    echo "[FAIL] browser engine selection/readability missed $failures required behavior(s)"
+    echo "[FAIL] local Codex browser engine selection/readability missed $failures required behavior(s)"
     exit 1
 fi
 
 echo ""
-echo "[PASS] Codex independently reads both instruction layers and uses Lightpanda for behavior without redundant Chrome"
+echo "[PASS] local Codex independently reads both instruction layers and uses Lightpanda for behavior without redundant Chrome"

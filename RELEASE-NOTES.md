@@ -1,5 +1,15 @@
 # Superpowers Release Notes
 
+## v6.5.4 (2026-09-09)
+
+### Minimum Sufficient Change
+
+- Added **Minimum Sufficient Change** as the first global development principle in `AGENTS.md`: solve the current verified need with the smallest architecture-correct change and prefer reuse over new layers.
+- Explicitly reject speculative abstractions, dependencies, evidence machinery, compatibility layers, configuration, and future-facing flexibility unless justified by a current requirement or demonstrated risk.
+- Clarified that ordinary deterministic development invariants should be enforced by regression tests rather than parallel hand-maintained evidence state unless that evidence has independent operational, governance, audit, or learning value.
+- This release intentionally does not modify behavior-shaping skill content; the repository requires behavioral eval evidence for such changes.
+- Updated all declared package/plugin version surfaces from `6.5.3` to `6.5.4`.
+
 ## v6.4.0 (2026-08-29)
 
 ### Frontend Design

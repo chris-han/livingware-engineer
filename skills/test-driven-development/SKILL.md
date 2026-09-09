@@ -217,7 +217,7 @@ For any change that introduces, modifies, or depends on multiple in-repo product
 
 After a fix, rerun the affected regression tests and invalidated integration checks. Reuse other results only under `superpowers:verification-before-completion`. Existing tests that cover the required behavior need not be duplicated at every layer. Add coverage for actual gaps and preserve a defect-reproducing negative control for new regression tests.
 
-Test output is the default development evidence. Give a concise outcome, commands/results, and remaining gaps; do not generate separate evidence files or intermediate reports unless explicitly required by the user or repository. Product-required runtime records are a separate correctness requirement, not development paperwork.
+Test output is the default verification result. Give a concise outcome, commands/results, and remaining gaps; do not generate separate verification files or intermediate reports unless explicitly required by the user or repository. Product-required runtime records are a separate correctness requirement, not development paperwork.
 
 **Mandatory rule:**
 

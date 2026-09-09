@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v6.5.21 (2026-09-10)
+
+- Simplify completion verification to scope, falsifiable check, run/reuse, and actual result; retain unchanged-state reuse, affected real-path checks, and declared MVL requirements.
+- Replace audit-style development terminology in the verification skill and TDD output guidance; no new reports or verification layers.
+- Synchronize all nine declared package/plugin versions to 6.5.21.
+
 ## v6.5.20 (2026-09-10)
 
 - Align execution and retry reviews with risk-selected depth, optional handoff files, and sprint-level integration; preserve explicit independent-review requirements and unresolved-defect gates.

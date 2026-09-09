@@ -128,3 +128,15 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 - One problem per PR
 - Test on at least one harness and report results in the environment table
 - Describe the problem you solved, not just what you changed
+
+## Browser Test Engine Selection
+
+Run the affected browser tests according to this contract. Choose the browser by what the test must prove, not by which endpoint happens to be running.
+
+- **BEHAVIOR** — interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript: use Lightpanda at `http://127.0.0.1:9223` by default. Probe `/json/version`; if Lightpanda is not running and the binary is installed, start `lightpanda serve --host 127.0.0.1 --port 9223`, wait for the endpoint, and stop only the process the test itself started.
+- **RENDERING** — visual appearance, layout, paint, fonts, screenshots, canvas/WebGL/WebGPU output, or Chromium-specific rendering behavior: use Windows-host Chrome at `http://127.0.0.1:9222`, preserving the shared browser's tabs, natural viewport, and operator state.
+- Do not run both browsers unless the acceptance criterion actually requires both behavioral and rendering evidence or a browser-specific compatibility question is under investigation.
+- Do not substitute Windows Chrome as a generic fallback merely because Lightpanda was not already running. Conversely, Lightpanda behavior evidence cannot prove rendering correctness because it has no graphical rendering surface.
+- Run only the affected browser test surface unless project instructions require broader coverage.
+
+The detailed process-ownership, CDP cleanup, viewport, and diagnostic rules live in `skills/test-driven-development/remote-cdp-browser-lifecycle.md`.

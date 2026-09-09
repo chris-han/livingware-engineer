@@ -8,6 +8,13 @@ Do not add abstractions, generalized frameworks, dependencies, evidence artifact
 
 Complexity must earn its keep now. If two designs satisfy the same required behavior and architecture constraints, choose the simpler one with fewer concepts, owners, states, handoffs, and maintenance surfaces. This principle never authorizes weakening correctness, architecture, safety/security, data integrity, or explicit user/repository requirements.
 
+Apply four operational rules:
+
+1. **Close claims at the semantic owner.** The code, data constraint, protocol, or contract closest to a behavior owns that fact. Verify it with the nearest independent executable oracle and, where the risk warrants it, the shipping gate or accountable review. Do not create a parallel manually maintained claim, risk, evidence, or status registry when existing owners, tests, runtime facts, and version history already constitute the authoritative evidence. Derived reports and audit views should be regenerable projections, not a second source of truth.
+2. **Require a current consumer for complexity.** Every new abstraction, compatibility path, fallback, state machine, configuration surface, dependency, or durable artifact must name a concrete current consumer or a demonstrated present risk it closes. Hypothetical future consumers do not justify present maintenance surface. If no current consumer or demonstrated risk exists, do not add it.
+3. **Verify the assembled path, not code existence.** A helper, component, endpoint, or test double existing in isolation does not mean a feature is implemented. For behavior that crosses boundaries, trace and verify the shipping path from producer through registration/composition and consumer to persistence/publication and the user- or model-visible result. Implementation is complete only when the required behavior is reachable through the real assembled path.
+4. **Give guards a defect-restoring negative control.** A new guard or regression test should prove that the target defect, illegal state, or violated invariant makes it fail for the intended reason. Prefer a negative control that restores the original defect over tests that merely show the correct implementation passes. Scale this requirement to the risk; do not manufacture elaborate fixtures for trivial pure transformations when a simpler oracle is sufficient.
+
 ## If You Are an AI Agent
 
 Stop. Read this section before doing anything.

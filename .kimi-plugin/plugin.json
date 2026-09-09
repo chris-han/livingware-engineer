@@ -1,6 +1,6 @@
 {
   "name": "livingware-engineer",
-  "version": "6.5.18",
+  "version": "6.5.19",
   "description": "Livingware Engineer: governed planning, TDD, integration verification, debugging, and software delivery methodology.",
   "author": {
     "name": "chris-han"
@@ -26,7 +26,7 @@
   "interface": {
     "displayName": "Livingware Engineer",
     "shortDescription": "Governed planning, TDD, integration verification, and delivery workflows",
-    "longDescription": "Use Livingware Engineer to guide agent work through brainstorming, implementation planning, test-driven development, real-component integration verification, systematic debugging, code review, and evidence-backed completion.",
+    "longDescription": "Use Livingware Engineer to guide agent work through brainstorming, implementation planning, test-driven development, real-component integration verification, systematic debugging, risk-based code review, and verification-backed completion.",
     "developerName": "chris-han",
     "capabilities": [
       "Interactive",

@@ -1,95 +1,76 @@
 ---
 name: requesting-code-review
-description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+description: Use when an architectural or high-risk change needs deliberate review, when a fresh perspective is useful, or when review is explicitly requested
 ---
 
 # Requesting Code Review
 
-Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history.
+Review is a risk-control mechanism, not a completion ceremony. Use the lightest review that addresses the actual failure risk, and do not repeat review of unchanged work.
 
-**Core principle:** Review the plan-defined unit and its real risks; avoid duplicate review of unchanged work.
+## Review Levels
 
-## When to Request Review
+### R0 — Ordinary Change
 
-**Mandatory:**
-- At the plan-defined review boundary in subagent-driven development; use an earlier gate for independent risk or repository requirements
-- After completing major feature
-- Before merge to main
+Examples: local bug fix with a clear reproducer, copy or styling change, small isolated helper, behavior-preserving refactor with adequate coverage.
 
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-- After fixing complex bug
+Required:
+- run the affected verification
+- inspect the diff once for unintended scope, accidental files, and obvious regressions
 
-## How to Request
+Do not dispatch a separate reviewer merely because the task is complete or ready to merge.
 
-**1. Get git SHAs:**
+### R1 — Architectural Change
+
+Examples: new service boundary, persistence-shape change, new runtime abstraction, dependency replacement, multi-component wiring change.
+
+Required:
+- review once at the coherent integration boundary
+- check interfaces, ownership, coupling, data flow, dependency decisions, and the assembled production path against the plan/spec
+- confirm the integration verification covers the architecture actually introduced
+
+A structured self-review is sufficient when the change is understandable in current context. Dispatch a fresh reviewer when context separation materially improves judgment or the plan explicitly selected a reviewer.
+
+### R2 — High-Risk Change
+
+Examples: authentication/authorization, security-sensitive code, destructive migration, financial calculation, irreversible external action, production deployment logic, or changes whose failure could corrupt or lose data.
+
+Required before completion:
+- identify the dangerous failure mode explicitly
+- run the focused negative control, regression, or real integration path that would expose it
+- inspect rollback, recovery, or containment implications where relevant
+- perform a deliberate fresh-context review when judgment risk is material; a reviewer subagent is useful here because it provides independent context, not organizational authority
+
+A small diff can be R2. A large isolated change can be R0.
+
+## If Dispatching a Reviewer
+
+Use a reviewer only when it adds a distinct check rather than duplicating verification already performed.
+
+**1. Get the review-unit SHAs:**
+
 ```bash
-BASE_SHA=<recorded-entry-commit-for-the-whole-review-unit>
+BASE_SHA=<recorded-entry-commit-for-the-review-unit>
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 
-**2. Dispatch code reviewer subagent:**
+**2. Dispatch one reviewer:**
 
-Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
+Use the template at [code-reviewer.md](code-reviewer.md) with:
+- `{DESCRIPTION}` — what changed and why
+- `{PLAN_OR_REQUIREMENTS}` — binding requirement/spec
+- `{BASE_SHA}` — start of the coherent review unit
+- `{HEAD_SHA}` — end of the coherent review unit
 
-**Placeholders:**
-- `{DESCRIPTION}` - Brief summary of what you built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
+Do not send the reviewer the session history. Give it the diff plus the requirements and concrete risks that justify the review.
 
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
+**3. Act on findings:**
+- required correctness or security defects block completion
+- optional polish does not become a mandatory loop
+- push back on an incorrect finding with code, tests, or contract evidence
+- re-review only the changed fix surface unless a fix invalidates broader assumptions
 
-## Example
+## Operating Rule
 
-```
-[Just completed Task 2: Add verification function]
+> Review only when the cost of a plausible mistake is meaningfully higher than the cost of reviewing it.
 
-You: Let me request code review before proceeding.
-
-BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
-HEAD_SHA=$(git rev-parse HEAD)
-
-[Dispatch code reviewer subagent]
-  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
-  BASE_SHA: a7981ec
-  HEAD_SHA: 3df7661
-
-[Subagent returns]:
-  Strengths: Clean architecture, real tests
-  Issues:
-    Important: Missing progress indicators
-    Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
-
-You: [Fix progress indicators]
-[Continue to Task 3]
-```
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
-| "I'll just review the diff myself instead of dispatching a reviewer" | You're the coordinator — reviewing the diff inline burns the context window you need to keep driving the work. Dispatch a reviewer subagent: the diff and the evaluation live in its context, and only the findings come back to you. |
-| "The reviewer needs my whole session history to understand the change" | Hand it precisely crafted context, never your session's history. That keeps the reviewer on the work product, not your thought process. |
-
-## Red Flags
-
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-- Argue with valid technical feedback
-
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
-- Request clarification
-
-See template at: [code-reviewer.md](code-reviewer.md)
+Do not create a review artifact when there are no findings that need to survive the current session. Git and the verification results already record ordinary development state.

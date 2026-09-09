@@ -7,9 +7,11 @@ description: Use at conversation start to route the task to relevant skills
 
 If dispatched as a subagent for a specific task, follow that task's selected workflow instead of restarting this router.
 
-## Minimum Sufficient Change
+## Minimum Sufficient Engineering
 
-Choose the smallest change and verification surface that satisfies the request. Reuse existing code, contracts, tests, and recovery state. Added complexity or durable artifacts need a current consumer or demonstrated risk. Preserve correctness, security, authority, data integrity, and explicit repository requirements.
+Choose the smallest change, verification surface, and review process that satisfies the request. Reuse existing code, contracts, tests, and recovery state. Added complexity or durable artifacts need a current consumer or demonstrated risk. Preserve correctness, security, required permissions, data integrity, product/runtime audit requirements, and explicit repository requirements.
+
+Verification exists to catch mistakes, not to create proof that work happened. Review follows risk: ordinary changes need affected verification plus a quick diff scan; architectural changes get one structured review at the coherent integration boundary; high-risk changes require deliberate failure-mode review and rollback/recovery consideration. Do not add another review merely because a workflow phase changed.
 
 ## Route the Task
 
@@ -34,4 +36,4 @@ Read the matching adapter when tool mapping or platform behavior is needed:
 
 ## Precedence
 
-User and repository instructions take precedence over these workflow defaults. Stop for missing authority, material unresolved design choices, security risk, destructive operations, or irreversible external actions that require approval. Safe in-scope work continues without repeated approval turns.
+User and repository instructions take precedence over these workflow defaults. Stop for missing permission, material unresolved design choices, security risk, destructive operations, or irreversible external actions that require approval. Safe in-scope work continues without repeated approval turns.

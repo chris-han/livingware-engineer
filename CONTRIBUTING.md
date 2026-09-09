@@ -11,7 +11,7 @@ Before you open a PR against this repo, you MUST:
 5. **Identify yourself.** Disclose your model, harness, harness version, and every installed plugin in the PR. Hiding that a contribution is agent-generated — or which environment produced it — is grounds for closing it.
 6. **Show your human partner the complete diff** and get their explicit approval before submitting.
 
-If any of these checks fail, do not open the PR. Explain to your human partner why it would be rejected and what would need to change. 
+If any of these checks fail, do not open the PR. Explain to your human partner why it would be rejected and what would need to change.
 
 ## Pull Request Requirements
 
@@ -57,7 +57,7 @@ If you maintain a fork with customizations, do not open PRs to sync your fork or
 
 ### Fabricated content
 
-PRs containing invented claims, fabricated problem descriptions, or hallucinated functionality will be closed immediately. 
+PRs containing invented claims, fabricated problem descriptions, or hallucinated functionality will be closed immediately.
 
 ### Bundled unrelated changes
 

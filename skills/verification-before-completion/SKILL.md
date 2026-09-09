@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: Use before claiming work is correct, complete, fixed, or passing, or before committing, pushing, or creating a PR
+description: Use before claiming work is correct, complete, fixed, or passing, or before an integration/release action whose safety depends on that claim
 ---
 
 # Verification Before Completion

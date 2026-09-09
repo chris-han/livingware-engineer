@@ -1,5 +1,10 @@
 # Superpowers Release Notes
 
+## v6.5.22 (2026-09-10)
+
+- Narrow verification activation to correctness/completion claims and consequential integration/release actions; ordinary checkpoint commits and backup pushes do not independently trigger it.
+- Synchronize all nine declared package/plugin versions to 6.5.22.
+
 ## v6.5.21 (2026-09-10)
 
 - Simplify completion verification to scope, falsifiable check, run/reuse, and actual result; retain unchanged-state reuse, affected real-path checks, and declared MVL requirements.

@@ -65,7 +65,6 @@ digraph tdd_cycle {
     verify_red -> red [label="wrong\nfailure"];
     green -> verify_green [label="yes"];
     verify_green -> green [label="no"];
-    verify_green -> verify_green [style=invis];
     verify_green -> refactor [label="yes"];
     refactor -> verify_green [label="stay\ngreen"];
     verify_green -> next;

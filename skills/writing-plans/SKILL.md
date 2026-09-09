@@ -251,7 +251,7 @@ Use the existing plan/task tracker as the coordination record. Test output and v
 **Forbidden mocks:** [internal components on the completion path]
 **Existing tests to run:** [focused existing coverage]
 **New tests required:** [only gaps not already covered]
-**UI test:** [required? preferred Chrome CDP endpoint if applicable]
+**UI test:** [required evidence lane and affected path, per the browser selection/lifecycle contract]
 
 ## Global Constraints
 
@@ -342,7 +342,7 @@ The plan must contain only the closure work justified by the observed impact rad
 1. **Prerequisite/dependency verification** — required for every new load-bearing package/service/tool before feature consumers execute.
 2. **TDD/local behavior** — always for changed behavior.
 3. **Focused or real-component integration** — only when R1/R2/R3 impact requires it; exercise the smallest affected production path with no internal completion-path mocks.
-4. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; prefer the configured Chrome CDP endpoint (commonly `127.0.0.1:9222`).
+4. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md).
 5. **Vertical/E2E** — when R3 impact or the MVL's smallest real journey crosses architectural boundaries.
 6. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
 7. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.

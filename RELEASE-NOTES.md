@@ -1,5 +1,12 @@
 # Superpowers Release Notes
 
+## v6.5.16 (2026-09-10)
+
+- Reconcile branch finishing with affected verification and unchanged-state result reuse; remove competing Chrome-first browser policies.
+- Honor plan-defined sprint review units, permit evidence-based early adjudication, and keep unresolved required behavior incomplete at retry limits.
+- Retain compact recovery state without exhaustive clean-check tables; route bootstrap skills by task and accept existing authorization for fully specified reversible bounded changes.
+- Narrow the browser evaluation to instruction-response routing rather than self-reported file access or actual browser execution.
+
 ## v6.5.15 (2026-09-10)
 
 - Preserve detailed step-by-step plans while referencing existing contracts and fixtures instead of duplicating them.

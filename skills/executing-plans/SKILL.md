@@ -11,7 +11,7 @@ Load plan, review critically, execute all tasks, preserve the feature's MVL cont
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Note:** Tell your human partner that Livingware Engineer works much better with access to subagents. If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+Honor the already authorized execution mode. Use subagent-driven-development when delegation is selected and useful; tool availability alone does not override an inline execution choice.
 
 ## MVL Continuity Rule
 
@@ -54,7 +54,7 @@ A successful package install is not proof of readiness. The dependency gate is g
 ### Step 1: Load and Review Plan
 1. Ensure an isolated workspace: use superpowers:using-git-worktrees to create one or verify the existing one.
 2. Read the plan file and its linked spec.
-3. For a product feature, extract the MVL Contract, Prerequisites and Dependencies, Impact Radius, and Integration Contract into the execution todo/ledger so they survive context changes.
+3. Reference the plan's MVL, dependency, impact, and integration sections from the existing recovery tracker; do not copy them into another ledger.
 4. Review critically for gaps or contradictions.
 5. Confirm the smallest real journey is actually implementable by the listed tasks.
 6. Confirm every load-bearing external or package prerequisite has an explicit declaration/install/verification path before any consumer task.
@@ -83,7 +83,7 @@ For each feature task:
 2. Confirm its declared prerequisite tasks are green.
 3. Follow each step exactly.
 4. Use TDD for changed behavior.
-5. Run the task verifications as specified.
+5. Run focused step tests and the plan's sprint-exit integration/review gates. Use `verification-before-completion` for scope and unchanged-state result reuse.
 6. Check that the task's output still matches the shared MVL journey and interfaces; do not invent a local alternate flow just to make tests pass.
 7. Do not add a new dependency without first adding/updating its prerequisite contract and verification.
 8. Mark as completed only when its implementation and required evidence are complete.
@@ -96,7 +96,7 @@ Run the plan's closure evidence in this order as applicable:
 
 1. **Dependency verification** — confirm all load-bearing packages/services/tools remain installed, pinned, and smoke/contract-tested.
 2. **Focused or real-component integration** — according to the plan's R0–R3 impact radius, exercise the affected production path through the required real in-repo components. Internal completion-path mocks are forbidden.
-3. **Real-browser UI verification** — mandatory for frontend/UI work. Prefer the configured Chrome CDP endpoint, commonly `127.0.0.1:9222`. In WSL, if that browser prerequisite is unavailable, tell the user how to start host Chrome in debug mode and keep UI completion blocked until real-browser evidence exists.
+3. **Real-browser UI verification** — follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md). Only an unavailable browser required by the selected evidence lane blocks that gate; Chrome availability does not block Lightpanda behavior verification.
 4. **Vertical/E2E verification** — when R3 impact or the user-value claim crosses multiple architecture boundaries.
 5. **Baseline / technical + UX measurement** — run the declared stable evaluation surface with realistic trial inputs.
 6. **Feedback capture verification** — prove telemetry, corrections, or explicit feedback are actually captured where the plan requires them.
@@ -126,7 +126,7 @@ After all required implementation and MVL closure evidence is satisfied accordin
 - a required production dependency is missing and cannot be installed/implemented within the plan
 - a required dependency cannot pass its smoke/contract test or conflicts with the declared platform/version constraints
 - the plan/spec is so contradictory that every path forward would redefine the user journey
-- required WSL host-browser verification is blocked because Chrome debug mode is not running; provide startup instructions and wait for that prerequisite before claiming UI completion
+- a browser required by the selected evidence lane is unavailable and cannot be started within authorized scope; report that gate as unverified and continue independent work
 
 For ordinary implementation ambiguity, prefer a documented ruling consistent with the spec and MVL Contract rather than fragmenting the feature into local guesses.
 

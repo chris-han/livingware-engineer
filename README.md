@@ -15,7 +15,7 @@ Livingware Engineer is designed around six principles:
 3. **Dependencies are architecture, not setup trivia.** Any new dependency must be discussed during design, declared and pinned in the plan, installed as a prerequisite, and smoke/contract-tested before feature code depends on it.
 4. **Test scope follows impact radius, not diff size.** Use `codebase-memory-mcp` when available to inspect callers, consumers, dependency edges, persistence, routes, trust boundaries, and user paths. Escalate from local TDD to focused integration, real-component integration, or vertical/E2E only when the observed production radius requires it.
 5. **Mocks cannot prove architecture exists.** Changed in-repo production components that matter to the completion path must appear as their real implementations in at least one integration path. True external systems may be substituted at their explicit boundary.
-6. **User-visible frontend work requires a real browser.** In the standard WSL workflow, prefer Windows-host Chrome through CDP on port `9222`. If Chrome is unavailable, the browser gate remains blocked until the user starts the debug instance; mock-only UI tests are not completion evidence.
+6. **User-visible frontend work requires a real browser.** Follow the [browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md); only the browser required by the selected evidence lane can block its gate. Mock-only UI tests are not completion evidence.
 
 The methodology keeps many upstream skill IDs and internal compatibility surfaces so Superpowers improvements can still be merged selectively.
 
@@ -211,7 +211,7 @@ MVL is not a separate skill. For product features, it is the **feature-developme
 7. **test-driven-development** — enforce RED → GREEN → REFACTOR for changed local behavior.
 8. **impact-radius assessment** — use `codebase-memory-mcp` when available (`index_repository`, `search_graph`, `trace_path`, `query_graph`, `search_code`, `get_code_snippet`) to determine the smallest sufficient verification scope.
 9. **focused / real-component integration verification** — when the observed impact radius crosses production seams, prove the affected path with real changed in-repo components and production wiring.
-10. **real-browser UI verification** — mandatory when frontend behavior is affected; for WSL prefer Windows-host Chrome CDP on `127.0.0.1:9222`.
+10. **real-browser UI verification** — mandatory when frontend behavior is affected; follow the [browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md).
 11. **vertical / end-to-end verification** — when the impact radius or MVL journey crosses architectural boundaries, execute the smallest real journey through the real application path.
 12. **technical + UX measurement / feedback / improvement / re-test** — use the same journey and realistic inputs to generate comparable product-learning evidence.
 13. **requesting-code-review** — verify specification compliance and code quality.
@@ -395,30 +395,7 @@ Mocks, fakes, and stubs remain appropriate at true external or nondeterministic 
 
 Any frontend/UI change requires browser-level verification because DOM simulators and component tests cannot prove the actual rendering, CSS/layout, focus, routing, canvas/graph behavior, or frontend/backend interaction.
 
-For the standard WSL development environment, prefer Windows-host Chrome over CDP:
-
-```text
-http://127.0.0.1:9222
-```
-
-Treat a persistent CDP browser as shared operator state. Use a fixture-owned page, preserve the natural viewport and existing tabs, and clean up device-metrics overrides, CDP sessions, owned pages, and the automation client in `finally`. Exact synthetic viewports require an isolated browser/profile.
-
-If DOM geometry and the screenshot disagree, inspect protocol layout metrics, screenshot dimensions, site zoom, CDP targets, and stale automation clients before changing CSS. When `9222` is reachable from WSL, keep this work in WSL/CDP; PowerShell is only a launch instruction for an unavailable endpoint. The full contract is in [Shared Chrome CDP Lifecycle](skills/test-driven-development/remote-cdp-browser-lifecycle.md).
-
-If it is unavailable, frontend completion remains blocked. The user should start a separate Windows Chrome debug profile rather than the agent installing a substitute browser inside WSL or downgrading to jsdom/mock-only evidence.
-
-Recommended PowerShell command:
-
-```powershell
-Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-Then verify from WSL:
-
-```bash
-curl -fsS http://127.0.0.1:9222/json/version
-```
+Follow the [browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md) for engine choice, endpoints, startup, shared-browser protection, and cleanup. Browser choice follows the evidence required by the test. An unavailable rendering browser does not block a behavior-only lane.
 
 ## Knowledge- and Data-Backed Features
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Behavioral regression for local Codex CLI: frontend browser verification must
-# choose the engine by evidence type and independently read both instruction layers.
+# Behavioral regression for local Codex CLI instruction-response routing: frontend
+# browser verification must choose the engine by evidence type.
 
 set -euo pipefail
 
@@ -15,28 +15,21 @@ criterion. You are working from WSL. Lightpanda is installed but
 http://127.0.0.1:9223 is not currently reachable. Windows Chrome happens to be
 running at http://127.0.0.1:9222.
 
-This eval is for the LOCAL CODEX CLI workspace. Do not use CodexPro, codex_apps,
-MCP file readers, app-backed workspace readers, or any remote workspace connector.
-Use the local repository workspace rooted at the current Codex working directory.
-
-Before answering, independently read BOTH repository files using local read-only
-shell access (for example cat or sed):
-1. AGENTS.md
-2. skills/test-driven-development/SKILL.md
-
-Do not rely on one file as a substitute for the other. If either local file cannot
-be read, say so and report NO for that layer below rather than pretending it was
-checked.
+You are executing the browser-verification step of an already-approved
+implementation plan in a separate local Codex session. Enter through the normal
+executing-plans workflow and evaluate the repository-local workflow skills rooted
+at the current Codex working directory, not stale installed plugin copies. Use
+read-only local instruction discovery as needed by that normal workflow.
 
 Explain which real browser you will use, how you will make it available, what you
 will run, and how you will clean up. Do not start browsers, run tests, modify files,
-or execute any command other than read-only shell commands needed to inspect the
-two instruction files above.
+or execute commands other than read-only local instruction discovery.
 
-End your answer with exactly these three machine-readable lines, once each:
-READ_AGENTS=<YES|NO>
-READ_TDD_SKILL=<YES|NO>
+End your answer with exactly one machine-readable line, once:
 EXECUTION_LANES=<lane decision>
+
+Do not emit READ_AGENTS or READ_TDD_SKILL markers. This response eval checks the
+instruction-routing decision; it does not prove file reads or browser execution.
 
 For this scenario, use BEHAVIOR:LIGHTPANDA when only the behavior lane should run,
 RENDERING:CHROME when only the rendering lane should run, or BOTH when both are required.
@@ -50,9 +43,8 @@ if ! command -v codex >/dev/null 2>&1; then
     exit 127
 fi
 
-# Force the subprocess root to this repository. The scenario deliberately requires
-# local read-only shell access and forbids CodexPro/MCP readers, so readability is
-# measured against the actual local Codex CLI workspace.
+# Force the subprocess root to this repository so normal local Codex instruction
+# discovery and skill routing apply.
 output=$(timeout 300 codex exec --cd "$REPO_ROOT" --sandbox read-only "$SCENARIO")
 
 echo "Agent output:"
@@ -87,10 +79,20 @@ assert_exact_once() {
     fi
 }
 
-assert_exact_once "$output" "READ_AGENTS=YES" \
-    "read AGENTS.md independently through local Codex CLI workspace"
-assert_exact_once "$output" "READ_TDD_SKILL=YES" \
-    "read TDD SKILL.md independently through local Codex CLI workspace"
+assert_not_contains() {
+    local haystack="$1"
+    local pattern="$2"
+    local description="$3"
+    if printf '%s\n' "$haystack" | grep -Eiq "$pattern"; then
+        echo "[FAIL] $description"
+        failures=$((failures + 1))
+    else
+        echo "[PASS] $description"
+    fi
+}
+
+assert_not_contains "$output" '^READ_(AGENTS|TDD_SKILL)=' \
+    "omit obsolete self-reported file-read markers"
 
 assert_contains "$output" "Lightpanda" \
     "choose Lightpanda for behavior verification"
@@ -107,19 +109,19 @@ assert_contains "$output" "affected|filter" \
 assert_exact_once "$output" "EXECUTION_LANES=BEHAVIOR:LIGHTPANDA" \
     "keep the behavior-only execution on the Lightpanda lane"
 
-marker_count=$(printf '%s\n' "$output" | grep -Ec '^(READ_AGENTS|READ_TDD_SKILL|EXECUTION_LANES)=' || true)
-if [ "$marker_count" -eq 3 ]; then
-    echo "[PASS] emit exactly three instruction/lane decision markers"
+marker_count=$(printf '%s\n' "$output" | grep -Ec '^EXECUTION_LANES=' || true)
+if [ "$marker_count" -eq 1 ]; then
+    echo "[PASS] emit exactly one lane decision marker"
 else
-    echo "[FAIL] emit exactly three instruction/lane decision markers"
+    echo "[FAIL] emit exactly one lane decision marker"
     failures=$((failures + 1))
 fi
 
 if [ "$failures" -gt 0 ]; then
     echo ""
-    echo "[FAIL] local Codex browser engine selection/readability missed $failures required behavior(s)"
+    echo "[FAIL] local Codex browser engine routing missed $failures required behavior(s)"
     exit 1
 fi
 
 echo ""
-echo "[PASS] local Codex independently reads both instruction layers and uses Lightpanda for behavior without redundant Chrome"
+echo "[PASS] local Codex routes behavior verification to Lightpanda without redundant Chrome"

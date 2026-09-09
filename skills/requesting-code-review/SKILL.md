@@ -7,12 +7,12 @@ description: Use when completing tasks, implementing major features, or before m
 
 Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history.
 
-**Core principle:** Review early, review often.
+**Core principle:** Review the plan-defined unit and its real risks; avoid duplicate review of unchanged work.
 
 ## When to Request Review
 
 **Mandatory:**
-- After each task in subagent-driven development
+- At the plan-defined review boundary in subagent-driven development; use an earlier gate for independent risk or repository requirements
 - After completing major feature
 - Before merge to main
 
@@ -25,7 +25,7 @@ Dispatch a code reviewer subagent to catch issues before they cascade. The revie
 
 **1. Get git SHAs:**
 ```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
+BASE_SHA=<recorded-entry-commit-for-the-whole-review-unit>
 HEAD_SHA=$(git rev-parse HEAD)
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: Use when an implementation request needs design decisions, requirements clarification, or scope assessment
 ---
 
 # Brainstorming Ideas Into Designs
@@ -9,23 +9,23 @@ Help turn ideas into fully formed designs and specs through natural collaborativ
 
 Start by classifying how much process the request needs, then work through your path: understand the context, refine the idea, decide what should be reused or adopted versus built, present a design, and get your human partner's approval.
 
-<HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have told your human partner what you intend and they have approved it. This applies to EVERY task on EVERY path below — the ceremony scales with the task; the approval gate never does.
-</HARD-GATE>
+## Authorization Boundary
 
-<PRODUCT-GOVERNANCE-LAW>
-This engineering design-approval gate is a development-process boundary, not a product runtime governance model. When designing product workflows, apply MVL Law 1: governance is ambient/default-pass for low-risk exploration, context formation, comparison, preview, and reversible transitions; explicit interruption is reserved for real safety, authority, consequential-action, or irreversibility triggers. Never copy this skill's blanket pre-implementation approval ceremony into the product UX.
-</PRODUCT-GOVERNANCE-LAW>
+For an explicit, fully specified, reversible bounded implementation request, the request itself authorizes the described change. State the approach briefly and proceed through affected tests; do not require another approval turn or a new plan/spec document.
+
+Ask before implementation when a material design choice remains unresolved or the work expands scope, authority, security risk, destructive effects, or irreversible external actions. Architectural work still follows design approval below. Approval of an inspection or spike does not authorize keeping or deploying its experimental code.
+
+Product governance is a separate boundary: low-risk exploration and previews should remain default-pass; preserve actual authority and consequential-action requirements.
 
 ## Three Paths
 
-Before your first question, classify the request and say the classification out loud — "this looks bounded, so I'll present a short design here rather than write a spec" — so your human partner can override it:
+Classify the request before choosing the amount of process. Briefly explain the approach when useful; do not add a classification-only turn:
 
-- **Spike** — a feasibility question ("can we...", "is it possible...", "quick and dirty is fine") whose output is an answer, not code you keep. Present the question and what you'll try in 2-3 sentences, get a nod, then find out as cheaply as correctness allows. No design doc, no spec file. Report findings as a recommendation; anything you built stays labeled throwaway.
-- **Bounded** — a well-scoped change to code that already exists in this repo: a new flag, a small endpoint, a one-file fix. Understanding the kind of app is not enough — bounded means the flow you are changing is already here to read. If there is no existing flow to change, the task is not bounded. Ask the clarifying questions that matter, present a short design IN CHAT (a few sentences to a few short paragraphs), and STOP. Implementation starts only after your human partner says yes to that design — a bounded task's approval is as hard a gate as an architectural one. No spec file, no implementation plan document.
+- **Spike** — a feasibility question ("can we...", "is it possible...", "quick and dirty is fine") whose output is an answer, not code you keep. For an explicitly requested safe, read-only probe, state what you will check and proceed; seek approval for consequential experiments. No design doc, no spec file. Report findings as a recommendation; anything you built stays labeled throwaway.
+- **Bounded** — a well-scoped change to code that already exists in this repo: a new flag, a small endpoint, a one-file fix. Understanding the kind of app is not enough — bounded means the flow you are changing is already here to read. If there is no existing flow to change, the task is not bounded. Resolve missing information that materially affects the change. Present a short approach in chat and apply the Authorization Boundary above; an already specified, reversible request does not need another yes. No spec file, no implementation plan document.
 - **Architectural** — new projects, new subsystems, changes that restructure how components fit together or alter interfaces others depend on. Follow the full process: questions, approaches, sectioned design, written spec, then the writing-plans skill.
 
-When in doubt between two paths, take the heavier one. The ratchet is one-way: hidden complexity discovered mid-task upgrades the path — stop, say so, and step up. Nothing downgrades mid-task.
+Choose the least process justified by observed scope and risk. Reclassify when new evidence changes those facts; pause for approval only when the Authorization Boundary requires it.
 
 ## Build vs Reuse vs Adopt Is a Design Decision
 
@@ -78,34 +78,21 @@ Plan prerequisite: install + smoke/contract verification required? yes/no
 
 If a new dependency is selected, the later implementation plan must include declaration/pinning, installation, compatibility verification, and a real smoke/contract test before downstream feature code depends on it.
 
-## Anti-Pattern: "Too Simple To Need Approval"
+## Approval Is About Scope, Not Ceremony
 
-Every path ends with your human partner approving your intent before implementation. A todo list, a single-function utility, a config change — the design may be two sentences in chat, but you MUST present it and get approval. "Simple" tasks are where unexamined assumptions cause the most wasted work. What scales with simplicity is the artifact, never the approval.
+Small does not mean risk-free: a one-line permission or deletion change can require approval. Conversely, repeating approval for a fully specified, reversible change adds no new decision. Ask about the unresolved choice or expanded risk, not merely whether to continue.
 
-## Red Flags
-
-| Thought | Reality |
-|---------|---------|
-| "This is too simple to need a design" | Simple means a short design, not no design. Two sentences in chat, then approval. |
-| "I'll call it bounded and skip the spec" | Reaching for a label to skip work IS the doubt — take the heavier path. |
-| "It's bounded and the design is obvious — I'll start while they read it" | The gate is the approval, not the design's length. Present, then stop until you hear yes. |
-| "I understand this kind of app, so it's bounded" | Bounded measures the repo, not your familiarity. A new project has no existing flow — it is architectural. |
-| "The spike works, so I'll keep the code" | A spike's output is an answer. Keeping the code is a new request — classify it. |
-| "It grew, but I'm almost done — no need to re-classify" | Hidden complexity upgrades the path mid-task. Stop and say so. |
-| "They approved the spike, so the follow-up change is approved too" | Each task gets its own classification and its own approval. |
-| "We can write this ourselves, so we should" | Capability to build is not evidence that custom ownership is the best lifecycle choice. Compare reuse/native/dependency options first. |
-| "There is an open-source package, so use it" | Existence is not fit. Evaluate maintenance, license, security, transitive cost, lock-in, and architectural ownership. |
-| "We'll decide the dependency during coding" | Dependency choice can reshape architecture and the MVL. Decide it during brainstorming and verify it as a plan prerequisite. |
+Do not treat approval of a spike as permission to ship it. Compare reuse/native/dependency options before adding meaningful capability; capability to build or the existence of a package does not establish fit.
 
 ## Checklist
 
-Classify first, announce the path, then create a task for each item on your path and complete them in order.
+Use the relevant path as a checklist, not a requirement to generate a todo or artifact for every item.
 
 **Spike:**
 1. **Explore project context** — enough to frame the probe
 2. **Check reuse/dependency options when the feasibility question depends on them**
 3. **Present question + probe plan** — 2-3 sentences
-4. **Get approval** — a nod is enough
+4. **Confirm scope** — use existing authorization for safe read-only investigation; ask for consequential experiments
 5. **Investigate** — as cheaply as correctness allows
 6. **Report findings** — a recommendation; label anything built as throwaway
 
@@ -114,7 +101,7 @@ Classify first, announce the path, then create a task for each item on your path
 2. **Check build/reuse/adopt options for any meaningful new capability**
 3. **Ask clarifying questions** — one at a time, the ones that matter
 4. **Present short design in chat** — approach, dependency decision if relevant, files touched, testing
-5. **Get approval** — STOP and wait for an explicit yes; presenting the design and starting in the same breath is skipping the gate
+5. **Apply the Authorization Boundary** — proceed on an explicit, fully specified, reversible request; otherwise obtain the missing design or risk decision
 6. **Implement** — proceed with the normal development workflow (TDD applies); no plan document
 
 **Architectural:**
@@ -138,7 +125,7 @@ digraph brainstorming {
     "Build / reuse / adopt decision" [shape=diamond];
     "Ask clarifying questions" [shape=box];
     "Present design / approaches" [shape=box];
-    "Human approves?" [shape=diamond];
+    "Required authorization satisfied?" [shape=diamond];
     "Investigate spike" [shape=doublecircle];
     "Implement bounded via normal workflow" [shape=doublecircle];
     "Write design doc" [shape=box];
@@ -150,10 +137,10 @@ digraph brainstorming {
     "Explore project context" -> "Build / reuse / adopt decision";
     "Build / reuse / adopt decision" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Present design / approaches";
-    "Present design / approaches" -> "Human approves?";
-    "Human approves?" -> "Investigate spike" [label="spike"];
-    "Human approves?" -> "Implement bounded via normal workflow" [label="bounded"];
-    "Human approves?" -> "Write design doc" [label="architectural"];
+    "Present design / approaches" -> "Required authorization satisfied?";
+    "Required authorization satisfied?" -> "Investigate spike" [label="spike"];
+    "Required authorization satisfied?" -> "Implement bounded via normal workflow" [label="bounded"];
+    "Required authorization satisfied?" -> "Write design doc" [label="architectural"];
     "Write design doc" -> "Spec self-review";
     "Spec self-review" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes"];
@@ -161,11 +148,11 @@ digraph brainstorming {
 }
 ```
 
-**Terminal states are path-bound.** Architectural: the ONLY skill you invoke after brainstorming is writing-plans — never frontend-design, mcp-builder, or any other implementation skill. Bounded: after approval, implementation proceeds directly through the normal development workflow; no plan document. Spike: the terminal state is a reported recommendation.
+**Terminal states are path-bound.** Architectural: the ONLY skill you invoke after brainstorming is writing-plans — never frontend-design, mcp-builder, or any other implementation skill. Bounded: with required authorization satisfied, implementation proceeds directly through the normal development workflow; no plan document. Spike: the terminal state is a reported recommendation.
 
 ## The Process
 
-The subsections below serve the bounded and architectural paths (a spike stops at "present the probe, get a nod"). Sections from **Exploring approaches** onward are architectural-path depth — for bounded work, context plus a few questions plus a short in-chat design is the whole process.
+The subsections below serve the bounded and architectural paths (a spike stops at a scoped investigation and recommendation). Sections from **Exploring approaches** onward are architectural-path depth — for bounded work, context plus a few questions plus a short in-chat design is the whole process.
 
 **Understanding the idea:**
 

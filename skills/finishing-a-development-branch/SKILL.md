@@ -1,6 +1,6 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work
+description: Use when implementation has passed required verification and is ready for an integration decision
 ---
 
 # Finishing a Development Branch
@@ -13,9 +13,9 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 ## Step 1: Verify Tests
 
-Run the project's full test suite (`npm test` / `cargo test` / `pytest` / `go test ./...`).
+Use `superpowers:verification-before-completion` as the owner of verification scope and result validity. Verify the required integration or release scope; reuse inspected passing results for unchanged relevant state. Run the full suite only when repository policy or demonstrated impact requires it. Unresolved required behavior or load-bearing review findings prevent claiming completion.
 
-**If tests fail**, report the failures and stop — the menu comes after a green suite:
+**If required checks fail or remain unverified**, report the gaps and preserve the branch; do not present it as complete:
 
 ```
 Tests failing (<N> failures). Must fix before completing:
@@ -50,7 +50,9 @@ plan, the conversation, or the branch's upstream. If it is not already
 known, ask: "This branch split from <your best guess> - is that correct?"
 Confirm before merging: merging into the wrong base is expensive to undo.
 
-## Step 4: Present Options
+## Step 4: Honor the Integration Decision
+
+If the user already explicitly selected the integration action and target, execute that choice within repository policy; do not ask again. Otherwise present the applicable menu below.
 
 **Normal repo and named-branch worktree — present exactly these 3 options:**
 
@@ -95,8 +97,9 @@ git checkout <base-branch>
 git pull
 git merge <feature-branch>
 
-# Verify tests on merged result
-<test command>
+# Verify the merged state under verification-before-completion.
+# Rerun affected checks when merge changes invalidate prior results.
+<required verification command, if invalidated>
 ```
 
 If tests fail on the merged result: stop, leave the worktree and branch in
@@ -213,8 +216,8 @@ place. If your platform provides a workspace-exit tool, use it.
 
 | Excuse | Reality |
 |--------|---------|
-| "Tests passed earlier this session" | Run the suite on the tree you are about to integrate. A green run only proves the tree it ran on. |
-| "They obviously want it merged" | Integration is your human partner's decision. Present the menu and wait. |
+| "Tests passed earlier this session" | Inspect the result and relevant state under verification-before-completion; reuse if valid, rerun affected checks if invalidated. |
+| "They obviously want it merged" | Do not infer authorization. Honor an explicit action and target; otherwise ask. |
 | "They seem done with this feature — I'll offer to discard it" | The menu is complete as written. Discard happens only when your human partner asks for it in so many words. |
 | "'Yeah, get rid of it' counts as confirmation" | Only the typed word `discard` authorizes deletion. |
 | "The PR is up, so the worktree is clutter now" | PR feedback gets fixed in that worktree. It stays until the work lands. |

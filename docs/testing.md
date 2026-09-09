@@ -30,7 +30,7 @@ Purpose: prove that the production components introduced, modified, or relied up
 
 **Mandatory rule:**
 
-> Any in-repo production component introduced, modified, or relied upon by an implementation plan must participate in at least one integration test using its real production implementation.
+> When the assessed impact requires integration (R1–R3), affected in-repo components on that path must participate as their real production implementations. R0 local-only changes may use focused behavior tests. See [impact-radius selection](../skills/test-driven-development/impact-radius-testing.md); use [verification-before-completion](../skills/verification-before-completion/SKILL.md) for valid result reuse.
 
 For product features, the integration test must also preserve the plan's MVL contract:
 - same target user / job-to-be-done
@@ -132,85 +132,11 @@ This applies to changes involving, for example:
 - frontend/backend wiring that changes what the user can see or do
 - keyboard, pointer, focus, navigation, accessibility, or responsive interaction behavior
 
-### Preferred Browser Harness
+### Browser Selection and Lifecycle
 
-The preferred browser is a **Windows-host Chrome instance exposed to WSL through Chrome DevTools Protocol on port `9222`**.
+Follow the [browser selection and CDP lifecycle contract](../skills/test-driven-development/remote-cdp-browser-lifecycle.md), which owns engine choice, endpoint setup, process ownership, and cleanup. Choose by what the acceptance criterion must prove, not by which browser happens to be running.
 
-Preferred endpoint from the coding environment:
-
-```text
-http://127.0.0.1:9222
-```
-
-Browser-test priority:
-
-```text
-1. Windows-host Chrome reachable from WSL on port 9222
-2. Project-standard real-browser harness only when the project already provides one
-3. Fresh local browser only when the coding environment actually has one installed
-```
-
-For the standard WSL workflow, do **not** assume Chrome is installed inside WSL and do not install another browser merely to bypass the preferred Windows Chrome test path.
-
-### Shared Chrome Lifecycle
-
-The persistent `9222` instance is operator-owned shared state. Browser tests must use a dedicated fixture-owned page, preserve the natural viewport/window, and avoid `setViewportSize`, device-metrics emulation, or window-bound mutations. Exact synthetic viewport coverage belongs in an isolated browser/profile.
-
-Cleanup must run in `finally`: clear fixture-created metrics overrides, detach CDP sessions, close only fixture-owned pages, disconnect the client transport, and ensure the automation process exits. Completion evidence must confirm the shared endpoint remains reachable and operator tabs remain intact.
-
-When `9222` is reachable from WSL, use WSL/CDP for probing, diagnostics, and cleanup. Do not execute PowerShell merely because Chrome is Windows-hosted. The PowerShell commands below are user-facing launch instructions only for an unavailable endpoint.
-
-If DOM geometry says the app fills `innerWidth` but a screenshot shows unexplained blank space, compare in-page metrics, `Page.getLayoutMetrics`, screenshot pixel dimensions, per-origin site zoom, CDP targets, and stale automation processes before changing CSS. See [the shared Chrome lifecycle reference](../skills/test-driven-development/remote-cdp-browser-lifecycle.md).
-
-### If Chrome on `9222` Is Unavailable
-
-If the agent cannot reach the Chrome DevTools endpoint, it must treat browser availability as a **user-provided test prerequisite**, not silently downgrade the test.
-
-The agent must:
-
-1. Test the endpoint, for example:
-
-   ```bash
-   curl -fsS http://127.0.0.1:9222/json/version
-   ```
-
-2. If unavailable, tell the user that Windows Chrome needs to be started in remote-debug mode.
-3. Provide the Windows launch instruction below.
-4. Explain that the debug instance uses a separate profile and does not use the user's normal Chrome profile.
-5. Ask the user to run the command and confirm Chrome is open; then retry `9222` and continue the UI test.
-6. **Do not claim frontend completion while the required real-browser gate is blocked.**
-
-Recommended Windows PowerShell command:
-
-```powershell
-Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-If Chrome is installed under the x86 Program Files directory:
-
-```powershell
-Start-Process "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-Command Prompt equivalent when `chrome.exe` is on `PATH`:
-
-```cmd
-start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
-```
-
-Modern Chrome requires remote debugging to use a non-default `--user-data-dir`; the dedicated `livingware-chrome-debug` profile is intentional and should be kept separate from the user's normal browser profile.
-
-After Chrome starts, verify from WSL:
-
-```bash
-curl -fsS http://127.0.0.1:9222/json/version
-```
-
-If Windows Chrome is running but WSL cannot reach `127.0.0.1:9222`, report that as a WSL/Windows host-network reachability problem rather than installing Chrome inside WSL or substituting a mock browser test. Resolve host reachability first, then run the UI gate.
-
-Do **not** silently downgrade a required UI test into jsdom, snapshot-only, shallow-render, mocked component, or source-inspection evidence.
+A missing browser blocks only a gate assigned to that evidence lane. Do not substitute DOM simulators or mocked components for required real-browser verification.
 
 ### UI Test Requirements
 
@@ -306,14 +232,14 @@ Before an architectural implementation is marked complete:
 - [ ] for product features, integration/E2E evidence exercises the same smallest real journey and realistic inputs declared by the MVL plan
 - [ ] a vertical / E2E test exists when the change crosses multiple architectural boundaries or delivers user-visible behavior
 - [ ] **any frontend/UI change has real-browser UI test evidence**
-- [ ] **Windows Chrome on port `9222` was preferred for WSL frontend work**
-- [ ] **if `9222` was unavailable, the user was given the Windows debug-launch instructions and UI completion remained blocked until a real browser became reachable**
+- [ ] **browser selection and cleanup follow the canonical CDP lifecycle contract**
+- [ ] **any unavailable required browser is reported against its selected evidence lane, not unrelated UI work**
 - [ ] **UI tests exercise the changed user-visible interaction through the real rendered application**
 - [ ] all relevant existing tests still pass
 
 If a plan cannot satisfy the integration gate because a required internal dependency is missing, the dependency must be installed or implemented first. Mocking the missing production component is not a substitute for completing the prerequisite.
 
-If a frontend plan cannot satisfy the UI gate because Windows Chrome is not reachable, browser availability is a test-environment prerequisite. Remind the user to start Chrome with remote debugging; do not replace the browser gate with mocked component tests and call the work complete.
+If the browser required by the selected evidence lane is unavailable, follow the canonical lifecycle contract to start it or report the missing prerequisite. Keep that gate unverified; continue independent work without replacing required real-browser checks with mocks.
 
 ## Integration Contract in Implementation Plans
 

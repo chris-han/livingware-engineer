@@ -1,63 +1,37 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use at conversation start to route the task to relevant skills
 ---
 
-<SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, ignore this skill.
-</SUBAGENT-STOP>
+# Using Superpowers
 
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+If dispatched as a subagent for a specific task, follow that task's selected workflow instead of restarting this router.
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+## Minimum Sufficient Change
 
-This is not negotiable. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
+Choose the smallest change and verification surface that satisfies the request. Reuse existing code, contracts, tests, and recovery state. Added complexity or durable artifacts need a current consumer or demonstrated risk. Preserve correctness, security, authority, data integrity, and explicit repository requirements.
 
-## The Rule
+## Route the Task
 
-**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+- **Explanation, inspection, or review:** answer or inspect within the requested scope. Do not automatically start brainstorming, planning, implementation, or delegation.
+- **Bug diagnosis or repair:** use systematic-debugging; a diagnosis request alone does not authorize implementing a fix.
+- **Implementation:** use brainstorming to resolve material design choices; an explicit, fully specified, reversible bounded change can use its existing authorization. Use TDD for behavior changes.
+- **Approved multi-step plan:** use the authorized execution workflow. Preserve detailed steps and the plan's sprint integration/review units.
+- **Completion or integration:** use verification-before-completion for required scope and valid result reuse, then finishing-a-development-branch for the authorized integration action.
 
-**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+Honor explicitly requested skills. Otherwise select skills whose descriptions directly match the task; load additional skills/references when a concrete need arises. Read a selected skill before acting on it. An ordinary question or targeted read is not a reason to activate every plausibly related process.
 
-Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
-
-## Skill Priority
-
-When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.
-
-- "Let's build X" → superpowers:brainstorming first, then implementation skills.
-- "Fix this bug" → superpowers:systematic-debugging first, then domain skills.
-
-## Red Flags
-
-These thoughts mean STOP—you're rationalizing:
-
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+Keep announcements and status concise. Track actionable milestones and recovery state, not a separate todo for every checklist sentence. Do not generate duplicate reports or clean-check narration.
 
 ## Platform Adaptation
 
-If your harness appears here, read its reference file for special instructions:
+Read the matching adapter when tool mapping or platform behavior is needed:
 
 - Codex: `references/codex-tools.md`
 - Pi: `references/pi-tools.md`
 - Antigravity: `references/antigravity-tools.md`
 - Hermes Agent: `references/hermes-tools.md`
 
-## User Instructions
+## Precedence
 
-User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills, which in turn override default behavior. Only skip skill workflows or instructions when your human partner has explicitly told you to.
+User and repository instructions take precedence over these workflow defaults. Stop for missing authority, material unresolved design choices, security risk, destructive operations, or irreversible external actions that require approval. Safe in-scope work continues without repeated approval turns.

@@ -13,7 +13,7 @@ description: Use when creating new skills, editing existing skills, or verifying
 
 You write test cases (pressure scenarios with subagents), watch them fail (baseline behavior), write the skill (documentation), watch tests pass (agents comply), and refactor (close loopholes).
 
-**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
+**Core principle:** Match evaluation to the changed behavior. A new behavioral rule needs a demonstrated failure and a relevant before/after scenario; a behavior-preserving edit needs coverage that confirms preservation.
 
 **REQUIRED BACKGROUND:** You MUST understand superpowers:test-driven-development before using this skill. That skill defines the fundamental RED-GREEN-REFACTOR cycle. This skill adapts TDD to documentation.
 
@@ -371,26 +371,14 @@ pptx/
 ```
 When: Reference material too large for inline
 
-## The Iron Law (Same as TDD)
+## Proportionate Evaluation
 
-```
-NO SKILL WITHOUT A FAILING TEST FIRST
-```
+- **Behavior-shaping changes:** identify the observed failure or run a baseline scenario, then test changed guidance through its normal entry point. Preserve safety, authority, and correctness controls.
+- **Behavior-preserving edits:** reuse adequate existing scenarios and inspect affected references/routing. Do not invent a behavioral failure for a typo, relocation, or metadata correction.
+- **Executable tooling:** use focused regression tests for changed output, side effects, and failure modes.
+- **High uncertainty or high consequence:** use multiple independent sessions and adversarial combinations. Choose repetition from observed variance and risk; a fixed sample count is not a universal prerequisite.
 
-This applies to NEW skills AND EDITS to existing skills.
-
-Write skill before testing? Delete it. Start over.
-Edit skill without testing? Same violation.
-
-**No exceptions:**
-- Not for "simple additions"
-- Not for "just adding a section"
-- Not for "documentation updates"
-- Don't keep untested changes as "reference"
-- Don't "adapt" while running tests
-- Delete means delete
-
-**REQUIRED BACKGROUND:** The superpowers:test-driven-development skill explains why this matters. Same principles apply to documentation.
+Inspect actual results and state their scope. Existing test output is enough; no separate evidence report, permanent transcript registry, or checklist artifact is required. User/repository-specific required evaluation gates still apply.
 
 ## Testing All Skill Types
 
@@ -454,7 +442,7 @@ Different skill types need different test approaches:
 | "Academic review is enough" | Reading ≠ using. Test application scenarios. |
 | "No time to test" | Deploying untested skill wastes more time fixing it later. |
 
-**All of these mean: Test before deploying. No exceptions.**
+Before deploying, satisfy the applicable checks in Proportionate Evaluation; do not use confidence as a substitute for an actual relevant check.
 
 ## Match the Form to the Failure
 
@@ -551,7 +539,9 @@ description: use when implementing any feature or bugfix, before writing impleme
 
 ## RED-GREEN-REFACTOR for Skills
 
-Follow the TDD cycle:
+For behavior-shaping changes, follow this cycle. Behavior-preserving edits use
+the preservation checks in Proportionate Evaluation instead; do not manufacture
+a failing control for a typo or unchanged-policy relocation.
 
 ### RED: Write Failing Test (Baseline)
 
@@ -574,11 +564,12 @@ Agent found new rationalization? Add explicit counter. Re-test until bulletproof
 
 ### Micro-Test Wording Before Full Scenarios
 
-Full pressure-scenario runs are the final gate, but they are slow and expensive per iteration. Verify the wording itself first with micro-tests:
+For behavior-shaping discipline guidance, use pressure scenarios proportionate
+to the risk as the final gate. When wording uncertainty warrants micro-tests:
 
 1. **One fresh-context sample per call** — a raw API call, or a single-shot subagent if you don't have API access. System prompt = the realistic context the guidance will live in (the full skill or prompt template, not the guidance in isolation); user message = a task that tempts the failure.
 2. **Always include a no-guidance control.** If the control doesn't exhibit the failure, there is nothing to fix — stop, don't author the guidance.
-3. **5+ reps per variant.** Single samples lie.
+3. **Repeat according to uncertainty.** Use independent samples when stochastic behavior or consequences warrant it; increase repetitions when results vary. A single pass is limited evidence, not proof of universal compliance.
 4. **Manually read every flagged match.** Score programmatically if you like, but template echoes and quoted counter-examples masquerade as hits; automated counts alone overstate both failure and success.
 5. **Variance is a metric.** When guidance lands, reps converge on the same shape. Five different interpretations across five reps means the wording isn't binding — tighten the form before adding words.
 
@@ -613,20 +604,16 @@ helper1, helper2, step3, pattern4
 
 ## STOP: Before Moving to Next Skill
 
-**After writing ANY skill, you MUST STOP and complete the deployment process.**
-
-**Do NOT:**
-- Create multiple skills in batch without testing each
-- Move to next skill before current one is verified
-- Skip testing because "batching is more efficient"
-
-**The deployment checklist below is MANDATORY for EACH skill.**
+Before deployment, cover each changed skill with the applicable checks selected
+under Proportionate Evaluation. Related changes may be batched into one review
+and integration unit; do not omit affected coverage. Shared unchanged checks may
+be reused under verification-before-completion.
 
 Deploying untested skills = deploying untested code. It's a violation of quality standards.
 
 ## Skill Creation Checklist (TDD Adapted)
 
-**IMPORTANT: Create a todo for EACH checklist item below.**
+Use this as an applicable checklist, not a requirement to create a todo or artifact for each item. Apply the Proportionate Evaluation policy above.
 
 **RED Phase - Write Failing Test:**
 - [ ] Create pressure scenarios (3+ combined pressures for discipline skills)
@@ -642,7 +629,7 @@ Deploying untested skills = deploying untested code. It's a violation of quality
 - [ ] Clear overview with core principle
 - [ ] Address specific baseline failures identified in RED
 - [ ] Guidance form matches the failure type (see Match the Form to the Failure)
-- [ ] For behavior-shaping guidance: wording micro-tested against a no-guidance control (5+ reps, every flagged match read manually) — N/A for pure reference skills
+- [ ] For behavior-shaping changes: relevant baseline and changed scenarios inspected; repetitions justified by risk/variance rather than a fixed count
 - [ ] Code inline OR link to separate file
 - [ ] One excellent example (not multi-language)
 - [ ] Run scenarios WITH skill - verify agents now comply

@@ -9,7 +9,7 @@ Review is a risk-control mechanism, not a completion ceremony. Use the lightest 
 
 ## Review Levels
 
-### R0 — Ordinary Change
+### Ordinary Change
 
 Examples: local bug fix with a clear reproducer, copy or styling change, small isolated helper, behavior-preserving refactor with adequate coverage.
 
@@ -19,7 +19,7 @@ Required:
 
 Do not dispatch a separate reviewer merely because the task is complete or ready to merge.
 
-### R1 — Architectural Change
+### Architectural Change
 
 Examples: new service boundary, persistence-shape change, new runtime abstraction, dependency replacement, multi-component wiring change.
 
@@ -30,7 +30,7 @@ Required:
 
 A structured self-review is sufficient when the change is understandable in current context. Dispatch a fresh reviewer when context separation materially improves judgment or the plan explicitly selected a reviewer.
 
-### R2 — High-Risk Change
+### High-Risk Change
 
 Examples: authentication/authorization, security-sensitive code, destructive migration, financial calculation, irreversible external action, production deployment logic, or changes whose failure could corrupt or lose data.
 
@@ -40,7 +40,7 @@ Required before completion:
 - inspect rollback, recovery, or containment implications where relevant
 - perform a deliberate fresh-context review when judgment risk is material; a reviewer subagent is useful here because it provides independent context, not organizational authority
 
-A small diff can be R2. A large isolated change can be R0.
+A small diff can be high-risk. A large isolated change can be ordinary. These review categories are independent of the R0–R3 test-impact radius.
 
 ## If Dispatching a Reviewer
 

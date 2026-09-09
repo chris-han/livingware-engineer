@@ -268,76 +268,9 @@ FRONTEND CHANGE -> AFFECTED REAL-BROWSER TEST -> SELECTED TEST CYCLE
 
 Use this gate for changes to pages, routes, components, forms, dialogs, menus, tables, graphs, visualizations, styles that affect behavior/visibility, frontend state, navigation, focus, keyboard/pointer interaction, or frontend/backend wiring.
 
-### Choose the browser by what the test proves
+### Browser Selection and Lifecycle
 
-Do not treat every frontend test as a Chrome test. Follow `AGENTS.md` and select one browser lane by evidence type:
-
-```text
-BEHAVIOR  -> Lightpanda     http://127.0.0.1:9223
-RENDERING -> Windows Chrome http://127.0.0.1:9222
-```
-
-**BEHAVIOR** includes interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript. Use Lightpanda by default.
-
-**RENDERING** includes visual appearance, layout, paint, fonts, screenshots, canvas/WebGL/WebGPU output, and Chromium-specific rendering behavior. Use Windows-host Chrome.
-
-Run only the affected browser tests unless project instructions require broader coverage. Do not run the same scenario in both engines unless the acceptance criterion actually requires both behavioral and rendering evidence or a browser-specific compatibility question is under investigation.
-
-Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) before browser automation. It defines engine selection, process ownership, shared-Chrome state, viewport, diagnostics, and cleanup.
-
-### Lightpanda behavior lane
-
-Probe the designated endpoint:
-
-```bash
-curl -fsS http://127.0.0.1:9223/json/version
-```
-
-If it is unavailable and the `lightpanda` binary is installed, start it automatically rather than asking the user to remember the prerequisite:
-
-```bash
-lightpanda serve --host 127.0.0.1 --port 9223
-```
-
-A harness may background that command, record the PID, wait until `/json/version` responds, and then run the affected behavior tests. If the harness started Lightpanda, stop only that recorded process in unconditional cleanup. If Lightpanda was already running, leave it running. Never kill a process merely by executable name or port.
-
-If the Lightpanda binary itself is unavailable, report the missing behavior-test prerequisite. Do not silently substitute Windows Chrome as a generic behavior fallback.
-
-Lightpanda has no graphical rendering surface, so behavior evidence from it does not prove rendering correctness.
-
-### Windows Chrome rendering lane
-
-Windows-host Chrome at `127.0.0.1:9222` is persistent shared operator state. Use it only when rendering or Chromium-specific evidence is required.
-
-When attaching to an already-running Chrome, preserve its natural viewport and operator-owned tabs. Use a dedicated fixture-owned page, never mutate the shared viewport/window for a screenshot, and always clean up owned pages, CDP sessions, emulation overrides, and the automation client in `finally`.
-
-If an exact synthetic viewport is required, launch an isolated browser/profile instead. A persistent endpoint is not a disposable test fixture.
-
-When `9222` is reachable from WSL, keep diagnostics and cleanup in WSL/CDP. Do not invoke PowerShell merely because Chrome is Windows-hosted.
-
-If a RENDERING test requires Chrome and `9222` is unavailable, tell the user to start a separate Windows Chrome debug instance. Recommended PowerShell command:
-
-```powershell
-Start-Process "$env:ProgramFiles\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-If Chrome is installed under the x86 Program Files directory:
-
-```powershell
-Start-Process "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe" `
-  -ArgumentList '--remote-debugging-port=9222', "--user-data-dir=$env:TEMP\livingware-chrome-debug"
-```
-
-Command Prompt equivalent when `chrome.exe` is available on `PATH`:
-
-```cmd
-start chrome --remote-debugging-port=9222 --user-data-dir="%TEMP%\livingware-chrome-debug"
-```
-
-The separate `--user-data-dir` is intentional: the debug profile must remain isolated from the user's normal Chrome profile.
-
-Chrome availability must not block a BEHAVIOR test that belongs on Lightpanda.
+Read [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) before browser automation. It owns evidence-lane selection, endpoint startup, shared-browser protection, and cleanup. Use the affected lane; do not run both browsers without an actual acceptance or compatibility requirement.
 
 The UI test must:
 - navigate to the real changed UI path

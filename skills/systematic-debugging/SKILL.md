@@ -67,17 +67,21 @@ You MUST complete each phase before proceeding to the next.
    - New dependencies, config changes
    - Environmental differences
 
-4. **Gather Evidence in Multi-Component Systems**
+4. **Gather Evidence at Unresolved Boundaries**
 
    **WHEN system has multiple components (CI → build → signing, API → service → database):**
 
-   **BEFORE proposing fixes, add diagnostic instrumentation:**
+   Start with existing logs, traces, and observable outputs. Add temporary
+   diagnostics only at boundaries where current evidence cannot distinguish the
+   remaining hypotheses; do not instrument every component by default.
+
+   Diagnostics must not print secret values or dump the environment. For secrets,
+   record only a redacted presence/absence signal:
    ```
-   For EACH component boundary:
-     - Log what data enters component
-     - Log what data exits component
-     - Verify environment/config propagation
-     - Check state at each layer
+   For each unresolved boundary:
+     - Identify the specific value or state needed to distinguish hypotheses
+     - Capture the smallest safe signal at entry and exit
+     - For secrets, record only PRESENT or ABSENT
 
    Run once to gather evidence showing WHERE it breaks
    THEN analyze evidence to identify failing component
@@ -87,12 +91,18 @@ You MUST complete each phase before proceeding to the next.
    **Example (multi-layer system):**
    ```bash
    # Layer 1: Workflow
-   echo "=== Secrets available in workflow: ==="
-   echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+   if [ -n "${IDENTITY:-}" ]; then
+     echo "IDENTITY_PRESENT=PRESENT"
+   else
+     echo "IDENTITY_PRESENT=ABSENT"
+   fi
 
    # Layer 2: Build script
-   echo "=== Env vars in build script: ==="
-   env | grep IDENTITY || echo "IDENTITY not in environment"
+   if [ -n "${IDENTITY:-}" ]; then
+     echo "IDENTITY_PRESENT=PRESENT"
+   else
+     echo "IDENTITY_PRESENT=ABSENT"
+   fi
 
    # Layer 3: Signing script
    echo "=== Keychain state: ==="
@@ -205,24 +215,30 @@ You MUST complete each phase before proceeding to the next.
    - STOP
    - Count: How many fixes have you tried?
    - If < 3: Return to Phase 1, re-analyze with new information
-   - **If ≥ 3: STOP and question the architecture (step 5 below)**
-   - DON'T attempt Fix #4 without architectural discussion
+   - **If ≥ 3: STOP and reassess the evidence and architecture (step 5 below)**
+   - DON'T stack Fix #4 on top; reassess first, then test a safe bounded
+     hypothesis or discuss any material architectural change
 
-5. **If 3+ Fixes Failed: Question Architecture**
+5. **If 3+ Fixes Failed: Reassess Before Continuing**
 
-   **Pattern indicating architectural problem:**
+   Repeated failed fixes show that the current explanation is incomplete. Recheck
+   assumptions, reproduction, dependencies, shared state, and boundary evidence.
+   Failure count alone does not prove the architecture is wrong or authorize an
+   architectural change.
+
+   **Signals that architecture may be part of the problem:**
    - Each fix reveals new shared state/coupling/problem in different place
    - Fixes require "massive refactoring" to implement
    - Each fix creates new symptoms elsewhere
 
-   **STOP and question fundamentals:**
+   **Reassess fundamentals:**
    - Is this pattern fundamentally sound?
    - Are we "sticking with it through sheer inertia"?
    - Should we refactor architecture vs. continue fixing symptoms?
 
-   **Discuss with your human partner before attempting more fixes**
-
-   This is NOT a failed hypothesis - this is a wrong architecture.
+   If reassessment yields another safe, bounded hypothesis, test it minimally.
+   Discuss with your human partner before any architectural change or other action
+   that needs new authority.
 
 ## Red Flags - STOP and Follow Process
 
@@ -243,7 +259,7 @@ If you catch yourself thinking:
 
 **ALL of these mean: STOP. Return to Phase 1.**
 
-**If 3+ fixes failed:** Question the architecture (see Phase 4.5)
+**If 3+ fixes failed:** Reassess evidence and architecture (see Phase 4.5)
 
 ## your human partner's Signals You're Doing It Wrong
 
@@ -267,7 +283,7 @@ If you catch yourself thinking:
 | "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
 | "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
 | "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
-| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
+| "One more fix attempt" (after 2+ failures) | Reassess the evidence and assumptions before choosing another bounded hypothesis; the count alone proves no architecture diagnosis. |
 
 ## Quick Reference
 

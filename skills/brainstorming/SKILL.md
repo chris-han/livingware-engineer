@@ -110,10 +110,10 @@ Use the relevant path as a checklist, not a requirement to generate a todo or ar
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Evaluate build vs reuse vs open-source adoption for meaningful capabilities** — research candidates where needed and make dependency ownership an explicit design choice
 5. **Propose 2-3 approaches** — with trade-offs, dependency strategy, and your recommendation
-6. **Present design** — in sections scaled to their complexity, get user approval after each section
+6. **Present design** — use sections scaled to complexity; obtain approval for the coherent design and unresolved material choices, not a separate yes for every section
 7. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
 8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, and unresolved dependency decisions
-9. **User reviews written spec** — ask user to review the spec file before proceeding
+9. **Confirm design continuity** — if the written spec changes the approved scope or material decisions, obtain approval for those changes; otherwise reference it and proceed
 10. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
@@ -130,7 +130,7 @@ digraph brainstorming {
     "Implement bounded via normal workflow" [shape=doublecircle];
     "Write design doc" [shape=box];
     "Spec self-review" [shape=box];
-    "User reviews spec?" [shape=diamond];
+    "Spec preserves approved design?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Classify: spike / bounded / architectural" -> "Explore project context";
@@ -142,9 +142,9 @@ digraph brainstorming {
     "Required authorization satisfied?" -> "Implement bounded via normal workflow" [label="bounded"];
     "Required authorization satisfied?" -> "Write design doc" [label="architectural"];
     "Write design doc" -> "Spec self-review";
-    "Spec self-review" -> "User reviews spec?";
-    "User reviews spec?" -> "Write design doc" [label="changes"];
-    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+    "Spec self-review" -> "Spec preserves approved design?";
+    "Spec preserves approved design?" -> "Present design / approaches" [label="material change: obtain approval"];
+    "Spec preserves approved design?" -> "Invoke writing-plans skill" [label="yes"];
 }
 ```
 
@@ -178,7 +178,7 @@ The subsections below serve the bounded and architectural paths (a spike stops a
 
 - Once you believe you understand what you're building, present the design
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
-- Ask after each section whether it looks right so far
+- Ask about unresolved material choices; do not require a separate approval for each explanatory section
 - Cover: architecture, components, data flow, dependency strategy, error handling, testing
 - Make new dependency choices and their verification prerequisites explicit
 - Be ready to go back and clarify if something doesn't make sense
@@ -220,11 +220,8 @@ After writing the spec document, look at it with fresh eyes:
 Fix any issues inline. No need to re-review — just fix and move on.
 
 **User Review Gate:**
-After the spec review loop passes, ask the user to review the written spec before proceeding:
 
-> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
-
-Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+The written spec must preserve the approved design. Ask for approval when it introduces a material scope, authority, dependency, or design change; otherwise report its location and continue to planning under the existing authorization.
 
 **Implementation:**
 

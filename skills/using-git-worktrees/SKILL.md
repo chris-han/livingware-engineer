@@ -93,10 +93,11 @@ Follow this priority order. Explicit user preference always beats observed files
 
 #### Safety Verification (project-local directories only)
 
-**MUST verify directory is ignored before creating worktree:**
+**MUST verify the exact selected directory is ignored before creating worktree:**
 
 ```bash
-git check-ignore -q .worktrees 2>/dev/null || git check-ignore -q worktrees 2>/dev/null
+# LOCATION is the one directory selected above
+git check-ignore -q "$LOCATION" 2>/dev/null
 ```
 
 **If NOT ignored:** Add to .gitignore, commit the change, then proceed.
@@ -113,37 +114,40 @@ git worktree add "$path" -b "$BRANCH_NAME"
 cd "$path"
 ```
 
-**Sandbox fallback:** If `git worktree add` fails with a permission error (sandbox denial), tell the user the sandbox blocked worktree creation and you're working in the current directory instead. Then run setup and baseline tests in place.
+**Permission failure:** If worktree creation is blocked, report the exact failure
+and preserve the required isolation boundary. Ask the user to fix permissions,
+authorize another isolated location/tool, or explicitly authorize in-place work
+when repository policy permits it. Do not silently continue in the current
+checkout when isolation was required.
 
 ## Step 2: Project Setup
 
-Auto-detect and run appropriate setup:
+Inspect the repository's declared package manager, lockfile, and existing
+environment. Install only prerequisites that are actually missing, using the
+project's own pinned setup path. Do not run every matching command or infer Poetry
+from `pyproject.toml` alone.
 
 ```bash
-# Node.js
-if [ -f package.json ]; then npm install; fi
-
-# Rust
-if [ -f Cargo.toml ]; then cargo build; fi
-
-# Python
-if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-if [ -f pyproject.toml ]; then poetry install; fi
-
-# Go
-if [ -f go.mod ]; then go mod download; fi
+# Examples only after the matching manager/lockfile is confirmed and setup is needed
+pnpm install --frozen-lockfile  # pnpm-lock.yaml / declared pnpm
+npm ci                          # package-lock.json / declared npm
+uv sync                         # uv.lock / declared uv
+poetry install                  # poetry.lock / declared Poetry
+cargo build --locked            # Cargo.lock
+go mod download                 # go.mod
 ```
 
 ## Step 3: Verify Clean Baseline
 
-Run tests to ensure workspace starts clean:
+Use `superpowers:verification-before-completion` to select and validate the
+baseline scope. Reuse an inspected passing result when the relevant state is
+unchanged; otherwise run the smallest baseline capable of exposing pre-existing
+failures relevant to the planned change. Run a full suite only when repository
+policy or demonstrated impact requires it.
 
-```bash
-# Use project-appropriate command
-npm test / cargo test / pytest / go test ./...
-```
-
-**If tests fail:** Report failures, ask whether to proceed or investigate.
+**If relevant required checks fail:** Report them and investigate or ask how to
+proceed. Existing failures proven unrelated to the task should be reported with
+their baseline provenance; they do not automatically block isolated work.
 
 **If tests pass:** Report ready.
 
@@ -170,9 +174,10 @@ Ready to implement <feature-name>
 | Both exist | Use `.worktrees/` |
 | Neither exists | Check instruction file, then default `.worktrees/` |
 | Directory not ignored | Add to .gitignore + commit |
-| Permission error on create | Sandbox fallback, work in place |
-| Tests fail during baseline | Report failures + ask |
-| No package.json/Cargo.toml | Skip dependency install |
+| Permission error on create | Preserve required isolation; resolve permissions or get explicit authorization for an allowed alternative |
+| Relevant baseline checks fail | Report and investigate or ask |
+| Proven unrelated baseline failure | Record provenance; do not blanket-block isolated work |
+| Prerequisites already present | Skip installation |
 
 ## Common Rationalizations
 
@@ -184,4 +189,4 @@ Ready to implement <feature-name>
 | "`git worktree add` is quicker than hunting for a native tool" | A native tool (e.g. `EnterWorktree`) owns placement, branching, and cleanup. Bypassing it is the #1 mistake — it creates phantom state your harness can't see or manage. |
 | "The worktree directory is surely ignored already" | Run `git check-ignore`. An unignored worktree directory commits the whole tree into the repo. |
 | "Any directory name works" | Explicit instructions beat an existing project-local directory, which beats the `.worktrees/` default. |
-| "The workspace is fresh — baseline tests can wait" | A dirty baseline makes every later failure ambiguous. Run the tests now; proceeding past failures is your human partner's call. |
+| "The workspace is fresh — baseline evidence can wait" | Validate the relevant baseline under verification-before-completion; reuse valid evidence or run the affected scope. |

@@ -70,7 +70,7 @@ For non-product maintenance work where no user-learning loop exists, state `MVL:
 
 Do **not** choose integration/E2E scope from diff size or intuition alone.
 
-When `codebase-memory-mcp` is available, use it before finalizing the Integration Contract. If the repository is not indexed, run `index_repository` first. Prefer graph-oriented tools such as:
+Use relationship-aware discovery when it materially improves the impact assessment. Prefer an available current code graph; check coverage and fall back to targeted source for gaps. Do not make whole-repository indexing a prerequisite for a bounded change. Useful graph tools include:
 
 - `search_graph`
 - `trace_path`
@@ -372,7 +372,7 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **3. Dependency readiness:** For every new package/service/tool, is there an exact declaration/install path, version/pin, compatibility note, and executable smoke/contract verification before consuming feature tasks begin?
 
-**4. Impact-radius evidence:** Did you use `codebase-memory-mcp` when available, index first if needed, and record concrete callers/consumers/boundaries rather than inferring blast radius from diff size?
+**4. Impact radius:** Did you identify concrete affected consumers/boundaries using adequate graph or targeted source evidence, without inferring scope from diff size or forcing unnecessary indexing?
 
 **5. Integration credibility:** Does required test scope match R0/R1/R2/R3? Are existing focused tests reused before adding overlapping tests? For R1+, do affected internal production components appear real where required?
 

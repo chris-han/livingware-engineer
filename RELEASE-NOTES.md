@@ -1,5 +1,13 @@
 # Superpowers Release Notes
 
+## v6.5.20 (2026-09-10)
+
+- Align execution and retry reviews with risk-selected depth, optional handoff files, and sprint-level integration; preserve explicit independent-review requirements and unresolved-defect gates.
+- Make setup, graph discovery, skill evaluation, design approval, and verification proportional to changed scope; preserve adequate refactor coverage and reuse unchanged results.
+- Redact secret diagnostics and require exact worktree cleanup ownership; preserve required isolation on setup failure.
+- Route contributor-only procedures to CONTRIBUTING.md and shorten broad activation text without weakening repository or product boundaries.
+- Synchronize all nine declared package/plugin versions to 6.5.20.
+
 ## v6.5.17 (2026-09-10)
 
 - Distinguish new-behavior TDD and bug reproducers from behavior-preserving refactors, which require adequate passing coverage before and after rather than artificial failures.

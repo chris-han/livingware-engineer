@@ -52,7 +52,7 @@ A successful package install is not proof of readiness. The dependency gate is g
 ## The Process
 
 ### Step 1: Load and Review Plan
-1. Ensure an isolated workspace: use superpowers:using-git-worktrees to create one or verify the existing one.
+1. Use superpowers:using-git-worktrees to choose in-place or isolated work; preserve an adequate existing workspace.
 2. Read the plan file and its linked spec.
 3. Reference the plan's MVL, dependency, impact, and integration sections from the existing recovery tracker; do not copy them into another ledger.
 4. Review critically for gaps or contradictions.

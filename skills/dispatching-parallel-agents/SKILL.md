@@ -81,7 +81,7 @@ Multiple dispatch calls in one response = parallel execution. One per response =
 When agents return:
 - Read each summary
 - Verify fixes don't conflict
-- Run full test suite
+- Verify the combined affected paths under verification-before-completion; reuse valid unaffected results
 - Integrate all changes
 
 ## Agent Prompt Structure
@@ -163,5 +163,5 @@ Agent 3 → Fix tool-approval-race-conditions.test.ts
 After agents return:
 1. **Review each summary** - Understand what changed
 2. **Check for conflicts** - Did agents edit same code?
-3. **Run full suite** - Verify all fixes work together
+3. **Verify combined impact** - Run affected integration checks invalidated by the combined changes; a full suite requires broad impact or repository policy
 4. **Spot check** - Agents can make systematic errors

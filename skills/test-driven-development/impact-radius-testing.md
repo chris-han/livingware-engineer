@@ -8,7 +8,7 @@ Use this reference when deciding how far a code change should escalate beyond lo
 
 A one-line change can require integration or E2E coverage if it changes a boundary used by multiple production consumers. A large pure-function refactor may require only focused local tests if its observable contract is unchanged.
 
-When **`codebase-memory-mcp`** is available, prefer it before deciding the required test surface. If the repository is not indexed, run `index_repository` first.
+Prefer an available current code graph when it materially helps select the test surface. Check relevant coverage and use targeted source for gaps. A bounded assessment does not require whole-repository indexing.
 
 Use the graph-oriented tools exposed by `codebase-memory-mcp` where applicable:
 
@@ -18,7 +18,7 @@ Use the graph-oriented tools exposed by `codebase-memory-mcp` where applicable:
 - `search_code` — find code-level references when graph queries need support
 - `get_code_snippet` — inspect the relevant implementation without broad file reading
 
-An equivalent code graph may be used only when `codebase-memory-mcp` is unavailable.
+Use equivalent graph or targeted static/source evidence when it adequately resolves the affected paths; disclose unresolved uncertainty.
 
 ## Impact-Radius Assessment
 

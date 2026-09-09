@@ -37,6 +37,6 @@ Do not let missing optional Impeccable context files block an established produc
 
 ## Completion contract
 
-For UI code changes, follow `test-driven-development` for real-browser verification in addition to code tests. Before completion, verify the rendered result against every consistency objective declared by the project's design system and run the relevant Impeccable critique/detector pass when available.
+For UI code changes, follow `test-driven-development` for real-browser verification in addition to code tests. Before completion, verify the affected rendered behavior against the applicable design-system objectives. Use an Impeccable critique/detector pass when it addresses a concrete risk; do not audit the entire product for a local UI change.
 
 A frontend task is not complete when it merely functions; it must also remain coherent with the project's design language and information structure.

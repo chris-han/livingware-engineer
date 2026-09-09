@@ -24,37 +24,11 @@ WHEN receiving code review feedback:
 6. IMPLEMENT: One item at a time, test each
 ```
 
-## Forbidden Responses
+## Respond and Resolve Ambiguity
 
-**NEVER:**
-- "You're absolutely right!" (explicit instruction-file violation)
-- "Great point!" / "Excellent feedback!" (performative)
-- "Let me implement that now" (before verification)
+Lead with the technical finding, evidence, or fix—not performative agreement. Keep acknowledgments natural and concise; wording rituals are not correctness gates.
 
-**INSTEAD:**
-- Restate the technical requirement
-- Ask clarifying questions
-- Push back with technical reasoning if wrong
-- Just start working (actions > words)
-
-## Handling Unclear Feedback
-
-```
-IF any item is unclear:
-  STOP - do not implement anything yet
-  ASK for clarification on unclear items
-
-WHY: Items may be related. Partial understanding = wrong implementation.
-```
-
-**Example:**
-```
-your human partner: "Fix 1-6"
-You understand 1,2,3,6. Unclear on 4,5.
-
-❌ WRONG: Implement 1,2,3,6 now, ask about 4,5 later
-✅ RIGHT: "I understand items 1,2,3,6. Need clarification on 4 and 5 before proceeding."
-```
+For unclear feedback, identify whether it affects shared requirements, authority, or dependent work. Pause that dependent work and ask the specific question. Independently understood, authorized fixes may continue when their correctness does not depend on the answer. Never guess through a security or product decision.
 
 ## Source-Specific Handling
 
@@ -62,7 +36,7 @@ You understand 1,2,3,6. Unclear on 4,5.
 - **Trusted** - implement after understanding
 - **Still ask** if scope unclear
 - **No performative agreement**
-- **Skip to action** or technical acknowledgment
+- **Skip to action** on authorized changes, or give a technical acknowledgment
 
 ### From External Reviewers
 ```
@@ -130,22 +104,7 @@ Push back when:
 
 ## Acknowledging Correct Feedback
 
-When feedback IS correct:
-```
-✅ "Fixed. [Brief description of what changed]"
-✅ "Good catch - [specific issue]. Fixed in [location]."
-✅ [Just fix it and show in the code]
-
-❌ "You're absolutely right!"
-❌ "Great point!"
-❌ "Thanks for catching that!"
-❌ "Thanks for [anything]"
-❌ ANY gratitude expression
-```
-
-**Why no thanks:** Actions speak. Just fix it. The code itself shows you heard the feedback.
-
-**If you catch yourself about to write "Thanks":** DELETE IT. State the fix instead.
+State what is correct or what was fixed, with relevant source/test evidence. A concise technical acknowledgment is enough; no separate report or prescribed gratitude wording is needed.
 
 ## Gracefully Correcting Your Pushback
 
@@ -170,7 +129,7 @@ State the correction factually and move on.
 | Batch without testing | One at a time, test each |
 | Assuming reviewer is right | Check if breaks things |
 | Avoiding pushback | Technical correctness > comfort |
-| Partial implementation | Clarify all items first |
+| Partial implementation | Clarify shared/dependent ambiguities; independent authorized fixes can proceed |
 | Can't verify, proceed anyway | State limitation, ask for direction |
 
 ## Real Examples

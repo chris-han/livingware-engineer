@@ -1,5 +1,7 @@
 # Task Reviewer Prompt Template
 
+Dispatch only when the selected risk level or explicit requirement needs independent review. File placeholders may reference existing plan sections, test output, or commit ranges; do not create duplicate artifacts to fill them. An appropriate existing model needs no override.
+
 Use this template when dispatching a task reviewer subagent. The reviewer
 reads the task's diff once and returns two verdicts: spec compliance and
 code quality.
@@ -10,13 +12,11 @@ more, nothing less) and is well-built (clean, tested, maintainable)
 ```
 Subagent (general-purpose):
   description: "Review Task N (spec + quality)"
-  model: [MODEL — REQUIRED: choose per SKILL.md Model Selection; an omitted
-         model silently inherits the session's most expensive one]
+  model: [optional override based on available capability and concrete risk]
   prompt: |
     You are reviewing one task's implementation: first whether it matches its
     requirements, then whether it is well-built. This is a task-scoped gate,
-    not a merge review — a broad whole-branch review happens separately after
-    all tasks are complete.
+    not an instruction to repeat review at merge; final review follows risk and remaining cross-unit questions.
 
     ## What Was Requested
 
@@ -35,9 +35,8 @@ Subagent (general-purpose):
     **Head:** [HEAD_SHA]
     **Diff file:** [DIFF_FILE]
 
-    Read the diff file once — it contains the commit list, a stat summary,
-    and the full diff with surrounding context, and it is your view of the
-    change. The diff's context lines ARE the changed files: do not Read a
+    Read the supplied diff or recorded commit range once. An optional diff
+    file contains the commit list, stat summary, and surrounding context. The diff's context lines ARE the changed files: do not Read a
     changed file separately unless a hunk you must judge is cut off
     mid-function — and say so in your report. Do not re-run git commands.
     If the diff file is missing, fetch the diff yourself:
@@ -188,20 +187,16 @@ Subagent (general-purpose):
 ```
 
 **Placeholders:**
-- `[MODEL]` — REQUIRED: reviewer model per SKILL.md Model Selection
-- `[BRIEF_FILE]` — REQUIRED: the task brief file (`scripts/task-brief PLAN N`
-  prints the path; same file the implementer worked from)
+- `[MODEL]` — optional override under SKILL.md Model Selection
+- `[BRIEF_FILE]` — exact requirements source; a separate brief is optional
 - `[GLOBAL_CONSTRAINTS]` — the binding requirements copied verbatim from
   the plan's Global Constraints section or the spec: exact values, formats,
   and stated relationships between components (not process rules — those
   are already in this template)
-- `[REPORT_FILE]` — REQUIRED: the file the implementer wrote its detailed
-  report to
+- `[REPORT_FILE]` — existing result/output reference; a separate report is optional
 - `[BASE_SHA]` — commit before this task
 - `[HEAD_SHA]` — current commit
-- `[DIFF_FILE]` — REQUIRED: the path the controller wrote the review
-  package to (`scripts/review-package PLAN_FILE BASE HEAD` prints the unique
-  path it wrote; the package never enters the controller's context)
+- `[DIFF_FILE]` — optional packaged diff; otherwise read the supplied base/head range
 
 **Reviewer returns:** Spec Compliance verdict (✅/❌/⚠️), Strengths, Issues
 (Critical/Important/Minor), Task quality verdict

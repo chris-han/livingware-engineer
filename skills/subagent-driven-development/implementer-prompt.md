@@ -1,12 +1,11 @@
 # Implementer Subagent Prompt Template
 
-Use this template when dispatching an implementer subagent.
+Use this template when dispatching an implementer subagent. BRIEF_FILE may be an exact existing plan/spec section; REPORT_FILE is optional. Do not create files solely to fill template slots. Use models available in the harness; omit a model override when the session choice is adequate.
 
 ```
 Subagent (general-purpose):
   description: "Implement Task N: [task name]"
-  model: [MODEL — REQUIRED: choose per SKILL.md Model Selection; an omitted
-         model silently inherits the session's most expensive one]
+  model: [optional override when the available session model is unsuitable]
   prompt: |
     You are implementing Task N: [task name]
 
@@ -121,15 +120,15 @@ Subagent (general-purpose):
     ## After Review Findings
 
     If the task review finds issues, you will be resumed with the findings.
-    Fix them, re-run the tests that cover the amended code, and append a fix
-    report to your report file: what you changed, the covering tests you
-    ran, the command, and the output. Reviewers will not re-run tests for
+    Fix them and rerun tests invalidated by the amended code. Return changed
+    scope, covering tests, commands, and results once; reference available output. Reviewers will not re-run tests for
     you — your report is the test evidence. Then reply with the same short
     status contract as your first report.
 
     ## Report Format
 
-    Write your full report to [REPORT_FILE]:
+    Return these facts concisely using existing results. Only write to
+    [REPORT_FILE] when the controller explicitly needs a file for recovery:
     - What you implemented (or what you attempted, if blocked)
     - What you tested and test results
     - **TDD Evidence** (if TDD was required for this task):
@@ -139,13 +138,13 @@ Subagent (general-purpose):
     - Self-review findings (if any)
     - Any issues or concerns
 
-    Then report back with ONLY (under 15 lines — the detail lives in the
-    report file):
+    If a report file was needed, return only its pointer and a short summary;
+    otherwise the concise response itself is the result:
     - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
     - Commits created (short SHA + subject)
     - One-line test summary (e.g. "14/14 passing, output pristine")
     - Your concerns, if any
-    - The report file path
+    - Existing output/recovery reference, if needed
 
     If BLOCKED or NEEDS_CONTEXT, put the specifics in the final message
     itself — the controller acts on it directly.

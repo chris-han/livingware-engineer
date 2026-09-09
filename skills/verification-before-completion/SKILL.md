@@ -46,7 +46,7 @@ For a product feature, if the plan declares an MVL Contract, you also cannot cla
 ## The Gate Function
 
 ```
-BEFORE claiming any status or expressing satisfaction:
+BEFORE making a correctness, passing-test, or completion claim:
 
 1. IDENTIFY: What exact level are you claiming?
    - task complete
@@ -191,13 +191,7 @@ Use the lifecycle checklist in [../test-driven-development/remote-cdp-browser-li
 
 ## When To Apply
 
-**ALWAYS before:**
-- ANY variation of success/completion claims
-- ANY expression of satisfaction
-- ANY positive statement about work state
-- Committing, PR creation, task completion
-- Moving to next task
-- Delegating to agents
+Apply before claiming correctness/completion or taking an integration action. Verify the claimed scope against observed results under the unchanged-state rule. Do not rerun checks merely to send a progress update, delegate an independent task, or express a non-technical acknowledgment.
 
 **Rule applies to:**
 - Exact phrases

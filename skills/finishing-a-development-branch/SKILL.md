@@ -35,12 +35,17 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 WORKTREE_PATH=$(git rev-parse --show-toplevel)
 ```
 
+Also establish cleanup provenance now from the actual workspace-creation record
+or explicit user authorization. Record `created by this workflow`, `cleanup
+authorized for this exact path`, or `unknown`; never derive it from the directory
+name.
+
 This determines which menu to show and how cleanup works:
 
 | State | Menu | Cleanup |
 |-------|------|---------|
 | `GIT_DIR == GIT_COMMON` (normal repo) | Standard 3 options | No worktree to clean up |
-| `GIT_DIR != GIT_COMMON`, named branch | Standard 3 options | Provenance-based (see Step 6) |
+| `GIT_DIR != GIT_COMMON`, named branch | Standard 3 options | Creation-ownership or explicit authorization (see Step 6) |
 | `GIT_DIR != GIT_COMMON`, detached HEAD | Reduced 2 options (no merge) | Externally managed — leave in place |
 
 ## Step 3: Determine Base Branch
@@ -169,13 +174,19 @@ Step 2, from before that directory change.
 
 **If `GIT_DIR == GIT_COMMON`:** Normal repo, no worktree to clean up. Done.
 
-**If `WORKTREE_PATH` is under `.worktrees/` or `worktrees/`:** Superpowers
-created this worktree — we own cleanup:
+Clean up only when this session/workflow actually created the exact worktree, or
+your human partner explicitly authorized cleanup of that exact path. Directory
+placement under `.worktrees/` or `worktrees/` is not ownership evidence. Confirm
+the captured path still names the registered worktree before removal:
 
 ```bash
+git worktree list --porcelain
 git worktree remove "$WORKTREE_PATH"
-git worktree prune  # Self-healing: clean up any stale registrations
 ```
+
+**If creation ownership is unknown and cleanup was not explicitly authorized:**
+preserve the worktree and report its path. If the host environment owns it, use a
+workspace-exit tool when available; do not infer permission to delete it.
 
 **If removal is refused** (`contains modified or untracked files`): the
 worktree holds files that exist nowhere else — uncommitted plans, notes,
@@ -200,9 +211,6 @@ Which?
 
 Carry out the choice, then remove the worktree.
 
-**Otherwise:** The host environment owns this workspace — leave it in
-place. If your platform provides a workspace-exit tool, use it.
-
 ## Quick Reference
 
 | Option | Merge | Push | Keep Worktree | Cleanup Branch |
@@ -221,7 +229,7 @@ place. If your platform provides a workspace-exit tool, use it.
 | "They seem done with this feature — I'll offer to discard it" | The menu is complete as written. Discard happens only when your human partner asks for it in so many words. |
 | "'Yeah, get rid of it' counts as confirmation" | Only the typed word `discard` authorizes deletion. |
 | "The PR is up, so the worktree is clutter now" | PR feedback gets fixed in that worktree. It stays until the work lands. |
-| "This other worktree looks stale — I'll clean it too" | Clean up only worktrees under `.worktrees/` or `worktrees/`. Everything else belongs to the host. |
+| "This worktree is under `.worktrees/`, so we own it" | Directory names do not establish creation ownership. Preserve it unless this workflow created it or your human partner authorized cleanup of the exact path. |
 | "Removal refused — `--force` is just finishing the cleanup" | The refusal means files exist only in that worktree. `--force` destroys them permanently. Show your human partner and ask. |
 | "The merged-result failure is probably flaky" | A failing merged result stops everything. Branch and worktree stay put while you investigate. |
 | "The base branch is obviously main" | Confirm the fork point or ask. Merging into the wrong base is expensive to undo. |

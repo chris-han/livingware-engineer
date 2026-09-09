@@ -17,8 +17,12 @@ running at http://127.0.0.1:9222.
 
 Read AGENTS.md and skills/test-driven-development/SKILL.md before answering.
 Explain which real browser you will use, how you will make it available, what you
-will run, and how you will clean up. State which browser lane or lanes you would
-actually execute. Do not modify files or actually run commands.
+will run, and how you will clean up. Do not modify files or actually run commands.
+
+End your answer with exactly one machine-readable lane decision line using this form:
+EXECUTION_LANES=<lane decision>
+For this scenario, use BEHAVIOR:LIGHTPANDA when only the behavior lane should run,
+RENDERING:CHROME when only the rendering lane should run, or BOTH when both are required.
 EOF
 )
 
@@ -49,42 +53,6 @@ assert_contains() {
     fi
 }
 
-assert_no_positive_chrome_execution() {
-    local haystack="$1"
-    local description="$2"
-    local offending
-    offending=$(printf '%s\n' "$haystack" \
-        | grep -Ei '(Chrome|9222)' \
-        | grep -Ei '(use|run|execute|test|verify|attach|connect)' \
-        | grep -Eiv '(do not|don.t|not |no need|not needed|not required|unnecessary|skip|avoid|leave .*alone|leave .*untouched|rendering only|only for rendering)' \
-        || true)
-    if [ -n "$offending" ]; then
-        echo "[FAIL] $description"
-        printf '%s\n' "$offending" | sed 's/^/  offending: /'
-        failures=$((failures + 1))
-    else
-        echo "[PASS] $description"
-    fi
-}
-
-assert_no_dual_execution() {
-    local haystack="$1"
-    local description="$2"
-    local offending
-    offending=$(printf '%s\n' "$haystack" \
-        | grep -Ei '(both|Lightpanda.*(and|plus).*Chrome|Chrome.*(and|plus).*Lightpanda)' \
-        | grep -Ei '(run|execute|test|verify|use)' \
-        | grep -Eiv '(do not|don.t|not |no need|not needed|not required|unnecessary|skip|avoid)' \
-        || true)
-    if [ -n "$offending" ]; then
-        echo "[FAIL] $description"
-        printf '%s\n' "$offending" | sed 's/^/  offending: /'
-        failures=$((failures + 1))
-    else
-        echo "[PASS] $description"
-    fi
-}
-
 assert_contains "$output" "Lightpanda" \
     "choose Lightpanda for behavior verification"
 assert_contains "$output" "9223" \
@@ -97,14 +65,16 @@ assert_contains "$output" "stop only|kill only|only.*started|leave.*running" \
     "clean up only fixture-owned Lightpanda"
 assert_contains "$output" "affected|filter" \
     "run the affected browser test rather than broad duplicate coverage"
-
-# Negative controls: mentioning Chrome to explain why it is unnecessary is valid.
-# Fail only when Codex positively proposes executing Chrome for this behavior-only
-# acceptance criterion, or positively proposes executing both browser lanes.
-assert_no_positive_chrome_execution "$output" \
+assert_contains "$output" "^EXECUTION_LANES=BEHAVIOR:LIGHTPANDA$" \
     "keep the behavior-only execution on the Lightpanda lane"
-assert_no_dual_execution "$output" \
-    "avoid duplicate execution in both engines"
+
+lane_count=$(printf '%s\n' "$output" | grep -Ec '^EXECUTION_LANES=' || true)
+if [ "$lane_count" -eq 1 ]; then
+    echo "[PASS] emit exactly one browser lane decision"
+else
+    echo "[FAIL] emit exactly one browser lane decision"
+    failures=$((failures + 1))
+fi
 
 if [ "$failures" -gt 0 ]; then
     echo ""

@@ -8,7 +8,7 @@
     {
       "name": "livingware-engineer",
       "description": "Governed planning, TDD, integration verification, debugging, and delivery workflows for coding agents",
-      "version": "6.5.24",
+      "version": "6.5.25",
       "source": "./",
       "author": {
         "name": "chris-han"

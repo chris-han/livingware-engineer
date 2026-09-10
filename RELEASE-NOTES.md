@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v6.5.25 (2026-09-10)
+
+- Record a per-module codebase-memory strategy for large/submodule worktrees in `using-superpowers`, with `semantier-runtime-main` treated as best-effort and module-level indexes as the default.
+- Expand Codex MCP setup guidance for active-worktree indexing and safe index cleanup, including explicit authorization constraints for `index_repository` and `delete_project`.
+- Synchronize all nine declared package/plugin versions to 6.5.25.
+
 ## v6.5.24 (2026-09-10)
 
 - Add Codex-specific setup for filtered indexing/cleanup tools, preserving authorization and existing configuration and requiring post-reload availability checks.

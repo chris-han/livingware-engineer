@@ -84,6 +84,16 @@ For active-worktree indexing, follow [Active Worktree Graph](../SKILL.md#active-
 
 With user authorization, add `index_repository` to an existing `enabled_tools` allowlist and remove only its conflicting `disabled_tools` entry. For authorized worktree-index cleanup, do the same for `delete_project`. Preserve other tools, server settings, credentials, and approval rules; do not replace the allowlist or enable unrelated mutation tools. If no filter explains the omission, inspect the server's advertised tools/profile instead of inventing config entries.
 
+### Indexing layout strategy (per-module / best-effort main)
+
+For large monorepos, keep focused per-module indexes and merge across modules at the caller only when needed:
+
+- Create separate indexes for affected module roots (for example `.../semantier-runtime/contextgraph-core`,
+  `.../semantier-runtime/hermes-workspace`, `.../semantier-runtime/hermes-agent`).
+- Keep aggregate `.../semantier-runtime-main` as best-effort/nightly only; it is optional when focused module indexes are present.
+- In active-workspace cleanup, remove only the exact worktree index you created, never `main` by inference.
+- If cleanup or index tools fail, preserve the index and report pending cleanup; do not delete cache files manually.
+
 Validate the edited TOML, reload/reconnect Codex, and verify the tool is actually exposed before claiming setup complete. Configuration enables the tool; `index_repository` registers the exact worktree root. A config edit alone does not index anything. If settings are managed or permission is missing, report the required change rather than bypassing the restriction.
 
 ## Environment Detection

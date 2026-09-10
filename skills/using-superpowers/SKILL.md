@@ -29,6 +29,13 @@ Keep announcements and status concise. Track actionable milestones and recovery 
 
 When codebase-memory MCP is available for structural code discovery, resolve the active checkout with `git rev-parse --show-toplevel`. At session start/resume and after switching worktrees, use `list_projects` to match its exact root, not merely the repository name or main checkout. If absent, use `index_repository` on that active root as a separate project; do not repoint main's index. Inspect `index_status` before relying on the graph and reuse a healthy existing index instead of forcing a rebuild.
 
+For large monorepos or submodule-heavy trees (especially semantier-runtime), prefer per-module indexing:
+
+- Keep module-level indexes for affected code paths (for example: contextgraph, hermes-workspace, hermes-agent, and other active module roots).
+- Merge results from multiple module indexes in the caller when cross-module impact requires it.
+- Treat `semantier-runtime-main` as a best-effort aggregate that is useful but not required for each change.
+- Never delete an index for `main` or a shared project unless this workflow has explicit ownership of that exact project and its removal is authorized.
+
 Check affected paths with `check_index_coverage`; read source for uncovered or stale ranges, including uncommitted changes not yet indexed. If indexing is unavailable or fails, state the limitation and continue with targeted source reads, never substituting main's graph as worktree truth. Literal and documentation lookups can still use direct reads/search without indexing.
 
 If Codex omits the required tools, read [MCP tool setup](references/codex-tools.md#codebase-memory-mcp-tool-setup); do not treat a filtered tool as a missing server capability.

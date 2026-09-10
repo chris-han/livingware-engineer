@@ -347,7 +347,8 @@ affected seams / consumers / user paths
 smallest sufficient verification
 ```
 
-When `codebase-memory-mcp` is available, index the repository if needed and use graph-oriented discovery such as `search_graph`, `trace_path`, `query_graph`, `search_code`, and `get_code_snippet`.
+When `codebase-memory-mcp` is available, index and query the smallest sufficient project scope.
+For semantier-runtime-family repos, prefer per-module indexes (core/workspace/hermes/agent modules) and merge cross-module results in the caller, instead of forcing a full aggregate root index each time. Keep aggregate `semantier-runtime-main` as best-effort when needed for verification breadth, not as a hard requirement for every change.
 
 Suggested impact classes:
 

@@ -17,6 +17,8 @@ Operating rule:
 
 > Before adding process, abstraction, testing, review, or documentation, name the concrete failure it prevents and who or what consumes the result. If there is no meaningful answer, do not add it.
 
+> Before stopping for human judgment, first apply any standing user delegation. Then name the exact decision that still cannot be delegated or resolved from binding authority/evidence, why a reversible default is insufficient, and the material consequence of choosing wrong. If all three cannot be named, choose the smallest reversible in-scope path and continue.
+
 These principles never authorize weakening correctness, architecture, safety/security, data integrity, product/runtime audit requirements, or explicit user/repository requirements.
 
 ## Repository Boundaries and Workflow Routing

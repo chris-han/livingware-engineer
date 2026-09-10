@@ -1,5 +1,12 @@
 # Superpowers Release Notes
 
+## v6.5.26 (2026-09-10)
+
+- Align planning, execution, and verification with MVL continuous execution: machine-verifiable gates advance automatically and status reporting is not a stop condition.
+- Add a Human Judgment Necessity Test that applies standing user delegation first and permits interruption only for unresolved, materially consequential, not-cheaply-reversible decisions.
+- Remove checkpoint-oriented execution priming from `writing-plans` and `executing-plans`; remaining gates, failed checks, browser/service fixtures, and review findings remain engineering work rather than reasons to ask the user to continue.
+- Synchronize package/plugin version surfaces to 6.5.26.
+
 ## v6.5.25 (2026-09-10)
 
 - Record a per-module codebase-memory strategy for large/submodule worktrees in `using-superpowers`, with `semantier-runtime-main` treated as best-effort and module-level indexes as the default.

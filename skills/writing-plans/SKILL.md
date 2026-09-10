@@ -7,7 +7,9 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 ## MVL Law 1 — Fast-to-Aha
 
-For product MVLs where governance is in the path, treat time-to-first-useful-result as an acceptance criterion. Distinguish recorded default-pass gates from blocking gates; ordinary low-risk journeys must not stop for approval ceremony unless a real safety, authority, or irreversibility trigger exists.
+For product MVLs where governance is in the path, treat time-to-first-useful-result as an acceptance criterion. Distinguish recorded default-pass gates from blocking gates; ordinary low-risk journeys must not stop for approval ceremony. A human-judgment gate is allowed only when the Human Judgment Necessity Test in `docs/mvl-laws.md` is satisfied after applying any standing user delegation.
+
+Classify every planned gate as either **machine-verifiable** or **human-judgment-required**. Machine-verifiable gates (tests, typecheck, lint, build, contract checks, service/browser fixtures, integration/E2E evidence, deterministic review findings) advance automatically when satisfied and never require a human checkpoint. A human-judgment gate is allowed only when standing delegation plus the Human Judgment Necessity Test in `docs/mvl-laws.md` says the decision cannot be resolved mechanically or reversibly. Do not create approval or checkpoint tasks merely to mark a phase boundary.
 
 ## Overview
 
@@ -388,9 +390,9 @@ After saving the plan, continue with the execution approach already authorized b
 
 **"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+**1. Subagent-Driven (recommended)** - dispatch bounded independent work and continue automatically through machine-verifiable review boundaries
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+**2. Inline Execution** - execute continuously in this session using executing-plans; checkpoints are evidence boundaries, not human pauses
 
 **Which approach?"**
 
@@ -401,5 +403,5 @@ After saving the plan, continue with the execution approach already authorized b
 
 **If Inline Execution chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Batch execution with checkpoints for review
+- Execute continuously through machine-verifiable checkpoints; involve the user only when the Human Judgment Necessity Test is met
 - Preserve the MVL Contract, Prerequisites and Dependencies, Impact Radius, and Integration Contract unless new codebase evidence or a spec revision requires an explicit update.

@@ -13,3 +13,17 @@ Passing a low-risk gate never grants consequential-action authorization or highe
 > Governance should be ambient by default and interruptive only by exception.
 
 Review question: if an approval step delays the first useful result without changing risk, remove or default-pass it.
+
+### Human Judgment Necessity Test
+
+Human judgment is a scarce input, not a generic workflow gate. Treat explicit delegation from the user as continuing authorization for in-scope engineering decisions; do not repeatedly ask the same authority holder to re-approve technical choices, phase transitions, reviews, or gates.
+
+A running plan may stop for human judgment only when all three conditions are true:
+
+1. **A real decision is required now** — the next action cannot proceed without choosing among materially different outcomes.
+2. **The decision is not already delegated or mechanically resolvable** — it cannot be resolved from the user's standing delegation, binding spec/policy, observed code/runtime evidence, executable verification, established project conventions, or a safe reversible default within scope.
+3. **The consequence of choosing wrong is material and not cheaply reversible** — for example a genuinely subjective product-intent choice, non-delegable legal/compliance determination, disclosure of sensitive data, irreversible/destructive operation, or consequential external/production action with material blast radius.
+
+Before asking, state the exact decision, viable options, material consequence, and why standing delegation plus evidence or a reversible default cannot resolve it. If any element is missing, human judgment is not necessary: make the smallest reversible in-scope ruling and continue.
+
+Human judgment is **not** required merely because a phase ended, a checkpoint or review completed, tests passed or failed, remaining gates exist, a task is incomplete, a browser/service fixture still needs to run, a technical design choice is required, or the agent has ordinary uncertainty that can be reduced by inspection, testing, debugging, rollback, or a reversible implementation choice.

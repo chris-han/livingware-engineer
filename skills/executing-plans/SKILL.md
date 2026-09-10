@@ -1,6 +1,6 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when you have a written implementation plan to execute continuously through its authorized stopping criterion, involving the user only when judgment is genuinely necessary
 ---
 
 # Executing Plans
@@ -12,6 +12,19 @@ Load plan, review critically, execute all tasks, preserve the feature's MVL cont
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
 Honor the already authorized execution mode. Use subagent-driven-development when delegation is selected and useful; tool availability alone does not override an inline execution choice.
+
+**Continuous execution:** A verified task, sprint exit, review, integration slice, or list of remaining gates is progress evidence, not a stop condition. Record or reuse the evidence and immediately execute the next dependency-ready item. Continue until the plan's stopping criterion is satisfied or the Human Judgment Necessity Test below is met.
+
+## Human Judgment Necessity Test
+
+Apply standing user delegation first. Do not ask the user to re-approve ordinary technical choices, phase transitions, review outcomes, implementation gates, refactors, test runs, browser checks, or other in-scope engineering work they have already delegated.
+
+Stop for human judgment only when all three are true:
+1. a real decision is required before the next action can proceed;
+2. the decision is not already delegated and cannot be resolved from the binding spec/policy, observed evidence, established conventions, executable checks, or a safe reversible default; and
+3. choosing wrong has a material, not-cheaply-reversible consequence, such as genuinely subjective product intent, a non-delegable legal/compliance determination, sensitive-data disclosure, irreversible/destructive action, or consequential external/production state change.
+
+Before asking, state the exact decision, viable options, material consequence, and why delegation plus evidence or reversibility cannot resolve it. Otherwise make the smallest reversible in-scope ruling and continue. Remaining work, remaining gates, a completed checkpoint/review, or ordinary technical uncertainty never satisfy this test by themselves.
 
 ## MVL Continuity Rule
 
@@ -58,7 +71,7 @@ A successful package install is not proof of readiness. The dependency gate is g
 4. Review critically for gaps or contradictions.
 5. Confirm the smallest real journey is actually implementable by the listed tasks.
 6. Confirm every load-bearing external or package prerequisite has an explicit declaration/install/verification path before any consumer task.
-7. If the plan has a critical gap that makes the intended journey unknowable or leaves a required dependency unspecified/unverifiable, raise it with the human partner before starting. Otherwise, create todos and proceed.
+7. If the plan has a critical gap, first resolve it from standing delegation, the binding spec, repository evidence, established conventions, or the smallest reversible ruling. Ask the human partner only if the Human Judgment Necessity Test is met. Otherwise, create todos and proceed.
 
 ### Step 2: Execute Prerequisites
 
@@ -121,14 +134,9 @@ After all required implementation and MVL closure evidence is satisfied accordin
 
 ## When to Stop and Ask for Help
 
-**STOP executing immediately when:**
-- an irreversible/destructive or security-sensitive action needs approval
-- a required production dependency is missing and cannot be installed/implemented within the plan
-- a required dependency cannot pass its smoke/contract test or conflicts with the declared platform/version constraints
-- the plan/spec is so contradictory that every path forward would redefine the user journey
-- a browser required by the selected evidence lane is unavailable and cannot be started within authorized scope; report that gate as unverified and continue independent work
+Stop for the human only when the Human Judgment Necessity Test is met. Missing dependencies, failed tests, unavailable browser/service fixtures, review findings, or incomplete gates are engineering work: debug, install/start what is authorized, repair, choose a reversible fallback where permitted, or continue independent work. They are not human-approval conditions by themselves.
 
-For ordinary implementation ambiguity, prefer a documented ruling consistent with the spec and MVL Contract rather than fragmenting the feature into local guesses.
+For ordinary implementation ambiguity, make a documented reversible ruling consistent with the spec and MVL Contract and keep going.
 
 ## When to Revisit Earlier Steps
 

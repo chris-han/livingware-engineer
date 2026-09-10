@@ -1,25 +1,18 @@
 {
   "name": "livingware-engineer",
-  "version": "6.5.25",
-  "description": "Livingware Engineer skills for governed software delivery, frontend design, and runtime bootstrap",
-  "type": "module",
-  "main": ".opencode/plugins/superpowers.js",
+  "version": "6.5.3",
+  "description": "An agentic skills framework & software development methodology that works.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chris-han/livingware-engineer.git"
+  },
   "keywords": [
-    "pi-package",
+    "agentic",
     "skills",
-    "tdd",
-    "integration-testing",
-    "debugging",
-    "frontend-design",
-    "collaboration",
-    "workflow"
-  ],
-  "pi": {
-    "extensions": [
-      "./.pi/extensions/superpowers.ts"
-    ],
-    "skills": [
-      "./skills"
-    ]
-  }
+    "software-engineering",
+    "codex",
+    "claude-code",
+    "hermes"
+  ]
 }

@@ -78,6 +78,14 @@ default_subagent_model = "<a mid-tier model from your spawn allowlist>"
 default_subagent_reasoning_effort = "medium"
 ```
 
+## Codebase-memory MCP Tool Setup
+
+For active-worktree indexing, follow [Active Worktree Graph](../SKILL.md#active-worktree-graph). If the server supports `index_repository` but the current tool catalog omits it, inspect its existing entry in `~/.codex/config.toml` (or the configured Codex home). Check both `enabled_tools` and `disabled_tools`; do not assume the server is broken.
+
+With user authorization, add `index_repository` to an existing `enabled_tools` allowlist and remove only its conflicting `disabled_tools` entry. For authorized worktree-index cleanup, do the same for `delete_project`. Preserve other tools, server settings, credentials, and approval rules; do not replace the allowlist or enable unrelated mutation tools. If no filter explains the omission, inspect the server's advertised tools/profile instead of inventing config entries.
+
+Validate the edited TOML, reload/reconnect Codex, and verify the tool is actually exposed before claiming setup complete. Configuration enables the tool; `index_repository` registers the exact worktree root. A config edit alone does not index anything. If settings are managed or permission is missing, report the required change rather than bypassing the restriction.
+
 ## Environment Detection
 
 Skills that create worktrees or finish branches should detect their

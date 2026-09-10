@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v6.5.24 (2026-09-10)
+
+- Add Codex-specific setup for filtered indexing/cleanup tools, preserving authorization and existing configuration and requiring post-reload availability checks.
+- Clean up only the exact separately indexed worktree after authorized removal succeeds; protect main/shared indexes and preserve indexes on failed removal or uncertain ownership/access.
+- Synchronize all nine declared package/plugin versions to 6.5.24.
+
 ## v6.5.23 (2026-09-10)
 
 - Match codebase-memory indexes to the active worktree at session start/resume and worktree switches; index missing roots separately, reuse healthy indexes, and check coverage before relying on graph results.

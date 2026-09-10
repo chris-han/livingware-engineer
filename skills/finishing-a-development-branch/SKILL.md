@@ -177,7 +177,9 @@ Step 2, from before that directory change.
 Clean up only when this session/workflow actually created the exact worktree, or
 your human partner explicitly authorized cleanup of that exact path. Directory
 placement under `.worktrees/` or `worktrees/` is not ownership evidence. Confirm
-the captured path still names the registered worktree before removal:
+the captured path still names the registered worktree before removal. When using
+codebase-memory, capture its exact root/project mapping now for the index-cleanup
+subsection below:
 
 ```bash
 git worktree list --porcelain
@@ -210,6 +212,12 @@ Which?
 ```
 
 Carry out the choice, then remove the worktree.
+
+### Remove the Deleted Worktree's Graph Index
+
+When codebase-memory MCP is available, capture the exact worktree-root/project mapping from `list_projects` before removal. Only after authorized worktree removal succeeds, confirm the captured path is no longer a registered worktree and has not reappeared. Recheck that the same project still maps to that exact root, then call `delete_project` for that project and verify its absence with `list_projects`.
+
+Never delete main's index, an index shared with another checkout, or an ambiguously owned project. A missing path, temporary access failure, disconnected session, commit, or push is not proof of authorized worktree removal. Failed/refused removal means preserve the index. If the tool is unavailable or cleanup fails, report pending index cleanup; do not delete cache files manually. For Codex tool filtering, use the [MCP setup guidance](../using-superpowers/references/codex-tools.md#codebase-memory-mcp-tool-setup). No worktree removal means no index cleanup.
 
 ## Quick Reference
 

@@ -31,6 +31,8 @@ When codebase-memory MCP is available for structural code discovery, resolve the
 
 Check affected paths with `check_index_coverage`; read source for uncovered or stale ranges, including uncommitted changes not yet indexed. If indexing is unavailable or fails, state the limitation and continue with targeted source reads, never substituting main's graph as worktree truth. Literal and documentation lookups can still use direct reads/search without indexing.
 
+If Codex omits the required tools, read [MCP tool setup](references/codex-tools.md#codebase-memory-mcp-tool-setup); do not treat a filtered tool as a missing server capability.
+
 ## Platform Adaptation
 
 Read the matching adapter when tool mapping or platform behavior is needed:

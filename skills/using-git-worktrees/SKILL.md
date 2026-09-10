@@ -122,6 +122,8 @@ checkout when isolation was required.
 
 ## Step 2: Project Setup
 
+For a new or reused worktree, apply [Active Worktree Graph](../using-superpowers/SKILL.md#active-worktree-graph) when codebase-memory MCP is available for structural discovery. Creating or entering a worktree does not make it covered by main's index.
+
 Inspect the repository's declared package manager, lockfile, and existing
 environment. Install only prerequisites that are actually missing, using the
 project's own pinned setup path. Do not run every matching command or infer Poetry

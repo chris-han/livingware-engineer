@@ -25,6 +25,12 @@ Honor explicitly requested skills. Otherwise select skills whose descriptions di
 
 Keep announcements and status concise. Track actionable milestones and recovery state, not a separate todo for every checklist sentence. Do not generate duplicate reports or clean-check narration.
 
+## Active Worktree Graph
+
+When codebase-memory MCP is available for structural code discovery, resolve the active checkout with `git rev-parse --show-toplevel`. At session start/resume and after switching worktrees, use `list_projects` to match its exact root, not merely the repository name or main checkout. If absent, use `index_repository` on that active root as a separate project; do not repoint main's index. Inspect `index_status` before relying on the graph and reuse a healthy existing index instead of forcing a rebuild.
+
+Check affected paths with `check_index_coverage`; read source for uncovered or stale ranges, including uncommitted changes not yet indexed. If indexing is unavailable or fails, state the limitation and continue with targeted source reads, never substituting main's graph as worktree truth. Literal and documentation lookups can still use direct reads/search without indexing.
+
 ## Platform Adaptation
 
 Read the matching adapter when tool mapping or platform behavior is needed:

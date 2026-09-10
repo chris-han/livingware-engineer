@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v6.5.23 (2026-09-10)
+
+- Match codebase-memory indexes to the active worktree at session start/resume and worktree switches; index missing roots separately, reuse healthy indexes, and check coverage before relying on graph results.
+- Link worktree setup to the shared routing rule; retain explicit source-read fallback when indexing is unavailable and avoid indexing for documentation-only lookups.
+- Synchronize all nine declared package/plugin versions to 6.5.23.
+
 ## v6.5.22 (2026-09-10)
 
 - Narrow verification activation to correctness/completion claims and consequential integration/release actions; ordinary checkpoint commits and backup pushes do not independently trigger it.

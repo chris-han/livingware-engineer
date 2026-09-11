@@ -1,63 +1,96 @@
 # Budgeted Behavioral Learning
 
-Behavioral evaluation and workflow learning are opt-in maintenance activities. They are not correctness gates for ordinary development and must not run automatically in CI, after every skill edit, during routine version bumps, or merely because a corpus exists.
+Behavioral evaluation and workflow learning are opt-in maintenance activities. They are not correctness gates for ordinary development and must not run automatically in CI, after skill edits, during version bumps, on a schedule, or merely because spare token budget exists.
 
-## When an agent may suggest a run
+## Suggestion gate
 
-A suggestion is justified only when accumulated evidence indicates a plausible framework-level pattern rather than an isolated task defect. Strong signals include:
+The agent may suggest a targeted workflow-learning eval only when all three conditions are satisfied:
 
-- the same workflow failure appears independently two or more times;
-- the user repeatedly corrects the same agent behavior;
-- several recent changes affect the same core instruction surfaces and interaction risk is now material;
-- a real task reveals behavior that cannot reasonably be explained as one implementation bug;
-- a larger Livingware release is approaching after substantive workflow changes.
+1. **Recurrence** — the same underlying workflow behavior has appeared in at least two materially independent failure episodes, or the user has independently corrected the same behavior more than once.
+2. **Systemic scope** — existing evidence plausibly points to a shared skill, instruction, routing rule, review policy, or interaction between them rather than a local defect.
+3. **Actionable uncertainty** — the agent can name one concrete workflow decision a targeted eval could resolve.
 
-Do not suggest a run for a one-off mistake, copy edit, local typo, already-contained regression, or simply because evals have not run recently.
+If any condition is `NO` or cannot be established cheaply from existing evidence, stay silent and continue normal work.
 
-Before suggesting, the agent must be able to state all three:
+### High-impact exception
 
-1. the accumulated evidence;
-2. the suspected repeated or systemic pattern;
-3. the concrete workflow or policy decision the eval could improve.
+A single event may justify a suggestion without recurrence only when all are true:
 
-If any of the three is missing, continue normal work without suggesting learning.
+- the cause is clearly framework-level;
+- waiting for recurrence would expose the user or system to material risk; and
+- a targeted eval can test a concrete policy correction.
 
-## Human initiation boundary
+Token waste, one unnecessary test, one premature stop, one unnecessary review, or one wrong routing choice do not qualify by themselves.
 
-The agent may recommend a run; it may not start one autonomously. Explicit user initiation is required because the work primarily spends tokens and review attention on long-horizon framework quality rather than the correctness of the current task.
+### Anti-noise rule
 
-Do not turn the recommendation into an approval ceremony for ordinary work. Current development continues under existing rules unless the user separately asks to run the maintenance evaluation.
+Accumulated changes, elapsed time, release cadence, corpus availability, general suspicion, or spare token budget are never sufficient reasons to suggest learning. Do not suggest an eval merely because it has not run recently.
 
-## Budget discipline after initiation
+## Recurring failure
 
-Once explicitly initiated:
+A failure is recurring when the same underlying workflow behavior appears in at least two materially independent failure episodes. Match the behavioral pattern, not exact wording or surface symptoms.
+
+Examples include premature stopping, unnecessary reviewer dispatch, duplicate artifact generation, over-broad testing, incorrect evidence-lane routing, or artificial RED requirements for behavior-preserving refactors.
+
+Do not count retries of one unresolved task, downstream symptoms of one mistake, parallel agents sharing faulty state, or repeated failures from one unchanged broken fixture, dependency, environment, or configuration as separate occurrences.
+
+## Material independence
+
+Treat two occurrences as materially independent only if every prompt below is `YES`:
+
+1. **Did the earlier task or execution end before the later occurrence began?**
+2. **Was the later occurrence reached without reusing the earlier occurrence's faulty intermediate state or downstream output?**
+3. **Was every known local cause from the earlier occurrence absent, fixed, or independently re-created in the later occurrence?**
+4. **Did the shared workflow rule execute again rather than merely continue the earlier execution?**
+
+Decision:
+
+```text
+YES to all four -> INDEPENDENT
+Any NO          -> SAME FAILURE EPISODE
+UNKNOWN         -> treat as NO unless cheaply resolved
+```
+
+Different agents, models, harnesses, repositories, execution paths, user journeys, or elapsed time do not override this test.
+
+### Handling UNKNOWN
+
+Resolve `UNKNOWN` only when existing evidence can answer it with small incremental effort and the answer could change whether a workflow-learning suggestion is permitted. Do not create new logs, traces, reports, experiments, broad searches, or evidence artifacts merely to prove independence. If meaningful extra work or token cost would be required, keep `UNKNOWN` and treat the occurrences as one failure episode.
+
+## Systemic attribution
+
+After recurrence is established, ask whether existing evidence plausibly attributes the behavior to a shared workflow rule. If the answer is `NO` or `UNKNOWN`, fix the local cause and do not suggest learning. Do not perform a broad framework investigation solely to convert `UNKNOWN` into `YES`.
+
+Typical local explanations include a task-specific misunderstanding, broken fixture, malformed plan, repository-specific convention, transient service failure, or implementation defect already contained by a regression test.
+
+## Actionable eval question
+
+Before suggesting learning, the agent must be able to complete:
+
+> A targeted eval would help decide whether __________.
+
+If no single concrete policy decision can fill the blank, stay silent.
+
+## Suggestion format
+
+Keep the suggestion minimal:
+
+```text
+Observed pattern: <minimal concrete evidence>
+Suspected shared cause: <skill/rule/interaction>
+Targeted eval question: <one policy decision>
+```
+
+Then ask whether the user wants to run that targeted eval. Do not automatically generate a learning report, corpus plan, scenario inventory, retrospective, or policy patch.
+
+## Human initiation and budget discipline
+
+A suggestion never authorizes execution. The user must explicitly initiate the run. Once initiated:
 
 1. select the smallest scenario subset that can falsify the suspected pattern;
 2. reuse existing observations instead of regenerating equivalent evidence;
-3. expand to a broader corpus only when initial findings, cross-skill interaction risk, or release risk justify the additional cost;
-4. report behavior deltas and likely rule changes concisely;
-5. treat proposed policy changes as proposals requiring human adoption, not autonomous mutations.
+3. expand only when initial findings or material interaction risk justify the added cost;
+4. report behavior deltas and proposed rule changes concisely; and
+5. treat shared-policy changes as proposals requiring human adoption, never autonomous mutations.
 
-A full corpus is exceptional, not the default. Do not create a continuous self-improvement loop that repeatedly evaluates, rewrites, and re-evaluates Livingware without a new explicit user instruction.
-
-## Canonical flow
-
-```text
-normal engineering
-  -> no behavioral eval
-
-repeated/systemic evidence accumulates
-  -> agent may suggest one targeted learning run
-  -> ordinary engineering does not pause
-
-human explicitly initiates
-  -> smallest relevant scenario subset
-  -> inspect behavioral deltas
-  -> expand only if justified
-  -> propose policy changes
-  -> human decides adoption
-```
-
-## Cost test
-
-Use the same total-cost principle as the rest of Livingware Engineer: a learning run is justified only when its expected reduction in future workflow failure, wasted work, or recurring token cost plausibly exceeds the tokens, tool calls, review time, and maintenance it consumes.
+A full corpus is exceptional. Do not create a continuous self-improvement loop.

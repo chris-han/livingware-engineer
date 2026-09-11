@@ -1,5 +1,12 @@
 # Superpowers Release Notes
 
+## v6.6.0 (2026-09-11)
+
+- Classify failures as `CAPABILITY | STEERING | IMPLEMENTATION | ENVIRONMENT` before workflow-learning suggestions; only `STEERING` enters the learning gate.
+- Distinguish a matched fix from generalized workflow learning by requiring materially independent support before retaining a shared workflow rule as generally supported.
+- Keep learning lineage minimal (`failure -> classification -> workflow delta -> matched result -> independent result -> retain/reject`) and reuse existing Git/tests/corrections instead of adding a learning ledger, EvoDAG, or evidence manifest.
+- Synchronize declared package/plugin version surfaces to 6.6.0.
+
 ## v6.5.26 (2026-09-10)
 
 - Align planning, execution, and verification with MVL continuous execution: machine-verifiable gates advance automatically and status reporting is not a stop condition.

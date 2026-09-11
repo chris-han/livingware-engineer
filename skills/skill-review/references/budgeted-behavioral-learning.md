@@ -2,6 +2,17 @@
 
 Behavioral evaluation and workflow learning are opt-in maintenance activities. They are not correctness gates for ordinary development and must not run automatically in CI, after skill edits, during version bumps, on a schedule, or merely because spare token budget exists.
 
+## Failure classification before learning
+
+Classify the observed failure before considering workflow learning:
+
+- `CAPABILITY` — a required tool, permission, API, test capability, context-access seam, or execution primitive is missing;
+- `STEERING` — the capability exists, but a shared skill, instruction, routing rule, review policy, or workflow interaction is materially wrong or insufficient;
+- `IMPLEMENTATION` — the code or product behavior is defective;
+- `ENVIRONMENT` — a fixture, dependency, credential, browser, runtime, transport, or configuration caused the failure.
+
+Only `STEERING` may enter the workflow-learning suggestion gate. Route the other classes to their normal owner and stay silent about workflow learning unless later evidence establishes an independent steering problem. Do not turn ordinary capability, implementation, or environment defects into new instructions.
+
 ## Suggestion gate
 
 The agent may suggest a targeted workflow-learning eval only when all three conditions are satisfied:
@@ -92,5 +103,22 @@ A suggestion never authorizes execution. The user must explicitly initiate the r
 3. expand only when initial findings or material interaction risk justify the added cost;
 4. report behavior deltas and proposed rule changes concisely; and
 5. treat shared-policy changes as proposals requiring human adoption, never autonomous mutations.
+
+## Matched fix is not generalized learning
+
+Passing the motivating failure or a matched regression proves only that the proposed change fixes that case. Before retaining a workflow rule as generally supported, require at least one materially independent case that did not participate in deriving the rule and that exercises the same shared steering behavior.
+
+```text
+motivating failure
+  -> STEERING classification
+  -> bounded workflow delta
+  -> matched result
+  -> materially independent result
+  -> retain / reject
+```
+
+If the matched case passes but no materially independent case is available, record the change as a local or provisional fix and do not claim generalized workflow learning. Reuse existing tasks, tests, and corrections for the independent check; do not create a new corpus, ledger, or broad eval suite merely to satisfy this rule.
+
+This chain is the minimum learning lineage. Existing Git history, test results, and explicit user corrections are sufficient when they preserve the causal link; do not add an EvoDAG, learning database, evidence manifest, or append-only research log.
 
 A full corpus is exceptional. Do not create a continuous self-improvement loop.

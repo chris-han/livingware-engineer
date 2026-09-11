@@ -22,7 +22,7 @@ The goal is not brevity for its own sake. Minimize always-loaded instruction cos
 
 ## Behavioral learning is opt-in maintenance
 
-Do not run behavioral evals or workflow learning automatically. When repeated/systemic workflow evidence makes a learning suggestion relevant, read `references/budgeted-behavioral-learning.md` and apply its recurrence, material-independence, high-impact, anti-noise, and human-initiation rules. Keep detailed trigger logic there rather than duplicating it in this always-loaded skill body.
+Do not run behavioral evals or workflow learning automatically. When repeated/systemic workflow evidence makes a learning suggestion relevant, read `references/budgeted-behavioral-learning.md` and apply its failure classification, recurrence, material-independence, high-impact, anti-noise, matched-vs-independent validation, and human-initiation rules. Keep detailed trigger logic there rather than duplicating it in this always-loaded skill body.
 
 ## Principles
 

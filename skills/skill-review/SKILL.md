@@ -22,13 +22,7 @@ The goal is not brevity for its own sake. Minimize always-loaded instruction cos
 
 ## Behavioral learning is opt-in maintenance
 
-Do not automatically run a behavioral eval corpus, agent-configuration regression suite, or workflow-learning loop as part of ordinary skill review, CI, version bumps, or completion. Those activities consume model turns and tokens for long-horizon framework improvement rather than current-task correctness.
-
-An agent may suggest a targeted behavioral-learning run only when enough relevant evidence has accumulated to make the expected learning value plausibly exceed its token and review cost. The suggestion must name: (1) the accumulated evidence, (2) the suspected repeated or systemic workflow pattern, and (3) the concrete framework decision an eval could improve. If those cannot be named, do not suggest a run.
-
-A suggestion never authorizes execution. The user must explicitly initiate the run. Once initiated, start with the smallest relevant scenario subset and expand only when findings or release risk justify it. Learning output may propose rule changes, but must not autonomously modify shared workflow policy.
-
-Read `references/budgeted-behavioral-learning.md` only when evaluating whether to suggest or conduct such a maintenance run.
+Do not run behavioral evals or workflow learning automatically. When repeated/systemic workflow evidence makes a learning suggestion relevant, read `references/budgeted-behavioral-learning.md` and apply its recurrence, material-independence, high-impact, anti-noise, and human-initiation rules. Keep detailed trigger logic there rather than duplicating it in this always-loaded skill body.
 
 ## Principles
 

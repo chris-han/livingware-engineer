@@ -1,0 +1,4 @@
+interface:
+  display_name: "System Dynamics Modeling"
+  short_description: "Explore and simulate feedback-driven systems"
+  default_prompt: "Use $system-dynamics-modeling to model this system at an evidence-appropriate level of precision."

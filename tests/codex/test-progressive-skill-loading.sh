@@ -61,36 +61,10 @@ require_text "$PROGRESSIVE" "At most one should govern current reasoning except 
 require_text "$PROGRESSIVE" "Pass compact state across transitions" \
   "progressive contract requires compact handoff"
 
-# Optional real-harness smoke probe. It is intentionally not part of the deterministic
-# default gate because it requires live Codex backend connectivity and can fail for
-# network/auth reasons unrelated to skill routing.
+# Optional live-harness probe. Kept separate because it requires backend connectivity
+# and captures durable JSON/stderr artifacts for diagnosis.
 if [[ "${LIVE_CODEX:-0}" == "1" ]]; then
-  command -v codex >/dev/null || fail "LIVE_CODEX=1 but codex CLI is unavailable"
-  tmp="$(mktemp -d)"
-  trap 'rm -rf "$tmp"' EXIT
-
-  echo "Running live Codex routing probes (network/auth required)..."
-  prompts=(
-    "A unit test started failing after a dependency update. Diagnose root cause only; do not modify files."
-    "The root cause is established: normalizePath now rejects an empty string. Implement the authorized bug fix with a regression test."
-    "Implementation and focused tests are green. Determine whether it is valid to claim the fix is complete and ready to merge."
-  )
-  expected=("systematic-debugging" "test-driven-development" "verification-before-completion")
-
-  for i in 0 1 2; do
-    out="$tmp/probe-$i.jsonl"
-    timeout "${LIVE_CODEX_TIMEOUT:-180}" codex exec --json --ephemeral --sandbox read-only \
-      "${prompts[$i]} Before doing any work, state the single Livingware workflow skill that governs the current state as SKILL=<name>." \
-      >"$out" 2>"$tmp/probe-$i.err" || {
-        cat "$tmp/probe-$i.err" >&2 || true
-        fail "live Codex probe $i did not complete"
-      }
-    grep -Fq "SKILL=${expected[$i]}" "$out" || {
-      cat "$out" >&2
-      fail "live probe $i did not select ${expected[$i]}"
-    }
-    pass "live probe $i selected ${expected[$i]}"
-  done
+  "$ROOT/tests/codex/live-progressive-skill-probe.sh"
 fi
 
 echo "Progressive skill loading contract: PASS"

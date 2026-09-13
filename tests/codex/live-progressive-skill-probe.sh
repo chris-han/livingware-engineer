@@ -9,9 +9,61 @@ RETRIES="${CODEX_PROBE_RETRIES:-3}"
 TIMEOUT_SECONDS="${CODEX_PROBE_TIMEOUT:-120}"
 BACKOFF_SECONDS="${CODEX_PROBE_BACKOFF:-5}"
 CODEX_BIN="${CODEX_BIN:-codex}"
+PROBE_WORKDIR="${CODEX_PROBE_WORKDIR:-}"
+FIXTURE_OWNED=0
 
+setup_fixture() {
+  if [[ -n "$PROBE_WORKDIR" ]]; then
+    [[ -d "$PROBE_WORKDIR" ]] || { echo "ERROR: CODEX_PROBE_WORKDIR does not exist: $PROBE_WORKDIR" >&2; exit 2; }
+    return
+  fi
+
+  PROBE_WORKDIR="${TMPDIR:-/tmp}/livingware-codex-probe-$RUN_ID"
+  FIXTURE_OWNED=1
+  rm -rf "$PROBE_WORKDIR"
+  mkdir -p "$PROBE_WORKDIR/src" "$PROBE_WORKDIR/tests"
+
+  cat > "$PROBE_WORKDIR/package.json" <<'JSON'
+{
+  "name": "livingware-progressive-probe-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test tests/*.test.js" }
+}
+JSON
+
+  cat > "$PROBE_WORKDIR/src/normalize-path.js" <<'JS'
+export function normalizePath(value) {
+  if (value === '') throw new Error('empty path');
+  return value.replace(/\\+/g, '/').replace(/\/$/, '');
+}
+JS
+
+  cat > "$PROBE_WORKDIR/tests/normalize-path.test.js" <<'JS'
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { normalizePath } from '../src/normalize-path.js';
+
+test('normalizes duplicate separators', () => {
+  assert.equal(normalizePath('a\\\\b/'), 'a/b');
+});
+
+test('empty path remains empty', () => {
+  assert.equal(normalizePath(''), '');
+});
+JS
+
+  git -C "$PROBE_WORKDIR" init -q
+  git -C "$PROBE_WORKDIR" config user.email probe@example.invalid
+  git -C "$PROBE_WORKDIR" config user.name "Livingware Probe"
+  git -C "$PROBE_WORKDIR" add .
+  git -C "$PROBE_WORKDIR" commit -qm "fixture: failing normalizePath baseline"
+}
+
+setup_fixture
 mkdir -p "$RUN_DIR"
 SUMMARY="$RUN_DIR/summary.tsv"
+printf 'probe-workdir\t%s\n' "$PROBE_WORKDIR" > "$RUN_DIR/run-info.tsv"
 printf 'scenario\texpected_skill\tstatus\tevidence\tattempts\tduration_seconds\tinput-count\tcached-input-count\tuncached-input-count\toutput-count\treasoning-output-count\tjsonl\tstderr\n' > "$SUMMARY"
 
 command -v "$CODEX_BIN" >/dev/null 2>&1 || {
@@ -50,6 +102,7 @@ prompts=(
   "The root cause is established: normalizePath now rejects an empty string. Implement the authorized bug fix with a regression test. Do not reopen root-cause investigation unless new contradictory evidence appears. In the final answer, summarize the test/change result."
   "Implementation and focused tests are green. Determine whether it is valid to claim the fix is complete and ready to merge. Do not modify files. In the final answer, state the exact claim scope and the evidence that supports or limits it."
 )
+scenario_sandboxes=("read-only" "read-only" "workspace-write" "read-only")
 
 classify_failure() {
   local rc="$1" stderr_file="$2" json_file="$3"
@@ -139,7 +192,7 @@ PY2
 }
 
 probe_one() {
-  local name="$1" expected="$2" prompt="$3"
+  local name="$1" expected="$2" prompt="$3" sandbox_mode="$4"
   local attempt rc start end duration status="failed"
   local scenario_dir="$RUN_DIR/$name"
   mkdir -p "$scenario_dir"
@@ -156,8 +209,8 @@ probe_one() {
     timeout "$TIMEOUT_SECONDS" "$CODEX_BIN" exec \
       --json \
       --ephemeral \
-      --sandbox read-only \
-      -C "$ROOT" \
+      --sandbox "$sandbox_mode" \
+      -C "$PROBE_WORKDIR" \
       "$prompt" \
       >"$json_file" 2>"$err_file"
     rc=$?
@@ -170,6 +223,7 @@ probe_one() {
       echo "attempt=$attempt"
       echo "exit_code=$rc"
       echo "duration_seconds=$duration"
+      echo "sandbox=$sandbox_mode"
       echo "jsonl=$json_file"
       echo "stderr=$err_file"
     } > "$meta_file"
@@ -222,12 +276,13 @@ probe_one() {
 
 failures=0
 for i in 0 1 2 3; do
-  if ! probe_one "${scenario_names[$i]}" "${expected_skills[$i]}" "${prompts[$i]}"; then
+  if ! probe_one "${scenario_names[$i]}" "${expected_skills[$i]}" "${prompts[$i]}" "${scenario_sandboxes[$i]}"; then
     failures=$((failures+1))
   fi
 done
 
 echo
+echo "Probe workdir: $PROBE_WORKDIR"
 echo "Captured probe artifacts: $RUN_DIR"
 echo "Summary: $SUMMARY"
 cat "$SUMMARY"

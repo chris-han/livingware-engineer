@@ -1,9 +1,13 @@
 ---
 name: systematic-debugging
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+description: Use while an unexplained bug, test failure, regression, performance anomaly, or unexpected behavior requires root-cause investigation
 ---
 
 # Systematic Debugging
+
+## Lifecycle Boundary
+
+**Entry:** an observed failure is still unexplained. **Exit:** root cause and affected behavior are sufficiently established, or diagnosis-only work is complete. Once exited, stop carrying this workflow forward. If implementation is authorized, the next task may match TDD; if a completion claim is imminent without a code change, it may match verification. Re-enter debugging only when new evidence makes the failure unexplained again.
 
 ## Overview
 

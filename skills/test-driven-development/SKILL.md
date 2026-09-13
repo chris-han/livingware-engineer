@@ -1,9 +1,13 @@
 ---
 name: test-driven-development
-description: Use when implementing new/changed behavior, fixing defects, or performing behavior-preserving refactors
+description: Use when implementing an authorized behavior change, a bug fix with established diagnosis, or a behavior-preserving refactor. Do not use for unresolved root-cause investigation or final completion claims.
 ---
 
 # Test-Driven Development (TDD)
+
+## Lifecycle Boundary
+
+**Entry:** intended changed behavior or the preservation contract is defined well enough to implement. **Exit:** focused behavior evidence is green and the implementation is ready for any broader completion/integration claim. Do not retain debugging instructions after diagnosis is established, and do not preload final verification while implementation is still active. Return to debugging only for a newly unexplained failure.
 
 ## Overview
 

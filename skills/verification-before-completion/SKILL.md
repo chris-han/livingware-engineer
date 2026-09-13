@@ -1,9 +1,13 @@
 ---
 name: verification-before-completion
-description: Use before claiming work is correct, complete, fixed, or passing, or before an integration/release action whose safety depends on that claim
+description: Use only when a correctness, completion, integration, merge, or release claim is imminent and needs current evidence. Do not preload during diagnosis or implementation.
 ---
 
 # Verification Before Completion
+
+## Lifecycle Boundary
+
+**Entry:** a correctness, completion, integration, merge, or release claim is imminent. **Exit:** the claim is supported, falsified, or narrowed to the evidence. A newly unexplained failure returns to debugging; a known implementation gap returns to the implementation/TDD workflow. Do not keep verification active during ordinary implementation loops.
 
 Before claiming correctness or completion:
 

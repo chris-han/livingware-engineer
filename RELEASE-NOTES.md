@@ -3,6 +3,15 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.0 (2026-09-14)
+
+- Make native harness skill matching the preferred dispatcher where available; `using-superpowers` is no longer a mandatory first-hop router on those platforms and remains a compact compatibility/core-principles bootstrap for harnesses that still need session injection.
+- Add a progressive skill-loading contract: debugging, TDD, and completion verification are sequential states with explicit entry, exit, replacement, and compact-handoff rules rather than a preloaded bundle.
+- Tighten debugging, TDD, and verification activation descriptions so each skill matches its current decision state and avoids loading future-state instructions.
+- Reduce always-loaded routing text, keep platform/index mechanics behind references, and document prefix-cache-friendly stable instructions, compact tool/context handoffs, evidence reuse, and avoidance of ceremonial serial agent turns.
+- Add the implementation-ready token-cost optimization plan covering progressive disclosure, instruction deduplication, deterministic enforcement, concise structured outputs, parallel independent work, and planning/execution contract reuse.
+- Synchronize declared package/plugin version surfaces to 6.8.0.
+
 ## v6.7.0 (2026-09-12)
 
 - Add `system-dynamics-modeling` for causal-loop and stock-flow construction, critique, scenario testing, sensitivity analysis, and leverage-point reasoning.

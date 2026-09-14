@@ -1,6 +1,6 @@
 ---
 name: verification-before-completion
-description: Use only when a correctness, completion, integration, merge, or release claim is imminent and needs current evidence. Do not preload during diagnosis or implementation.
+description: Use only when a correctness, completion, integration, merge, or release claim is imminent and needs current evidence. For bounded/local claims, use existing focused evidence directly; do not also activate codebase-memory or repository-graph discovery. Do not preload during diagnosis or implementation.
 ---
 
 # Verification Before Completion
@@ -24,7 +24,7 @@ A focused pass is not a full-suite or integrated pass. Architectural claims requ
 
 ## Tool Economy
 
-Start from already-produced implementation evidence. For a bounded claim, do not rediscover the repository, enumerate code-graph projects, reread unrelated history, or rerun broad checks merely for ceremony. Inspect the focused diff/state and execute only checks that can falsify the claim or whose prior evidence was invalidated.
+Start from already-produced implementation evidence. For a bounded/local claim, do not activate codebase-memory, rediscover the repository, enumerate code-graph projects, reread unrelated history, or rerun broad checks merely for ceremony. Inspect the focused diff/state and execute only checks that can falsify the claim or whose prior evidence was invalidated.
 
 Use broader graph/integration/browser discovery only when the claim itself crosses those boundaries or existing evidence cannot establish scope.
 

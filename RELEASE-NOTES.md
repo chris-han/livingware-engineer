@@ -3,6 +3,13 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.4 (2026-09-14)
+
+- Stabilize bounded completion verification by explicitly preventing codebase-memory/repository-graph activation unless the claim has unresolved structural scope.
+- Add a durable Codex token-cost benchmark documenting the isolated 6.8.3 three-run median, variance, routing invariants, and comparison with the 6.8.0 baseline.
+- Treat benchmark medians and trace behavior as the optimization reference rather than single-run token counts.
+- Synchronize declared package/plugin version surfaces to 6.8.4.
+
 ## v6.8.3 (2026-09-14)
 
 - Tighten bounded/local debugging activation so it does not pair with codebase-memory or repository-graph discovery unless direct source inspection leaves material relationship uncertainty unresolved.

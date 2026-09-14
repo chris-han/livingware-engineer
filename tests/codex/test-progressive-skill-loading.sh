@@ -60,6 +60,7 @@ require_text "$VERIFY" "Do not preload during diagnosis or implementation." \
   "verification explicitly forbids preloading"
 require_text "$VERIFY" "## Lifecycle" "verification defines a lifecycle boundary"
 require_text "$VERIFY" "Tool Economy" "verification defaults to bounded tool use"
+require_text "$VERIFY" "do not activate codebase-memory" "bounded verification does not pair with codebase-memory"
 require_text "$VERIFY" "references/detailed-playbook.md" "verification preserves detailed guidance behind progressive disclosure"
 
 require_text "$PROGRESSIVE" "Debugging, TDD, and verification are sequential states, not a default bundle." \

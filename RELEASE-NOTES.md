@@ -3,6 +3,15 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.1 (2026-09-14)
+
+- Shrink the always-read debugging, TDD, and completion-verification roots from about 39 KB combined to about 7.5 KB while preserving expanded guidance behind conditional detailed-playbook references.
+- Add tool-economy contracts: bounded/local work reads implicated source and tests first and avoids repository indexing or broad code-graph discovery unless relationship or impact uncertainty materially requires it.
+- Preserve root-cause-before-fix, real-component integration, real-browser UI evidence, and claim/evidence invariants in the compact roots.
+- Extend progressive-loading tests to verify lifecycle, bounded tool use, and detailed-reference availability.
+- Keep the isolated live Codex cost probe with baseline, cached/uncached input, output, and reasoning count decomposition for before/after measurement.
+- Synchronize declared package/plugin version surfaces to 6.8.1.
+
 ## v6.8.0 (2026-09-14)
 
 - Make native harness skill matching the preferred dispatcher where available; `using-superpowers` is no longer a mandatory first-hop router on those platforms and remains a compact compatibility/core-principles bootstrap for harnesses that still need session injection.

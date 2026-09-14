@@ -1,0 +1,7 @@
+scenario=implementation
+expected_skill=test-driven-development
+attempt=1
+exit_code=124
+duration_seconds=120
+jsonl=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T165605Z/implementation/attempt-1.jsonl
+stderr=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T165605Z/implementation/attempt-1.stderr.log

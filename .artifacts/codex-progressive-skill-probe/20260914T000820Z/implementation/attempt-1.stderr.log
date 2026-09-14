@@ -1,0 +1,5 @@
+2026-09-14T00:10:16.248033Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /tmp/livingware-codex-probe-20260914T000820Z/src/normalize-path.js:
+export function normalizePath(value) {
+  if (value === '') throw new Error('empty path');
+  return value.replace(/\\\\+/g, '/').replace(/\\/$/, '');
+}

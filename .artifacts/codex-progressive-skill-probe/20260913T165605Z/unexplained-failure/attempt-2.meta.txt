@@ -1,7 +1,0 @@
-scenario=unexplained-failure
-expected_skill=systematic-debugging
-attempt=2
-exit_code=124
-duration_seconds=120
-jsonl=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T165605Z/unexplained-failure/attempt-2.jsonl
-stderr=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T165605Z/unexplained-failure/attempt-2.stderr.log

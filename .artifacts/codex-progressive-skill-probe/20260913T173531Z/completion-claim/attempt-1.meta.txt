@@ -1,7 +1,0 @@
-scenario=completion-claim
-expected_skill=verification-before-completion
-attempt=1
-exit_code=124
-duration_seconds=180
-jsonl=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T173531Z/completion-claim/attempt-1.jsonl
-stderr=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260913T173531Z/completion-claim/attempt-1.stderr.log

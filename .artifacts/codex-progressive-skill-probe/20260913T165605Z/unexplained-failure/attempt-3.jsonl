@@ -1,6 +1,0 @@
-{"type":"thread.started","thread_id":"01a09bb6-724f-70a0-89b9-573382816d18"}
-{"type":"turn.started"}
-{"type":"error","message":"Reconnecting... 2/5 (request timed out)"}
-{"type":"error","message":"Reconnecting... 3/5 (request timed out)"}
-{"type":"error","message":"Reconnecting... 4/5 (request timed out)"}
-{"type":"error","message":"Reconnecting... 5/5 (request timed out)"}

@@ -1,8 +1,0 @@
-scenario=baseline
-expected_skill=none
-attempt=1
-exit_code=0
-duration_seconds=11
-sandbox=read-only
-jsonl=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260914T000820Z/baseline/attempt-1.jsonl
-stderr=/home/chris/repo/semantier-runtime/livingware-engineer-token-opt/.artifacts/codex-progressive-skill-probe/20260914T000820Z/baseline/attempt-1.stderr.log

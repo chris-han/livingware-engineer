@@ -1,5 +1,0 @@
-Reading additional input from stdin...
-2026-09-13T17:13:35.398706Z ERROR codex_models_manager::manager: failed to refresh available models: timeout waiting for child process to exit
-2026-09-13T17:13:35.514943Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: failed to lookup address information: Name has no usable address, url: wss://chatgpt.com/backend-api/codex/responses
-2026-09-13T17:14:00.512396Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(HttpRequest(HttpRequest("http/request failed: error sending request for url (https://chatgpt.com/backend-api/ps/mcp)")))
-2026-09-13T17:14:30.514152Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when Client(HttpRequest(HttpRequest("http/request failed: error sending request for url (https://chatgpt.com/backend-api/ps/mcp)")))

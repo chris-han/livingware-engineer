@@ -1,10 +1,9 @@
 {
   "name": "livingware-engineer",
-  "version": "6.8.1",
+  "version": "6.8.2",
   "description": "An agentic skills framework & software development methodology that works.",
   "repository": "https://github.com/chris-han/livingware-engineer",
   "skills": "skills",
-  "hooks": "hooks/hooks.json",
   "commands": {
     "update": {
       "description": "Update the installed Livingware Engineer plugin from the GitHub marketplace source.",

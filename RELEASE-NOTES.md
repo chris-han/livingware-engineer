@@ -3,6 +3,13 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.2 (2026-09-14)
+
+- Stop registering the legacy SessionStart bootstrap in the Codex plugin manifest; Codex now relies on native skill discovery/matching instead of paying an unconditional `using-superpowers` context tax on every session.
+- Keep the shared session-start hook files for harnesses that still require bootstrap injection, preserving cross-harness compatibility.
+- Add a focused regression assertion that the Codex manifest has no `hooks` field while compatibility hook assets remain available.
+- Synchronize declared package/plugin version surfaces to 6.8.2.
+
 ## v6.8.1 (2026-09-14)
 
 - Shrink the always-read debugging, TDD, and completion-verification roots from about 39 KB combined to about 7.5 KB while preserving expanded guidance behind conditional detailed-playbook references.

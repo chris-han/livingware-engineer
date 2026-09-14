@@ -42,6 +42,7 @@ require_text "$DEBUG" "Use while an unexplained bug, test failure, regression, p
 require_text "$DEBUG" "## Lifecycle" "debugging defines a lifecycle boundary"
 require_text "$DEBUG" "Exit:" "debugging defines an exit condition"
 require_text "$DEBUG" "Tool Economy" "debugging defaults to bounded tool use"
+require_text "$DEBUG" "Do not activate codebase-memory" "debugging does not pair bounded/local diagnosis with codebase-memory"
 require_text "$DEBUG" "references/detailed-playbook.md" "debugging preserves detailed guidance behind progressive disclosure"
 
 require_text "$TDD" "a bug fix with established diagnosis" \
@@ -50,6 +51,7 @@ require_text "$TDD" "Do not use for unresolved root-cause investigation or final
   "TDD excludes debugging and completion states"
 require_text "$TDD" "## Lifecycle" "TDD defines a lifecycle boundary"
 require_text "$TDD" "Tool Economy" "TDD defaults to bounded tool use"
+require_text "$TDD" "A concise implementation-result report is not by itself a completion claim" "TDD result reporting does not trigger verification"
 require_text "$TDD" "references/detailed-playbook.md" "TDD preserves detailed guidance behind progressive disclosure"
 
 require_text "$VERIFY" "Use only when a correctness, completion, integration, merge, or release claim is imminent" \

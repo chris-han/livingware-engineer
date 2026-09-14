@@ -38,4 +38,4 @@ Load details only when triggered:
 - `remote-cdp-browser-lifecycle.md` only for frontend/browser evidence.
 - `references/detailed-playbook.md` only when the compact contract is insufficient for a complex/high-risk implementation.
 
-After focused implementation evidence is green, leave this workflow. Let a completion claim match verification rather than carrying this body forward.
+After focused implementation evidence is green, leave this workflow. Load verification only when the user or task actually requires a correctness/completion/integration/merge/release claim. A concise implementation-result report is not by itself a completion claim and should not trigger verification.

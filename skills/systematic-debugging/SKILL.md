@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use while an unexplained bug, test failure, regression, performance anomaly, or unexpected behavior requires root-cause investigation
+description: Use while an unexplained bug, test failure, regression, performance anomaly, or unexpected behavior requires root-cause investigation. For bounded/local failures, use this workflow alone; do not also activate repository-graph discovery unless direct source inspection cannot resolve material relationship uncertainty.
 ---
 
 # Systematic Debugging
@@ -26,7 +26,7 @@ If the issue is not reproducible, external, timing-dependent, or environmental, 
 
 ## Tool Economy
 
-For a bounded/local failure, inspect the directly implicated test, source, error, and recent diff first. Do not index a repository, enumerate code-graph projects, or run broad structural discovery by default. Use code graphs or wider repository mapping only when callers, dependencies, ownership, or impact radius are materially unclear and direct source inspection cannot answer the question efficiently.
+For a bounded/local failure, inspect the directly implicated test, source, error, and recent diff first. Do not activate codebase-memory, index a repository, enumerate graph projects, or run broad structural discovery by default. Only add relationship-oriented discovery after direct source inspection leaves a material question about callers, dependencies, ownership, or impact radius unresolved.
 
 Prefer one focused command/result over multiple overlapping discovery calls. Keep tool output bounded; do not feed large repository listings, histories, or unrelated logs back into the next turn.
 

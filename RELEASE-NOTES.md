@@ -3,6 +3,13 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.3 (2026-09-14)
+
+- Tighten bounded/local debugging activation so it does not pair with codebase-memory or repository-graph discovery unless direct source inspection leaves material relationship uncertainty unresolved.
+- Clarify the TDD exit boundary: reporting a concise implementation/test result is not itself a completion claim and must not automatically activate completion verification.
+- Add regression assertions for both token-economy boundaries.
+- Synchronize declared package/plugin version surfaces to 6.8.3.
+
 ## v6.8.2 (2026-09-14)
 
 - Stop registering the legacy SessionStart bootstrap in the Codex plugin manifest; Codex now relies on native skill discovery/matching instead of paying an unconditional `using-superpowers` context tax on every session.

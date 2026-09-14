@@ -1,5 +1,5 @@
 {
-  "version": "6.8.4",
+  "version": "6.8.5",
   "files": [
     "package.json",
     ".codex-plugin/plugin.json",

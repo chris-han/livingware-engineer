@@ -3,6 +3,14 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.8.5 (2026-09-14)
+
+- Upgrade the repository-owned skill creator workflow (`writing-skills`) with architecture-first token-economics guidance: eliminate unnecessary loading, prevent activation collisions, keep compact roots, bound tool cost, reuse evidence, reduce serial turns, preserve cache-stable prefixes, and compress wording last.
+- Extend `skill-review` with a whole-loop token-economics audit covering fixed context vs selected-skill/tool-loop cost, meta-routing, activation collisions, broad repository discovery, large tool returns, repeated evidence, and measurement quality.
+- Add `docs/skill-token-economics.md` as the canonical shared reference grounded in the validated 6.8.x Codex experiments, so creator/reviewer skills do not duplicate the full doctrine.
+- Add regression coverage locking the creator and review token-economics contracts.
+- Synchronize declared package/plugin version surfaces to 6.8.5.
+
 ## v6.8.4 (2026-09-14)
 
 - Stabilize bounded completion verification by explicitly preventing codebase-memory/repository-graph activation unless the claim has unresolved structural scope.

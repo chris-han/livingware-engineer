@@ -9,6 +9,8 @@ description: Use when creating new skills, editing existing skills, or verifying
 
 **Writing skills IS Test-Driven Development applied to process documentation.**
 
+This is Livingware Engineer's repository-owned skill-creator workflow. Create or revise skills here rather than adding a competing creator/router skill.
+
 **Personal skills live in your runtime's skills directory** (`~/.claude/skills/` on Claude Code) — see [codex-tools.md](../using-superpowers/references/codex-tools.md) or [gemini-tools.md](../using-superpowers/references/gemini-tools.md) for the path on those runtimes. Codex, Copilot CLI, and Gemini CLI all also recognize `~/.agents/skills/` as a cross-runtime alias.
 
 You write test cases (pressure scenarios with subagents), watch them fail (baseline behavior), write the skill (documentation), watch tests pass (agents comply), and refactor (close loopholes).
@@ -210,70 +212,31 @@ Use words an agent would search for:
 - ✅ `creating-skills` not `skill-creation`
 - ✅ `condition-based-waiting` not `async-test-helpers`
 
-### 4. Token Efficiency (Critical)
+### 4. Token Economics (Critical)
 
-**Problem:** getting-started and frequently-referenced skills load into EVERY conversation. Every token counts.
+Design token cost at the architecture level before shortening prose. Apply this order:
 
-**Target word counts:**
-- getting-started workflows: <150 words each
-- Frequently-loaded skills: <200 words total
-- Other skills: <500 words (still be concise)
+1. **Do not load unnecessary context.** Future-state or adjacent skills stay unloaded until their own entry condition is satisfied.
+2. **Prevent activation collisions.** Descriptions should discriminate the current state and exclude observed neighboring collisions when necessary.
+3. **Keep the root contract minimal.** `SKILL.md` owns activation, hard invariants, entry/exit boundaries, the smallest sufficient workflow, and progressive-disclosure pointers. Put examples, long checklists, platform rules, and model compensation in references.
+4. **Do not reimplement harness capability.** Native skill matching should not be wrapped in a mandatory meta-router merely to route to other skills.
+5. **Design tool economy.** Bounded work should use bounded source/test/diff reads; broad indexing, graph discovery, repository listings, long histories, and repeated checks need a concrete reason.
+6. **Reuse evidence and reduce serial turns.** Valid unchanged results should travel forward as compact state instead of being rerun or narrated again.
+7. **Keep stable static prefixes.** Structure frequently reused instructions consistently so remaining context can benefit from prefix caching.
+8. **Only then compress wording.** Sentence-level shortening is the last optimization.
 
-**Techniques:**
+When creating or materially revising a high-frequency skill, explicitly ask:
 
-**Move details to tool help:**
-```bash
-# ❌ BAD: Document all flags in SKILL.md
-search-conversations supports --text, --both, --after DATE, --before DATE, --limit N
+- What exact state should activate this skill?
+- What nearby skills/tools must *not* activate for the same bounded task?
+- What is the skill's exit condition, and what context can become inactive then?
+- Which content belongs behind progressive disclosure?
+- Could a tool response or serial workflow cost more than the skill body itself?
+- Can a deterministic script/test enforce the rule instead of repeating it in prompt text?
 
-# ✅ GOOD: Reference --help
-search-conversations supports multiple modes and filters. Run --help for details.
-```
+For token-sensitive or frequently selected skills, use a small live/behavioral probe when practical. Measure selection accuracy and unwanted activation first, then latency plus cached/uncached input and output counts. Prefer repeated runs and medians over one-off counts.
 
-**Use cross-references:**
-```markdown
-# ❌ BAD: Repeat workflow details
-When searching, dispatch subagent with template...
-[20 lines of repeated instructions]
-
-# ✅ GOOD: Reference other skill
-Always use subagents (50-100x context savings). REQUIRED: Use [other-skill-name] for workflow.
-```
-
-**Compress examples:**
-```markdown
-# ❌ BAD: Verbose example (42 words)
-your human partner: "How did we handle authentication errors in React Router before?"
-You: I'll search past conversations for React Router authentication patterns.
-[Dispatch subagent with search query: "React Router authentication error handling 401"]
-
-# ✅ GOOD: Minimal example (20 words)
-Partner: "How did we handle auth errors in React Router?"
-You: Searching...
-[Dispatch subagent → synthesis]
-```
-
-**Eliminate redundancy:**
-- Don't repeat what's in cross-referenced skills
-- Don't explain what's obvious from command
-- Don't include multiple examples of same pattern
-
-**Verification:**
-```bash
-wc -w skills/path/SKILL.md
-# getting-started workflows: aim for <150 each
-# Other frequently-loaded: aim for <200 total
-```
-
-**Name by what you DO or core insight:**
-- ✅ `condition-based-waiting` > `async-test-helpers`
-- ✅ `using-skills` not `skill-usage`
-- ✅ `flatten-with-flags` > `data-structure-refactoring`
-- ✅ `root-cause-tracing` > `debugging-techniques`
-
-**Gerunds (-ing) work well for processes:**
-- `creating-skills`, `testing-skills`, `debugging-with-logs`
-- Active, describes the action you're taking
+Read `../../docs/skill-token-economics.md` for the full design/review model and the empirically validated 6.8.x lessons. Do not copy that reference into every skill.
 
 ### 5. Cross-Referencing Other Skills
 

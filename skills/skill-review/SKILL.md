@@ -1,6 +1,6 @@
 ---
 name: skill-review
-description: Review SKILL.md and AGENTS.md instructions for activation noise, unnecessary always-on context, weak progressive disclosure, obsolete or unsupported model scaffolding, and unclear decision or completion boundaries.
+description: Review SKILL.md and AGENTS.md instructions for activation noise, unnecessary always-on context, weak progressive disclosure, token/tool-loop cost, obsolete or unsupported model scaffolding, and unclear decision or completion boundaries.
 ---
 
 # Skill Review
@@ -18,7 +18,26 @@ The goal is not brevity for its own sake. Minimize always-loaded instruction cos
 5. Flag obsolete or unsupported model-compensation rules, especially blanket requirements to map the repository, read large doc stacks, ask for approval at every step, run broad tests, brainstorm, plan, or follow a fixed itinerary regardless of task shape.
 6. For retained scaffolding, ask what evidence justifies it, which supported model needs it, whether it harms another supported model, and whether it can move into an adapter or conditional reference.
 7. Check decision and completion boundaries. Preserve real authority and safety limits; remove unnecessary stop gates. Where useful, state safe autonomy and a concrete definition of done.
-8. Produce a prioritized audit with concrete rewrite recommendations. Prefer deleting or relocating whole classes of unnecessary instruction over merely shortening sentences.
+8. Audit token economics across the whole agent loop, not just `SKILL.md` length: activation collisions, future-state preloading, duplicate routing, broad tool discovery, large tool outputs, repeated evidence, and unnecessary serial turns.
+9. When cost matters, separate fixed startup/context cost from selected-skill and tool-loop cost; prefer isolated fixtures, repeated runs, and medians before attributing a regression to prompt text.
+10. Produce a prioritized audit with concrete rewrite recommendations. Prefer deleting or relocating whole classes of unnecessary instruction over merely shortening sentences.
+
+## Token-economics audit
+
+Read `../../docs/skill-token-economics.md` when reviewing a frequently loaded skill, a skill set with overlapping activation, or a workflow with unexpectedly high latency/context cost. Apply the optimization order there: eliminate unnecessary loading first, then collisions and tool/turn amplification, then improve cache stability, and only last shorten wording.
+
+Flag especially:
+
+- mandatory meta-routing where the harness already matches skills natively,
+- descriptions whose breadth activates multiple adjacent workflow states,
+- root skills carrying examples/checklists/platform procedures that should be conditional references,
+- bounded/local tasks that automatically index/map a repository or enumerate all projects,
+- completion/review skills activated merely to summarize an implementation result,
+- valid unchanged evidence rerun because a workflow phase changed,
+- large unbounded tool responses and repeated read/status/test calls,
+- performance conclusions based on a single run or a large host repository rather than an isolated comparable fixture.
+
+Preserve correctness and safety invariants while removing cost. A smaller prompt that causes extra tool turns, weaker verification, or more retries is not an optimization.
 
 ## Behavioral learning is opt-in maintenance
 
@@ -30,6 +49,9 @@ Do not run behavioral evals or workflow learning automatically. When repeated/sy
 - Keep skill descriptions as short as possible while still discriminating when the skill should be used.
 - Avoid overlapping activation surfaces unless the distinction is obvious from the descriptions.
 - Prefer progressive disclosure. Multi-workflow skills should use the root `SKILL.md` as a minimal router into references, scripts, or workflow-specific files.
+- Prefer native harness matching over a mandatory meta-router when the platform already discovers/selects skills; keep compatibility routing only where a harness actually needs it.
+- Treat tool calls and their returned payloads as context cost. For bounded tasks, broad repository/index discovery requires demonstrated structural uncertainty, not habit.
+- A token that never enters context is cheaper than a cached token; cache-friendly stability matters after unnecessary context has been eliminated.
 - Avoid elaborate itineraries when capable models can infer reasonable steps. Prescribe sequences only where order matters, deviation creates concrete risk, or evidence shows a supported model requires the extra scaffolding.
 - Treat `AGENTS.md` as a repository constitution, not a universal runbook.
 - Preserve hard invariants: security, authority, destructive-operation limits, deterministic correctness requirements, architecture laws, and other boundaries with real consequences.
@@ -50,6 +72,9 @@ For substantial audits, return:
 - `AGENTS.md` findings split into `KEEP ALWAYS LOADED`, `ROUTE`, and `RELOCATE/REMOVE`,
 - activation-collision findings,
 - progressive-disclosure opportunities,
+- token-economics findings: fixed context vs selected-skill vs tool-loop cost,
+- activation-collision and unwanted tool-family activation findings,
+- serial-turn / tool-output amplification opportunities,
 - single-model optimization findings,
 - multi-model compatibility findings,
 - evidence assessment for extra scaffolding,

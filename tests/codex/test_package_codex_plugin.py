@@ -25,7 +25,7 @@ def require(condition: bool, message: str) -> None:
 def portable_env(tmp: Path) -> dict[str, str]:
     bindir = tmp / "portable-bin"
     bindir.mkdir()
-    for name in ("python3", "git"):
+    for name in ("bash", "python3", "git"):
         target = shutil.which(name)
         if not target:
             raise AssertionError(f"required test prerequisite missing: {name}")
@@ -76,7 +76,7 @@ def main() -> int:
         write_metadata_fixture(metadata)
         out_zip = tmp / "livingware.zip"
         result = run_package(env, metadata, out_zip)
-        require(result.returncode == 0, f"package script succeeds with git + python3 only\n{result.stdout}")
+        require(result.returncode == 0, f"package script succeeds with bash + git + python3 only\n{result.stdout}")
         require(out_zip.is_file(), "package script writes ZIP archive")
         require("Format:  zip" in result.stdout, "package script reports ZIP format")
         require("SHA-256:" in result.stdout, "package script reports SHA-256")
@@ -97,7 +97,7 @@ def main() -> int:
 
         out_tar = tmp / "livingware.tar.gz"
         tar_result = run_package(env, metadata, out_tar, "--format", "tar.gz")
-        require(tar_result.returncode == 0, f"package script writes tar.gz with git + python3 only\n{tar_result.stdout}")
+        require(tar_result.returncode == 0, f"package script writes tar.gz with bash + git + python3 only\n{tar_result.stdout}")
         require("Format:  tar.gz" in tar_result.stdout, "package script reports tar.gz format")
         require(tar_paths(out_tar) == paths, "ZIP and tar.gz contain identical paths")
         with tarfile.open(out_tar, "r:gz") as tf:

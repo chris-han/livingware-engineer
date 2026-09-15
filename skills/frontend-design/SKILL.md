@@ -9,6 +9,14 @@ description: Use when designing, implementing, refactoring, reviewing, auditing,
 
 **REQUIRED:** Apply `docs/mvl-laws.md` MVL Law 1 first. Preserve governance boundaries, but keep normal low-risk product paths default-pass. Flag approval ceremony that delays the first useful result without changing risk.
 
+## IA Before UI
+
+For a new or materially changed user-facing structure, run `docs/ia-before-ui.md` before the first production UI implementation hunk. The review must establish the user task/domain model, canonical semantic owners, region hierarchy, ordinary Fast-to-Aha path, state/recovery ownership, action semantics, responsive composition, shared-pattern reuse, and verification evidence.
+
+This is a structural engineering gate, not a default human-approval checkpoint. If all stop conditions clear, proceed directly with `GO_FOR_UI`. If the review finds duplicated semantic ownership, implementation-model leakage, unresolved action meaning, missing state ownership, or responsive ambiguity, disposition is `REVISE_IA` and the IA must be repaired before styling or component implementation continues.
+
+Pure visual-token corrections, renderer-performance work, implementation-only refactors, and accessibility fixes that do not alter IA may mark the gate `NOT_APPLICABLE` with a brief rationale.
+
 ## Overview
 
 Use Livingware's engineering workflow for the work process and Impeccable for frontend craft. Existing project design context is evidence and constraint, not optional inspiration.
@@ -28,15 +36,16 @@ If no design system exists, use Impeccable's normal brief-inference and new-work
 ## Working method
 
 1. Identify the screen's actual user task and information roles before choosing components.
-2. Reuse project tokens, primitives, and recurring structures before adding page-local styling.
-3. Preserve incumbent visual and information-architecture rules during refinements and feature extensions.
-4. Use Impeccable to detect generic AI defaults, weak hierarchy, decorative structure, inconsistent geometry, accessibility defects, and other frontend slop.
-5. When a recurring visual or information structure is introduced, integrate it into the project's existing design-system boundary rather than duplicating it locally.
+2. For material IA changes, clear the IA-before-UI gate before production UI coding.
+3. Reuse project tokens, primitives, and recurring structures before adding page-local styling.
+4. Preserve incumbent visual and information-architecture rules during refinements and feature extensions.
+5. Use Impeccable to detect generic AI defaults, weak hierarchy, decorative structure, inconsistent geometry, accessibility defects, and other frontend slop.
+6. When a recurring visual or information structure is introduced, integrate it into the project's existing design-system boundary rather than duplicating it locally.
 
 Do not let missing optional Impeccable context files block an established product UI when the repository already provides sufficient product requirements and design authority. Do not run a design-system replacement flow unless the task calls for one.
 
 ## Completion contract
 
-For UI code changes, follow `test-driven-development` for real-browser verification in addition to code tests. Before completion, verify the affected rendered behavior against the applicable design-system objectives. Use an Impeccable critique/detector pass when it addresses a concrete risk; do not audit the entire product for a local UI change.
+For UI code changes, follow `test-driven-development` for real-browser verification in addition to code tests. Test scope follows the observed production impact radius rather than diff size; use the existing Verification Impact Analysis / R0-R3 policy instead of automatically escalating every UI change to the broadest suite. Before completion, verify the affected rendered behavior against the applicable design-system objectives and the IA evidence established before implementation. Use an Impeccable critique/detector pass when it addresses a concrete risk; do not audit the entire product for a local UI change.
 
 A frontend task is not complete when it merely functions; it must also remain coherent with the project's design language and information structure.

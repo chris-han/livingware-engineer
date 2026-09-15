@@ -2,24 +2,39 @@
 
 Behavioral evaluation and workflow learning are opt-in maintenance activities. They are not correctness gates for ordinary development and must not run automatically in CI, after skill edits, during version bumps, on a schedule, or merely because spare token budget exists.
 
+The canonical layer model and counterfactual-evaluation semantics live in `../../../docs/skill-runtime-architecture.md`. This reference owns learning admission, recurrence, material independence, and evidence sufficiency; it does not redefine the architecture.
+
 ## Failure classification before learning
 
 Classify the observed failure before considering workflow learning:
 
-- `CAPABILITY` — a required tool, permission, API, test capability, context-access seam, or execution primitive is missing;
-- `STEERING` — the capability exists, but a shared skill, instruction, routing rule, review policy, or workflow interaction is materially wrong or insufficient;
+- `CAPABILITY` — a required tool, permission, API, test capability, context-access seam, or execution primitive is missing or materially defective;
+- `STEERING` — the capability exists, but a shared skill, routing rule, workflow transition, review policy, or cross-cutting instruction is materially wrong or insufficient;
 - `IMPLEMENTATION` — the code or product behavior is defective;
 - `ENVIRONMENT` — a fixture, dependency, credential, browser, runtime, transport, or configuration caused the failure.
 
-Only `STEERING` may enter the workflow-learning suggestion gate. Route the other classes to their normal owner and stay silent about workflow learning unless later evidence establishes an independent steering problem. Do not turn ordinary capability, implementation, or environment defects into new instructions.
+Route non-steering failures to their normal owner. Do not turn capability, implementation, or environment defects into new shared instructions merely because an agent encountered them.
+
+For `STEERING`, attribute the correction before proposing learning:
+
+```text
+STEERING
+  +-- ROUTING  -> selection, branch, reference/tool choice, stop/exit
+  +-- WORKFLOW -> transition topology, recovery, convergence, handoff
+  +-- POLICY   -> cross-cutting invariant, authority/boundary rule
+```
+
+A routing failure does not authorize a tool change. A workflow loop is not repaired by widening activation. A local inconvenience does not justify policy mutation. Change the smallest owning layer that explains the evidence.
+
+A confirmed deterministic tool correctness defect follows its normal regression path and does not wait for behavioral-learning recurrence. Expanded tool semantics or new capability are deliberate tool evolution and use the slower tool-admission cadence described by the architecture.
 
 ## Suggestion gate
 
-The agent may suggest a targeted workflow-learning eval only when all three conditions are satisfied:
+The agent may suggest a targeted shared behavioral-learning eval only when all three conditions are satisfied:
 
-1. **Recurrence** — the same underlying workflow behavior has appeared in at least two materially independent failure episodes, or the user has independently corrected the same behavior more than once.
-2. **Systemic scope** — existing evidence plausibly points to a shared skill, instruction, routing rule, review policy, or interaction between them rather than a local defect.
-3. **Actionable uncertainty** — the agent can name one concrete workflow decision a targeted eval could resolve.
+1. **Recurrence** — the same underlying steering behavior has appeared in at least two materially independent observed failure episodes, or the user has independently corrected the same behavior more than once.
+2. **Systemic scope** — existing evidence plausibly points to a shared routing rule, workflow structure, policy, skill surface, or interaction rather than a local defect.
+3. **Actionable uncertainty** — the agent can name one concrete decision a targeted eval could resolve.
 
 If any condition is `NO` or cannot be established cheaply from existing evidence, stay silent and continue normal work.
 
@@ -29,30 +44,46 @@ A single event may justify a suggestion without recurrence only when all are tru
 
 - the cause is clearly framework-level;
 - waiting for recurrence would expose the user or system to material risk; and
-- a targeted eval can test a concrete policy correction.
+- a targeted eval can test a concrete correction.
 
-Token waste, one unnecessary test, one premature stop, one unnecessary review, or one wrong routing choice do not qualify by themselves.
+Token waste, one unnecessary test, one premature stop, one unnecessary review, one wrong routing choice, or one favorable simulation do not qualify by themselves.
 
 ### Anti-noise rule
 
-Accumulated changes, elapsed time, release cadence, corpus availability, general suspicion, or spare token budget are never sufficient reasons to suggest learning. Do not suggest an eval merely because it has not run recently.
+Accumulated changes, elapsed time, release cadence, corpus availability, general suspicion, spare token budget, or availability of a simulator are never sufficient reasons to suggest learning. Do not suggest an eval merely because one has not run recently or because many synthetic rollouts can be generated cheaply.
+
+## Evidence provenance
+
+Behavioral-learning evidence must preserve provenance. Use the canonical categories:
+
+- `OBSERVED` — produced by a real execution against the declared fixture/environment;
+- `REPLAYED` — deterministically recomputed from frozen observed inputs;
+- `SIMULATED` — generated by an explicit transition/probability model;
+- `INFERRED` — estimated analytically or by a model;
+- `ASSUMED` — scenario parameter without empirical support in the current comparison basis.
+
+`REPLAYED`, `SIMULATED`, `INFERRED`, and `ASSUMED` results may expose impossible alternatives, estimate cost, rank candidates, perform sensitivity analysis, or falsify a proposal. They do **not** become observed episodes and do not count toward the materially independent observed evidence required for generalized shared learning.
+
+`REAL_REEXECUTION` against a declared comparable fixture/environment produces `OBSERVED` evidence because the candidate path actually executed. Its comparability still has to be established; sharing a fixture name alone does not prove material independence.
+
+Never use simulation quantity as a substitute for empirical independence: ten thousand rollouts from one modeled episode are still modeled evidence from one basis.
 
 ## Recurring failure
 
-A failure is recurring when the same underlying workflow behavior appears in at least two materially independent failure episodes. Match the behavioral pattern, not exact wording or surface symptoms.
+A failure is recurring when the same underlying workflow behavior appears in at least two materially independent observed failure episodes. Match the behavioral pattern, not exact wording or surface symptoms.
 
 Examples include premature stopping, unnecessary reviewer dispatch, duplicate artifact generation, over-broad testing, incorrect evidence-lane routing, or artificial RED requirements for behavior-preserving refactors.
 
-Do not count retries of one unresolved task, downstream symptoms of one mistake, parallel agents sharing faulty state, or repeated failures from one unchanged broken fixture, dependency, environment, or configuration as separate occurrences.
+Do not count retries of one unresolved task, downstream symptoms of one mistake, parallel agents sharing faulty state, repeated failures from one unchanged broken fixture/dependency/environment, deterministic replays of one episode, or stochastic simulations derived from one episode as separate occurrences.
 
 ## Material independence
 
-Treat two occurrences as materially independent only if every prompt below is `YES`:
+Treat two observed occurrences as materially independent only if every prompt below is `YES`:
 
 1. **Did the earlier task or execution end before the later occurrence began?**
 2. **Was the later occurrence reached without reusing the earlier occurrence's faulty intermediate state or downstream output?**
 3. **Was every known local cause from the earlier occurrence absent, fixed, or independently re-created in the later occurrence?**
-4. **Did the shared workflow rule execute again rather than merely continue the earlier execution?**
+4. **Did the shared steering rule execute again rather than merely continue or replay the earlier execution?**
 
 Decision:
 
@@ -62,17 +93,19 @@ Any NO          -> SAME FAILURE EPISODE
 UNKNOWN         -> treat as NO unless cheaply resolved
 ```
 
-Different agents, models, harnesses, repositories, execution paths, user journeys, or elapsed time do not override this test.
+Different agents, models, harnesses, repositories, execution paths, user journeys, elapsed time, random seeds, or rollout counts do not override this test.
 
 ### Handling UNKNOWN
 
-Resolve `UNKNOWN` only when existing evidence can answer it with small incremental effort and the answer could change whether a workflow-learning suggestion is permitted. Do not create new logs, traces, reports, experiments, broad searches, or evidence artifacts merely to prove independence. If meaningful extra work or token cost would be required, keep `UNKNOWN` and treat the occurrences as one failure episode.
+Resolve `UNKNOWN` only when existing evidence can answer it with small incremental effort and the answer could change whether a learning suggestion is permitted. Do not create new logs, traces, reports, broad searches, synthetic corpora, or simulations merely to prove independence. If meaningful extra work or token cost would be required, keep `UNKNOWN` and treat the occurrences as one failure episode.
 
 ## Systemic attribution
 
-After recurrence is established, ask whether existing evidence plausibly attributes the behavior to a shared workflow rule. If the answer is `NO` or `UNKNOWN`, fix the local cause and do not suggest learning. Do not perform a broad framework investigation solely to convert `UNKNOWN` into `YES`.
+After recurrence is established, ask whether existing evidence plausibly attributes the behavior to a shared owner: routing, workflow, or policy. If the answer is `NO` or `UNKNOWN`, fix the local cause and do not suggest shared learning. Do not perform a broad framework investigation solely to convert `UNKNOWN` into `YES`.
 
 Typical local explanations include a task-specific misunderstanding, broken fixture, malformed plan, repository-specific convention, transient service failure, or implementation defect already contained by a regression test.
+
+Counterfactual simulation may help distinguish candidate shared causes, but it does not eliminate the need for attribution from observed behavior.
 
 ## Actionable eval question
 
@@ -80,45 +113,52 @@ Before suggesting learning, the agent must be able to complete:
 
 > A targeted eval would help decide whether __________.
 
-If no single concrete policy decision can fill the blank, stay silent.
+Prefer a layer-specific question, for example whether a route should prefer focused inspection before graph discovery, whether a recovery transition should return to diagnosis after contradictory evidence, or whether a policy boundary should apply to a wider class of workflows.
+
+If no single concrete policy/routing/workflow decision can fill the blank, stay silent.
 
 ## Suggestion format
 
 Keep the suggestion minimal:
 
 ```text
-Observed pattern: <minimal concrete evidence>
-Suspected shared cause: <skill/rule/interaction>
-Targeted eval question: <one policy decision>
+Observed pattern: <minimal concrete observed evidence>
+Attributed layer: ROUTING | WORKFLOW | POLICY
+Suspected shared cause: <rule/transition/interaction>
+Targeted eval question: <one decision>
+Optional simulation use: <only if it cheaply narrows the real eval>
 ```
 
-Then ask whether the user wants to run that targeted eval. Do not automatically generate a learning report, corpus plan, scenario inventory, retrospective, or policy patch.
+Then ask whether the user wants to run that targeted eval. Do not automatically generate a learning report, corpus plan, scenario inventory, retrospective, simulation campaign, or policy patch.
 
 ## Human initiation and budget discipline
 
-A suggestion never authorizes execution. The user must explicitly initiate the run. Once initiated:
+A suggestion never authorizes execution. The user must explicitly initiate the behavioral-learning run. Once initiated:
 
 1. select the smallest scenario subset that can falsify the suspected pattern;
 2. reuse existing observations instead of regenerating equivalent evidence;
-3. expand only when initial findings or material interaction risk justify the added cost;
-4. report behavior deltas and proposed rule changes concisely; and
-5. treat shared-policy changes as proposals requiring human adoption, never autonomous mutations.
+3. use replay/simulation only when it is cheaper than real execution and can materially narrow the candidate set;
+4. prefer real bounded re-execution for promising alternatives when practical;
+5. expand only when initial findings or material interaction risk justify the added cost;
+6. report behavior deltas, evidence provenance, and proposed layer-specific rule changes concisely; and
+7. treat shared-policy/workflow/routing changes as proposals requiring human adoption, never autonomous mutations.
 
 ## Matched fix is not generalized learning
 
-Passing the motivating failure or a matched regression proves only that the proposed change fixes that case. Before retaining a workflow rule as generally supported, require at least one materially independent case that did not participate in deriving the rule and that exercises the same shared steering behavior.
+Passing the motivating failure or a matched regression proves only that the proposed change fixes that case. Before retaining a shared steering rule as generally supported, require at least one materially independent observed case that did not participate in deriving the rule and that exercises the same shared behavior.
 
 ```text
-motivating failure
-  -> STEERING classification
-  -> bounded workflow delta
-  -> matched result
-  -> materially independent result
+motivating observed failure
+  -> STEERING + layer attribution
+  -> bounded candidate delta
+  -> optional replay/simulation to narrow alternatives
+  -> matched real result
+  -> materially independent observed result
   -> retain / reject
 ```
 
-If the matched case passes but no materially independent case is available, record the change as a local or provisional fix and do not claim generalized workflow learning. Reuse existing tasks, tests, and corrections for the independent check; do not create a new corpus, ledger, or broad eval suite merely to satisfy this rule.
+If the matched case passes but no materially independent observed case is available, record the change as local/provisional and do not claim generalized workflow learning. Simulation cannot upgrade `LOCAL_FIX_VERIFIED` into generalized support.
 
-This chain is the minimum learning lineage. Existing Git history, test results, and explicit user corrections are sufficient when they preserve the causal link; do not add an EvoDAG, learning database, evidence manifest, or append-only research log.
+Existing Git history, test results, real bounded re-executions, and explicit user corrections are sufficient when they preserve the causal/evidence link. Do not add an EvoDAG, learning database, evidence manifest, event-log warehouse, or append-only research log merely to represent the chain.
 
-A full corpus is exceptional. Do not create a continuous self-improvement loop.
+A full corpus or continuous process-mining system is exceptional. Do not create a continuous self-improvement loop.

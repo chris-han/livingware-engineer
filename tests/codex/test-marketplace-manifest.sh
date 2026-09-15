@@ -18,14 +18,16 @@ if not marketplace_path.exists():
 
 marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
 
+
 def assert_equal(actual, expected, label):
     if actual != expected:
         raise AssertionError(f"{label}: expected {expected!r}, got {actual!r}")
 
-assert_equal(marketplace.get("name"), "superpowers-dev", "marketplace name")
+
+assert_equal(marketplace.get("name"), "livingware-engineer", "marketplace name")
 assert_equal(
     marketplace.get("interface", {}).get("displayName"),
-    "Superpowers Dev",
+    "Livingware Engineer",
     "marketplace display name",
 )
 
@@ -33,8 +35,8 @@ plugins = marketplace.get("plugins")
 if not isinstance(plugins, list):
     raise AssertionError("plugins must be a list")
 
-matching_plugins = [plugin for plugin in plugins if plugin.get("name") == "superpowers"]
-assert_equal(len(matching_plugins), 1, "superpowers plugin entry count")
+matching_plugins = [plugin for plugin in plugins if plugin.get("name") == "livingware-engineer"]
+assert_equal(len(matching_plugins), 1, "livingware-engineer plugin entry count")
 
 plugin = matching_plugins[0]
 assert_equal(plugin.get("source"), {"source": "url", "url": "./"}, "plugin source")
@@ -52,16 +54,9 @@ if not plugin_manifest.exists():
 manifest = json.loads(plugin_manifest.read_text(encoding="utf-8"))
 assert_equal(manifest.get("name"), plugin.get("name"), "plugin manifest name")
 
-# Codex auto-discovers a plugin's hooks/hooks.json whenever the Codex manifest
-# has no `hooks` field: load_plugin_hooks falls back to a hardcoded
-# DEFAULT_HOOKS_CONFIG_FILE = "hooks/hooks.json" and registers it. That file is
-# the Claude Code SessionStart hook, it is tracked in this repo, and this
-# marketplace installs the whole repo root (source url "./"), so on Codex the
-# fallback re-registers the SessionStart hook and its install-time trust prompt.
-# Declaring an empty inline hooks object ({}) parses as an empty inline hook set
-# and suppresses the auto-discovery. An absent field, an empty array ([]), and
-# an empty inline list all collapse back to the fallback, so the value must be
-# exactly an empty object.
+# Codex auto-discovers hooks/hooks.json when the manifest has no `hooks` field.
+# That file is the Claude Code SessionStart hook and should not be registered as
+# a Codex hook. An explicit empty object suppresses fallback auto-discovery.
 hooks_config = repo_root / "hooks" / "hooks.json"
 if not hooks_config.exists():
     raise AssertionError("hooks/hooks.json must exist (Claude Code SessionStart hook)")

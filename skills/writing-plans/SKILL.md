@@ -74,13 +74,13 @@ For non-product maintenance work where no user-learning loop exists, state `MVL:
 
 Before production UI implementation, determine whether the work introduces or materially changes user-facing information architecture. If it does, apply `docs/ia-before-ui.md` and record an `IA-Before-UI Review` before implementation tasks begin.
 
-The review must establish the user task/domain model, canonical semantic owners, region hierarchy, Fast-to-Aha path, state/recovery ownership, action semantics, responsive constraints, shared-pattern reuse, and planned verification evidence. Its disposition is `GO_FOR_UI` only when all stop conditions are clear; unresolved duplicated ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, or responsive ambiguity yields `REVISE_IA` and blocks production UI implementation until the IA is repaired.
+The review must establish the user task/domain model, canonical semantic owners, region hierarchy, Fast-to-Aha path, state/recovery ownership, action semantics, responsive constraints, shared-pattern reuse, and planned verification evidence. Its disposition is `GO_FOR_UI` only when all stop conditions are clear; unresolved duplicated semantic ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, or responsive ambiguity yields `REVISE_IA` and blocks production UI implementation until the IA is repaired.
 
 This is a machine-verifiable structural engineering gate, not a default human-approval checkpoint. Pure visual-token fixes, renderer-performance work, implementation-only refactors, and accessibility corrections with no IA change may record `NOT_APPLICABLE` with a brief reason.
 
 ## Impact Radius Before Test Scope
 
-Do **not** choose integration/E2E scope from diff size or intuition alone. Apply Verification Impact Analysis after the intended implementation surface is known and before choosing integration/browser/E2E scope.
+Verification Impact Analysis (VIA) chooses the smallest verification surface capable of falsifying the implementation claim. Do **not** choose integration/E2E scope from diff size or intuition alone.
 
 Use relationship-aware discovery when it materially improves the impact assessment. Prefer an available current code graph; check coverage and fall back to targeted source for gaps. Do not make whole-repository indexing a prerequisite for a bounded change. Useful graph tools include:
 
@@ -101,9 +101,15 @@ R2 multi-component   -> real-component integration through affected path
 R3 user/cross-boundary/UI -> vertical/E2E + real-browser verification for UI
 ```
 
-Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0. Preserve D0 deterministic invariants, D1 local semantic sentinels, and D2 broad semantic audits as separate cadences; do not promote every D1 change to D2.
+Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0.
 
-Read `../test-driven-development/impact-radius-testing.md` and `../../docs/verification-impact-analysis-v1.md` for the detailed policy.
+Preserve the verification cadence distinction:
+
+- D0 deterministic invariants — cheap mechanical checks on every relevant mutation;
+- D1 local semantic sentinels — focused behavior/integration selected from current impact radius;
+- D2 broad semantic audits — broad or expensive suites for release, high-risk, periodic, or genuinely broad/uncertain changes.
+
+Read `docs/verification-impact-analysis-v1.md` and `../test-driven-development/impact-radius-testing.md` for the detailed policy.
 
 ## Dependency and Prerequisite Contract
 
@@ -135,17 +141,7 @@ select dependency
   -> only then build feature code on top of it
 ```
 
-A package merely appearing in a manifest or lockfile is **not** sufficient evidence. The plan must specify an executable check appropriate to the dependency, for example:
-
-```text
-Python library  -> import real package + exercise required API
-Node package    -> import/instantiate real package + required behavior
-Database        -> real connection + migration/query smoke test
-CLI/tool        -> version + minimal real command
-Browser/CDP     -> endpoint reachable + real browser session attach
-External SDK    -> real in-repo adapter against local/sandbox remote boundary
-Plugin          -> load/register + expected capability visible
-```
+A package merely appearing in a manifest or lockfile is **not** sufficient evidence. The plan must specify an executable check appropriate to the dependency.
 
 If the dependency itself is an in-repo production component or local service, do not fake it merely to unblock development. Install or implement the prerequisite first, then verify it with the real implementation.
 
@@ -164,275 +160,66 @@ For a product feature, prefer the smallest loop that can generate reliable learn
 Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
 
 - Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
+- Prefer smaller, focused files over large ones that do too much.
 - Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
-
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+- In existing codebases, follow established patterns.
 
 ## Task Right-Sizing
 
 A task is the smallest implementation unit that carries its own focused test cycle and an independently testable deliverable. Fold setup, configuration, scaffolding, and documentation into the task whose deliverable needs them. Group related tasks for integrated sprint review; use an earlier task review when its risk or an explicit repository requirement warrants it. Small implementation steps are not separate review gates.
 
-**Exception for feature prerequisites:** if a new dependency is load-bearing for multiple later tasks, make dependency declaration/install/verification an explicit prerequisite task before those consumers. Do not duplicate install steps in every downstream task.
-
 Task boundaries MUST preserve the MVL journey. Do not decompose the work in a way that leaves the final integration task reconstructing a user path from mutually inconsistent local assumptions.
-
-## Bite-Sized Task Granularity
-
-### Sprint Integration Cadence
-
-Group related tasks into a coherent sprint: a bounded, integrated deliverable, not necessarily a calendar interval. State its real user or contract path, owned files, dependencies, and exit checks once. Keep the detailed implementation steps within that sprint.
-
-- **Each step:** run focused TDD/regression tests for the behavior being changed.
-- **During the sprint:** run focused seam tests when interfaces, wiring, persistence, authorization, or other boundaries change. Run expensive integration earlier when uncertainty or a demonstrated risk requires it.
-- **Sprint exit:** run the affected real-component integration path and browser/E2E checks required by the impact radius. A locally green task may advance inside the sprint; it is not integrated or feature-complete until these checks pass.
-- **After a fix:** rerun tests invalidated by that fix and the affected sprint-exit checks. Reuse results for unaffected paths under `superpowers:verification-before-completion`; do not rerun an expensive suite after every small step merely for ceremony.
-
-Assign one owner per overlapping edit surface. Parallelize only independent work when delegation is authorized. Resolve shared contracts once; reopen them when implementation evidence contradicts them. Review the integrated deliverable, then scope fix reviews to changed code and affected behavior rather than repeatedly reviewing unchanged helpers.
-
-Use the existing plan/task tracker as the coordination record. Test output and version history are sufficient development evidence; do not add duplicate ledgers, evidence packages, or intermediate reports. If the user or repository explicitly requires a durable record, maintain it once and reference it. This does not remove product-required persistence, audit, recovery, or replay guarantees.
-
-### Implementation Steps
-
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Install/declare required dependency" - step when applicable
-- "Run dependency smoke/contract test" - step when applicable
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
 
 ## Plan Document Header
 
-**Every plan MUST start with this header:**
+Every plan must include the relevant review blocks before implementation tasks:
 
 ```markdown
-# [Feature Name] Implementation Plan
-
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
-**Goal:** [One sentence describing what this builds]
-
-**Architecture:** [2-3 sentences about approach]
-
-**Tech Stack:** [Key technologies/libraries]
-
-**Spec:** [path to the spec/design doc this plan implements — the plan argues from the spec, so the spec travels with it; executors read both]
-
-## MVL Contract
-
-**Target user / JTBD:** [who is trying to accomplish what]
-**Value hypothesis:** [what useful change should happen]
-**Smallest real journey:** [entry point -> meaningful action -> visible/useful outcome]
-**Trial inputs:** [realistic fixtures/scenarios]
-**Technical metrics:** [quality/reliability/latency/cost/etc.]
-**UX metrics:** [completion/effort/confusion/correction/usefulness/trust/etc.]
-**Feedback capture:** [telemetry, explicit feedback, corrections, traces]
-**Improvement levers:** [what can change after evidence]
-**Re-test surface:** [repeatable benchmark/user journey]
-**Stopping criterion:** [what closes this iteration]
-
 ## IA-Before-UI Review
 
 **Applicability:** REQUIRED | NOT_APPLICABLE
-**User task:** [task supported by the changed surface]
-**Primary domain objects:** [user-facing concepts]
-**Canonical semantic owners:** [one owner per major state/action]
-**Proposed region hierarchy:** [shell/workbench/stage/drawer/etc.]
-**Ordinary Fast-to-Aha path:** [intent/context -> first useful result]
-**States/recovery ownership:** [loading/empty/stale/forbidden/error/retry/etc.]
-**Shared primitives/patterns reused:** [existing design-system owners]
-**Responsive constraints:** [allocated width/height/keyboard/localization/reduced motion]
-**Verification evidence:** [deterministic/browser proof]
+**User task:** ...
+**Primary domain objects:** ...
+**Canonical semantic owners:** ...
+**Proposed region hierarchy:** ...
+**Fast-to-Aha path:** ...
+**States/recovery ownership:** ...
+**Responsive constraints:** ...
+**Verification evidence:** ...
 **Stop conditions checked:** PASS | BLOCKED
+**Blocking findings:** none | ...
 **Disposition:** GO_FOR_UI | REVISE_IA | NOT_APPLICABLE
-
-## Prerequisites and Dependencies
-
-**New dependencies:** [exact package/tool/service + version/pin, or none]
-**Declaration files:** [pyproject/package.json/lockfile/Docker/etc.]
-**Install/setup commands:** [exact commands]
-**Configuration:** [required non-secret settings/env names]
-**Compatibility constraints:** [runtime/platform/version assumptions]
-**Dependency verification:** [exact smoke/contract test command + expected result]
-**Replaced dependencies / cleanup:** [if applicable]
 
 ## Verification Impact Analysis
 
 **Source:** codebase-memory-mcp | equivalent | manual fallback
-**Indexed:** [true/false/not-applicable]
-**Changed surfaces:** [symbols/files/routes/schema/config]
-**Direct consumers:** [callers/consumers]
-**Affected boundaries:** [DI/routes/persistence/events/trust/UI/etc.]
-**User paths at risk:** [if any]
-**Graph evidence:** [relevant search_graph / trace_path / query_graph findings]
+**Changed surfaces:** ...
+**Direct consumers:** ...
+**Affected boundaries:** ...
+**User paths at risk:** ...
 **Uncertainty:** low | medium | high
 **Radius:** R0 | R1 | R2 | R3
-**Selected tests:** [smallest sufficient falsification surface]
-**Omitted broad suites:** [suite + unaffected/redundant/deferred-to-D2 reason]
-
-## Integration Contract
-
-**Required scope:** local | focused_integration | real_component_integration | vertical_e2e
-**Real components required:** [changed/relied-upon in-repo components that must appear real in integration]
-**Permitted substitutes:** [true external/nondeterministic boundaries only]
-**Forbidden mocks:** [internal components on the completion path]
-**Existing tests to run:** [focused existing coverage]
-**New tests required:** [only gaps not already covered]
-**UI test:** [required evidence lane and affected path, per the browser selection/lifecycle contract]
-
-## Global Constraints
-
-[The spec's project-wide requirements — version floors, dependency limits, naming and copy rules, platform requirements — one line each, with exact values copied verbatim from the spec. Every task's requirements implicitly include this section.]
-
----
+**Selected tests:** ...
+**Omitted broad suites:** ...
 ```
 
-For maintenance/non-product work, replace the MVL Contract block with `MVL: not applicable — <reason>`. Keep `IA-Before-UI Review` as `NOT_APPLICABLE` when there is no material IA change; still declare prerequisites/dependencies, perform Verification Impact Analysis, and keep the Integration Contract whenever production wiring may be affected.
-
-## Task Structure
-
-````markdown
-### Task N: [Component Name]
-
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
-
-**Interfaces:**
-- Consumes: [what this task uses from earlier tasks — exact signatures]
-- Produces: [what later tasks rely on — exact function names, parameter and return types. A task's implementer sees only their own task; this block is how they learn the names and types neighboring tasks use.]
-
-**MVL contribution:** [which part of the smallest real journey / metric / feedback surface this task enables]
-
-**Prerequisites:** [earlier dependency/setup task(s) that must already be green]
-
-- [ ] **Step 1: Write the failing test**
-
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
-```
-
-- [ ] **Step 2: Run test to verify it fails**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
-
-- [ ] **Step 3: Write minimal implementation**
-
-```python
-def function(input):
-    return expected
-```
-
-- [ ] **Step 4: Run test to verify it passes**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
-```
-````
-
-### Dependency Prerequisite Task Shape
-
-When a new dependency is load-bearing, use an explicit early task like:
-
-````markdown
-### Task 0: Install and Verify [Dependency]
-
-**Files:**
-- Modify: `pyproject.toml` / `package.json` / relevant manifest
-- Modify: lockfile
-- Test: `tests/integration/test_<dependency>_availability.py` (or equivalent)
-
-- [ ] **Step 1: Add/pin the dependency**
-- [ ] **Step 2: Install/sync the environment**
-- [ ] **Step 3: Write the smallest real smoke/contract test for the API the feature will rely on**
-- [ ] **Step 4: Run the dependency test and verify it passes with the real package/service**
-- [ ] **Step 5: Run the existing baseline tests affected by the dependency change**
-- [ ] **Step 6: Commit manifest + lockfile + dependency verification together**
-````
-
-Later tasks may rely on this prerequisite only after its verification is green.
-
-## Mandatory Closure Tasks for Product Features
-
-The plan must contain only the closure work justified by the observed impact radius plus the product-learning work required by the MVL:
-
-1. **IA-before-UI** — required before production UI implementation when material user-facing structure changes; `REVISE_IA` blocks coding until structural stop conditions are repaired.
-2. **Prerequisite/dependency verification** — required for every new load-bearing package/service/tool before feature consumers execute.
-3. **TDD/local behavior** — always for changed behavior.
-4. **Focused or real-component integration** — only when R1/R2/R3 impact requires it; exercise the smallest affected production path with no internal completion-path mocks.
-5. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md).
-6. **Vertical/E2E** — when R3 impact or the MVL's smallest real journey crosses architectural boundaries.
-7. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
-8. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.
-9. **Improvement cycle** — make at least one evidence-driven change when the iteration requires MVL closure.
-10. **Comparable re-test** — rerun the same evaluation surface and record before/after evidence.
-
-A plan that ends after technical verification is implementation-complete, not MVL-complete.
-
-## No Placeholders
-
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
-- "TBD", "TODO", "implement later", "fill in details"
-- "Install dependencies" without exact package/version/declaration/install/verification details
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" without a concrete behavior/assertion and test location or an exact existing test reference
-- "Similar to Task N" without an exact reference and the differences this task must implement
-- Steps too vague to execute; use concrete actions and acceptance criteria, with inline code where needed to resolve ambiguity
-- References to types, functions, or methods not defined in a task or an exact cited source/specification
+For non-UI work, IA may be `NOT_APPLICABLE`, but VIA still selects test scope. For material UI work, `GO_FOR_UI` must precede implementation. `REVISE_IA` blocks production UI coding but does not imply a human approval ceremony.
 
 ## Self-Review
 
-After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+After writing the plan, check:
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+1. Spec coverage.
+2. MVL continuity.
+3. Dependency readiness.
+4. IA-before-UI applicability and disposition.
+5. Verification Impact Analysis and R0–R3 scope.
+6. Integration credibility.
+7. Placeholder scan.
+8. Type consistency.
 
-**2. MVL continuity:** Can you trace the same target user, smallest journey, trial inputs, metrics, feedback surface, improvement lever, and re-test criterion from the plan header into concrete tasks and closure evidence? If not, the feature-development unit fragmented during planning.
-
-**3. IA readiness:** For material user-facing IA changes, is the IA-before-UI review complete with one semantic owner per major concept/action, explicit state/recovery ownership, responsive constraints, verification evidence, and `GO_FOR_UI` before implementation tasks? For non-IA work, is `NOT_APPLICABLE` justified rather than omitted?
-
-**4. Dependency readiness:** For every new package/service/tool, is there an exact declaration/install path, version/pin, compatibility note, and executable smoke/contract verification before consuming feature tasks begin?
-
-**5. Verification impact:** Did you identify concrete affected consumers/boundaries using adequate graph or targeted source evidence, without inferring scope from diff size or forcing unnecessary indexing? Does the selected test surface match R0/R1/R2/R3, and are omitted broad suites explicitly justified?
-
-**6. Integration credibility:** Are existing focused tests reused before adding overlapping tests? For R1+, do affected internal production components appear real where required? For UI work, is real-browser evidence planned for the affected behavior?
-
-**7. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
-
-**8. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
-
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement, dependency prerequisite, IA contract item, or MVL contract item with no task/evidence path, add it.
+If a material UI change lacks an IA review, or VIA is missing/unsupported, the plan is incomplete.
 
 ## Execution Handoff
 
-After saving the plan, continue with the execution approach already authorized by the user. If no approach has been selected and the choice materially affects coordination, offer:
-
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
-
-**1. Subagent-Driven (recommended)** - dispatch bounded independent work and continue automatically through machine-verifiable review boundaries
-
-**2. Inline Execution** - execute continuously in this session using executing-plans; checkpoints are evidence boundaries, not human pauses
-
-**Which approach?"**
-
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Delegate bounded implementation units; preserve the sprint's integration and review cadence rather than turning every implementation step into a fresh handoff
-- The controller owns MVL continuity and prerequisite readiness across task boundaries; individual implementers do not redefine the feature contract or install undeclared dependencies ad hoc.
-
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Execute continuously through machine-verifiable checkpoints; involve the user only when the Human Judgment Necessity Test is met
-- Preserve the MVL Contract, IA-Before-UI Review, Prerequisites and Dependencies, Verification Impact Analysis, and Integration Contract unless new codebase evidence or a spec revision requires an explicit update.
+After saving the plan, continue with the execution approach already authorized by the user. Machine-verifiable gates advance automatically; involve the user only when the Human Judgment Necessity Test is met.

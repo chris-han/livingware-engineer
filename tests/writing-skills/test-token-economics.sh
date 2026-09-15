@@ -4,6 +4,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 CREATOR="$ROOT/skills/writing-skills/SKILL.md"
 REVIEW="$ROOT/skills/skill-review/SKILL.md"
+EXECUTING="$ROOT/skills/executing-plans/SKILL.md"
+EXECUTING_ROUTING="$ROOT/skills/executing-plans/references/workflow-routing.md"
 TOKEN_REF="$ROOT/docs/skill-token-economics.md"
 ARCH_REF="$ROOT/docs/skill-runtime-architecture.md"
 LEARNING_REF="$ROOT/skills/skill-review/references/budgeted-behavioral-learning.md"
@@ -17,10 +19,10 @@ require() {
   pass "$label"
 }
 
-[[ -f "$TOKEN_REF" ]] || fail "canonical token-economics reference exists"
-[[ -f "$ARCH_REF" ]] || fail "canonical layered runtime architecture exists"
-[[ -f "$LAYERED_EVAL" ]] || fail "layered evaluation reference exists"
-pass "canonical architecture/evaluation references exist"
+for file in "$TOKEN_REF" "$ARCH_REF" "$LAYERED_EVAL" "$EXECUTING_ROUTING"; do
+  [[ -f "$file" ]] || fail "required layered architecture/reference missing: $file"
+done
+pass "canonical architecture/evaluation/workflow references exist"
 
 require "$CREATOR" "skill is a discoverable entry package for a reusable, context-conditioned workflow" "creator defines skill as workflow entry package"
 require "$CREATOR" "TOOL / SCRIPT / TEST" "creator routes deterministic mechanics to executable owners"
@@ -35,6 +37,13 @@ require "$REVIEW" "references/layered-evaluation.md" "review routes detailed eva
 require "$REVIEW" "simulation narrows search; real execution remains the judge" "review preserves simulation evidence boundary"
 require "$REVIEW" "../../docs/skill-runtime-architecture.md" "review points to canonical layered architecture"
 require "$REVIEW" "../../docs/skill-token-economics.md" "review points to canonical token economics"
+
+require "$EXECUTING" "references/workflow-routing.md" "executing-plans routes transition topology to workflow reference"
+require "$EXECUTING" "unexplained failure -> `systematic-debugging`" "executing-plans delegates unresolved diagnosis"
+require "$EXECUTING" "authorized changed behavior -> `test-driven-development`" "executing-plans delegates implementation behavior"
+require "$EXECUTING" "completion/correctness claim -> `verification-before-completion`" "executing-plans delegates completion claims"
+require "$EXECUTING_ROUTING" "PLAN_REVIEW" "execution workflow owns explicit state topology"
+require "$EXECUTING_ROUTING" "Do not preload those skills before their entry conditions are reached." "execution workflow preserves current-state loading"
 
 require "$TOKEN_REF" "routing/discovery context" "token model measures routing context"
 require "$TOKEN_REF" "selected workflow context" "token model measures selected workflow context"

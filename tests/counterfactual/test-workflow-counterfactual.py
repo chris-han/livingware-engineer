@@ -41,6 +41,23 @@ def make_replay_payload(base: dict) -> dict:
     return payload
 
 
+def make_all_metrics_fixed(payload: dict) -> None:
+    for alt in payload["alternatives"].values():
+        for transition in alt["transitions"]:
+            for metric in transition["metrics"].values():
+                if metric["distribution"] == "triangular":
+                    value = metric["mode"]
+                    provenance = metric["provenance"]
+                    source_ref = metric["source_ref"]
+                    metric.clear()
+                    metric.update({
+                        "distribution": "fixed",
+                        "value": value,
+                        "provenance": provenance,
+                        "source_ref": source_ref,
+                    })
+
+
 class CounterfactualTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -67,6 +84,7 @@ class CounterfactualTests(unittest.TestCase):
         p["mode"] = "REPLAY"
         p.pop("seed", None)
         p["rollouts"] = 1
+        make_all_metrics_fixed(p)
         rc, _, body = run_payload(p)
         self.assertEqual(rc, 2)
         self.assertIn("replay requires probability 1.0", body["error"])
@@ -79,12 +97,7 @@ class CounterfactualTests(unittest.TestCase):
 
     def test_valid_replay_has_non_observed_claim_scope(self):
         p = make_replay_payload(self.base)
-        for alt in p["alternatives"].values():
-            for t in alt["transitions"]:
-                for metric in t["metrics"].values():
-                    if metric["distribution"] == "triangular":
-                        metric.clear()
-                        metric.update({"distribution": "fixed", "value": 10, "provenance": "REPLAYED", "source_ref": "replay:test"})
+        make_all_metrics_fixed(p)
         rc, _, body = run_payload(p)
         self.assertEqual(rc, 0)
         self.assertEqual(body["claim_scope"], "deterministic replay; not new observed evidence")

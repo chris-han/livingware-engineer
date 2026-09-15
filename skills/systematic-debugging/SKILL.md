@@ -41,7 +41,6 @@ Load only what the current state needs:
 - `root-cause-tracing.md` for deep call/data-flow tracing;
 - `condition-based-waiting.md` for timing/race failures;
 - `defense-in-depth.md` only after root cause is known and layered validation is justified;
-- `../test-driven-development/remote-cdp-browser-lifecycle.md` for browser/CDP capture-state problems;
-- `references/detailed-playbook.md` only when the compact contract is insufficient for a complex, repeated, or high-risk investigation.
+- `references/detailed-playbook.md` only when the compact contract is insufficient for a complex, repeated, browser-specific, or high-risk investigation.
 
 Do not preload a future implementation or completion workflow while diagnosis is unresolved.

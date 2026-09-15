@@ -39,8 +39,10 @@ Target user + job + value hypothesis
   -> smallest real user journey
   -> realistic trial inputs
   -> prerequisites / dependencies
+  -> IA-before-UI when material user-facing structure changes
   -> implementation
   -> TDD
+  -> Verification Impact Analysis
   -> real-component integration when impact radius requires it
   -> real-browser UI verification when applicable
   -> technical + UX measurement
@@ -68,9 +70,17 @@ These are not a separate skill or optional appendix. They are part of the plan c
 
 For non-product maintenance work where no user-learning loop exists, state `MVL: not applicable — <reason>` rather than inventing one.
 
+## IA Before UI
+
+Before production UI implementation, determine whether the work introduces or materially changes user-facing information architecture. If it does, apply `docs/ia-before-ui.md` and record an `IA-Before-UI Review` before implementation tasks begin.
+
+The review must establish the user task/domain model, canonical semantic owners, region hierarchy, Fast-to-Aha path, state/recovery ownership, action semantics, responsive constraints, shared-pattern reuse, and planned verification evidence. Its disposition is `GO_FOR_UI` only when all stop conditions are clear; unresolved duplicated ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, or responsive ambiguity yields `REVISE_IA` and blocks production UI implementation until the IA is repaired.
+
+This is a machine-verifiable structural engineering gate, not a default human-approval checkpoint. Pure visual-token fixes, renderer-performance work, implementation-only refactors, and accessibility corrections with no IA change may record `NOT_APPLICABLE` with a brief reason.
+
 ## Impact Radius Before Test Scope
 
-Do **not** choose integration/E2E scope from diff size or intuition alone.
+Do **not** choose integration/E2E scope from diff size or intuition alone. Apply Verification Impact Analysis after the intended implementation surface is known and before choosing integration/browser/E2E scope.
 
 Use relationship-aware discovery when it materially improves the impact assessment. Prefer an available current code graph; check coverage and fall back to targeted source for gaps. Do not make whole-repository indexing a prerequisite for a bounded change. Useful graph tools include:
 
@@ -91,9 +101,9 @@ R2 multi-component   -> real-component integration through affected path
 R3 user/cross-boundary/UI -> vertical/E2E + real-browser verification for UI
 ```
 
-Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0.
+Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0. Preserve D0 deterministic invariants, D1 local semantic sentinels, and D2 broad semantic audits as separate cadences; do not promote every D1 change to D2.
 
-Read `../test-driven-development/impact-radius-testing.md` for the detailed policy.
+Read `../test-driven-development/impact-radius-testing.md` and `../../docs/verification-impact-analysis-v1.md` for the detailed policy.
 
 ## Dependency and Prerequisite Contract
 
@@ -224,6 +234,21 @@ Use the existing plan/task tracker as the coordination record. Test output and v
 **Re-test surface:** [repeatable benchmark/user journey]
 **Stopping criterion:** [what closes this iteration]
 
+## IA-Before-UI Review
+
+**Applicability:** REQUIRED | NOT_APPLICABLE
+**User task:** [task supported by the changed surface]
+**Primary domain objects:** [user-facing concepts]
+**Canonical semantic owners:** [one owner per major state/action]
+**Proposed region hierarchy:** [shell/workbench/stage/drawer/etc.]
+**Ordinary Fast-to-Aha path:** [intent/context -> first useful result]
+**States/recovery ownership:** [loading/empty/stale/forbidden/error/retry/etc.]
+**Shared primitives/patterns reused:** [existing design-system owners]
+**Responsive constraints:** [allocated width/height/keyboard/localization/reduced motion]
+**Verification evidence:** [deterministic/browser proof]
+**Stop conditions checked:** PASS | BLOCKED
+**Disposition:** GO_FOR_UI | REVISE_IA | NOT_APPLICABLE
+
 ## Prerequisites and Dependencies
 
 **New dependencies:** [exact package/tool/service + version/pin, or none]
@@ -234,7 +259,7 @@ Use the existing plan/task tracker as the coordination record. Test output and v
 **Dependency verification:** [exact smoke/contract test command + expected result]
 **Replaced dependencies / cleanup:** [if applicable]
 
-## Impact Radius
+## Verification Impact Analysis
 
 **Source:** codebase-memory-mcp | equivalent | manual fallback
 **Indexed:** [true/false/not-applicable]
@@ -243,7 +268,10 @@ Use the existing plan/task tracker as the coordination record. Test output and v
 **Affected boundaries:** [DI/routes/persistence/events/trust/UI/etc.]
 **User paths at risk:** [if any]
 **Graph evidence:** [relevant search_graph / trace_path / query_graph findings]
+**Uncertainty:** low | medium | high
 **Radius:** R0 | R1 | R2 | R3
+**Selected tests:** [smallest sufficient falsification surface]
+**Omitted broad suites:** [suite + unaffected/redundant/deferred-to-D2 reason]
 
 ## Integration Contract
 
@@ -262,7 +290,7 @@ Use the existing plan/task tracker as the coordination record. Test output and v
 ---
 ```
 
-For maintenance/non-product work, replace the MVL Contract block with `MVL: not applicable — <reason>` but still declare prerequisites/dependencies, perform Impact Radius assessment, and keep the Integration Contract whenever production wiring may be affected.
+For maintenance/non-product work, replace the MVL Contract block with `MVL: not applicable — <reason>`. Keep `IA-Before-UI Review` as `NOT_APPLICABLE` when there is no material IA change; still declare prerequisites/dependencies, perform Verification Impact Analysis, and keep the Integration Contract whenever production wiring may be affected.
 
 ## Task Structure
 
@@ -341,15 +369,16 @@ Later tasks may rely on this prerequisite only after its verification is green.
 
 The plan must contain only the closure work justified by the observed impact radius plus the product-learning work required by the MVL:
 
-1. **Prerequisite/dependency verification** — required for every new load-bearing package/service/tool before feature consumers execute.
-2. **TDD/local behavior** — always for changed behavior.
-3. **Focused or real-component integration** — only when R1/R2/R3 impact requires it; exercise the smallest affected production path with no internal completion-path mocks.
-4. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md).
-5. **Vertical/E2E** — when R3 impact or the MVL's smallest real journey crosses architectural boundaries.
-6. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
-7. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.
-8. **Improvement cycle** — make at least one evidence-driven change when the iteration requires MVL closure.
-9. **Comparable re-test** — rerun the same evaluation surface and record before/after evidence.
+1. **IA-before-UI** — required before production UI implementation when material user-facing structure changes; `REVISE_IA` blocks coding until structural stop conditions are repaired.
+2. **Prerequisite/dependency verification** — required for every new load-bearing package/service/tool before feature consumers execute.
+3. **TDD/local behavior** — always for changed behavior.
+4. **Focused or real-component integration** — only when R1/R2/R3 impact requires it; exercise the smallest affected production path with no internal completion-path mocks.
+5. **Real-browser UI verification** — mandatory when frontend/UI behavior is affected; follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md).
+6. **Vertical/E2E** — when R3 impact or the MVL's smallest real journey crosses architectural boundaries.
+7. **Baseline measurement** — run the declared technical and UX evaluation surface on realistic inputs.
+8. **Feedback capture verification** — prove the planned telemetry/feedback/correction surface actually records useful evidence.
+9. **Improvement cycle** — make at least one evidence-driven change when the iteration requires MVL closure.
+10. **Comparable re-test** — rerun the same evaluation surface and record before/after evidence.
 
 A plan that ends after technical verification is implementation-complete, not MVL-complete.
 
@@ -372,17 +401,19 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **2. MVL continuity:** Can you trace the same target user, smallest journey, trial inputs, metrics, feedback surface, improvement lever, and re-test criterion from the plan header into concrete tasks and closure evidence? If not, the feature-development unit fragmented during planning.
 
-**3. Dependency readiness:** For every new package/service/tool, is there an exact declaration/install path, version/pin, compatibility note, and executable smoke/contract verification before consuming feature tasks begin?
+**3. IA readiness:** For material user-facing IA changes, is the IA-before-UI review complete with one semantic owner per major concept/action, explicit state/recovery ownership, responsive constraints, verification evidence, and `GO_FOR_UI` before implementation tasks? For non-IA work, is `NOT_APPLICABLE` justified rather than omitted?
 
-**4. Impact radius:** Did you identify concrete affected consumers/boundaries using adequate graph or targeted source evidence, without inferring scope from diff size or forcing unnecessary indexing?
+**4. Dependency readiness:** For every new package/service/tool, is there an exact declaration/install path, version/pin, compatibility note, and executable smoke/contract verification before consuming feature tasks begin?
 
-**5. Integration credibility:** Does required test scope match R0/R1/R2/R3? Are existing focused tests reused before adding overlapping tests? For R1+, do affected internal production components appear real where required?
+**5. Verification impact:** Did you identify concrete affected consumers/boundaries using adequate graph or targeted source evidence, without inferring scope from diff size or forcing unnecessary indexing? Does the selected test surface match R0/R1/R2/R3, and are omitted broad suites explicitly justified?
 
-**6. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+**6. Integration credibility:** Are existing focused tests reused before adding overlapping tests? For R1+, do affected internal production components appear real where required? For UI work, is real-browser evidence planned for the affected behavior?
 
-**7. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+**7. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement, dependency prerequisite, or MVL contract item with no task/evidence path, add it.
+**8. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+
+If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement, dependency prerequisite, IA contract item, or MVL contract item with no task/evidence path, add it.
 
 ## Execution Handoff
 
@@ -404,4 +435,4 @@ After saving the plan, continue with the execution approach already authorized b
 **If Inline Execution chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
 - Execute continuously through machine-verifiable checkpoints; involve the user only when the Human Judgment Necessity Test is met
-- Preserve the MVL Contract, Prerequisites and Dependencies, Impact Radius, and Integration Contract unless new codebase evidence or a spec revision requires an explicit update.
+- Preserve the MVL Contract, IA-Before-UI Review, Prerequisites and Dependencies, Verification Impact Analysis, and Integration Contract unless new codebase evidence or a spec revision requires an explicit update.

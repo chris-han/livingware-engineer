@@ -9,7 +9,7 @@ description: Use only when a correctness, completion, integration, merge, or rel
 
 Entry: a correctness, completion, integration, merge, or release claim is imminent.
 Exit: the claim is supported, falsified, or narrowed to what the evidence establishes.
-An unexplained failure returns to debugging; a known implementation gap returns to implementation/TDD. Do not keep verification active during ordinary implementation loops.
+If evidence reveals an unexplained failure or a known implementation gap, exit this workflow and hand off only the compact state needed by the next appropriate workflow. Do not keep verification active during ordinary implementation loops.
 
 ## Core Contract
 

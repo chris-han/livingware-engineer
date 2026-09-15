@@ -9,10 +9,19 @@ on:
       - 'docs/skill-token-economics.md'
       - 'skills/**'
       - 'scripts/simulate-workflow-counterfactual.py'
+      - 'scripts/bump-version.sh'
       - 'tests/counterfactual/**'
       - 'tests/codex/**'
       - 'tests/writing-skills/**'
       - 'tests/systematic-debugging/**'
+      - '.version-bump.json'
+      - 'package.json'
+      - '.codex-plugin/plugin.json'
+      - '.claude-plugin/plugin.json'
+      - '.cursor-plugin/plugin.json'
+      - '.devin-plugin/plugin.json'
+      - '.kimi-plugin/plugin.json'
+      - 'gemini-extension.json'
       - '.github/workflows/layered-runtime-ci.yml'
   pull_request:
     paths:
@@ -21,10 +30,20 @@ on:
       - 'docs/skill-token-economics.md'
       - 'skills/**'
       - 'scripts/simulate-workflow-counterfactual.py'
+      - 'scripts/bump-version.sh'
       - 'tests/counterfactual/**'
       - 'tests/codex/**'
       - 'tests/writing-skills/**'
       - 'tests/systematic-debugging/**'
+      - '.version-bump.json'
+      - 'package.json'
+      - '.codex-plugin/plugin.json'
+      - '.claude-plugin/plugin.json'
+      - '.cursor-plugin/plugin.json'
+      - '.devin-plugin/plugin.json'
+      - '.kimi-plugin/plugin.json'
+      - 'gemini-extension.json'
+      - '.github/workflows/layered-runtime-ci.yml'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +54,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Version manifest consistency
+        run: bash scripts/bump-version.sh --check
       - name: Progressive skill loading
         run: bash tests/codex/test-progressive-skill-loading.sh
       - name: Layered skill and token economics

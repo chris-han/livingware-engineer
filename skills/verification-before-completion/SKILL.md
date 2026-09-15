@@ -41,9 +41,6 @@ Use broader graph/integration/browser discovery only when the claim itself cross
 
 ## Progressive Disclosure
 
-- Use `../test-driven-development/impact-radius-testing.md` when the verification radius is uncertain.
-- Use `../test-driven-development/remote-cdp-browser-lifecycle.md` only for browser-render/interaction claims.
-- Use the plan's MVL contract only when the plan explicitly declares one.
-- Load `references/detailed-playbook.md` only for complex, high-risk, delegated, architectural, or release claims where the compact contract is insufficient.
+Keep auxiliary procedures behind the detailed playbook unless the current claim specifically requires them. Load `references/detailed-playbook.md` only for complex, high-risk, delegated, architectural, browser-specific, or release claims where the compact contract is insufficient. Use the plan's MVL contract only when the plan explicitly declares one.
 
 Evidence decides the claim; verification is not a reason to generate extra reports or stop for approval when no human judgment is required.

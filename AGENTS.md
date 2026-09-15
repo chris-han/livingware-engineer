@@ -14,6 +14,7 @@ Livingware Engineer optimizes for trustworthy software with the least total work
 8. **Optimize the whole development loop.** Optimize total engineering cost, not individual tool calls. Consider developer time, model turns, token consumption, test runtime, context reconstruction, duplicated investigation, review churn, and future maintenance. The cheapest model, smallest test, shortest plan, or fewest lines of code is not automatically the cheapest overall solution.
 9. **Budget framework learning.** Behavioral evals and workflow-learning runs are maintenance work, not default execution steps or CI gates. Never start them autonomously. Suggest a targeted learning run only when repeated materially independent evidence plausibly points to a shared workflow rule and one concrete policy decision can be tested, except for a clearly framework-level high-impact event. Execution requires explicit human initiation and smallest-relevant-scope first.
 10. **Route incidents to the smallest durable owner.** After root-cause analysis, keep an implementation defect in its reproducer/regression test and fix; update an existing contract only when that contract is wrong or ambiguous; reopen intent/MVL/spec only when evidence shows the requirement, architecture, or value hypothesis itself must change. Do not create incident reports or new planning artifacts by default.
+11. **Attribute before adapting.** Separate capability/tool defects, environment defects, product implementation defects, routing errors, workflow-structure errors, and policy errors before changing the framework. Learning/change authority follows the smallest owning layer. Replay, simulation, inference, or assumptions may narrow an experiment but never substitute for real observed evidence when an empirical claim requires it.
 
 Operating rule:
 
@@ -29,4 +30,6 @@ These principles never authorize weakening correctness, architecture, safety/sec
 - This repository is a zero-dependency plugin; dependency exceptions and contribution eligibility are defined in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Before preparing a pull request or harness contribution, read [CONTRIBUTING.md](CONTRIBUTING.md) and the PR template. Existing human-review and target-branch requirements remain binding.
 - For browser work, read [the browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md). It owns evidence lanes, startup, process ownership, and cleanup.
-- Use the task-sensitive skill router. Honor explicit user/repository requirements over generic workflow defaults.
+- Use native task-sensitive skill discovery where the harness provides it. After entry, route by current workflow state and observed evidence; do not add a second mandatory meta-router.
+- The layered runtime and counterfactual-evaluation architecture is owned by [docs/skill-runtime-architecture.md](docs/skill-runtime-architecture.md). Keep detailed routing/eval mechanics out of this constitutional file.
+- Honor explicit user/repository requirements over generic workflow defaults.

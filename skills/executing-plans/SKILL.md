@@ -1,163 +1,87 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute continuously through its authorized stopping criterion, involving the user only when judgment is genuinely necessary
+description: Use when a written implementation plan is ready to execute continuously through its authorized stopping criterion, involving the user only when judgment is genuinely necessary.
 ---
 
 # Executing Plans
 
-## Overview
+Load the authoritative plan/spec, preserve its contract across task boundaries, and execute continuously until the declared stopping criterion is satisfied or a genuine non-delegable human decision is required.
 
-Load plan, review critically, execute all tasks, preserve the feature's MVL contract across task boundaries, and report the actual evidence state when complete.
+## Lifecycle
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+Entry: a written plan has been selected for implementation.
+Exit: the plan's authorized stopping criterion is supported by evidence, or the Human Judgment Necessity Test is met.
 
-Honor the already authorized execution mode. Use subagent-driven-development when delegation is selected and useful; tool availability alone does not override an inline execution choice.
+A completed task, sprint exit, review, integration slice, or list of remaining gates is progress evidence, not a stop condition. Continue with the next dependency-ready state.
 
-**Continuous execution:** A verified task, sprint exit, review, integration slice, or list of remaining gates is progress evidence, not a stop condition. Record or reuse the evidence and immediately execute the next dependency-ready item. Continue until the plan's stopping criterion is satisfied or the Human Judgment Necessity Test below is met.
+Never start implementation directly on `main`/`master` without explicit user consent. Preserve any stronger repository-specific branch/worktree rule.
 
 ## Human Judgment Necessity Test
 
-Apply standing user delegation first. Do not ask the user to re-approve ordinary technical choices, phase transitions, review outcomes, implementation gates, refactors, test runs, browser checks, or other in-scope engineering work they have already delegated.
+Apply standing user delegation first. Stop for human judgment only when all three are true:
 
-Stop for human judgment only when all three are true:
 1. a real decision is required before the next action can proceed;
-2. the decision is not already delegated and cannot be resolved from the binding spec/policy, observed evidence, established conventions, executable checks, or a safe reversible default; and
-3. choosing wrong has a material, not-cheaply-reversible consequence, such as genuinely subjective product intent, a non-delegable legal/compliance determination, sensitive-data disclosure, irreversible/destructive action, or consequential external/production state change.
+2. the decision is not already delegated and cannot be resolved from binding plan/spec/policy, observed evidence, established convention, executable checks, or a safe reversible default; and
+3. choosing wrong has a material, not-cheaply-reversible consequence.
 
-Before asking, state the exact decision, viable options, material consequence, and why delegation plus evidence or reversibility cannot resolve it. Otherwise make the smallest reversible in-scope ruling and continue. Remaining work, remaining gates, a completed checkpoint/review, or ordinary technical uncertainty never satisfy this test by themselves.
+Examples include genuinely subjective product intent, a non-delegable legal/compliance determination, sensitive-data disclosure, irreversible/destructive action, or consequential external/production state change.
 
-## MVL Continuity Rule
+Ordinary implementation ambiguity, failed tests, review findings, unavailable local fixtures, phase transitions, or incomplete gates do not satisfy this test by themselves.
 
-For product features, the plan's **MVL Contract is binding across the whole execution**. It is not a task-specific note and must not be silently narrowed or reinterpreted while implementing individual components.
+## Plan and MVL continuity
 
-Before coding, identify from the plan:
+Treat the plan as authoritative dynamic context. Preserve its target/stopping criterion, prerequisites, dependency contract, impact/integration scope, required real components, permitted substitutes, forbidden mocks, and authority boundaries.
 
-- target user / job-to-be-done
-- value hypothesis
-- smallest real user journey
-- realistic trial inputs
-- technical and UX metrics
-- feedback/telemetry surface
-- improvement levers
-- re-test surface and stopping criterion
-- Prerequisites and Dependencies: required packages/tools/services, exact install/setup, compatibility assumptions, dependency verification
-- Impact Radius and Integration Contract: real components, permitted substitutes, forbidden mocks, UI/browser requirement
+For product features, preserve the same MVL target user/job, value hypothesis, smallest real journey, trial inputs, metrics, feedback surface, improvement levers, and comparable re-test through completion. Local task success is not permission to redefine the feature contract.
 
-Every task should advance that same loop. Local task success is not permission to mark the feature complete.
+Do not copy those fields into a second ledger. Reference the plan and existing repository evidence.
 
-## Dependency Readiness Rule
+## Dependency boundary
 
-A downstream feature task may not rely on a new package, service, runtime, database, CLI, plugin, browser, system library, or other prerequisite until the plan's dependency gate is satisfied.
+A consumer must not rely on a new load-bearing dependency until the plan's declaration/install/smoke-contract gate is satisfied. If execution discovers a genuinely new dependency or contradicts the declared contract, return to the plan/prerequisite state before consumers proceed.
 
-For each new load-bearing dependency:
+A successful install alone is not readiness; exercise the minimum real API/behavior the plan relies on.
 
-1. verify the dependency is explicitly declared in the plan
-2. add/pin it in the repository-owned manifest or setup surface
-3. install/sync it using the exact planned command
-4. run the planned smoke/contract test against the real dependency or real in-repo adapter
-5. run any baseline tests affected by the dependency change
-6. only then execute feature code that consumes it
+## Dynamic workflow routing
 
-Do not install undeclared dependencies ad hoc just because an implementation task needs them. If a dependency is discovered mid-execution, update the plan/prerequisite contract first (or record a ruling consistent with the spec when your execution mode permits), then install and verify it before proceeding.
-
-A successful package install is not proof of readiness. The dependency gate is green only when the minimal real API/behavior the feature relies on has been exercised successfully.
-
-## The Process
-
-### Step 1: Load and Review Plan
-1. Use superpowers:using-git-worktrees to choose in-place or isolated work; preserve an adequate existing workspace.
-2. Read the plan file and its linked spec.
-3. Reference the plan's MVL, dependency, impact, and integration sections from the existing recovery tracker; do not copy them into another ledger.
-4. Review critically for gaps or contradictions.
-5. Confirm the smallest real journey is actually implementable by the listed tasks.
-6. Confirm every load-bearing external or package prerequisite has an explicit declaration/install/verification path before any consumer task.
-7. If the plan has a critical gap, first resolve it from standing delegation, the binding spec, repository evidence, established conventions, or the smallest reversible ruling. Ask the human partner only if the Human Judgment Necessity Test is met. Otherwise, create todos and proceed.
-
-### Step 2: Execute Prerequisites
-
-Before feature consumers run, execute every prerequisite/dependency task in dependency order.
-
-For each dependency prerequisite:
-1. declare/pin it in the correct manifest/configuration surface
-2. install/sync the environment
-3. run the dependency smoke/contract test
-4. verify the expected real capability exists
-5. run the relevant existing baseline tests
-6. record the exact version/pin and evidence
-
-If the dependency itself is an in-repo production component or local service, use its real implementation. Do not fake it to get past the prerequisite gate.
-
-If the dependency is genuinely external or nondeterministic, keep the in-repo adapter/client real and substitute only the remote side when the plan explicitly permits that.
-
-### Step 3: Execute Feature Tasks
-
-For each feature task:
-1. Mark as in_progress.
-2. Confirm its declared prerequisite tasks are green.
-3. Follow each step exactly.
-4. Use TDD for changed behavior.
-5. Run focused step tests and the plan's sprint-exit integration/review gates. Use `verification-before-completion` for scope and unchanged-state result reuse.
-6. Check that the task's output still matches the shared MVL journey and interfaces; do not invent a local alternate flow just to make tests pass.
-7. Do not add a new dependency without first adding/updating its prerequisite contract and verification.
-8. Mark as completed only when its implementation and required evidence are complete.
-
-### Step 4: Prove the Integrated MVL Journey
-
-After component tasks are green, do **not** jump directly to branch completion for product features.
-
-Run the plan's closure evidence in this order as applicable:
-
-1. **Dependency verification** — confirm all load-bearing packages/services/tools remain installed, pinned, and smoke/contract-tested.
-2. **Focused or real-component integration** — according to the plan's R0–R3 impact radius, exercise the affected production path through the required real in-repo components. Internal completion-path mocks are forbidden.
-3. **Real-browser UI verification** — follow the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md). Only an unavailable browser required by the selected evidence lane blocks that gate; Chrome availability does not block Lightpanda behavior verification.
-4. **Vertical/E2E verification** — when R3 impact or the user-value claim crosses multiple architecture boundaries.
-5. **Baseline / technical + UX measurement** — run the declared stable evaluation surface with realistic trial inputs.
-6. **Feedback capture verification** — prove telemetry, corrections, or explicit feedback are actually captured where the plan requires them.
-7. **Improvement + comparable re-test** — when the plan's stopping criterion requires closing a full learning iteration, make the evidence-driven change and rerun the same evaluation surface.
-
-Keep these distinctions explicit:
+Read `references/workflow-routing.md` when the next execution state is non-obvious. It owns the state topology:
 
 ```text
-Task complete           = local deliverable + local evidence
-Dependency ready        = declared/pinned + installed + required API smoke-tested
-Implementation complete = dependency readiness + TDD + required integration + browser/E2E where applicable
-MVL complete            = implementation credibility + measurement + feedback + required improvement + comparable re-test
+plan review -> prerequisites -> task execution -> integration
+           -> MVL closure when applicable -> completion handoff
 ```
 
-### Step 5: Complete Development
+Route by current evidence rather than preloading future workflows:
 
-After all required implementation and MVL closure evidence is satisfied according to the plan's stopping criterion:
-- invoke `verification-before-completion` and verify every claimed gate with fresh evidence
-- then announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, and execute the chosen branch action.
+- unexplained failure -> `systematic-debugging`;
+- authorized changed behavior -> `test-driven-development`;
+- completion/correctness claim -> `verification-before-completion`;
+- UI/browser evidence -> the existing browser lifecycle contract;
+- branch completion -> `finishing-a-development-branch` when supported and authorized.
 
-## When to Stop and Ask for Help
+The owning downstream skill defines its mechanics. Do not duplicate debugging, TDD, verification, browser, review, packaging, or version-sync procedures here.
 
-Stop for the human only when the Human Judgment Necessity Test is met. Missing dependencies, failed tests, unavailable browser/service fixtures, review findings, or incomplete gates are engineering work: debug, install/start what is authorized, repair, choose a reversible fallback where permitted, or continue independent work. They are not human-approval conditions by themselves.
+## Real-path invariant
 
-For ordinary implementation ambiguity, make a documented reversible ruling consistent with the spec and MVL Contract and keep going.
+When the claim crosses component boundaries, prove the smallest affected production path through the real in-repo components that matter. Substitute only genuine external or nondeterministic boundaries where the plan permits it. A mock of the internal architecture cannot prove that architecture is integrated.
 
-## When to Revisit Earlier Steps
+Reuse valid unchanged evidence. Rerun checks invalidated by changed code/config/dependencies/fixtures/environment; do not rerun expensive evidence merely because workflow state changed.
 
-Return to plan review when:
-- the partner updates the plan/spec
-- a new dependency is discovered or an existing dependency version/contract must change
-- the value hypothesis or smallest real journey materially changes
-- integration evidence proves the planned architecture cannot deliver the journey
-- measurement/feedback shows the current iteration needs an explicit plan adjustment before the re-test
+## Compact handoff
 
-A changed MVL contract or load-bearing dependency contract is a plan/spec change, not a local implementation tweak.
+Across workflow transitions carry only:
 
-## Remember
-- Review plan critically first
-- Preserve one MVL contract from planning through integration and re-test
-- Make dependencies explicit before consumers rely on them
-- Install and smoke/contract-test new dependencies before feature implementation
-- Follow task steps exactly
-- Don't skip verifications
-- Internal mocks cannot prove the architecture exists
-- Frontend work requires real-browser evidence
-- Integration/E2E completion is not automatically MVL completion
-- Evidence before claims
-- Never start implementation on main/master without explicit user consent
+```text
+current plan/task state
+binding intended/preserved behavior
+affected surface
+valid evidence already obtained
+unresolved material risk
+next-state entry reason
+```
+
+Do not carry complete prior skill bodies, broad repository dumps, or duplicate test narration.
+
+## Completion
+
+Before claiming fixed/correct/complete/integrated/ready-to-merge/release, enter `verification-before-completion` for the exact claim. After supported completion evidence, use the already-authorized branch action or the branch-completion workflow. Evidence boundaries are not human approval checkpoints.

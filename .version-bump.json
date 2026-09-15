@@ -1,12 +1,20 @@
 {
   "version": "6.8.5",
   "files": [
-    "package.json",
-    ".codex-plugin/plugin.json",
-    ".claude-plugin/plugin.json",
-    ".cursor-plugin/plugin.json",
-    ".devin-plugin/plugin.json",
-    ".kimi-plugin/plugin.json",
-    "gemini-extension.json"
-  ]
+    {"path": ".version-bump.json", "field": "version"},
+    {"path": "package.json", "field": "version"},
+    {"path": ".codex-plugin/plugin.json", "field": "version"},
+    {"path": ".claude-plugin/plugin.json", "field": "version"},
+    {"path": ".cursor-plugin/plugin.json", "field": "version"},
+    {"path": ".devin-plugin/plugin.json", "field": "version"},
+    {"path": ".kimi-plugin/plugin.json", "field": "version"},
+    {"path": "gemini-extension.json", "field": "version"}
+  ],
+  "audit": {
+    "exclude": [
+      "RELEASE-NOTES.md",
+      "CHANGELOG.md",
+      "docs"
+    ]
+  }
 }

@@ -96,7 +96,12 @@ bash tests/codex/test-progressive-skill-loading.sh
 bash tests/writing-skills/test-token-economics.sh
 ```
 
-- [ ] If Codex CLI is available, run one smoke pass of `tests/codex/live-progressive-skill-probe.sh` with one retry and 180s timeout.
+- [ ] If Codex CLI is available, run one smoke pass:
+
+```bash
+CODEX_PROBE_RETRIES=1 CODEX_PROBE_TIMEOUT=180 \
+  bash tests/codex/live-progressive-skill-probe.sh
+```
 
 ## W1 — Canonical layered runtime documentation
 
@@ -107,7 +112,8 @@ bash tests/writing-skills/test-token-economics.sh
 
 - [ ] Verify `docs/skill-runtime-architecture.md` remains the single detailed architecture owner for layer placement, recurrent routing, failure attribution, four cadences, trace semantics, counterfactual modes, and simulation admission boundaries.
 - [ ] Add one compact `AGENTS.md` principle: change/learning authority follows failure attribution and the smallest durable owner; simulation cannot substitute for real evidence where the claim is empirical.
-- [ ] Update token economics to distinguish routing context, selected workflow context, references, tool schema/payload cost, simulation cost, and real re-execution cost. Optimization order is replay -> bounded simulation -> real re-execution when uncertainty justifies it.
+- [ ] Keep `AGENTS.md` constitutional; do not copy the four-clock model or simulator schema into it.
+- [ ] Keep token economics separated into routing context, selected workflow context, references, tool schema/payload cost, simulation cost, and real re-execution cost. Optimization order is existing evidence -> replay -> bounded simulation -> real re-execution when uncertainty justifies it.
 - [ ] Run `bash tests/writing-skills/test-token-economics.sh`.
 
 ## W2 — Skill creator/reviewer enforce layer ownership
@@ -124,12 +130,18 @@ bash tests/writing-skills/test-token-economics.sh
 - [ ] Require high-frequency skills to identify nearest competing state/skill when the boundary is non-obvious.
 - [ ] Extend review rubric with layer-mixing checks and simulation-evidence provenance check.
 - [ ] Assert through existing token-economics tests that creator/reviewer point to the canonical architecture rather than duplicating it.
+- [ ] Run:
+
+```bash
+bash tests/writing-skills/test-token-economics.sh
+bash tests/codex/test-progressive-skill-loading.sh
+```
 
 ## W3 — Separate routing evidence from behavior evidence
 
 **Files:**
 - Modify: `tests/codex/live-progressive-skill-probe.sh`
-- Modify: `docs/skill-token-economics.md`
+- Modify: `docs/skill-token-economics.md` only if the implemented metrics require clarification.
 
 - [ ] Add required-skill and forbidden-neighboring-skill expectations per scenario.
 - [ ] Emit separate fields:
@@ -161,21 +173,33 @@ usage = token counts
 - [ ] Workflow reference expresses recurrent state transitions, not a universal recipe.
 - [ ] `find-polluter.sh` remains an operator; workflow decides when to call it and does not duplicate its mechanics.
 - [ ] Do not preload TDD/verification.
-- [ ] Run operator test + progressive-loading test + explicit live unexplained-failure scenario.
+- [ ] Run:
+
+```bash
+bash tests/systematic-debugging/test-find-polluter.sh
+bash tests/codex/test-progressive-skill-loading.sh
+```
+
+- [ ] Run explicit live unexplained-failure scenario through the existing probe and verify positive selection + forbidden-collision evidence.
 
 ## W5 — Layered evaluation and learning admission
 
 **Files:**
 - Modify: `skills/skill-review/SKILL.md`
 - Modify: `skills/skill-review/references/audit-rubric.md`
-- Modify: `skills/skill-review/references/budgeted-behavioral-learning.md`
+- Keep/refine: `skills/skill-review/references/budgeted-behavioral-learning.md`
 - Create: `skills/skill-review/references/layered-evaluation.md`
 
 - [ ] Define eval questions by layer: routing selection/branch/stop/cost; workflow convergence/recovery/loops; tool contract/determinism/compatibility; policy invariant/bypass/cross-workflow consequence.
 - [ ] Preserve existing `CAPABILITY | STEERING | IMPLEMENTATION | ENVIRONMENT` first-stage classification, then refine `STEERING` to `ROUTING | WORKFLOW | POLICY`.
-- [ ] Add simulation rule: `REPLAYED`, `SIMULATED`, `INFERRED`, and `ASSUMED` results can motivate/falsify/prioritize but cannot satisfy materially independent observed evidence for generalized shared steering learning.
-- [ ] State that `REAL_REEXECUTION` counts as observed evidence only when it really executes the declared comparable fixture/environment.
+- [ ] Preserve simulation rule: `REPLAYED`, `SIMULATED`, `INFERRED`, and `ASSUMED` results can motivate/falsify/prioritize but cannot satisfy materially independent observed evidence for generalized shared steering learning.
+- [ ] `REAL_REEXECUTION` counts as observed evidence only when it really executes the declared comparable fixture/environment.
 - [ ] Keep behavioral-learning execution human-initiated.
+- [ ] Run:
+
+```bash
+bash tests/writing-skills/test-token-economics.sh
+```
 
 ## W6 — Counterfactual/what-if evaluation MVL
 
@@ -185,11 +209,11 @@ usage = token counts
 - Create: `tests/counterfactual/fixtures/routing-whatif-v1.json`
 - Modify: `docs/skill-runtime-architecture.md` only if implementation evidence exposes an ambiguity.
 
-**No dependencies:** Python standard library only.
+**Dependencies:** Python standard library only.
 
-### Input fixture contract
+### W6.1 — Exact fixture/schema contract
 
-The fixture must include:
+Use one finite-state process model per alternative. Do not invent probability distributions at runtime.
 
 ```json
 {
@@ -199,47 +223,129 @@ The fixture must include:
   "baseline_choice": "broad-graph-discovery",
   "alternate_choice": "focused-source-followup",
   "frozen_basis": {
-    "fixture_id": "...",
-    "workflow_version": "...",
-    "operator_versions": {"...": "..."}
+    "fixture_id": "routing-whatif-v1",
+    "repository_state": "fixture:1",
+    "workflow_version": "systematic-debugging:v-current",
+    "policy_version": "livingware:current",
+    "operator_versions": {
+      "focused-read": "fixture:1",
+      "graph-discovery": "fixture:1"
+    }
   },
   "mode": "MONTE_CARLO",
   "seed": 7,
   "rollouts": 10000,
-  "branches": {},
-  "metrics": {}
+  "max_steps": 16,
+  "alternatives": {
+    "baseline": {
+      "start_state": "S0",
+      "terminal_states": ["SUCCESS", "FAILURE"],
+      "transitions": []
+    },
+    "alternate": {
+      "start_state": "S0",
+      "terminal_states": ["SUCCESS", "FAILURE"],
+      "transitions": []
+    }
+  }
 }
 ```
 
-Each distribution/constant used by `branches` or `metrics` must carry provenance: `OBSERVED`, `REPLAYED`, `INFERRED`, or `ASSUMED`. `SIMULATED` is reserved for generated rollout results.
+Each transition has this exact conceptual shape:
 
-### Simulator behavior
+```json
+{
+  "from": "S0",
+  "to": "S1",
+  "probability": {
+    "value": 0.8,
+    "provenance": "OBSERVED",
+    "source_ref": "fixture-observation:baseline-route"
+  },
+  "metrics": {
+    "latency_seconds": {
+      "distribution": "triangular",
+      "low": 20,
+      "mode": 30,
+      "high": 50,
+      "provenance": "OBSERVED",
+      "source_ref": "fixture-observation:latency"
+    },
+    "uncached_input_tokens": {
+      "distribution": "fixed",
+      "value": 12000,
+      "provenance": "ASSUMED",
+      "source_ref": "scenario-assumption:token-cost"
+    },
+    "tool_calls": {
+      "distribution": "fixed",
+      "value": 2,
+      "provenance": "REPLAYED",
+      "source_ref": "trace-replay:tool-count"
+    }
+  }
+}
+```
 
-- [ ] Support `REPLAY`: recompute deterministic path metrics from frozen inputs; reject stochastic fields.
-- [ ] Support `MONTE_CARLO`: seeded, reproducible sampling of explicit branch-success, latency, token/tool-call, and retry distributions; do not infer missing distributions silently.
-- [ ] Do not implement a `CAUSAL` mode.
-- [ ] Produce a concise JSON result containing baseline vs alternate metric summaries, seed/rollout count, sensitivity/provenance summary, and a `claim_scope` field that explicitly says `what-if simulation; not causal effect` for Monte Carlo.
-- [ ] Fail closed when provenance, layer, decision point, seed, or frozen-basis identity is missing.
-- [ ] Ensure a mixed-provenance simulation reports which conclusions depend on assumptions.
-- [ ] Keep outputs ephemeral under test/artifact paths; do not add a persistent simulation ledger.
+Supported metric distributions in v1 are intentionally bounded:
 
-### Required tests
+```text
+fixed(value)
+triangular(low, mode, high)
+```
 
-- [ ] same fixture + seed -> byte-stable normalized result;
-- [ ] different seed -> permitted numeric variance but same schema/provenance contract;
-- [ ] replay rejects stochastic model;
-- [ ] Monte Carlo rejects missing seed/rollout count;
-- [ ] missing provenance fails;
-- [ ] multi-layer intervention is flagged `exploratory` and cannot claim isolated attribution;
-- [ ] simulated result cannot be marked `OBSERVED`;
+Branching probability is represented only by transition probability, not by a second Bernoulli distribution. For every nonterminal state, outgoing probabilities must sum to `1.0` within `1e-9`. `tool_calls` is rounded to a nonnegative integer after sampling; latency/tokens must remain nonnegative. Unknown distributions or missing provenance fail validation.
+
+### W6.2 — REPLAY mode
+
+- [ ] `REPLAY` requires all transitions to have probability `1.0` from each visited nonterminal state and all metrics to use `fixed` distributions.
+- [ ] Replay walks the declared process path, sums metrics, records terminal state, and emits provenance without random sampling.
+- [ ] Replay rejects stochastic transition probabilities, triangular metrics, seed/rollout-dependent semantics, or unbounded loops.
+
+### W6.3 — MONTE_CARLO mode
+
+- [ ] Seeded `random.Random(seed)` only; do not rely on global random state.
+- [ ] Each rollout starts at the alternative's declared start state and samples one outgoing transition according to declared probabilities.
+- [ ] Sample transition metrics, accumulate latency/tokens/tool calls, and stop only at declared terminal state or `max_steps`.
+- [ ] Exceeding `max_steps` records a `LOOP_LIMIT` failure outcome rather than hanging.
+- [ ] Report per alternative: success rate, failure rate, loop-limit rate, median and mean latency, median and mean uncached-input tokens, median and mean tool calls.
+- [ ] Report baseline-minus-alternate deltas and a provenance summary for every metric family.
+- [ ] If any input contributing to a claimed improvement is `ASSUMED` or `INFERRED`, label that conclusion `assumption_sensitive=true`.
+- [ ] `claim_scope` must be exactly compatible with `what-if simulation; not causal effect` for Monte Carlo output.
+
+### W6.4 — REAL_REEXECUTION boundary
+
+Do not implement a generic real-execution engine in the simulator. `REAL_REEXECUTION` is a workflow/eval mode that invokes the existing real harness/fixture externally and records its result as `OBSERVED`. The simulator may consume those observations as later fixture inputs, but must not fake them.
+
+### W6.5 — Validation and output
+
+- [ ] Input validation fails closed for missing layer, decision point, choices, frozen-basis identifiers, provenance/source refs, terminal states, invalid probability sums, unsupported distribution, negative metric parameters, or missing seed/rollouts in Monte Carlo.
+- [ ] A comparison changing multiple declared semantic layers is marked `exploratory=true` and `isolated_attribution=false`.
+- [ ] Output is JSON only and includes schema version, input digest, mode, seed/rollouts when relevant, per-alternative summaries, deltas, provenance summary, assumption sensitivity, isolated-attribution flag, and claim scope.
+- [ ] Normalize object key order and numeric rounding so fixed fixture + fixed seed yields byte-stable output.
+- [ ] Keep output ephemeral; no persistent simulation ledger/database.
+
+### W6.6 — Required tests
+
+- [ ] fixed fixture + fixed seed -> byte-stable normalized result;
+- [ ] different seed -> permitted numeric variance but identical schema/provenance semantics;
+- [ ] replay rejects stochastic transition probability;
+- [ ] replay rejects triangular metric;
+- [ ] Monte Carlo rejects missing seed or rollouts;
+- [ ] outgoing probabilities not summing to 1 fail;
+- [ ] missing provenance/source ref fails;
+- [ ] unsupported distribution fails;
+- [ ] process loop is bounded by `max_steps` and reported, not hung;
+- [ ] simulated output cannot be marked `OBSERVED`;
 - [ ] output cannot claim causal effect;
 - [ ] assumption-driven superiority is visibly labeled;
-- [ ] simulator does not modify skills/policy/code.
+- [ ] multi-layer intervention cannot claim isolated attribution;
+- [ ] simulator does not modify skills, policies, source, or repository state.
 
 Run:
 
 ```bash
-python3 -m unittest tests.counterfactual.test-workflow-counterfactual
+python3 tests/counterfactual/test-workflow-counterfactual.py
 ```
 
 Expected: all pass.
@@ -282,18 +388,36 @@ REFERENCE_RELOCATION
 
 ## W9 — Final verification and disposition
 
-Run deterministic suite:
+Run repository-local deterministic checks:
 
 ```bash
 bash tests/codex/test-progressive-skill-loading.sh
 bash tests/writing-skills/test-token-economics.sh
-bash tests/explicit-skill-requests/test-explicit-skill-requests.sh
-bash tests/plugin-loader/test-plugin-loading.sh
 bash tests/systematic-debugging/test-find-polluter.sh
-python3 -m unittest tests.counterfactual.test-workflow-counterfactual
+python3 tests/counterfactual/test-workflow-counterfactual.py
 ```
 
-Then run three comparable live Codex probe repetitions using the existing isolated fixture shape.
+Run explicit skill-request integration using the existing runner when its required model/runtime is available:
+
+```bash
+bash tests/explicit-skill-requests/run-all.sh
+```
+
+Run relevant platform/plugin checks for surfaces actually changed. At minimum, if Codex packaging/sync files changed, use the existing Codex tests rather than a nonexistent generic `tests/plugin-loader` suite:
+
+```bash
+bash tests/codex/test-marketplace-manifest.sh
+bash tests/codex/test-package-codex-plugin.sh
+```
+
+Then run three comparable live Codex probe repetitions using the existing isolated fixture shape:
+
+```bash
+for i in 1 2 3; do
+  CODEX_PROBE_RETRIES=1 CODEX_PROBE_TIMEOUT=180 \
+    bash tests/codex/live-progressive-skill-probe.sh || exit 1
+done
+```
 
 Expected:
 
@@ -317,7 +441,7 @@ The refactor is complete when:
 - creator/reviewer can identify layer-mixing and nearest competing routing states;
 - systematic-debugging and executing-plans demonstrate the new split;
 - routing/workflow/tool/policy evals have distinct admission cadence;
-- counterfactual evaluator supports deterministic replay and seeded BPM-style Monte Carlo what-if simulation with explicit provenance;
+- counterfactual evaluator supports deterministic replay and seeded BPM-style finite-state Monte Carlo what-if simulation with explicit provenance;
 - simulator has no causal mode and never upgrades synthetic evidence to observed evidence;
 - real re-execution remains the preferred empirical validation of promising alternatives;
 - generalized learning still requires materially independent observed evidence and human authorization;
@@ -329,6 +453,7 @@ The refactor is complete when:
 - a production workflow orchestration engine;
 - a second skill router;
 - causal inference or structural-causal-model implementation;
+- resource/queue scheduling simulation in this MVL;
 - automatic discovery of probability distributions from all agent traces;
 - automatic policy/tool mutation;
 - persistent process-mining/event-log infrastructure;

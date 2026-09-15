@@ -1,0 +1,49 @@
+name: Layered Runtime Verification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - 'docs/skill-runtime-architecture.md'
+      - 'docs/skill-token-economics.md'
+      - 'skills/**'
+      - 'scripts/simulate-workflow-counterfactual.py'
+      - 'tests/counterfactual/**'
+      - 'tests/codex/**'
+      - 'tests/writing-skills/**'
+      - 'tests/systematic-debugging/**'
+      - '.github/workflows/layered-runtime-ci.yml'
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'docs/skill-runtime-architecture.md'
+      - 'docs/skill-token-economics.md'
+      - 'skills/**'
+      - 'scripts/simulate-workflow-counterfactual.py'
+      - 'tests/counterfactual/**'
+      - 'tests/codex/**'
+      - 'tests/writing-skills/**'
+      - 'tests/systematic-debugging/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Progressive skill loading
+        run: bash tests/codex/test-progressive-skill-loading.sh
+      - name: Layered skill and token economics
+        run: bash tests/writing-skills/test-token-economics.sh
+      - name: Systematic debugging operator
+        run: bash tests/systematic-debugging/test-find-polluter.sh
+      - name: Counterfactual evaluator
+        run: python3 tests/counterfactual/test-workflow-counterfactual.py
+      - name: Codex marketplace manifest
+        run: bash tests/codex/test-marketplace-manifest.sh
+      - name: Codex package contract
+        run: bash tests/codex/test-package-codex-plugin.sh

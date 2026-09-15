@@ -1,0 +1,95 @@
+{
+  "schema_version": "livingware.counterfactual.v1",
+  "layer": "ROUTING",
+  "decision_point": "after-direct-source-inspection",
+  "baseline_choice": "broad-graph-discovery",
+  "alternate_choice": "focused-source-followup",
+  "frozen_basis": {
+    "fixture_id": "routing-whatif-v1",
+    "repository_state": "fixture:1",
+    "workflow_version": "systematic-debugging:v-current",
+    "policy_version": "livingware:current",
+    "operator_versions": {
+      "focused-read": "fixture:1",
+      "graph-discovery": "fixture:1"
+    }
+  },
+  "mode": "MONTE_CARLO",
+  "seed": 7,
+  "rollouts": 10000,
+  "max_steps": 16,
+  "alternatives": {
+    "baseline": {
+      "start_state": "S0",
+      "terminal_states": ["SUCCESS", "FAILURE"],
+      "transitions": [
+        {
+          "from": "S0",
+          "to": "S1",
+          "probability": {"value": 1.0, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-enter"},
+          "metrics": {
+            "latency_seconds": {"distribution": "triangular", "low": 20, "mode": 30, "high": 50, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 12000, "provenance": "ASSUMED", "source_ref": "scenario-assumption:baseline-token-cost"},
+            "tool_calls": {"distribution": "fixed", "value": 2, "provenance": "REPLAYED", "source_ref": "trace-replay:baseline-tool-count"}
+          }
+        },
+        {
+          "from": "S1",
+          "to": "SUCCESS",
+          "probability": {"value": 0.9, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-success"},
+          "metrics": {
+            "latency_seconds": {"distribution": "fixed", "value": 18, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-success-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 8000, "provenance": "ASSUMED", "source_ref": "scenario-assumption:baseline-success-tokens"},
+            "tool_calls": {"distribution": "fixed", "value": 1, "provenance": "REPLAYED", "source_ref": "trace-replay:baseline-success-tool-count"}
+          }
+        },
+        {
+          "from": "S1",
+          "to": "FAILURE",
+          "probability": {"value": 0.1, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-failure"},
+          "metrics": {
+            "latency_seconds": {"distribution": "fixed", "value": 25, "provenance": "OBSERVED", "source_ref": "fixture-observation:baseline-failure-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 9000, "provenance": "ASSUMED", "source_ref": "scenario-assumption:baseline-failure-tokens"},
+            "tool_calls": {"distribution": "fixed", "value": 2, "provenance": "REPLAYED", "source_ref": "trace-replay:baseline-failure-tool-count"}
+          }
+        }
+      ]
+    },
+    "alternate": {
+      "start_state": "S0",
+      "terminal_states": ["SUCCESS", "FAILURE"],
+      "transitions": [
+        {
+          "from": "S0",
+          "to": "S1",
+          "probability": {"value": 1.0, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-enter"},
+          "metrics": {
+            "latency_seconds": {"distribution": "triangular", "low": 8, "mode": 12, "high": 20, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 6000, "provenance": "ASSUMED", "source_ref": "scenario-assumption:alternate-token-cost"},
+            "tool_calls": {"distribution": "fixed", "value": 1, "provenance": "REPLAYED", "source_ref": "trace-replay:alternate-tool-count"}
+          }
+        },
+        {
+          "from": "S1",
+          "to": "SUCCESS",
+          "probability": {"value": 0.88, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-success"},
+          "metrics": {
+            "latency_seconds": {"distribution": "fixed", "value": 14, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-success-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 5000, "provenance": "ASSUMED", "source_ref": "scenario-assumption:alternate-success-tokens"},
+            "tool_calls": {"distribution": "fixed", "value": 1, "provenance": "REPLAYED", "source_ref": "trace-replay:alternate-success-tool-count"}
+          }
+        },
+        {
+          "from": "S1",
+          "to": "FAILURE",
+          "probability": {"value": 0.12, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-failure"},
+          "metrics": {
+            "latency_seconds": {"distribution": "fixed", "value": 20, "provenance": "OBSERVED", "source_ref": "fixture-observation:alternate-failure-latency"},
+            "uncached_input_tokens": {"distribution": "fixed", "value": 6500, "provenance": "ASSUMED", "source_ref": "scenario-assumption:alternate-failure-tokens"},
+            "tool_calls": {"distribution": "fixed", "value": 2, "provenance": "REPLAYED", "source_ref": "trace-replay:alternate-failure-tool-count"}
+          }
+        }
+      ]
+    }
+  }
+}

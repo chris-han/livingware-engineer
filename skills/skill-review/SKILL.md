@@ -1,85 +1,68 @@
 ---
 name: skill-review
-description: Review SKILL.md and AGENTS.md instructions for activation noise, unnecessary always-on context, weak progressive disclosure, token/tool-loop cost, obsolete or unsupported model scaffolding, and unclear decision or completion boundaries.
+description: Review SKILL.md and AGENTS.md instructions for activation noise, layer mixing, weak progressive disclosure, token/tool-loop cost, unsupported scaffolding, and unclear decision or completion boundaries.
 ---
 
 # Skill Review
 
-Use this skill to audit agent instruction surfaces such as `SKILL.md`, `AGENTS.md`, repository agent guidance, or an installed skill set.
+Use this skill to audit agent instruction surfaces such as `SKILL.md`, `AGENTS.md`, repository guidance, or an installed skill set.
 
-The goal is not brevity for its own sake. Minimize always-loaded instruction cost while preserving constraints whose violation has a concrete consequence and retaining extra scaffolding when supported models demonstrably need it.
+The goal is not brevity for its own sake. Minimize always-loaded instruction cost while preserving hard constraints and assigning every rule to its smallest durable owner.
 
 ## Review method
 
-1. Inventory the instruction surfaces in scope and identify the supported model/platform mix when known.
-2. Review skill descriptions before bodies. Flag descriptions that are broad, overlapping, contradictory, or have excessive “pick me” energy.
-3. For each skill, separate routing information, selected-workflow guidance, conditional detail that should move behind progressive disclosure, genuine invariants or safety boundaries, and model/platform-specific compensation.
-4. Review `AGENTS.md` as universally loaded repository context. Ask whether each instruction is needed for nearly every task or should instead be a contextual pointer or adapter-specific rule.
-5. Flag obsolete or unsupported model-compensation rules, especially blanket requirements to map the repository, read large doc stacks, ask for approval at every step, run broad tests, brainstorm, plan, or follow a fixed itinerary regardless of task shape.
-6. For retained scaffolding, ask what evidence justifies it, which supported model needs it, whether it harms another supported model, and whether it can move into an adapter or conditional reference.
-7. Check decision and completion boundaries. Preserve real authority and safety limits; remove unnecessary stop gates. Where useful, state safe autonomy and a concrete definition of done.
-8. Audit token economics across the whole agent loop, not just `SKILL.md` length: activation collisions, future-state preloading, duplicate routing, broad tool discovery, large tool outputs, repeated evidence, and unnecessary serial turns.
-9. When cost matters, separate fixed startup/context cost from selected-skill and tool-loop cost; prefer isolated fixtures, repeated runs, and medians before attributing a regression to prompt text.
-10. Produce a prioritized audit with concrete rewrite recommendations. Prefer deleting or relocating whole classes of unnecessary instruction over merely shortening sentences.
+1. Inventory the instruction surfaces in scope and the supported model/platform mix when known.
+2. Review descriptions before bodies. Flag broad, overlapping, contradictory, or excessive “pick me” activation language.
+3. Classify each instruction by owner using `../../docs/skill-runtime-architecture.md`: `TOOL/OPERATOR`, `POLICY`, `WORKFLOW`, `ROUTING`, or conditional `REFERENCE`.
+4. Flag deterministic mechanics repeated as prose, dynamic choices frozen into universal sequences, cross-cutting policy duplicated into skills, and references eagerly loaded without current need.
+5. Review `AGENTS.md` as constitutional always-loaded context. Route task-specific runbooks elsewhere.
+6. Check neighboring-state boundaries and likely activation collisions.
+7. Audit whole-loop token economics: routing context, selected workflow context, references, tool schemas/payloads, serial turns, repeated evidence, and unnecessary simulation/re-execution.
+8. Check decision and completion boundaries. Preserve real authority/safety limits; remove ceremonial stops.
+9. Attribute observed failures before proposing learning or structural changes.
+10. Return prioritized changes with one authoritative owner for each rule.
 
-## Token-economics audit
+## Detailed evaluation
 
-Read `../../docs/skill-token-economics.md` when reviewing a frequently loaded skill, a skill set with overlapping activation, or a workflow with unexpectedly high latency/context cost. Apply the optimization order there: eliminate unnecessary loading first, then collisions and tool/turn amplification, then improve cache stability, and only last shorten wording.
+For substantial evaluation or failure attribution, read `references/layered-evaluation.md`. It owns evaluation questions for routing, workflow, tool/operator, and policy layers, including counterfactual evidence provenance.
 
-Flag especially:
+For systematic scoring, read `references/audit-rubric.md`.
 
-- mandatory meta-routing where the harness already matches skills natively,
-- descriptions whose breadth activates multiple adjacent workflow states,
-- root skills carrying examples/checklists/platform procedures that should be conditional references,
-- bounded/local tasks that automatically index/map a repository or enumerate all projects,
-- completion/review skills activated merely to summarize an implementation result,
-- valid unchanged evidence rerun because a workflow phase changed,
-- large unbounded tool responses and repeated read/status/test calls,
-- performance conclusions based on a single run or a large host repository rather than an isolated comparable fixture.
+## Token economics
 
-Preserve correctness and safety invariants while removing cost. A smaller prompt that causes extra tool turns, weaker verification, or more retries is not an optimization.
+Read `../../docs/skill-token-economics.md` for frequently loaded skills, overlapping activation, or unexpectedly high latency/context cost. Optimize architecture before wording: eliminate unnecessary loading, prevent collisions, bound tool output, reuse evidence, reduce serial turns, then improve cache stability and wording.
+
+A smaller prompt that causes extra tool turns, weaker verification, more retries, or repeated real executions is not an optimization.
 
 ## Behavioral learning is opt-in maintenance
 
-Do not run behavioral evals or workflow learning automatically. When repeated/systemic workflow evidence makes a learning suggestion relevant, read `references/budgeted-behavioral-learning.md` and apply its failure classification, recurrence, material-independence, high-impact, anti-noise, matched-vs-independent validation, and human-initiation rules. Keep detailed trigger logic there rather than duplicating it in this always-loaded skill body.
+Do not run behavioral evals or shared workflow learning automatically. When repeated/systemic steering evidence makes learning relevant, read `references/budgeted-behavioral-learning.md`. It owns recurrence, material independence, evidence sufficiency, counterfactual/simulation admission, and human initiation.
+
+`REPLAYED`, `SIMULATED`, `INFERRED`, or `ASSUMED` evidence may narrow a real eval but cannot become materially independent observed evidence. `REAL_REEXECUTION` counts as `OBSERVED` only when the declared real comparable fixture/environment actually runs.
 
 ## Principles
 
-- Apply MVL Law 1 first: flag unconditional workflow stops that could remain recorded and inspectable while defaulting to pass-through. Preserve true security, authority, destructive-operation, and irreversible-external-action boundaries.
-- Keep skill descriptions as short as possible while still discriminating when the skill should be used.
-- Avoid overlapping activation surfaces unless the distinction is obvious from the descriptions.
-- Prefer progressive disclosure. Multi-workflow skills should use the root `SKILL.md` as a minimal router into references, scripts, or workflow-specific files.
-- Prefer native harness matching over a mandatory meta-router when the platform already discovers/selects skills; keep compatibility routing only where a harness actually needs it.
-- Treat tool calls and their returned payloads as context cost. For bounded tasks, broad repository/index discovery requires demonstrated structural uncertainty, not habit.
-- A token that never enters context is cheaper than a cached token; cache-friendly stability matters after unnecessary context has been eliminated.
-- Avoid elaborate itineraries when capable models can infer reasonable steps. Prescribe sequences only where order matters, deviation creates concrete risk, or evidence shows a supported model requires the extra scaffolding.
-- Treat `AGENTS.md` as a repository constitution, not a universal runbook.
-- Preserve hard invariants: security, authority, destructive-operation limits, deterministic correctness requirements, architecture laws, and other boundaries with real consequences.
-- Verification should be proportionate to the affected surface unless the repository has a concrete reason for stronger coverage.
-- Do not require approval at every intermediate step for safe local work. Make stop conditions explicit where they matter.
-- Define completion for workflows that should continue through implementation, inspection, and repair.
-- Prefer model-neutral, outcome- and invariant-oriented guidance in shared skills. Retain model-specific compensation when evidence supports it, but isolate it in platform/model adapters or conditional references when possible.
-- Do not assume guidance optimized for one strong model is automatically optimal for weaker or differently-behaving supported models.
+- Skill is a discovery/workflow-entry package, not the owner of every invariant and mechanic.
+- Native harness matching is the preferred first-hop dispatcher where available.
+- Routing is recurrent after observations; workflow owns reusable transition structure; tools own deterministic mechanics; policy owns stable cross-cutting constraints.
+- Learning/change authority follows failure attribution and the smallest durable owner.
+- Prefer progressive disclosure and current-state loading.
+- Preserve security, authority, destructive-operation, architecture, real-component, browser-evidence, and correctness invariants.
+- Keep model/platform compensation isolated when possible and require evidence for universal scaffolding.
+- Simulation narrows search; real execution remains the judge for empirical claims.
 
 ## Output
 
 For substantial audits, return:
 
-- instruction inventory and effective scope,
-- supported model/platform mix when known,
-- highest-risk issues first,
-- per-skill verdict: `KEEP`, `TRIM`, `REFACTOR`, `MERGE`, or `REMOVE`,
-- `AGENTS.md` findings split into `KEEP ALWAYS LOADED`, `ROUTE`, and `RELOCATE/REMOVE`,
-- activation-collision findings,
-- progressive-disclosure opportunities,
-- token-economics findings: fixed context vs selected-skill vs tool-loop cost,
-- activation-collision and unwanted tool-family activation findings,
-- serial-turn / tool-output amplification opportunities,
-- single-model optimization findings,
-- multi-model compatibility findings,
-- evidence assessment for extra scaffolding,
-- model/platform rules that should move into adapter references,
-- decision-boundary and persistence findings,
+- effective instruction inventory and supported platform/model mix when known;
+- highest-risk findings first;
+- per-skill verdict: `KEEP`, `TRIM`, `REFACTOR`, `MERGE`, or `REMOVE`;
+- layer-owner findings: `TOOL`, `POLICY`, `WORKFLOW`, `ROUTING`, `REFERENCE`;
+- activation/collision and progressive-disclosure findings;
+- token-economics findings across context, tools, turns, simulation, and re-execution;
+- evidence provenance and failure attribution where learning is proposed;
+- `AGENTS.md` findings split into `KEEP ALWAYS LOADED`, `ROUTE`, and `RELOCATE/REMOVE`;
 - a concrete target structure or patch plan.
 
-Use `references/audit-rubric.md` for systematic scoring. Read `references/article-principles.md` when the review should be explicitly grounded in Eric Provencher's “Rethinking skills and prompts for GPT-6 Astra”.
+Read `references/article-principles.md` only when the review should explicitly use Eric Provencher's “Rethinking skills and prompts for GPT-6 Astra”.

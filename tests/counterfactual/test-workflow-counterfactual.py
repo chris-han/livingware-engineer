@@ -26,6 +26,21 @@ def run_payload(payload: dict) -> tuple[int, bytes, dict]:
         path.unlink(missing_ok=True)
 
 
+def make_replay_payload(base: dict) -> dict:
+    payload = copy.deepcopy(base)
+    payload["mode"] = "REPLAY"
+    payload.pop("seed", None)
+    payload["rollouts"] = 1
+    for name in ("baseline", "alternate"):
+        original = payload["alternatives"][name]["transitions"]
+        start = copy.deepcopy(original[0])
+        success = copy.deepcopy(next(t for t in original if t["to"] == "SUCCESS"))
+        start["probability"]["value"] = 1.0
+        success["probability"]["value"] = 1.0
+        payload["alternatives"][name]["transitions"] = [start, success]
+    return payload
+
+
 class CounterfactualTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -57,16 +72,22 @@ class CounterfactualTests(unittest.TestCase):
         self.assertIn("replay requires probability 1.0", body["error"])
 
     def test_replay_rejects_triangular_metric(self):
-        p = copy.deepcopy(self.base)
-        p["mode"] = "REPLAY"
-        p.pop("seed", None)
-        p["rollouts"] = 1
-        for alt in p["alternatives"].values():
-            for t in alt["transitions"]:
-                t["probability"]["value"] = 1.0
+        p = make_replay_payload(self.base)
         rc, _, body = run_payload(p)
         self.assertEqual(rc, 2)
         self.assertIn("replay requires fixed metrics", body["error"])
+
+    def test_valid_replay_has_non_observed_claim_scope(self):
+        p = make_replay_payload(self.base)
+        for alt in p["alternatives"].values():
+            for t in alt["transitions"]:
+                for metric in t["metrics"].values():
+                    if metric["distribution"] == "triangular":
+                        metric.clear()
+                        metric.update({"distribution": "fixed", "value": 10, "provenance": "REPLAYED", "source_ref": "replay:test"})
+        rc, _, body = run_payload(p)
+        self.assertEqual(rc, 0)
+        self.assertEqual(body["claim_scope"], "deterministic replay; not new observed evidence")
 
     def test_monte_carlo_requires_seed_and_rollouts(self):
         for missing in ("seed", "rollouts"):
@@ -82,6 +103,13 @@ class CounterfactualTests(unittest.TestCase):
         rc, _, body = run_payload(p)
         self.assertEqual(rc, 2)
         self.assertIn("sum to", body["error"])
+
+    def test_nonterminal_destination_requires_outgoing_transition(self):
+        p = copy.deepcopy(self.base)
+        p["alternatives"]["baseline"]["transitions"][0]["to"] = "MISSING"
+        rc, _, body = run_payload(p)
+        self.assertEqual(rc, 2)
+        self.assertIn("has no outgoing transitions", body["error"])
 
     def test_missing_provenance_fails(self):
         p = copy.deepcopy(self.base)

@@ -10,7 +10,7 @@ description: Use while an unexplained bug, test failure, regression, performance
 Entry: an observed failure is still unexplained.
 Exit: root cause and affected behavior are sufficiently established, or diagnosis-only work is complete.
 
-After exit, stop carrying this workflow forward. Authorized implementation may match TDD; a completion claim may match verification. Re-enter only when new contradictory evidence makes the failure unexplained again.
+After exit, stop carrying this workflow forward. Hand off only compact diagnostic state to the next workflow selected by the user's task. Re-enter only when new contradictory evidence makes the failure unexplained again.
 
 ## Core invariant
 
@@ -44,4 +44,4 @@ Load only what the current state needs:
 - `../test-driven-development/remote-cdp-browser-lifecycle.md` for browser/CDP capture-state problems;
 - `references/detailed-playbook.md` only when the compact contract is insufficient for a complex, repeated, or high-risk investigation.
 
-Do not preload TDD or verification while diagnosis is unresolved.
+Do not preload a future implementation or completion workflow while diagnosis is unresolved.

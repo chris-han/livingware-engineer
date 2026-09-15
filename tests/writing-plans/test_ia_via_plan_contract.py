@@ -58,3 +58,31 @@ def test_via_keeps_test_scope_separate_from_mvl_value_evaluation():
     assert "D0 — deterministic invariants" in text
     assert "D1 — local semantic sentinels" in text
     assert "D2 — full semantic audits" in text
+
+
+def _run_without_pytest() -> int:
+    tests = [
+        test_combined_ia_via_contract_is_explicit,
+        test_plan_template_orders_ia_before_implementation_and_via_before_integration,
+        test_plan_header_requires_both_reviews,
+        test_ia_gate_is_structural_not_default_human_approval,
+        test_via_keeps_test_scope_separate_from_mvl_value_evaluation,
+    ]
+    failures = 0
+    for test in tests:
+        try:
+            test()
+        except Exception as exc:
+            failures += 1
+            print(f"[FAIL] {test.__name__}: {exc}")
+        else:
+            print(f"[PASS] {test.__name__}")
+    if failures:
+        print(f"IA/VIA deterministic contract: FAIL ({failures} test(s))")
+        return 1
+    print("IA/VIA deterministic contract: PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_run_without_pytest())

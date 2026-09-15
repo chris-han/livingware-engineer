@@ -42,7 +42,18 @@ jobs:
       - name: Systematic debugging operator
         run: bash tests/systematic-debugging/test-find-polluter.sh
       - name: Counterfactual evaluator
-        run: python3 tests/counterfactual/test-workflow-counterfactual.py
+        run: |
+          python3 tests/counterfactual/test-workflow-counterfactual.py > /tmp/counterfactual-test.log 2>&1 || {
+            cat /tmp/counterfactual-test.log
+            exit 1
+          }
+          cat /tmp/counterfactual-test.log
+      - name: Upload counterfactual diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: counterfactual-test-log
+          path: /tmp/counterfactual-test.log
       - name: Codex marketplace manifest
         run: bash tests/codex/test-marketplace-manifest.sh
       - name: Codex package contract

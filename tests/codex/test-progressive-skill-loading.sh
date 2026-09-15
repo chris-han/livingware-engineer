@@ -3,7 +3,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$ROOT/package.json")"
-INSTALL_ROOT="${LIVINGWARE_INSTALL_ROOT:-$HOME/.codex/plugins/cache/livingware-engineer/livingware-engineer/$VERSION}"
+DEFAULT_INSTALL_ROOT="$HOME/.codex/plugins/cache/livingware-engineer/livingware-engineer/$VERSION"
+INSTALL_ROOT="${LIVINGWARE_INSTALL_ROOT:-$DEFAULT_INSTALL_ROOT}"
 
 fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "PASS: $*"; }
@@ -18,19 +19,29 @@ reject_text() {
   pass "$label"
 }
 
-[[ -d "$INSTALL_ROOT" ]] || fail "installed Livingware $VERSION not found at $INSTALL_ROOT"
-pass "installed Livingware $VERSION found"
+# Prefer the installed plugin when it exists; clean CI/source checkouts use the
+# repository tree so contract verification does not require manufacturing an
+# installation. Set LIVINGWARE_REQUIRE_INSTALLED=1 to make absence fatal.
+if [[ -d "$INSTALL_ROOT" ]]; then
+  CONTRACT_ROOT="$INSTALL_ROOT"
+  pass "installed Livingware $VERSION found"
+elif [[ "${LIVINGWARE_REQUIRE_INSTALLED:-0}" == "1" ]]; then
+  fail "installed Livingware $VERSION not found at $INSTALL_ROOT"
+else
+  CONTRACT_ROOT="$ROOT"
+  pass "installed cache absent; verifying repository contracts"
+fi
 
-ROUTER="$INSTALL_ROOT/skills/using-superpowers/SKILL.md"
-DEBUG="$INSTALL_ROOT/skills/systematic-debugging/SKILL.md"
-TDD="$INSTALL_ROOT/skills/test-driven-development/SKILL.md"
-VERIFY="$INSTALL_ROOT/skills/verification-before-completion/SKILL.md"
-PROGRESSIVE="$INSTALL_ROOT/skills/using-superpowers/references/progressive-skill-loading.md"
+ROUTER="$CONTRACT_ROOT/skills/using-superpowers/SKILL.md"
+DEBUG="$CONTRACT_ROOT/skills/systematic-debugging/SKILL.md"
+TDD="$CONTRACT_ROOT/skills/test-driven-development/SKILL.md"
+VERIFY="$CONTRACT_ROOT/skills/verification-before-completion/SKILL.md"
+PROGRESSIVE="$CONTRACT_ROOT/skills/using-superpowers/references/progressive-skill-loading.md"
 
 for f in "$ROUTER" "$DEBUG" "$TDD" "$VERIFY" "$PROGRESSIVE"; do
-  [[ -f "$f" ]] || fail "missing installed contract: $f"
+  [[ -f "$f" ]] || fail "missing progressive-loading contract: $f"
 done
-pass "all installed progressive-loading contract files exist"
+pass "all progressive-loading contract files exist"
 
 require_text "$ROUTER" "Do not load merely to route ordinary tasks when native skill matching is available." \
   "using-superpowers is compatibility/reference, not mandatory first-hop routing"
@@ -41,8 +52,9 @@ require_text "$DEBUG" "Use while an unexplained bug, test failure, regression, p
   "debugging activation is unresolved-root-cause scoped"
 require_text "$DEBUG" "## Lifecycle" "debugging defines a lifecycle boundary"
 require_text "$DEBUG" "Exit:" "debugging defines an exit condition"
-require_text "$DEBUG" "Tool Economy" "debugging defaults to bounded tool use"
-require_text "$DEBUG" "Do not activate codebase-memory" "debugging does not pair bounded/local diagnosis with codebase-memory"
+require_text "$DEBUG" "## Tool economy" "debugging defaults to bounded tool use"
+require_text "$DEBUG" "Add graph/index discovery only after direct inspection" "debugging keeps structural discovery conditional"
+require_text "$DEBUG" "references/workflow-routing.md" "debugging routes dynamic transition depth progressively"
 require_text "$DEBUG" "references/detailed-playbook.md" "debugging preserves detailed guidance behind progressive disclosure"
 
 require_text "$TDD" "a bug fix with established diagnosis" \
@@ -70,8 +82,6 @@ require_text "$PROGRESSIVE" "At most one should govern current reasoning except 
 require_text "$PROGRESSIVE" "Pass compact state across transitions" \
   "progressive contract requires compact handoff"
 
-# Optional live-harness probe. Kept separate because it requires backend connectivity
-# and captures durable JSON/stderr artifacts for diagnosis.
 if [[ "${LIVE_CODEX:-0}" == "1" ]]; then
   "$ROOT/tests/codex/live-progressive-skill-probe.sh"
 fi

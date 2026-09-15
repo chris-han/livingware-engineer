@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import math
 import random
 import statistics
 import sys
@@ -71,12 +70,14 @@ def validate_alternative(name: str, alt: dict[str, Any], mode: str) -> None:
     require(isinstance(transitions, list) and transitions, f"{name}: transitions required")
 
     outgoing: dict[str, list[dict[str, Any]]] = {}
+    destination_states: set[str] = set()
     for i, transition in enumerate(transitions):
         where = f"{name}.transitions[{i}]"
         require(isinstance(transition, dict), f"{where}: transition must be object")
         src, dst = transition.get("from"), transition.get("to")
         require(isinstance(src, str) and src, f"{where}: missing from")
         require(isinstance(dst, str) and dst, f"{where}: missing to")
+        destination_states.add(dst)
         probability = transition.get("probability")
         require(isinstance(probability, dict), f"{where}: probability object required")
         validate_provenance(probability, f"{where}.probability")
@@ -92,8 +93,7 @@ def validate_alternative(name: str, alt: dict[str, Any], mode: str) -> None:
         outgoing.setdefault(src, []).append(transition)
 
     terminal_set = set(terminals)
-    states = set(outgoing)
-    states.add(alt["start_state"])
+    states = set(outgoing) | destination_states | {alt["start_state"]}
     for state in states - terminal_set:
         require(state in outgoing, f"{name}: nonterminal state {state!r} has no outgoing transitions")
         total = sum(float(t["probability"]["value"]) for t in outgoing[state])
@@ -208,15 +208,20 @@ def provenance_summary(payload: dict[str, Any]) -> dict[str, list[str]]:
     return {key: sorted(values) for key, values in summary.items()}
 
 
+def rng_for(seed: int, alternative_name: str) -> random.Random:
+    digest = hashlib.sha256(f"{seed}:{alternative_name}".encode("utf-8")).digest()
+    return random.Random(int.from_bytes(digest[:8], "big"))
+
+
 def compare(payload: dict[str, Any]) -> dict[str, Any]:
     validate(payload)
     mode = payload["mode"]
     input_digest = "sha256:" + hashlib.sha256(canonical_bytes(payload)).hexdigest()
-    rng = random.Random(payload["seed"]) if mode == "MONTE_CARLO" else None
     run_count = payload["rollouts"] if mode == "MONTE_CARLO" else 1
     summaries: dict[str, Any] = {}
     for name in ("baseline", "alternate"):
         alt = payload["alternatives"][name]
+        rng = rng_for(payload["seed"], name) if mode == "MONTE_CARLO" else None
         runs = [run_once(alt, mode, payload["max_steps"], rng) for _ in range(run_count)]
         summaries[name] = summarize(runs, alt["terminal_states"])
 

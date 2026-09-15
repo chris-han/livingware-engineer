@@ -106,7 +106,70 @@ PY
 
 observed_skill_event() {
   local json_file="$1" skill="$2"
-  grep -Eqi "(skill|SKILL|load_skill|use_skill).*${skill}|${skill}.*(skill|SKILL|load_skill|use_skill)" "$json_file"
+  python3 - "$json_file" "$skill" <<'PY'
+import json, re, sys
+
+json_file, skill = sys.argv[1], sys.argv[2]
+path_re = re.compile(rf'(?:^|[/\\])skills[/\\]{re.escape(skill)}[/\\]SKILL\.md(?:$|[\s"\'`])', re.I)
+explicit_marker_keys = {
+    'type', 'event', 'event_type', 'kind', 'name', 'tool_name', 'function',
+    'function_name', 'action', 'operation', 'op', 'command'
+}
+
+def flatten_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from flatten_strings(v)
+    elif isinstance(value, list):
+        for v in value:
+            yield from flatten_strings(v)
+
+def is_explicit_skill_record(obj):
+    if not isinstance(obj, dict):
+        return False
+    marker_values = []
+    for key in explicit_marker_keys:
+        value = obj.get(key)
+        if isinstance(value, str):
+            marker_values.append(value)
+    marker = ' '.join(marker_values).lower()
+    payload = '\n'.join(flatten_strings(obj))
+
+    # Strong evidence 1: a structured event/tool/action whose marker itself is
+    # skill-specific and whose payload names the target skill.
+    if 'skill' in marker and skill.lower() in payload.lower():
+        return True
+
+    # Strong evidence 2: an executed/read command or structured record refers
+    # to the target skill's concrete SKILL.md path. Merely mentioning another
+    # skill by name inside loaded lifecycle/handoff prose does not count.
+    if path_re.search(payload):
+        commandish = any(token in marker for token in (
+            'command', 'exec', 'shell', 'read', 'cat', 'sed', 'python', 'tool'
+        ))
+        if commandish or 'skill' in marker:
+            return True
+    return False
+
+with open(json_file, encoding='utf-8', errors='ignore') as fh:
+    for line in fh:
+        try:
+            root = json.loads(line)
+        except Exception:
+            continue
+        stack = [root]
+        while stack:
+            current = stack.pop()
+            if is_explicit_skill_record(current):
+                raise SystemExit(0)
+            if isinstance(current, dict):
+                stack.extend(v for v in current.values() if isinstance(v, (dict, list)))
+            elif isinstance(current, list):
+                stack.extend(v for v in current if isinstance(v, (dict, list)))
+raise SystemExit(1)
+PY
 }
 
 routing_oracle() {

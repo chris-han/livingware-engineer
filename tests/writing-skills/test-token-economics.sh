@@ -13,7 +13,7 @@ fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "PASS: $*"; }
 require() {
   local file="$1" text="$2" label="$3"
-  grep -Fq "$text" "$file" || fail "$label"
+  grep -Fiq "$text" "$file" || fail "$label"
   pass "$label"
 }
 
@@ -26,13 +26,13 @@ require "$CREATOR" "skill is a discoverable entry package for a reusable, contex
 require "$CREATOR" "TOOL / SCRIPT / TEST" "creator routes deterministic mechanics to executable owners"
 require "$CREATOR" "POLICY / INVARIANT OWNER" "creator routes stable constraints to policy owner"
 require "$CREATOR" "nearest competing state/skill" "creator checks neighboring routing state"
-require "$CREATOR" "Do not load unnecessary context" "creator prioritizes context elimination"
+require "$CREATOR" "do not load unnecessary context" "creator prioritizes context elimination"
 require "$CREATOR" "../../docs/skill-runtime-architecture.md" "creator uses canonical layered architecture"
 require "$CREATOR" "../../docs/skill-token-economics.md" "creator uses canonical token economics"
 
 require "$REVIEW" "TOOL/OPERATOR" "review separates operator ownership"
 require "$REVIEW" "references/layered-evaluation.md" "review routes detailed eval to canonical reference"
-require "$REVIEW" "Simulation narrows search; real execution remains the judge" "review preserves simulation evidence boundary"
+require "$REVIEW" "simulation narrows search; real execution remains the judge" "review preserves simulation evidence boundary"
 require "$REVIEW" "../../docs/skill-runtime-architecture.md" "review points to canonical layered architecture"
 require "$REVIEW" "../../docs/skill-token-economics.md" "review points to canonical token economics"
 

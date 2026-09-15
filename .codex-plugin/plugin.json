@@ -4,6 +4,7 @@
   "description": "An agentic skills framework & software development methodology that works.",
   "repository": "https://github.com/chris-han/livingware-engineer",
   "skills": "skills",
+  "hooks": {},
   "commands": {
     "update": {
       "description": "Update the installed Livingware Engineer plugin from the GitHub marketplace source.",

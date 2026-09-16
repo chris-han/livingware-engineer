@@ -1,7 +1,7 @@
 # Livingware Skill Runtime Architecture
 
 **Status:** accepted implementation basis  
-**Date:** 2026-09-15
+**Date:** 2026-09-16
 
 ## Purpose
 
@@ -76,6 +76,12 @@ current state + current evidence
 ```
 
 A host with native skill matching must not be wrapped in a second mandatory meta-router merely to reproduce discovery capability.
+
+#### Conceptual-to-engineering reclassification invariant
+
+Routing remains recurrent across the life of a conversation, not only at the first user turn. When a conceptual or research discussion begins proposing a named contract, interface, service, store, object, or subsystem for a real software project, the current state has changed from conceptual exploration to engineering design. Native skill matching should expose the matching design workflow at that point, and that workflow must inspect the existing project/repository before proposing an architectural delta.
+
+This transition must not require an always-on meta-router. The discoverable design skill description is responsible for matching the new current state; purely conceptual research with no project design decision remains outside the engineering-design workflow.
 
 ### Skill
 

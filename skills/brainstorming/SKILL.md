@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: Use when an implementation request needs design decisions, requirements clarification, or scope assessment
+description: Use when a software/project discussion needs design decisions about behavior, architecture, contracts, interfaces, services, stores, or subsystems, including when a conceptual discussion starts proposing code-level structure in an existing repo. Do not use for purely conceptual research with no project design decision.
 ---
 
 # Brainstorming Ideas Into Designs
@@ -8,6 +8,8 @@ description: Use when an implementation request needs design decisions, requirem
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
 Start by classifying how much process the request needs, then work through your path: understand the context, refine the idea, decide what should be reused or adopted versus built, present a design, and get your human partner's approval.
+
+Architecture design is not a parallel unguided mode. Reclassify when a conceptual or research discussion begins proposing code-level contracts, interfaces, services, stores, objects, or subsystems for a real project. In an existing repository, inspect the current project state before proposing the architectural delta so an already-owned contract or subsystem is reused rather than redesigned from first principles. Purely conceptual research remains outside this workflow until a project design decision exists.
 
 ## Authorization Boundary
 

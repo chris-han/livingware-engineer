@@ -3,6 +3,13 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.9.6 (2026-09-16)
+
+- Broaden `brainstorming` discovery so code-relevant architecture, contract, interface, service, store, and subsystem design is governed by the existing design workflow even when the conversation began as conceptual research.
+- Add a recurrent conceptual-to-engineering reclassification invariant: inspect the live project/repository before proposing an architectural delta, without introducing an always-on meta-router.
+- Preserve the negative boundary for purely conceptual research with no project design decision, and add a focused routing regression contract.
+- Synchronize declared package/plugin version surfaces to 6.9.6.
+
 ## v6.9.5 (2026-09-16)
 
 - Add a requirement-to-evidence gate for plan completion: inspect assertions, connected journeys, fixture/baseline fidelity, and repeat counts before closing plan or goal status.

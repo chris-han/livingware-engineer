@@ -3,6 +3,13 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.9.5 (2026-09-16)
+
+- Add a requirement-to-evidence gate for plan completion: inspect assertions, connected journeys, fixture/baseline fidelity, and repeat counts before closing plan or goal status.
+- Keep failed or unverified requirements open; recover premature completion claims and report host status limitations.
+- Refresh governance bindings only after reviewing their affected documents; passing metadata checks cannot substitute for review.
+- Preserve proportional verification: existing valid integration evidence counts regardless of test directory, with no mandatory duplicate suite or evidence ledger.
+
 ## v6.8.5 (2026-09-14)
 
 - Upgrade the repository-owned skill creator workflow (`writing-skills`) with architecture-first token-economics guidance: eliminate unnecessary loading, prevent activation collisions, keep compact roots, bound tool cost, reuse evidence, reduce serial turns, preserve cache-stable prefixes, and compress wording last.

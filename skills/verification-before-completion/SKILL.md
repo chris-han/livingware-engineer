@@ -22,6 +22,18 @@ Before making a claim:
 
 A focused pass is not a full-suite or integrated pass. Architectural claims require real-component evidence through the affected production path. Frontend completion requires affected real-browser evidence. A declared MVL is complete only when its own stopping criterion is satisfied; do not invent MVL requirements for work that has none.
 
+## Plan completion gate
+
+For a plan or declared acceptance contract, passing commands is necessary evidence, not proof that the contract was exercised. Before changing completion state:
+
+1. Read the original acceptance requirements, including referenced specifications and deliverables. Map each requirement to current evidence and the specific assertion or reviewed artifact that proves it; classify it as proved, failed, or unverified. Use the existing plan/work log when recovery requires persistence, not a second ledger.
+2. Inspect the evidence's meaning: fixture, exact inputs, assertions, forbidden substitutions, repeat counts, benchmark baseline, and thresholds must match the requirement. Test names, green summaries, and metadata validators cannot establish coverage by themselves.
+3. For a required connected journey, verify its transitions through the real components on the required shared state, including restart/reopen when specified. Separate passing tests of disconnected pieces do not prove the journey. Classify tests by the boundaries they exercise, not their directory or filename; reuse valid integration evidence without rerunning by ceremony.
+4. Any failed or unverified requirement keeps the plan and goal incomplete. Continue authorized work or report the exact external blocker; do not narrow the stopping criterion to the implemented subset.
+5. Only after every requirement is proved, update plan/goal completion status and archive or hand off as required. Run lifecycle checks on that final metadata. Never mark complete merely to satisfy a checker. If an earlier completion claim is disproved, retract it and restore available status surfaces to incomplete before continuing; report any status the host cannot reopen.
+
+Governance hashes and review bindings attest to review; refreshing them does not perform it. Inspect each affected document against its changed sources before refreshing only those reviewed bindings. Do not refresh unrelated bindings merely to make a global check green.
+
 ## Verification Impact Analysis
 
 Use the existing impact-radius classes rather than escalating by habit:

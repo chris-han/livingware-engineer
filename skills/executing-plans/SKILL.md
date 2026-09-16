@@ -85,3 +85,5 @@ Do not carry complete prior skill bodies, broad repository dumps, or duplicate t
 ## Completion
 
 Before claiming fixed/correct/complete/integrated/ready-to-merge/release, enter `verification-before-completion` for the exact claim. After supported completion evidence, use the already-authorized branch action or the branch-completion workflow. Evidence boundaries are not human approval checkpoints.
+
+For whole-plan completion, apply that skill's Plan completion gate to the original acceptance contract. Keep incomplete requirements visible through task boundaries; a green command list or completed implementation slice cannot authorize closing the plan or goal.

@@ -26,6 +26,14 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
+## Architecture Delta Before Architecture Work
+
+For a plan that introduces or changes a subsystem, service, store, contract, interface, ownership boundary, cross-component data flow, runtime responsibility, or structural architecture, apply `docs/architecture-delta-principle.md` before creating implementation tasks. Carry forward the design's current-state evidence and Architecture Delta Review rather than re-inventing the architecture from the spec title.
+
+The plan may contain architecture-changing tasks only when the review disposition is `PROCEED_WITH_DELTA`. `UNKNOWN` is an investigation state, not a missing-capability claim; `NO_CHANGE_REQUIRED` is terminal and the plan must not manufacture implementation tasks. Every architecture-changing task must trace to at least one verified delta item, remain inside the declared scope fence, and name the evidence that will close that delta.
+
+This is a machine-verifiable structural gate, not a default human-approval checkpoint. For work with no architecture effect, record `NOT_APPLICABLE` briefly and continue.
+
 ## MVL Is the Feature-Development Unit
 
 For product features, plan a **Minimum Viable Loop (MVL)**, not merely an implementation slice.
@@ -39,6 +47,7 @@ Target user + job + value hypothesis
   -> smallest real user journey
   -> realistic trial inputs
   -> prerequisites / dependencies
+  -> Architecture Delta when architecture-affecting
   -> IA-before-UI when material user-facing structure changes
   -> implementation
   -> TDD
@@ -175,6 +184,18 @@ Task boundaries MUST preserve the MVL journey. Do not decompose the work in a wa
 Every plan must include the relevant review blocks before implementation tasks:
 
 ```markdown
+## Architecture Delta Review
+
+**Applicability:** REQUIRED | NOT_APPLICABLE
+**Intent:** ...
+**Evidence basis:** ...
+**Observed architecture:** ...
+**Required properties:** ...
+**Verified delta:** ...
+**Scope fence / does not change:** ...
+**Closing evidence:** ...
+**Disposition:** PROCEED_WITH_DELTA | NO_CHANGE_REQUIRED | INVESTIGATE_UNKNOWN | REFRESH_CONTEXT | REDUCE_SCOPE | NOT_APPLICABLE
+
 ## IA-Before-UI Review
 
 **Applicability:** REQUIRED | NOT_APPLICABLE
@@ -203,7 +224,7 @@ Every plan must include the relevant review blocks before implementation tasks:
 **Omitted broad suites:** ...
 ```
 
-For non-UI work, IA may be `NOT_APPLICABLE`, but VIA still selects test scope. For material UI work, `GO_FOR_UI` must precede implementation. `REVISE_IA` blocks production UI coding but does not imply a human approval ceremony.
+For architecture-affecting work, only `PROCEED_WITH_DELTA` may precede implementation tasks; `NO_CHANGE_REQUIRED` is terminal, `INVESTIGATE_UNKNOWN` requires evidence gathering, `REFRESH_CONTEXT` requires current-state reconstruction, and `REDUCE_SCOPE` requires a smaller candidate change. For non-architecture work, Architecture Delta may be `NOT_APPLICABLE`. For non-UI work, IA may be `NOT_APPLICABLE`, but VIA still selects test scope. For material UI work, `GO_FOR_UI` must precede implementation. These are machine-verifiable structural dispositions and do not imply human approval ceremony.
 
 ## Self-Review
 
@@ -212,13 +233,14 @@ After writing the plan, check:
 1. Spec coverage.
 2. MVL continuity.
 3. Dependency readiness.
-4. IA-before-UI applicability and disposition.
-5. Verification Impact Analysis and R0–R3 scope.
-6. Integration credibility.
-7. Placeholder scan.
-8. Type consistency.
+4. Architecture Delta applicability, evidence, minimality, and disposition.
+5. IA-before-UI applicability and disposition.
+6. Verification Impact Analysis and R0–R3 scope.
+7. Integration credibility.
+8. Placeholder scan.
+9. Type consistency.
 
-If a material UI change lacks an IA review, or VIA is missing/unsupported, the plan is incomplete.
+If architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
 
 ## Execution Handoff
 

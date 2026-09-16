@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'AGENTS.md'
+      - 'docs/architecture-delta-principle.md'
       - 'docs/skill-runtime-architecture.md'
       - 'docs/skill-token-economics.md'
       - 'skills/**'
@@ -26,6 +27,7 @@ on:
   pull_request:
     paths:
       - 'AGENTS.md'
+      - 'docs/architecture-delta-principle.md'
       - 'docs/skill-runtime-architecture.md'
       - 'docs/skill-token-economics.md'
       - 'skills/**'
@@ -58,6 +60,8 @@ jobs:
         run: bash scripts/bump-version.sh --check
       - name: Progressive skill loading
         run: bash tests/codex/test-progressive-skill-loading.sh
+      - name: Architecture routing and delta
+        run: bash tests/writing-skills/test-architecture-routing.sh
       - name: Layered skill and token economics
         run: bash tests/writing-skills/test-token-economics.sh
       - name: Systematic debugging operator

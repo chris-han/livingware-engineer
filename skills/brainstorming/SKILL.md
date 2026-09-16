@@ -9,7 +9,7 @@ Help turn ideas into fully formed designs and specs through natural collaborativ
 
 Start by classifying how much process the request needs, then work through your path: understand the context, refine the idea, decide what should be reused or adopted versus built, present a design, and get your human partner's approval.
 
-Architecture design is not a parallel unguided mode. Reclassify when a conceptual or research discussion begins proposing code-level contracts, interfaces, services, stores, objects, or subsystems for a real project. In an existing repository, inspect the current project state before proposing the architectural delta so an already-owned contract or subsystem is reused rather than redesigned from first principles. Purely conceptual research remains outside this workflow until a project design decision exists.
+Architecture design is not a parallel unguided mode. Reclassify when a conceptual or research discussion begins proposing code-level contracts, interfaces, services, stores, objects, or subsystems for a real project. In an existing repository, inspect the current project state and apply the Architecture Delta Probe in `docs/architecture-delta-principle.md` before proposing an architectural change, so an already-owned contract or subsystem is reused rather than redesigned from first principles. Purely conceptual research remains outside this workflow until a project design decision exists.
 
 ## Authorization Boundary
 
@@ -25,9 +25,22 @@ Classify the request before choosing the amount of process. Briefly explain the 
 
 - **Spike** — a feasibility question ("can we...", "is it possible...", "quick and dirty is fine") whose output is an answer, not code you keep. For an explicitly requested safe, read-only probe, state what you will check and proceed; seek approval for consequential experiments. No design doc, no spec file. Report findings as a recommendation; anything you built stays labeled throwaway.
 - **Bounded** — a well-scoped change to code that already exists in this repo: a new flag, a small endpoint, a one-file fix. Understanding the kind of app is not enough — bounded means the flow you are changing is already here to read. If there is no existing flow to change, the task is not bounded. Resolve missing information that materially affects the change. Present a short approach in chat and apply the Authorization Boundary above; an already specified, reversible request does not need another yes. No spec file, no implementation plan document.
-- **Architectural** — new projects, new subsystems, changes that restructure how components fit together or alter interfaces others depend on. Follow the full process: questions, approaches, sectioned design, written spec, then the writing-plans skill.
+- **Architectural** — new projects, new subsystems, changes that restructure how components fit together or alter interfaces others depend on. Follow the full process: questions, Architecture Delta Probe, approaches, sectioned design, written spec, then the writing-plans skill.
 
 Choose the least process justified by observed scope and risk. Reclassify when new evidence changes those facts; pause for approval only when the Authorization Boundary requires it.
+
+## Architecture Delta Probe
+
+For architecture-affecting work in an existing project, read and apply `docs/architecture-delta-principle.md` before exploring implementation approaches. The probe is the design workflow's current-state admissibility check, not a separate architecture mode or human approval ceremony.
+
+1. State the desired outcome and required architectural properties independently of a preferred implementation.
+2. Reconstruct the smallest relevant observed architecture from current code, tests, contracts/configuration, accepted architecture records, and runtime evidence where material.
+3. Classify every required property as `SATISFIED`, `PARTIAL`, `UNSATISFIED`, `UNKNOWN`, or `CONFLICTING`.
+4. Only `PARTIAL` and `UNSATISFIED` may create architecture delta items. `UNKNOWN` requires targeted investigation; it is not evidence that a capability is missing. Resolve conflicting or stale evidence before designing around it.
+5. If the verified delta is empty, stop architecture change with `NO_CHANGE_REQUIRED`; documentation alignment may still be appropriate, but do not manufacture implementation work.
+6. For a non-empty delta, keep every proposed change inside that verified delta, identify what existing owners/boundaries must not change, and define observable closing evidence before implementation planning.
+
+Use the current Working Context and repository evidence rather than creating a new durable architecture ledger or requiring a whole-repository scan. A greenfield project may have an empty observed implementation, but still separate required properties from technology preferences and check for reusable platform/repository capabilities first.
 
 ## Build vs Reuse vs Adopt Is a Design Decision
 
@@ -109,14 +122,15 @@ Use the relevant path as a checklist, not a requirement to generate a todo or ar
 **Architectural:**
 1. **Explore project context** — check files, docs, recent commits
 2. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
-3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Evaluate build vs reuse vs open-source adoption for meaningful capabilities** — research candidates where needed and make dependency ownership an explicit design choice
-5. **Propose 2-3 approaches** — with trade-offs, dependency strategy, and your recommendation
-6. **Present design** — use sections scaled to complexity; obtain approval for the coherent design and unresolved material choices, not a separate yes for every section
-7. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
-8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, and unresolved dependency decisions
-9. **Confirm design continuity** — if the written spec changes the approved scope or material decisions, obtain approval for those changes; otherwise reference it and proceed
-10. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria sufficiently to state required architectural properties
+4. **Run the Architecture Delta Probe** — classify required properties against observed architecture; investigate `UNKNOWN`; stop with `NO_CHANGE_REQUIRED` when the verified delta is empty
+5. **Evaluate build vs reuse vs open-source adoption for the verified delta** — research candidates where needed and make dependency ownership an explicit design choice
+6. **Propose 2-3 approaches** — with trade-offs, dependency strategy, and your recommendation, all inside the verified delta
+7. **Present design** — use sections scaled to complexity; obtain approval for the coherent design and unresolved material choices, not a separate yes for every section
+8. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+9. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope, architecture-delta traceability, and unresolved dependency decisions
+10. **Confirm design continuity** — if the written spec changes the approved scope or material decisions, obtain approval for those changes; otherwise reference it and proceed
+11. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
 
@@ -124,8 +138,11 @@ Use the relevant path as a checklist, not a requirement to generate a todo or ar
 digraph brainstorming {
     "Classify: spike / bounded / architectural" [shape=diamond];
     "Explore project context" [shape=box];
-    "Build / reuse / adopt decision" [shape=diamond];
     "Ask clarifying questions" [shape=box];
+    "Architecture Delta Probe" [shape=diamond];
+    "No architecture change required" [shape=doublecircle];
+    "Investigate unknown/conflict" [shape=box];
+    "Build / reuse / adopt decision" [shape=diamond];
     "Present design / approaches" [shape=box];
     "Required authorization satisfied?" [shape=diamond];
     "Investigate spike" [shape=doublecircle];
@@ -136,9 +153,15 @@ digraph brainstorming {
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Classify: spike / bounded / architectural" -> "Explore project context";
-    "Explore project context" -> "Build / reuse / adopt decision";
-    "Build / reuse / adopt decision" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Present design / approaches";
+    "Explore project context" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Architecture Delta Probe" [label="architectural"];
+    "Architecture Delta Probe" -> "No architecture change required" [label="empty delta"];
+    "Architecture Delta Probe" -> "Investigate unknown/conflict" [label="unknown/conflicting"];
+    "Investigate unknown/conflict" -> "Architecture Delta Probe";
+    "Architecture Delta Probe" -> "Build / reuse / adopt decision" [label="verified non-empty delta"];
+    "Build / reuse / adopt decision" -> "Present design / approaches";
+    "Explore project context" -> "Present design / approaches" [label="bounded"];
+    "Explore project context" -> "Required authorization satisfied?" [label="spike"];
     "Present design / approaches" -> "Required authorization satisfied?";
     "Required authorization satisfied?" -> "Investigate spike" [label="spike"];
     "Required authorization satisfied?" -> "Implement bounded via normal workflow" [label="bounded"];
@@ -150,7 +173,7 @@ digraph brainstorming {
 }
 ```
 
-**Terminal states are path-bound.** Architectural: the ONLY skill you invoke after brainstorming is writing-plans — never frontend-design, mcp-builder, or any other implementation skill. Bounded: with required authorization satisfied, implementation proceeds directly through the normal development workflow; no plan document. Spike: the terminal state is a reported recommendation.
+**Terminal states are path-bound.** Architectural: a verified empty delta terminates as `NO_CHANGE_REQUIRED`; otherwise the ONLY skill you invoke after brainstorming is writing-plans — never frontend-design, mcp-builder, or any other implementation skill. Bounded: with required authorization satisfied, implementation proceeds directly through the normal development workflow; no plan document. Spike: the terminal state is a reported recommendation.
 
 ## The Process
 
@@ -165,10 +188,12 @@ The subsections below serve the bounded and architectural paths (a spike stops a
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
+- For architecture-affecting work, distinguish required architectural properties from the user's or agent's initially proposed mechanism before calculating the delta
 - Identify meaningful capabilities that could be reused or supplied by existing/open-source dependencies before locking architecture around custom implementations
 
 **Exploring approaches:**
 
+- Do not explore implementation approaches for architecture-affecting work until a non-empty Architecture Delta has been established
 - Propose 2-3 different approaches with trade-offs
 - Include the build/reuse/adopt strategy when it materially differs between approaches
 - Present options conversationally with your recommendation and reasoning
@@ -182,6 +207,7 @@ The subsections below serve the bounded and architectural paths (a spike stops a
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask about unresolved material choices; do not require a separate approval for each explanatory section
 - Cover: architecture, components, data flow, dependency strategy, error handling, testing
+- Make the observed architecture, verified delta, scope fence, and delta-closing evidence visible for architecture-affecting work
 - Make new dependency choices and their verification prerequisites explicit
 - Be ready to go back and clarify if something doesn't make sense
 
@@ -197,8 +223,9 @@ The subsections below serve the bounded and architectural paths (a spike stops a
 
 - Explore the current structure before proposing changes. Follow existing patterns.
 - Search for existing implementations and installed dependencies before proposing new code or new packages.
-- Where existing code has problems that affect the work, include targeted improvements as part of the design.
-- Don't propose unrelated refactoring. Stay focused on what serves the current goal.
+- Classify required architecture properties against current evidence; do not convert `UNKNOWN` into `UNSATISFIED`, and stop architecture work when the verified delta is empty.
+- Where existing code has problems that affect the verified delta, include targeted improvements as part of the design.
+- Don't propose unrelated refactoring. Stay focused on what serves the current goal and verified delta.
 
 ## After the Design (architectural path)
 
@@ -206,6 +233,7 @@ The subsections below serve the bounded and architectural paths (a spike stops a
 
 - Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
+- Record the Architecture Delta Review, including evidence basis, observed architecture, required properties, verified delta, scope fence, closing evidence, and disposition
 - Record material build/reuse/adopt decisions and selected dependency candidates in the design
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
@@ -217,7 +245,8 @@ After writing the spec document, look at it with fresh eyes:
 2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
-5. **Dependency decision check:** Does every meaningful new capability have a resolved build/reuse/adopt decision? If a new package is chosen, are rationale, constraints, version/pinning intent, and required smoke/contract verification clear enough for writing-plans?
+5. **Architecture Delta check:** Does every architecture-changing proposal trace to a `PARTIAL` or `UNSATISFIED` required property backed by current evidence? Are `UNKNOWN` items investigations rather than changes, is the scope fenced, and would an empty delta have stopped the design?
+6. **Dependency decision check:** Does every meaningful new capability have a resolved build/reuse/adopt decision? If a new package is chosen, are rationale, constraints, version/pinning intent, and required smoke/contract verification clear enough for writing-plans?
 
 Fix any issues inline. No need to re-review — just fix and move on.
 
@@ -228,7 +257,7 @@ The written spec must preserve the approved design. Ask for approval when it int
 **Implementation:**
 
 - Invoke the writing-plans skill to create a detailed implementation plan
-- The plan must carry forward approved dependency decisions and add install + verification prerequisites for any new dependency
+- The plan must carry forward the Architecture Delta Review and approved dependency decisions, adding install + verification prerequisites for any new dependency
 - Do NOT invoke any other skill. writing-plans is the next step.
 
 ## Visual Companion

@@ -7,6 +7,8 @@ description: Use when an architectural or high-risk change needs deliberate revi
 
 Review is a risk-control mechanism, not a completion ceremony. Use the lightest review that addresses the actual failure risk, and do not repeat review of unchanged work.
 
+When generated evidence is itself the deliverable, review scope includes the artifact, not merely its generator and tests.
+
 ## Review Levels
 
 ### Ordinary Change

@@ -20,6 +20,8 @@ Before making a claim:
 3. Run that check, or reuse an observed result only when the relevant code, tests, dependencies, configuration, fixtures, and environment are unchanged.
 4. Read the actual result and state only what it establishes.
 
+When the deliverable is a human-readable evidence or research artifact, acceptance includes independently reading the generated artifact for lineage, stopping reason, denominators, limitations, and demonstrated versus non-demonstrated claims.
+
 A focused pass is not a full-suite or integrated pass. Architectural claims require real-component evidence through the affected production path. Frontend completion requires affected real-browser evidence. A declared MVL is complete only when its own stopping criterion is satisfied; do not invent MVL requirements for work that has none.
 
 ## Plan completion gate

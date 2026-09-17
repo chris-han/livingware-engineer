@@ -1,6 +1,13 @@
 Warning: truncated output (original token count: 25901)
 Total output lines: 1512
 
+## v6.9.9 (2026-09-17)
+
+- Require standalone reading of human-readable evidence and research deliverables for lineage, stopping reason, denominators, limitations, and demonstrated versus non-demonstrated claims.
+- Include generated evidence artifacts themselves in review scope, alongside their generators and tests.
+- Keep both reminders conditional; no new workflow layer or change to `executing-plans`. These clarify acceptance expectations without claiming generalized behavioral-evaluation gains.
+- Synchronize declared package/plugin version surfaces to 6.9.9.
+
 # Superpowers Release Notes
 
 ## v6.9.8 (2026-09-17)

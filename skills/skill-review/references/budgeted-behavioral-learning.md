@@ -117,6 +117,24 @@ Prefer a layer-specific question, for example whether a route should prefer focu
 
 If no single concrete policy/routing/workflow decision can fill the blank, stay silent.
 
+## Marginal future-impact gate
+
+Accumulated evidence does not by itself justify generalized behavioral learning. After recurrence and systemic attribution are established, a candidate shared change must still have a plausible material effect on future routing, workflow trajectories, completion quality, authority/correctness preservation, or whole-loop cost.
+
+Use the smallest counterfactual question that can distinguish the candidate from no change:
+
+```text
+ExpectedFutureImpact(candidate) =
+  material_difference(
+    future behavior under current shared rule,
+    future behavior under candidate shared rule
+  )
+```
+
+The comparison need not be a numeric score. It must identify at least one decision-relevant behavior that could materially improve or regress. If existing evidence supports no material expected trajectory or decision improvement, do not generalize the change merely because evidence has accumulated. Prefer `NO_SHARED_CHANGE`, a local/provisional fix, or continued observation as appropriate.
+
+Evidence can still have option value when it reduces uncertainty or helps discriminate a later candidate. `No shared change now` does not mean `delete the evidence`, and an unchanged final task outcome does not by itself prove zero value when the evidence materially changes authority, uncertainty, path cost, recovery behavior, or future evaluability.
+
 ## Suggestion format
 
 Keep the suggestion minimal:
@@ -142,6 +160,21 @@ A suggestion never authorizes execution. The user must explicitly initiate the b
 5. expand only when initial findings or material interaction risk justify the added cost;
 6. report behavior deltas, evidence provenance, and proposed layer-specific rule changes concisely; and
 7. treat shared-policy/workflow/routing changes as proposals requiring human adoption, never autonomous mutations.
+
+## Historical execution-basis invariant
+
+Later workflow, routing, tool-semantic, or policy learning may change the conditions of future executions; it must never rewrite the basis of a historical episode. Preserve enough identity to interpret an observed episode under the repository/input state, workflow/policy versions, operator versions, model/harness/config pins, and evidence that actually governed that execution when those factors are material.
+
+```text
+historical episode E_t under basis B_t
+  -> learning / candidate delta
+  -> future basis B_t+1
+
+B_t+1 may govern future episodes.
+B_t+1 MUST NOT be substituted for B_t when interpreting E_t.
+```
+
+Replaying an old input under a newer basis creates a new `REPLAYED` or `OBSERVED` comparison, depending on how it is executed; it does not replace the original episode. A later rule that would have produced a better path is counterfactual evidence about future behavior, not evidence that the historical system actually followed that path. Preserve this distinction whenever behavioral learning uses past executions to justify a shared change.
 
 ## Matched fix is not generalized learning
 

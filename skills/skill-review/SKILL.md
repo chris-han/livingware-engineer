@@ -36,7 +36,7 @@ A smaller prompt that causes extra tool turns, weaker verification, more retries
 
 ## Behavioral learning is opt-in maintenance
 
-Do not run behavioral evals or shared workflow learning automatically. When repeated/systemic steering evidence makes learning relevant, read `references/budgeted-behavioral-learning.md`. It owns recurrence, material independence, evidence sufficiency, counterfactual/simulation admission, and human initiation.
+Do not run behavioral evals or shared workflow learning automatically. When repeated/systemic steering evidence makes learning relevant, read `references/budgeted-behavioral-learning.md`. It owns recurrence, material independence, evidence sufficiency, marginal future-impact admission, historical execution-basis preservation, counterfactual/simulation admission, and human initiation.
 
 `REPLAYED`, `SIMULATED`, `INFERRED`, or `ASSUMED` evidence may narrow a real eval but cannot become materially independent observed evidence. `REAL_REEXECUTION` counts as `OBSERVED` only when the declared real comparable fixture/environment actually runs.
 

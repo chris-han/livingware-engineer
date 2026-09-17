@@ -3,6 +3,14 @@ Total output lines: 1512
 
 # Superpowers Release Notes
 
+## v6.9.8 (2026-09-17)
+
+- Add a marginal future-impact gate for generalized behavioral learning: accumulated evidence must support a plausible material improvement in future routing, workflow trajectories, completion quality, authority/correctness preservation, or whole-loop cost before a shared change is justified.
+- Preserve evidence option value when no shared change is currently justified; an unchanged final task outcome does not imply zero evidence value when uncertainty, path cost, recovery, authority, or future evaluability changes materially.
+- Add a historical execution-basis invariant: later workflow, routing, tool-semantic, or policy learning may govern future executions but must never be substituted for the basis that actually governed a historical episode.
+- Clarify that replaying an old input under a newer basis creates new comparison evidence rather than rewriting the original observed episode.
+- Synchronize declared package/plugin version surfaces to 6.9.8.
+
 ## v6.9.6 (2026-09-16)
 
 - Broaden `brainstorming` discovery so code-relevant architecture, contract, interface, service, store, and subsystem design is governed by the existing design workflow even when the conversation began as conceptual research.

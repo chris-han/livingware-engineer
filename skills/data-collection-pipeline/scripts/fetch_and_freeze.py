@@ -104,7 +104,7 @@ def main() -> int:
         target.write_bytes(body)
         digest = hashlib.sha256(body).hexdigest()
         record.update({
-            "artifact_path": str(target),
+            "artifact_path": str(target.relative_to(manifest.parent)),
             "sha256": digest,
             "byte_size": len(body),
             "freeze_state": "FROZEN",

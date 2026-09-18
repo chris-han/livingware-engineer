@@ -111,7 +111,7 @@ Browser success does not replace raw-source freezing when a canonical downloadab
 ## Semantier implementation companion
 
 The generic Livingware contract is implemented in Semantier by
-`chris-han/semantier-skills/plugins/resilient_public_data_collection` version `0.2.0`.
+`chris-han/semantier-skills/plugins/resilient_public_data_collection` version `0.2.1`.
 That plugin may add domain/runtime responsibilities such as public-IP/SSRF checks,
 workspace-scoped content-addressed storage, immutable capture receipts, byte-format
 validation, and CCGP-specific public-link derivation. Those Semantier responsibilities do

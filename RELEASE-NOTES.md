@@ -1,3 +1,11 @@
+## v6.10.7 (2026-09-18)
+
+- Remove the hidden `jq` dependency from `scripts/bump-version.sh`; JSON read/write, declared-file enumeration, and audit excludes now use Python, which is already required by the plugin runtime.
+- Prevent the missing-`jq` cascade that produced `versions[0]: unbound variable` by explicitly rejecting an empty readable-version set.
+- Add a disposable-repository regression with a deliberately failing fake `jq`, exercising `--check`, `--audit`, and a real version bump including a nested JSON field.
+- Add the jq-free packaging regression to Layered Runtime Verification.
+- Synchronize declared package/plugin version surfaces to 6.10.7.
+
 ## v6.10.6 (2026-09-18)
 
 - Bind the generic Livingware `data-collection-pipeline` contract to the Semantier companion implementation `chris-han/semantier-skills/plugins/resilient_public_data_collection` v0.2.0.

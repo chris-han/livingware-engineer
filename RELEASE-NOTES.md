@@ -1,3 +1,12 @@
+## v6.10.4 (2026-09-18)
+
+- Add a lazy, isolated Crawlee dependency bootstrap owned by `data-collection-pipeline`; review-only/planning-only use does not install dependencies.
+- Pin and verify Crawlee Python `1.10.1`; core acquisition installs only `crawlee==1.10.1` into the Livingware runtime cache and returns the isolated Python executable.
+- Keep browser support as a separate explicit escalation: `--mode browser` installs `crawlee[playwright]==1.10.1`, verifies `PlaywrightCrawler`, and installs Chromium only in non-CI browser-ready mode.
+- Add version/capability checks, idempotent reuse, check-only/plan modes, and a browser-readiness marker written only after Chromium installation succeeds.
+- Add fresh-install CI proving core mode excludes Playwright and browser mode adds the Playwright extra only after escalation.
+- Synchronize declared package/plugin version surfaces to 6.10.4.
+
 ## v6.10.3 (2026-09-18)
 
 - Convert the real 2026-09-18 CCGP failure-and-recovery episode into executable regression coverage.

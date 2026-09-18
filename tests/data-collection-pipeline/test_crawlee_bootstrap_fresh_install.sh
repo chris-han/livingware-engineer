@@ -5,7 +5,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 BOOT="$ROOT/skills/data-collection-pipeline/scripts/bootstrap_crawlee.py"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-RUNTIME="$TMP/crawlee-runtime"
+if [[ -n "${CRAWLEE_BOOTSTRAP_TEST_RUNTIME:-}" ]]; then
+  RUNTIME="$CRAWLEE_BOOTSTRAP_TEST_RUNTIME"
+  rm -rf "$RUNTIME"
+else
+  RUNTIME="$TMP/crawlee-runtime"
+fi
 
 python3 "$BOOT" --mode core --runtime-dir "$RUNTIME" --plan > "$TMP/core-plan.json"
 grep -Fq '"requirement": "crawlee==1.10.1"' "$TMP/core-plan.json"

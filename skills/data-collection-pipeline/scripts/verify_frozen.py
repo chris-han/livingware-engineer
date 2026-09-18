@@ -25,7 +25,7 @@ def main() -> int:
             if record.get("freeze_state") != "FROZEN":
                 continue
             frozen += 1
-            path = Path(record.get("artifact_path", ""))
+            path = args.manifest.parent / Path(record.get("artifact_path", ""))
             expected = record.get("sha256")
             if not path.is_file():
                 failures.append({"line": lineno, "reason": "MISSING_ARTIFACT", "path": str(path)})

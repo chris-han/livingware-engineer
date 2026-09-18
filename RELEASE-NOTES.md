@@ -1,3 +1,11 @@
+## v6.10.2 (2026-09-18)
+
+- Add a pinned historical Tender-law regression fixture backed by `chris-han/semantier-runtime` commit `e751f57b12b168ac5cab97be876df981687a1857`.
+- Verify two real previously downloaded PDFs — `招标投标法实施条例.pdf` and `招标投标领域公平竞争审查规则_2024年第16号令.pdf` — against historical `下载状态.tsv`, Git blob identity, byte size, PDF magic, original source URL, and SHA-256.
+- Keep the cross-repository regression zero-copy: the test uses `git show <pinned-commit>:<path>` from an existing Semantier checkout instead of vendoring domain PDFs into Livingware.
+- Make the external fixture optional by default but enforceable with `REQUIRE_TENDER_LAW_FIXTURE=1`; `SEMANTIER_RUNTIME_ROOT` overrides the default `/home/chris/repo/semantier-runtime`.
+- Synchronize declared package/plugin version surfaces to 6.10.2.
+
 ## v6.10.1 (2026-09-18)
 
 - Refactor `data-collection-pipeline` to reuse Crawlee Python for acquisition mechanics instead of maintaining a custom HTTP downloader.

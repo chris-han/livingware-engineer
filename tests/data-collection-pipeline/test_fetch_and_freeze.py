@@ -70,8 +70,8 @@ def main() -> int:
             assert ok_record["http_status"] == 200
             assert ok_record["resolved_url"].endswith("/ok.pdf")
             assert ok_record["sha256"] == hashlib.sha256(PAYLOAD).hexdigest()
-            assert (manifest_path.parent / ok_record["artifact_path"]).read_bytes() == PAYLOAD
             manifest_path = root / "ok" / "manifest.jsonl"
+            assert (manifest_path.parent / ok_record["artifact_path"]).read_bytes() == PAYLOAD
             manifest_row = json.loads(manifest_path.read_text().strip())
             assert manifest_row["freeze_state"] == "FROZEN"
 

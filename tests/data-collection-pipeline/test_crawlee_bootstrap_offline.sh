@@ -11,7 +11,12 @@ if [[ -z "$CACHE" ]]; then
   echo "FAIL: CRAWLEE_BOOTSTRAP_TEST_RUNTIME must point to the cache created by the fresh-install test" >&2
   exit 1
 fi
-[[ -x "$CACHE/venv/bin/python" ]] || { echo "FAIL: expected cached runtime at $CACHE" >&2; exit 1; }
+if ! python3 "$BOOT" --mode core --runtime-dir "$CACHE" --check-only > "$TMP/cache-precheck.json"; then
+  echo "FAIL: expected ready cached runtime at $CACHE" >&2
+  cat "$TMP/cache-precheck.json" >&2
+  exit 1
+fi
+grep -Fq '"state": "READY"' "$TMP/cache-precheck.json"
 
 # Poison all package/network routes. Offline/check-only behavior must still work.
 export PIP_NO_INDEX=1

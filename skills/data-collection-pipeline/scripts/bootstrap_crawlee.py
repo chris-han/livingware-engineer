@@ -100,7 +100,7 @@ def _write_target_launcher(runtime_dir: Path) -> Path:
         launcher.write_text(
             "#!/bin/sh\n"
             f"PYTHONPATH={shlex.quote(str(site))}${{PYTHONPATH:+:$PYTHONPATH}} "
-            f"exec {shlex.quote(sys.executable)} \"\$@\"\n",
+            f"exec {shlex.quote(sys.executable)} \"$@\"\n",
             encoding="utf-8",
         )
         launcher.chmod(0o755)

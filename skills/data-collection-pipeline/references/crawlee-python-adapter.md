@@ -32,7 +32,9 @@ Core mode provisions an isolated venv under the Livingware runtime cache and ins
 crawlee==1.10.1
 ```
 
-It then verifies the installed distribution version and imports `FileDownloadCrawler`. Re-running core mode is idempotent when the supported version is already ready. Use `--check-only` when installation is not allowed and `--plan` to inspect the intended runtime without changing anything.
+It then verifies the installed distribution version and imports `FileDownloadCrawler`. Re-running core mode is idempotent when the supported version is already ready. Use `--check-only` to verify readiness without installation, `--offline` to require cache-only reuse with no venv creation, pip invocation, or browser download, and `--plan` to inspect the intended runtime without changing anything.
+
+Offline mode returns structured cache/capability states such as `OFFLINE_CACHE_MISS`, `OFFLINE_VERSION_MISMATCH`, `OFFLINE_CAPABILITY_MISS`, or `OFFLINE_BROWSER_BINARY_MISSING` instead of attempting network repair. A mutable install failure returns `INSTALL_FAILED` with exit code 6 and must not be treated as a ready cache.
 
 The bootstrap returns the isolated `python_executable`; run Crawlee acquisition code with that interpreter. Do not rely on an unrelated globally installed Crawlee.
 

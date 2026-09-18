@@ -1,3 +1,10 @@
+## v6.10.8 (2026-09-18)
+
+- Fix the installed-cache data-collection contract test so literal Markdown backticks around `401` are quoted safely and never execute as a shell command.
+- Make the fresh Crawlee bootstrap regression surface the failing stage, exit code, structured bootstrap stdout, and stderr instead of silently exiting under `set -e`.
+- Preserve the underlying bootstrap semantics; this release improves installed-host correctness and diagnosis after the Belfast 6.10.7 cache test exposed both issues.
+- Synchronize declared package/plugin version surfaces to 6.10.8.
+
 ## v6.10.7 (2026-09-18)
 
 - Remove the hidden `jq` dependency from `scripts/bump-version.sh`; JSON read/write, declared-file enumeration, and audit excludes now use Python, which is already required by the plugin runtime.

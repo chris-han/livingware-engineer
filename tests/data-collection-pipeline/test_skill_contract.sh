@@ -32,4 +32,5 @@ if grep -Fq "fetch_and_freeze.py" "$SKILL"; then
   exit 1
 fi
 python3 "$ROOT/tests/data-collection-pipeline/test_freeze_and_verify.py"
+python3 "$ROOT/tests/data-collection-pipeline/test_tender_law_historical_fixture.py"
 echo "PASS: data-collection-pipeline skill contract"

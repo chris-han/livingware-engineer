@@ -1,3 +1,11 @@
+## v6.10.1 (2026-09-18)
+
+- Refactor `data-collection-pipeline` to reuse Crawlee Python for acquisition mechanics instead of maintaining a custom HTTP downloader.
+- Make the first Crawlee pass evidence-preserving with `retry_on_blocked=False`, then run alternate-source and same-site alternate-entry recovery before any blocked-retry escalation.
+- Permit one bounded `retry_on_blocked=True` escalation only when eligible: never automatically for 401, conditionally for public-resource 403, and for 429 only after rate backoff is respected.
+- Keep raw-source provenance in Livingware through a local-only SHA-256 artifact freezer and offline verifier; keep browser/adaptive transport and AI-oriented transformations conditional and downstream.
+- Synchronize declared package/plugin version surfaces to 6.10.1.
+
 ## v6.10.0 (2026-09-18)
 
 - Add `data-collection-pipeline` for reproducible public-source acquisition and recovery when an initial URL is blocked by authentication, anti-bot behavior, redirects, missing routes, or unstable download paths.

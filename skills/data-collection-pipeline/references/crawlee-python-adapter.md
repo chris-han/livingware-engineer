@@ -14,7 +14,35 @@ The current Crawlee Python implementation defines:
 
 Because those defaults are broader than Livingware's evidence-first recovery policy, Livingware overrides the first pass.
 
+The supported runtime is pinned to Crawlee Python `1.10.1`, the current stable release verified on 2026-09-18. Livingware installs it lazily into an isolated runtime rather than modifying the caller's Python environment.
+
 Upstream: `https://github.com/apify/crawlee-python`.
+
+## Lazy dependency bootstrap
+
+For real acquisition, bootstrap core Crawlee immediately before the first Crawlee operation:
+
+```bash
+python3 scripts/bootstrap_crawlee.py --mode core
+```
+
+Core mode provisions an isolated venv under the Livingware runtime cache and installs exactly:
+
+```text
+crawlee==1.10.1
+```
+
+It then verifies the installed distribution version and imports `FileDownloadCrawler`. Re-running core mode is idempotent when the supported version is already ready. Use `--check-only` when installation is not allowed and `--plan` to inspect the intended runtime without changing anything.
+
+The bootstrap returns the isolated `python_executable`; run Crawlee acquisition code with that interpreter. Do not rely on an unrelated globally installed Crawlee.
+
+Browser support is a separate escalation. Only after browser behavior is actually required, run:
+
+```bash
+python3 scripts/bootstrap_crawlee.py --mode browser
+```
+
+Browser mode upgrades the same isolated runtime to exactly `crawlee[playwright]==1.10.1`, verifies `PlaywrightCrawler`, and installs Chromium into the Livingware runtime cache. It writes a browser-readiness marker only after Chromium setup succeeds. CI may use `--skip-browser-binary` to verify the Python extra without downloading Chromium; production/browser execution should not claim readiness from that CI-only mode.
 
 ## Stage 1 — observation-first acquisition
 

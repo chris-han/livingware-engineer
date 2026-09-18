@@ -70,6 +70,8 @@ jobs:
         run: bash tests/systematic-debugging/test-find-polluter.sh
       - name: Data collection pipeline
         run: bash tests/data-collection-pipeline/test_skill_contract.sh
+      - name: Crawlee lazy bootstrap fresh install
+        run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_fresh_install.sh
       - name: Counterfactual evaluator
         run: |
           python3 tests/counterfactual/test-workflow-counterfactual.py > /tmp/counterfactual-test.log 2>&1 || {

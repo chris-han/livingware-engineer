@@ -1,3 +1,12 @@
+## v6.10.5 (2026-09-18)
+
+- Add explicit offline/no-network semantics to the lazy Crawlee bootstrap: `--offline` reuses verified cache only and never creates a venv, invokes pip, or downloads browser binaries.
+- Return structured offline states for cache miss, version mismatch, capability miss, and missing browser binary; return structured `INSTALL_FAILED` with exit code 6 for mutable installation failures.
+- Add CI-backed cache-reuse tests that poison package indexes and proxies, proving a valid cached core/browser-extra runtime remains usable without network access.
+- Add no-network failure coverage for empty cache, check-only non-mutation, forced pip failure via `PIP_NO_INDEX=1`, and post-failure false-readiness prevention.
+- Preserve browser escalation separation: a cached Playwright Python extra can be verified offline, while Chromium readiness still requires its explicit readiness marker.
+- Synchronize declared package/plugin version surfaces to 6.10.5.
+
 ## v6.10.4 (2026-09-18)
 
 - Add a lazy, isolated Crawlee dependency bootstrap owned by `data-collection-pipeline`; review-only/planning-only use does not install dependencies.

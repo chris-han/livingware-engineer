@@ -28,7 +28,7 @@ Run both lanes when they are cheap and independent. Do not serially exhaust one 
 1. Define the corpus boundary before downloading: source family, target document types, time/jurisdiction filters, minimum diversity, and stopping condition.
 2. When this skill is selected for real acquisition and Crawlee mechanics are needed, lazily provision the isolated core runtime before the first Crawlee operation:
    `python3 scripts/bootstrap_crawlee.py --mode core`
-   Use the returned `python_executable` for Crawlee acquisition code. Do not install Crawlee globally and do not bootstrap it for review-only or planning-only use of this skill.
+   Use the returned `python_executable` for Crawlee acquisition code. Do not install Crawlee globally and do not bootstrap it for review-only or planning-only use of this skill. When network installation is unavailable or prohibited, use `--offline` to reuse only an already verified cache; use `--check-only` for a non-mutating readiness check.
 3. Use Crawlee Python as the default acquisition runtime. Start with a one-request observation probe: `retry_on_blocked=False`, no session rotations, no ordinary request retries, and `401/403/429` exposed to the handler as observations.
 4. Record the observed transport state. A `401`, `403`, or `429` is an observation about that route, not proof that the source is absent.
 5. On a blocked entry point, run the alternate-source and same-site alternate-entry lanes.

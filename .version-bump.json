@@ -1,5 +1,5 @@
 {
-  "version": "6.10.2",
+  "version": "6.10.3",
   "files": [
     {"path": ".version-bump.json", "field": "version"},
     {"path": "package.json", "field": "version"},

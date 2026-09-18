@@ -55,8 +55,12 @@ grep -Fq '"browser_extra": false' "$TMP/core-install.json"
 run_bootstrap "core check-only" "$TMP/core-check.json" "$TMP/core-check.stderr" --mode core --runtime-dir "$RUNTIME" --check-only
 grep -Fq '"state": "READY"' "$TMP/core-check.json"
 
-VENV_PY="$RUNTIME/venv/bin/python"
-"$VENV_PY" - <<'PY'
+RUNTIME_PY="$(python3 - "$TMP/core-install.json" <<'PY'
+import json, sys
+print(json.load(open(sys.argv[1], encoding="utf-8"))["python_executable"])
+PY
+)"
+"$RUNTIME_PY" - <<'PY'
 import importlib.util
 import importlib.metadata
 assert importlib.metadata.version("crawlee") == "1.10.1"

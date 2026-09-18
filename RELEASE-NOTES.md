@@ -1,3 +1,12 @@
+## v6.10.3 (2026-09-18)
+
+- Convert the real 2026-09-18 CCGP failure-and-recovery episode into executable regression coverage.
+- Preserve the observed failure taxonomy `LOGIN_REQUIRED | HOST_NOT_ALLOWLISTED | ATTACHMENT_HTTP_FAILURE` and the invariant that a blocked entry point is not evidence that the source is unavailable.
+- Pin two public recovery examples: Guangzhou `CZ2026-0323` on CCGP with six Guangdong official attachments, and Sichuan `N5100012026001757` on CCGP with one Sichuan official attachment.
+- Add deterministic recovery routing that always evaluates alternate-source and same-site alternate-entry recovery before any blocked retry; 401 never auto-escalates, public/session-like 403 may retry once, and 429 must respect backoff first.
+- Bound blocked retry to one explicit attempt and add regression cases proving recovered routes suppress retry and access-control boundaries do not escalate.
+- Synchronize declared package/plugin version surfaces to 6.10.3.
+
 ## v6.10.2 (2026-09-18)
 
 - Add a pinned historical Tender-law regression fixture backed by `chris-han/semantier-runtime` commit `e751f57b12b168ac5cab97be876df981687a1857`.

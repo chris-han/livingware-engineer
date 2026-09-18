@@ -49,7 +49,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 def run(url: str, out: Path):
     return subprocess.run(
-        [str(SCRIPT), url, "--output-dir", str(out), "--retrieved-at", "2026-09-18T00:00:00Z"],
+        [sys.executable, str(SCRIPT), url, "--output-dir", str(out), "--retrieved-at", "2026-09-18T00:00:00Z"],
         text=True,
         capture_output=True,
         check=False,
@@ -70,17 +70,17 @@ def main() -> int:
             assert ok_record["http_status"] == 200
             assert ok_record["resolved_url"].endswith("/ok.pdf")
             assert ok_record["sha256"] == hashlib.sha256(PAYLOAD).hexdigest()
-            assert Path(ok_record["artifact_path"]).read_bytes() == PAYLOAD
+            assert (manifest_path.parent / ok_record["artifact_path"]).read_bytes() == PAYLOAD
             manifest_path = root / "ok" / "manifest.jsonl"
             manifest_row = json.loads(manifest_path.read_text().strip())
             assert manifest_row["freeze_state"] == "FROZEN"
 
-            verified = subprocess.run([str(VERIFY), str(manifest_path)], text=True, capture_output=True, check=False)
+            verified = subprocess.run([sys.executable, str(VERIFY), str(manifest_path)], text=True, capture_output=True, check=False)
             assert verified.returncode == 0
             verify_record = json.loads(verified.stdout)
             assert verify_record["state"] == "OFFLINE_VERIFIED"
 
-            Path(ok_record["artifact_path"]).write_bytes(b"tampered")
+            (manifest_path.parent / ok_record["artifact_path"]).write_bytes(b"tampered")
             tampered = subprocess.run([str(VERIFY), str(manifest_path)], text=True, capture_output=True, check=False)
             assert tampered.returncode == 3
             tampered_record = json.loads(tampered.stdout)

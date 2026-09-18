@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "name": "tender-law-historical-v1",
+  "source_repository": "chris-han/semantier-runtime",
+  "source_ref": "codex/add-procurement-law-pdfs",
+  "source_commit": "e751f57b12b168ac5cab97be876df981687a1857",
+  "status_manifest_path": "docs/招投标法规/下载状态.tsv",
+  "verified_on": "2026-09-18",
+  "verification_method": "GitHub contents API base64 bytes -> SHA-256 compared with historical 下载状态.tsv",
+  "artifacts": [
+    {
+      "path": "docs/招投标法规/招标投标法实施条例.pdf",
+      "status": "SUCCESS",
+      "git_blob_sha": "584445f789178acc0a6f87afaa15501002dbb9d6",
+      "byte_size": 306503,
+      "sha256": "1bcdfcaa9e67c4b1a12753f950e29294adec101536f2da07767b8f950c1cc7bb",
+      "source_url": "https://xzfg.moj.gov.cn/law/download?LawID=1155&type=pdf"
+    },
+    {
+      "path": "docs/招投标法规/招标投标领域公平竞争审查规则_2024年第16号令.pdf",
+      "status": "SUCCESS",
+      "git_blob_sha": "eeb84fc56e35764ffe03980ff53980e25bb3e228",
+      "byte_size": 263384,
+      "sha256": "d460ed0a7d9aed3864efccd5bbc4c8d05ba78dc8407ff07bc181eb4bf557b572",
+      "source_url": "https://www.ndrc.gov.cn/xxgk/zcfb/fzggwl/202404/P020240403302339643235.pdf"
+    }
+  ]
+}

@@ -14,9 +14,6 @@
 - Add local HTTP regression coverage for redirects, successful acquisition, 401, 403, 404, 429, hash verification, and tamper detection.
 - Synchronize declared package/plugin version surfaces to 6.10.0.
 
-Warning: truncated output (original token count: 25901)
-Total output lines: 1512
-
 ## v6.9.9 (2026-09-17)
 
 - Require standalone reading of human-readable evidence and research deliverables for lineage, stopping reason, denominators, limitations, and demonstrated versus non-demonstrated claims.

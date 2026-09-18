@@ -23,9 +23,11 @@ Use the appropriate Crawlee HTTP/file crawler with:
 ```python
 retry_on_blocked=False
 max_session_rotations=0
+max_request_retries=0
+ignore_http_error_status_codes=[401, 403, 429]
 ```
 
-Keep ordinary network retry settings proportional to the source, but do not let blocked-session retry obscure the first observed `401/403/429`.
+This first pass is a probe, so suppress both blocked-session rotation and ordinary request retries. Treat `401/403/429` as observable responses rather than acquisition successes; record their status and do not freeze their bodies as source artifacts. After classification, later non-blocked acquisition attempts may use ordinary retry settings appropriate to the source.
 
 Interpretation:
 

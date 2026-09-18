@@ -1,3 +1,10 @@
+## v6.10.6 (2026-09-18)
+
+- Bind the generic Livingware `data-collection-pipeline` contract to the Semantier companion implementation `chris-han/semantier-skills/plugins/resilient_public_data_collection` v0.2.0.
+- Lock cross-repo alignment for `public_source_prepare_runtime` and `public_source_route_recovery`: Crawlee 1.10.1, lazy core provisioning, separate browser escalation, offline cache-only mode, non-mutating check-only mode, recovery-before-retry ordering, no automatic 401 escalation, and at most one eligible blocked retry.
+- Preserve the ownership boundary: Semantier may add public-IP/SSRF checks, content-addressed storage, immutable receipts, byte validation, and source-specific derivation without redefining the generic Livingware policy.
+- Synchronize declared package/plugin version surfaces to 6.10.6.
+
 ## v6.10.5 (2026-09-18)
 
 - Add explicit offline/no-network semantics to the lazy Crawlee bootstrap: `--offline` reuses verified cache only and never creates a venv, invokes pip, or downloads browser binaries.

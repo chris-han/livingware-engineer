@@ -133,6 +133,7 @@ def main() -> int:
     parser.add_argument("--runtime-dir", type=Path, default=default_runtime_dir())
     parser.add_argument("--plan", action="store_true", help="Describe the lazy install without modifying the runtime.")
     parser.add_argument("--check-only", action="store_true", help="Verify the selected runtime is already ready; do not install.")
+    parser.add_argument("--offline", action="store_true", help="Reuse cached runtime only; never create a venv, invoke pip, or download browser binaries.")
     parser.add_argument(
         "--skip-browser-binary",
         action="store_true",
@@ -161,6 +162,7 @@ def main() -> int:
         "runtime_dir": str(runtime_dir),
         "python_executable": str(python),
         "browser_extra": args.mode == "browser",
+        "offline": args.offline,
         "browser_binary_requested": args.mode == "browser" and not args.skip_browser_binary,
         "playwright_browsers_path": str(browser_dir) if args.mode == "browser" else None,
     }
@@ -168,15 +170,16 @@ def main() -> int:
         print(json.dumps(plan, sort_keys=True))
         return 0
 
-    if args.check_only:
+    if args.check_only or args.offline:
         if not python.is_file():
-            print(json.dumps({**plan, "state": "MISSING_RUNTIME"}, sort_keys=True))
+            state = "OFFLINE_CACHE_MISS" if args.offline else "MISSING_RUNTIME"
+            print(json.dumps({**plan, "state": state}, sort_keys=True))
             return 4
         version = installed_crawlee_version(python)
         if version != SUPPORTED_CRAWLEE_VERSION:
             print(json.dumps({
                 **plan,
-                "state": "VERSION_MISMATCH" if version else "MISSING_CRAWLEE",
+                "state": ("OFFLINE_VERSION_MISMATCH" if version else "OFFLINE_CACHE_MISS") if args.offline else ("VERSION_MISMATCH" if version else "MISSING_CRAWLEE"),
                 "installed_version": version,
             }, sort_keys=True))
             return 4
@@ -185,42 +188,54 @@ def main() -> int:
             if args.mode == "browser":
                 verify_browser_extra(python)
                 if not args.skip_browser_binary and not browser_ready_marker(runtime_dir).is_file():
-                    print(json.dumps({**plan, "state": "MISSING_BROWSER_BINARY", "installed_version": version}, sort_keys=True))
+                    state = "OFFLINE_BROWSER_BINARY_MISSING" if args.offline else "MISSING_BROWSER_BINARY"
+                    print(json.dumps({**plan, "state": state, "installed_version": version}, sort_keys=True))
                     return 4
         except RuntimeError as exc:
-            print(json.dumps({**plan, "state": "CAPABILITY_MISMATCH", "error": str(exc)}, sort_keys=True))
+            state = "OFFLINE_CAPABILITY_MISS" if args.offline else "CAPABILITY_MISMATCH"
+            print(json.dumps({**plan, "state": state, "error": str(exc)}, sort_keys=True))
             return 4
-        print(json.dumps({**plan, "state": "READY", "installed_version": version}, sort_keys=True))
+        print(json.dumps({**plan, "state": "READY", "installed_version": version, "installed_dependency": False}, sort_keys=True))
         return 0
 
-    python, created = ensure_venv(runtime_dir)
-    before = installed_crawlee_version(python)
-    installed = False
+    try:
+        python, created = ensure_venv(runtime_dir)
+        before = installed_crawlee_version(python)
+        installed = False
 
-    if args.mode == "core":
-        if before != SUPPORTED_CRAWLEE_VERSION:
-            pip_install(python, CORE_REQUIREMENT)
-            installed = True
-    else:
-        # Browser mode is an explicit escalation. Installing the extra also
-        # ensures the pinned Crawlee core remains at the supported version.
-        if before != SUPPORTED_CRAWLEE_VERSION or not module_available(python, "playwright"):
-            pip_install(python, BROWSER_REQUIREMENT)
-            installed = True
+        if args.mode == "core":
+            if before != SUPPORTED_CRAWLEE_VERSION:
+                pip_install(python, CORE_REQUIREMENT)
+                installed = True
+        else:
+            # Browser mode is an explicit escalation. Installing the extra also
+            # ensures the pinned Crawlee core remains at the supported version.
+            if before != SUPPORTED_CRAWLEE_VERSION or not module_available(python, "playwright"):
+                pip_install(python, BROWSER_REQUIREMENT)
+                installed = True
 
-    after = installed_crawlee_version(python)
-    if after != SUPPORTED_CRAWLEE_VERSION:
-        raise RuntimeError(
-            f"Crawlee version verification failed: expected {SUPPORTED_CRAWLEE_VERSION}, got {after!r}"
-        )
+        after = installed_crawlee_version(python)
+        if after != SUPPORTED_CRAWLEE_VERSION:
+            raise RuntimeError(
+                f"Crawlee version verification failed: expected {SUPPORTED_CRAWLEE_VERSION}, got {after!r}"
+            )
 
-    verify_core(python)
-    browser_binary_installed = False
-    if args.mode == "browser":
-        verify_browser_extra(python)
-        if not args.skip_browser_binary:
-            install_chromium(python, browser_dir, runtime_dir)
-            browser_binary_installed = True
+        verify_core(python)
+        browser_binary_installed = False
+        if args.mode == "browser":
+            verify_browser_extra(python)
+            if not args.skip_browser_binary:
+                install_chromium(python, browser_dir, runtime_dir)
+                browser_binary_installed = True
+    except RuntimeError as exc:
+        installed_version = installed_crawlee_version(python) if python.is_file() else None
+        print(json.dumps({
+            **plan,
+            "state": "INSTALL_FAILED",
+            "error": str(exc),
+            "installed_version": installed_version,
+        }, sort_keys=True))
+        return 6
 
     print(json.dumps({
         **plan,

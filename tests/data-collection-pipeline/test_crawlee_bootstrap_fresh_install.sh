@@ -79,7 +79,7 @@ grep -Fq '"installed_version": "1.10.1"' "$TMP/browser-install.json"
 grep -Fq '"browser_extra": true' "$TMP/browser-install.json"
 grep -Fq '"browser_binary_installed": false' "$TMP/browser-install.json"
 
-"$VENV_PY" - <<'PY'
+"$RUNTIME_PY" - <<'PY'
 import importlib.util
 import importlib.metadata
 assert importlib.metadata.version("crawlee") == "1.10.1"

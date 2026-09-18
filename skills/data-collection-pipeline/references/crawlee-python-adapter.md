@@ -26,11 +26,15 @@ For real acquisition, bootstrap core Crawlee immediately before the first Crawle
 python3 scripts/bootstrap_crawlee.py --mode core
 ```
 
-Core mode provisions an isolated venv under the Livingware runtime cache and installs exactly:
+Core mode provisions an isolated runtime under the Livingware runtime cache and installs exactly:
 
 ```text
 crawlee==1.10.1
 ```
+
+Isolation uses an auto backend. Standard-library `venv` is preferred when `ensurepip` is available. On minimal Debian/Ubuntu installations where `python3-venv` / `ensurepip` is absent, the bootstrap falls back automatically to an isolated target-directory runtime. That fallback installs into a private `site-packages` directory using host `python -m pip --target` when available, otherwise `uv pip install --target`. It does not require `sudo apt install python3-venv` and does not write Crawlee into system site-packages.
+
+Use `--backend venv` or `--backend target` only for diagnostics/testing; production acquisition should normally keep `--backend auto`.
 
 It then verifies the installed distribution version and imports `FileDownloadCrawler`. Re-running core mode is idempotent when the supported version is already ready. Use `--check-only` to verify readiness without installation, `--offline` to require cache-only reuse with no venv creation, pip invocation, or browser download, and `--plan` to inspect the intended runtime without changing anything.
 

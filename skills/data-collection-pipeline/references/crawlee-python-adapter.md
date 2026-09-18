@@ -103,3 +103,18 @@ After acquisition:
 If public content is reachable only through JavaScript-driven navigation, prefer Crawlee's browser crawler first so the acquisition runtime stays uniform. Scrapling may be selected as a conditional adaptive/browser transport when it has a demonstrated advantage for the target site.
 
 Browser success does not replace raw-source freezing when a canonical downloadable artifact exists.
+
+## Semantier implementation companion
+
+The generic Livingware contract is implemented in Semantier by
+`chris-han/semantier-skills/plugins/resilient_public_data_collection` version `0.2.0`.
+That plugin may add domain/runtime responsibilities such as public-IP/SSRF checks,
+workspace-scoped content-addressed storage, immutable capture receipts, byte-format
+validation, and CCGP-specific public-link derivation. Those Semantier responsibilities do
+not redefine the generic bootstrap or recovery policy.
+
+The Semantier registered tools `public_source_prepare_runtime` and
+`public_source_route_recovery` should stay behaviorally aligned with this Livingware
+contract: Crawlee `1.10.1`, lazy core provisioning, separate browser escalation,
+cache-only offline mode, non-mutating check-only mode, recovery-before-retry ordering,
+no automatic 401 escalation, and at most one eligible blocked retry.

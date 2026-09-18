@@ -71,7 +71,13 @@ jobs:
       - name: Data collection pipeline
         run: bash tests/data-collection-pipeline/test_skill_contract.sh
       - name: Crawlee lazy bootstrap fresh install
+        env:
+          CRAWLEE_BOOTSTRAP_TEST_RUNTIME: ${{ runner.temp }}/livingware-crawlee-bootstrap-cache
         run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_fresh_install.sh
+      - name: Crawlee offline and no-network bootstrap
+        env:
+          CRAWLEE_BOOTSTRAP_TEST_RUNTIME: ${{ runner.temp }}/livingware-crawlee-bootstrap-cache
+        run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_offline.sh
       - name: Counterfactual evaluator
         run: |
           python3 tests/counterfactual/test-workflow-counterfactual.py > /tmp/counterfactual-test.log 2>&1 || {

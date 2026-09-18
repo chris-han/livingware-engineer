@@ -60,6 +60,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Version manifest consistency
         run: bash scripts/bump-version.sh --check
+      - name: Version tooling without jq
+        run: bash tests/codex/test-bump-version-no-jq.sh
       - name: Progressive skill loading
         run: bash tests/codex/test-progressive-skill-loading.sh
       - name: Architecture routing and delta

@@ -1,3 +1,13 @@
+## v6.10.9 (2026-09-18)
+
+- Make the Crawlee bootstrap work on minimal Debian/Ubuntu hosts where Python is present but `ensurepip/python3-venv` is not.
+- Add runtime backend selection `auto | venv | target`: auto prefers stdlib `venv`, then falls back to an isolated target-directory runtime rather than requiring `sudo apt install python3-venv`.
+- The target backend installs only into a private runtime `site-packages`, using host `python -m pip --target` when available and `uv pip install --target` otherwise; it never writes Crawlee into system site-packages.
+- Return the actual selected runtime launcher and backend, keep offline/check-only semantics backend-agnostic, and preserve separate browser escalation.
+- Add a real target-backend install/reuse regression and remove remaining venv-only assertions from fresh/offline tests.
+- Align the Semantier companion implementation to `resilient_public_data_collection` v0.2.1 with the same fallback contract.
+- Synchronize declared package/plugin version surfaces to 6.10.9.
+
 ## v6.10.8 (2026-09-18)
 
 - Fix the installed-cache data-collection contract test so literal Markdown backticks around `401` are quoted safely and never execute as a shell command.

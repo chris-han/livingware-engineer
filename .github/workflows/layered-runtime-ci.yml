@@ -76,6 +76,8 @@ jobs:
         env:
           CRAWLEE_BOOTSTRAP_TEST_RUNTIME: ${{ runner.temp }}/livingware-crawlee-bootstrap-cache
         run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_fresh_install.sh
+      - name: Crawlee no-venv target fallback
+        run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_target_fallback.sh
       - name: Crawlee offline and no-network bootstrap
         env:
           CRAWLEE_BOOTSTRAP_TEST_RUNTIME: ${{ runner.temp }}/livingware-crawlee-bootstrap-cache

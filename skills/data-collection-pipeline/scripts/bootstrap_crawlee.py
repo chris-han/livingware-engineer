@@ -106,13 +106,25 @@ def pip_install(python: Path, requirement: str) -> None:
         raise RuntimeError(result.stderr.strip() or f"failed to install {requirement}")
 
 
-def install_chromium(python: Path, browser_dir: Path) -> None:
+def browser_ready_marker(runtime_dir: Path) -> Path:
+    return runtime_dir / "browser-ready.json"
+
+
+def install_chromium(python: Path, browser_dir: Path, runtime_dir: Path) -> None:
     browser_dir.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
     env["PLAYWRIGHT_BROWSERS_PATH"] = str(browser_dir)
     result = run([str(python), "-m", "playwright", "install", "chromium"], env=env)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "failed to install Playwright Chromium runtime")
+    browser_ready_marker(runtime_dir).write_text(
+        json.dumps({
+            "crawlee_version": SUPPORTED_CRAWLEE_VERSION,
+            "browser": "chromium",
+            "playwright_browsers_path": str(browser_dir),
+        }, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def main() -> int:
@@ -172,7 +184,7 @@ def main() -> int:
             verify_core(python)
             if args.mode == "browser":
                 verify_browser_extra(python)
-                if not args.skip_browser_binary and not browser_dir.exists():
+                if not args.skip_browser_binary and not browser_ready_marker(runtime_dir).is_file():
                     print(json.dumps({**plan, "state": "MISSING_BROWSER_BINARY", "installed_version": version}, sort_keys=True))
                     return 4
         except RuntimeError as exc:
@@ -207,7 +219,7 @@ def main() -> int:
     if args.mode == "browser":
         verify_browser_extra(python)
         if not args.skip_browser_binary:
-            install_chromium(python, browser_dir)
+            install_chromium(python, browser_dir, runtime_dir)
             browser_binary_installed = True
 
     print(json.dumps({

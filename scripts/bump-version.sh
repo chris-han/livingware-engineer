@@ -23,21 +23,56 @@ fi
 
 # Read a dotted field path from a JSON file.
 # Handles both simple ("version") and nested ("plugins.0.version") paths.
+# Python is already a plugin runtime requirement; do not add jq as a hidden
+# packaging dependency for installed-cache version checks.
 read_json_field() {
   local file="$1" field="$2"
-  # Convert dot-path to jq path: "plugins.0.version" -> .plugins[0].version
-  local jq_path
-  jq_path=$(echo "$field" | sed -E 's/\.([0-9]+)/[\1]/g' | sed 's/^/./' | sed 's/\.\././g')
-  jq -r "$jq_path" "$file"
+  python3 - "$file" "$field" <<'PY'
+import json
+import sys
+
+path, field = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as stream:
+    value = json.load(stream)
+for part in field.split("."):
+    value = value[int(part)] if part.isdigit() else value[part]
+if isinstance(value, bool):
+    print("true" if value else "false")
+elif value is None:
+    print("null")
+else:
+    print(value)
+PY
 }
 
-# Write a dotted field path in a JSON file, preserving formatting.
+# Write a dotted field path in a JSON file.
 write_json_field() {
   local file="$1" field="$2" value="$3"
-  local jq_path
-  jq_path=$(echo "$field" | sed -E 's/\.([0-9]+)/[\1]/g' | sed 's/^/./' | sed 's/\.\././g')
-  local tmp="${file}.tmp"
-  jq "$jq_path = \"$value\"" "$file" > "$tmp" && mv "$tmp" "$file"
+  python3 - "$file" "$field" "$value" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+field = sys.argv[2]
+new_value = sys.argv[3]
+with path.open(encoding="utf-8") as stream:
+    data = json.load(stream)
+
+target = data
+parts = field.split(".")
+for part in parts[:-1]:
+    target = target[int(part)] if part.isdigit() else target[part]
+last = parts[-1]
+if last.isdigit():
+    target[int(last)] = new_value
+else:
+    target[last] = new_value
+
+tmp = path.with_suffix(path.suffix + ".tmp")
+tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+tmp.replace(path)
+PY
 }
 
 require_tool() {
@@ -88,13 +123,21 @@ write_manifest_field() {
 # Read the list of declared files from config.
 # Outputs lines of "path<TAB>field"
 declared_files() {
-  jq -r '.files[] | "\(.path)\t\(.field)"' "$CONFIG"
+  python3 - "$CONFIG" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as stream:
+    data = json.load(stream)
+for item in data.get("files", []):
+    print(f"{item['path']}\t{item['field']}")
+PY
 }
 
 preflight_manifests() {
   local path field fullpath
 
-  require_tool jq || return 1
+  require_tool python3 || return 1
   while IFS=$'\t' read -r path field; do
     fullpath="$REPO_ROOT/$path"
     [[ -f "$fullpath" ]] || continue
@@ -108,7 +151,15 @@ preflight_manifests() {
 
 # Read the audit exclude patterns from config.
 audit_excludes() {
-  jq -r '.audit.exclude[]' "$CONFIG" 2>/dev/null
+  python3 - "$CONFIG" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as stream:
+    data = json.load(stream)
+for item in data.get("audit", {}).get("exclude", []):
+    print(item)
+PY
 }
 
 # --- commands ---
@@ -134,6 +185,11 @@ cmd_check() {
   done < <(declared_files)
 
   echo ""
+
+  if [[ "${#versions[@]}" -eq 0 ]]; then
+    echo "error: no readable declared version files" >&2
+    return 1
+  fi
 
   # Check if all versions match
   local unique

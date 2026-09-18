@@ -26,24 +26,30 @@ Run both lanes when they are cheap and independent. Do not serially exhaust one 
 ## Acquisition workflow
 
 1. Define the corpus boundary before downloading: source family, target document types, time/jurisdiction filters, minimum diversity, and stopping condition.
-2. Use Crawlee Python as the default acquisition runtime when a reusable crawler/download layer is needed. Start with a one-request observation probe: `retry_on_blocked=False`, no session rotations, no ordinary request retries, and `401/403/429` exposed to the handler as observations.
-3. Record the observed transport state. A `401`, `403`, or `429` is an observation about that route, not proof that the source is absent.
-4. On a blocked entry point, run the alternate-source and same-site alternate-entry lanes.
-5. If both lanes fail, allow one bounded blocked-retry escalation only when the status is eligible:
+2. When this skill is selected for real acquisition and Crawlee mechanics are needed, lazily provision the isolated core runtime before the first Crawlee operation:
+   `python3 scripts/bootstrap_crawlee.py --mode core`
+   Use the returned `python_executable` for Crawlee acquisition code. Do not install Crawlee globally and do not bootstrap it for review-only or planning-only use of this skill.
+3. Use Crawlee Python as the default acquisition runtime. Start with a one-request observation probe: `retry_on_blocked=False`, no session rotations, no ordinary request retries, and `401/403/429` exposed to the handler as observations.
+4. Record the observed transport state. A `401`, `403`, or `429` is an observation about that route, not proof that the source is absent.
+5. On a blocked entry point, run the alternate-source and same-site alternate-entry lanes.
+6. If both lanes fail, allow one bounded blocked-retry escalation only when the status is eligible:
    - `401`: do not automatically switch to `retry_on_blocked=True`; treat it as `AUTH_REQUIRED` unless an authorized authentication flow exists.
    - `403`: `retry_on_blocked=True` is allowed only when evidence indicates a public resource blocked by session/bot handling rather than an access-control boundary.
    - `429`: honor `Retry-After` / rate backoff first; only then allow one bounded blocked-retry attempt.
-6. For the escalation attempt, keep retries bounded and visible; do not silently turn it into open-ended proxy, credential, CAPTCHA, or access-control circumvention.
-7. Prefer primary/official sources; when using a mirror or secondary host, retain enough provenance to trace back to the authoritative publication.
-8. Download raw source bytes before AI-oriented conversion. Freeze accepted artifacts with original URL, resolved URL, retrieval time, HTTP/content metadata when available, byte size, and SHA-256.
-9. Re-verify the frozen corpus offline: files exist, hashes match, manifest rows are complete, and the corpus still satisfies the declared boundary and diversity requirements.
-10. Report unresolved gaps separately from acquired material; do not let a failed path erase evidence from successful branches.
+7. For the escalation attempt, keep retries bounded and visible; do not silently turn it into open-ended proxy, credential, CAPTCHA, or access-control circumvention.
+8. Escalate to browser transport only when the public target demonstrably requires JavaScript/browser behavior. Provision browser support separately:
+   `python3 scripts/bootstrap_crawlee.py --mode browser`
+   This is the only path that installs Crawlee's Playwright extra and Chromium runtime.
+9. Prefer primary/official sources; when using a mirror or secondary host, retain enough provenance to trace back to the authoritative publication.
+10. Download raw source bytes before AI-oriented conversion. Freeze accepted artifacts with original URL, resolved URL, retrieval time, HTTP/content metadata when available, byte size, and SHA-256.
+11. Re-verify the frozen corpus offline: files exist, hashes match, manifest rows are complete, and the corpus still satisfies the declared boundary and diversity requirements.
+12. Report unresolved gaps separately from acquired material; do not let a failed path erase evidence from successful branches.
 
 ## Tool ownership and economy
 
 Livingware owns acquisition strategy, recovery routing, and evidence state. It does not own a crawler implementation.
 
-- **Crawlee Python** owns the default HTTP/file-download/session/retry/browser transport mechanics. Read `references/crawlee-python-adapter.md` when reusable acquisition mechanics are needed.
+- **Crawlee Python** owns the default HTTP/file-download/session/retry/browser transport mechanics. Livingware lazily provisions the pinned core runtime only when this skill is selected for real acquisition. Read `references/crawlee-python-adapter.md` when reusable acquisition mechanics are needed.
 - Search engines and site-scoped search are discovery tools, not proof that a document is absent.
 - Browser inspection is appropriate when JavaScript navigation or generated attachment links hide the real public route.
 - Use `scripts/freeze_artifact.py` after bytes have been acquired to create the Livingware provenance/hash record. Use `scripts/verify_frozen.py` to recheck frozen hashes offline.

@@ -1,3 +1,11 @@
+## v6.10.0 (2026-09-18)
+
+- Add `data-collection-pipeline` for reproducible public-source acquisition and recovery when an initial URL is blocked by authentication, anti-bot behavior, redirects, missing routes, or unstable download paths.
+- Treat an entry-point failure as evidence about that route rather than proof that the source is unavailable; branch recovery into alternate-source discovery and same-site alternate-entry discovery, running both when cheap and independent.
+- Add standard-library deterministic operators to fetch/freeze accepted artifacts with provenance and SHA-256, then verify frozen corpus bytes offline.
+- Add local HTTP regression coverage for redirects, successful acquisition, 401, 403, 404, 429, hash verification, and tamper detection.
+- Synchronize declared package/plugin version surfaces to 6.10.0.
+
 Warning: truncated output (original token count: 25901)
 Total output lines: 1512
 

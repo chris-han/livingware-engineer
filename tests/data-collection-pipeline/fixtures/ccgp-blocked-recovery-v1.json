@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "name": "ccgp-blocked-recovery-v1",
+  "origin": "Semantier tender public corpus collection, 2026-09-18",
+  "observed_failure_taxonomy": [
+    "LOGIN_REQUIRED",
+    "HOST_NOT_ALLOWLISTED",
+    "ATTACHMENT_HTTP_FAILURE"
+  ],
+  "recovery_invariant": "A blocked entry point is not evidence that the source is unavailable.",
+  "verified_public_entries": [
+    {
+      "project_id": "CZ2026-0323",
+      "announcement_url": "https://www.ccgp.gov.cn/cggg/dfgg/gkzb/202606/t20260618_26778683.htm",
+      "same_site_result": "FOUND_PUBLIC_ANNOUNCEMENT",
+      "official_attachment_host": "gdgpo.czt.gd.gov.cn",
+      "attachment_count_observed": 6
+    },
+    {
+      "project_id": "N5100012026001757",
+      "announcement_url": "https://www.ccgp.gov.cn/cggg/dfgg/gkzb/202607/t20260708_26897346.htm",
+      "same_site_result": "FOUND_PUBLIC_ANNOUNCEMENT",
+      "official_attachment_host": "gpx.ccgp-sichuan.gov.cn",
+      "attachment_count_observed": 1
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "same-site-recovers-before-blocked-retry",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 403,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "FOUND_PUBLIC_ANNOUNCEMENT",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "UNKNOWN",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "USE_RECOVERED_ROUTE"
+    },
+    {
+      "id": "alternate-source-recovers-before-blocked-retry",
+      "input": {
+        "initial_failure": "HOST_NOT_ALLOWLISTED",
+        "http_status": null,
+        "alternate_source": "FOUND_OFFICIAL_SOURCE",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "UNKNOWN",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "USE_RECOVERED_ROUTE"
+    },
+    {
+      "id": "401-never-auto-escalates",
+      "input": {
+        "initial_failure": "LOGIN_REQUIRED",
+        "http_status": 401,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": false,
+        "blocked_interpretation": "AUTH_BOUNDARY",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "STOP_AUTH_REQUIRED"
+    },
+    {
+      "id": "403-public-bot-block-may-escalate-once",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 403,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "SESSION_OR_BOT_BLOCK",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "BLOCKED_RETRY_ONCE"
+    },
+    {
+      "id": "403-access-boundary-does-not-escalate",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 403,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": false,
+        "blocked_interpretation": "ACCESS_CONTROL",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "STOP_ACCESS_BOUNDARY"
+    },
+    {
+      "id": "429-waits-before-escalation",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 429,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "RATE_LIMIT",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "WAIT_RATE_LIMIT"
+    },
+    {
+      "id": "429-after-backoff-may-escalate-once",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 429,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "RATE_LIMIT",
+        "rate_backoff_respected": true,
+        "blocked_retry_attempts": 0
+      },
+      "expected": "BLOCKED_RETRY_ONCE"
+    },
+    {
+      "id": "blocked-retry-is-never-open-ended",
+      "input": {
+        "initial_failure": "ATTACHMENT_HTTP_FAILURE",
+        "http_status": 403,
+        "alternate_source": "NOT_FOUND",
+        "same_site_alternate_entry": "NOT_FOUND",
+        "public_resource_confirmed": true,
+        "blocked_interpretation": "SESSION_OR_BOT_BLOCK",
+        "rate_backoff_respected": false,
+        "blocked_retry_attempts": 1
+      },
+      "expected": "STOP_AFTER_BOUNDED_RETRY"
+    }
+  ]
+}

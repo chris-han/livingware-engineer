@@ -1,3 +1,10 @@
+## v6.10.10 (2026-09-20)
+
+- Make evidence reuse explicitly production-time and contract-bound across Livingware core guidance.
+- Require prior test, benchmark, qualification, and experiment evidence to be classified as `EXACT_REUSE`, `PARTIAL_REUSE`, or `STALE` when the governing acceptance/evaluation contract changed after production.
+- Clarify that reporting time is not production time and that newly introduced or strengthened requirements remain unverified until directly supported.
+- Synchronize declared package/plugin version surfaces to 6.10.10.
+
 ## v6.10.9 (2026-09-18)
 
 - Make the Crawlee bootstrap work on minimal Debian/Ubuntu hosts where Python is present but `ensurepip/python3-venv` is not.

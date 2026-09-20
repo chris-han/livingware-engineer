@@ -1,3 +1,10 @@
+## v6.10.11 (2026-09-20)
+
+- Add request, raw-content, and derived-processing deduplication guidance to the data-collection pipeline.
+- Preserve source aliases and receipts, require verified equivalence for reuse, and distinguish transfer savings from storage or review savings.
+- Add duplicate-transfer diagnostics and preserve frozen acquisition contracts.
+- Synchronize declared package/plugin version surfaces to 6.10.11.
+
 ## v6.10.10 (2026-09-20)
 
 - Make evidence reuse explicitly production-time and contract-bound across Livingware core guidance.

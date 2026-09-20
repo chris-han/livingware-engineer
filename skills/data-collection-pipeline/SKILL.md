@@ -25,7 +25,7 @@ Run both lanes when they are cheap and independent. Do not serially exhaust one 
 
 ## Acquisition workflow
 
-1. Define the corpus boundary before downloading: source family, target document types, time/jurisdiction filters, minimum diversity, and stopping condition.
+1. Define the corpus boundary before downloading: source family, target document types, time/jurisdiction filters, minimum diversity, and stopping condition. Declare request deduplication and cache-reuse scope before acquisition; apply the deduplication process below.
 2. When this skill is selected for real acquisition and Crawlee mechanics are needed, lazily provision the isolated core runtime before the first Crawlee operation:
    `python3 scripts/bootstrap_crawlee.py --mode core`
    Use the returned `python_executable` for Crawlee acquisition code. Do not install Crawlee globally and do not bootstrap it for review-only or planning-only use of this skill. The bootstrap prefers stdlib `venv`, but automatically falls back to a private target-directory runtime when `ensurepip/python3-venv` is unavailable. When network installation is unavailable or prohibited, use `--offline` to reuse only an already verified cache; use `--check-only` for a non-mutating readiness check.
@@ -42,8 +42,21 @@ Run both lanes when they are cheap and independent. Do not serially exhaust one 
    This is the only path that installs Crawlee's Playwright extra and Chromium runtime.
 9. Prefer primary/official sources; when using a mirror or secondary host, retain enough provenance to trace back to the authoritative publication.
 10. Download raw source bytes before AI-oriented conversion. Freeze accepted artifacts with original URL, resolved URL, retrieval time, HTTP/content metadata when available, byte size, and SHA-256.
-11. Re-verify the frozen corpus offline: files exist, hashes match, manifest rows are complete, and the corpus still satisfies the declared boundary and diversity requirements.
+11. Deduplicate verified content before conversion/review, retaining every source alias and receipt. Re-verify the frozen corpus offline: files exist, hashes match, manifest rows are complete, and the corpus still satisfies the declared boundary and diversity requirements.
 12. Report unresolved gaps separately from acquired material; do not let a failed path erase evidence from successful branches.
+
+## Deduplication process
+
+Deduplicate requests, content, and derived processing separately; each requires different evidence.
+
+1. **Before transfer:** collapse identical request identities within the declared acquisition scope, preserving every discovery/source reference. Identity includes URL and any method, body, headers, or authorization context that can change the representation. Do not strip signed query parameters or merge URLs by filename. Reuse an existing successful receipt only when the acquisition contract permits that observation to be reused and its raw bytes still match the recorded hash and length; record reuse rather than a new retrieval.
+2. **Different URLs:** matching names, sizes, timestamps, or partial bytes do not establish identical content. Skip a transfer only when a trusted content digest or an explicit source version/alias contract binds that resource to already verified bytes. An ETag alone is not a cross-URL content hash. Otherwise download and compare full content hashes.
+3. **After transfer:** group verified raw artifacts by SHA-256, use one content object per group, and preserve all original/resolved URLs, notices, retrieval times, receipts, and alias mappings. Do not delete or rewrite historical evidence to deduplicate it. Keep failed captures and unresolved aliases visible.
+4. **Before conversion/review:** reuse derived output only when raw hash, parser/version, configuration, and relevant filename/media-type context match. Pin the reused output and retain source-specific review rows. Identical bytes do not by themselves establish independent evidence units or interchangeable source authority; semantic/template independence remains a separate qualification step.
+5. **When acquisition is slow:** measure captured references versus unique hashes, transferred versus unique bytes, duplicate-transfer duration, and identical-request repeats. Distinguish retries from distinct published URLs returning identical content. Report whether an optimization saves network transfer, storage, or downstream processing; post-download deduplication does not save the initial transfer.
+6. **For a running frozen acquisition:** preserve existing receipts and scope. Introduce changed request selection or reuse semantics through an explicit versioned acquisition contract, never a silent collector change. An incomplete deduplication snapshot is not a completed corpus audit.
+
+Use the existing collector/cache and content store for these mechanics; do not introduce a second downloader or deduplication framework solely for this workflow.
 
 ## Tool ownership and economy
 

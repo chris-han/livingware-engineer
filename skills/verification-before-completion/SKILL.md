@@ -17,7 +17,7 @@ Before making a claim:
 
 1. Name the exact scope of the claim.
 2. Apply `docs/verification-impact-analysis-v1.md`: identify the observed production impact radius and the smallest verification surface capable of falsifying the claim.
-3. Run that check, or reuse an observed result only when the relevant code, tests, dependencies, configuration, fixtures, and environment are unchanged.
+3. Run that check, or reuse an observed result only when the relevant code, tests, dependencies, configuration, fixtures, environment, and governing acceptance/evaluation contract are unchanged. Bind reused evidence to its production context rather than its reporting time. If the contract changed after production, classify the evidence as `EXACT_REUSE`, `PARTIAL_REUSE`, or `STALE`; verify every newly introduced or strengthened requirement separately.
 4. Read the actual result and state only what it establishes.
 
 When the deliverable is a human-readable evidence or research artifact, acceptance includes independently reading the generated artifact for lineage, stopping reason, denominators, limitations, and demonstrated versus non-demonstrated claims.

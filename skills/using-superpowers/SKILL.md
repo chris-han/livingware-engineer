@@ -13,6 +13,12 @@ Choose the smallest change, context, verification surface, and review process th
 
 Safe reversible in-scope work continues without repeated approval. Stop only for missing authority, material unresolved design choices, security risk, destructive operations, or irreversible external actions that require human judgment.
 
+## Evidence Reuse Discipline
+
+Evidence is temporal and contract-bound. A result reported now must not be assumed to have been produced under the current acceptance or evaluation contract. Before reusing prior test, benchmark, qualification, or experiment evidence, bind it to the actual production context: production time when available, artifact/result hash, governing contract or plan version/hash, and the relevant code, configuration, fixture, model, dependency, and environment identities.
+
+If the governing contract changed after the evidence was produced, classify reuse as `EXACT_REUSE`, `PARTIAL_REUSE`, or `STALE`. Reuse only the claims still established by unchanged semantics. Newly introduced or strengthened requirements remain unverified until directly supported. Reporting time is not production time, and a later summary is not a substitute for inspecting available source evidence when chronology or contract identity affects the claim.
+
 ## Progressive Loading
 
 Load a workflow skill only when its own entry condition is satisfied. Do not preload downstream skills because they may become relevant later. Debugging, TDD, and verification are sequential states, not a bundle. When a state exits, pass a compact handoff and stop consulting or restating its detailed instructions.

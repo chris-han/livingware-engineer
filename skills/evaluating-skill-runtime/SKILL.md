@@ -77,6 +77,33 @@ For important skills, include:
 
 Counterfactual evaluation may compare alternate routes or workflows, but must preserve the accepted intervention and provenance contract.
 
+## Native Codex empirical lane
+
+When the claim is about actual Codex skill activation rather than only a repository contract, use the existing live progressive-routing probe through the Eval IR wrapper:
+
+```bash
+CODEX_PROBE_RETRIES=1 \
+CODEX_PROBE_TIMEOUT=180 \
+bash tests/eval-skills/live-skill-runtime-eval.sh
+```
+
+The wrapper executes `tests/codex/live-progressive-skill-probe.sh` and compiles its observed summary through `scripts/compile-live-skill-eval.py`.
+
+The result is written under:
+
+```text
+.artifacts/livingware-eval-skill-runtime/<run>/eval-run.json
+```
+
+Interpret routing evidence conservatively:
+
+- required skill explicitly observed and no forbidden skill observed -> `PASS`;
+- forbidden skill observed -> `FAIL`;
+- required skill not explicitly observed -> `UNKNOWN`, even if output behavior looks correct;
+- for the no-workflow baseline, observed absence of all forbidden workflow skills is the expected routing evidence and may be `PASS`.
+
+Do not convert historical live runs into current-version evidence. They may serve as regression references only.
+
 ## Invariants
 
 - A failed skill-runtime eval does not automatically authorize editing the skill.

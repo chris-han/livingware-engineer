@@ -95,6 +95,8 @@ The result is written under:
 .artifacts/livingware-eval-skill-runtime/<run>/eval-run.json
 ```
 
+The artifact binds the observed episode to its production run id, repository commit, Livingware version, and Codex CLI version so later reporting or contract changes cannot silently rewrite the evidence basis.
+
 Interpret routing evidence conservatively:
 
 - required skill explicitly observed and no forbidden skill observed -> `PASS`;

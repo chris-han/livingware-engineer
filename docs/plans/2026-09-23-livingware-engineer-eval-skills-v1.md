@@ -153,6 +153,32 @@ Do not create an LLM judge merely to satisfy this milestone. Current disposition
 
 Gate: `LIVINGWARE_EVALUATOR_QUALIFICATION_GREEN` for the deterministic evaluator slice.
 
+## W6 — Native harness empirical runner
+
+- [x] Reuse `tests/codex/live-progressive-skill-probe.sh` rather than creating a second routing probe.
+- [x] Add `tests/eval-skills/live-skill-runtime-eval.sh` as the Livingware Eval entrypoint.
+- [x] Add `scripts/compile-live-skill-eval.py` as the deterministic summary-to-Eval-IR operator.
+- [x] Compile live executions as `livingware.eval-run.v1` with `OBSERVED` provenance.
+- [x] Preserve routing, behavior, and runtime as separate claims.
+- [x] Map missing required explicit skill-load evidence to `UNKNOWN` instead of inferring routing from output behavior.
+- [x] Treat the no-workflow baseline differently: verified absence of forbidden workflow skills is positive routing evidence.
+- [x] Add deterministic compiler fixtures and CI coverage.
+- [x] GitHub Actions run 194 is GREEN for the compiler/eval contracts and existing repository contracts.
+- [ ] Execute the runner against the current branch in an authenticated Codex environment and admit the resulting `eval-run.json` as current empirical evidence.
+
+Current command:
+
+```bash
+CODEX_PROBE_RETRIES=1 \
+CODEX_PROBE_TIMEOUT=180 \
+bash tests/eval-skills/live-skill-runtime-eval.sh
+```
+
+Historical note: Livingware 6.9.2 had GREEN live Codex routing for baseline, debugging, implementation, and completion-claim scenarios. That evidence is a regression reference only and does not close the current branch's empirical gate.
+
+Gate: `LIVINGWARE_EVAL_NATIVE_HARNESS_RUNNER_READY` — GREEN.  
+Empirical gate remains: `LIVINGWARE_EVAL_NATIVE_HARNESS_ACTIVATION_UNVERIFIED`.
+
 ## Completion
 
 The architecture/skill implementation slice is complete: W0-W3 are GREEN, W4 is GREEN at the deterministic contract layer, and W5 is GREEN for the deterministic evaluator slice. Native harness activation remains an explicit empirical follow-up and is not represented as completed evidence.

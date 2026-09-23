@@ -16,6 +16,7 @@ SKILLS = {
 }
 IR_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "routing-whatif-eval-ir-v1.json"
 COUNTERFACTUAL_FIXTURE = ROOT / "tests" / "counterfactual" / "fixtures" / "routing-whatif-v1.json"
+DOGFOOD_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "skill-runtime-dogfood-v1.json"
 
 
 def test_eval_skill_family_exists_with_discriminating_metadata():
@@ -103,6 +104,41 @@ def test_eval_ir_can_reference_existing_counterfactual_fixture_without_new_runti
     assert source["rollouts"] == data["eval_case"]["input_basis"]["rollouts"]
 
 
+
+def test_skill_runtime_dogfood_distinguishes_contract_evidence_from_live_routing():
+    data = json.loads(DOGFOOD_FIXTURE.read_text(encoding="utf-8"))
+
+    assert data["schema_version"] == "livingware.eval-dogfood.v1"
+    assert data["dogfood_disposition"]["contract_level"] == "QUALIFIED"
+    assert data["dogfood_disposition"]["native_harness_activation"] == "UNVERIFIED"
+    assert data["dogfood_disposition"]["regression_witness_created"] is False
+
+    targets = {target["skill"]: target for target in data["targets"]}
+    assert {"systematic-debugging", "verification-before-completion"} <= set(targets)
+
+    for skill, target in targets.items():
+        classes = {case["class"] for case in target["cases"]}
+        assert "SHOULD_ACTIVATE" in classes
+        assert "SHOULD_NOT_ACTIVATE" in classes
+        assert "HARD_NEGATIVE" in classes
+        assert "CONTRACT" in classes
+
+        contract_cases = [
+            case for case in target["cases"]
+            if case["evidence_lane"] == "DETERMINISTIC_REPOSITORY_CONTRACT"
+        ]
+        live_cases = [
+            case for case in target["cases"]
+            if case["evidence_lane"] == "LIVE_HARNESS_REQUIRED"
+        ]
+        assert contract_cases and all(case["status"] == "QUALIFIED" for case in contract_cases)
+        assert live_cases and all(case["status"] == "UNVERIFIED" for case in live_cases)
+
+        skill_text = (ROOT / target["contract_ref"]).read_text(encoding="utf-8")
+        expected = contract_cases[0]["expected"]
+        assert expected["entry_contains"] in skill_text
+        assert expected["exit_contains"] in skill_text
+
 def main():
     tests = [
         test_eval_skill_family_exists_with_discriminating_metadata,
@@ -111,6 +147,7 @@ def main():
         test_skill_runtime_eval_preserves_skill_review_boundary,
         test_evaluator_design_prefers_deterministic_checks_and_supports_unknown,
         test_eval_ir_can_reference_existing_counterfactual_fixture_without_new_runtime,
+        test_skill_runtime_dogfood_distinguishes_contract_evidence_from_live_routing,
     ]
     for test in tests:
         test()

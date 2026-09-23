@@ -103,9 +103,9 @@ Gate: `LIVINGWARE_EVAL_ZERO_RUNTIME_INTEGRATION_GREEN` after tests execute succe
 
 ## W3 — Discoverability and packaging
 
-- [ ] Add a compact README section for the evaluation skill family.
-- [ ] Verify existing plugin packaging discovers the six new skill directories without manifest duplication.
-- [ ] Run repository skill/package contract tests relevant to Codex/Hermes and any generic skill discovery checks.
+- [x] Add a compact README section for the evaluation skill family.
+- [x] Verify existing plugin packaging discovers the six new skill directories without manifest duplication. Codex points to the whole `skills/` tree; Hermes registers every `skills/*/SKILL.md` dynamically.
+- [ ] Run repository skill/package contract tests relevant to Codex/Hermes and any generic skill discovery checks. Local execution was attempted on 2026-09-23 but the available container could not resolve `github.com`, so no test result is claimed.
 
 Gate: `LIVINGWARE_EVAL_DISCOVERABILITY_GREEN`.
 

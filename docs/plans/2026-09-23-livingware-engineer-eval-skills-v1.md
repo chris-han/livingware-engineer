@@ -159,6 +159,7 @@ Gate: `LIVINGWARE_EVALUATOR_QUALIFICATION_GREEN` for the deterministic evaluator
 - [x] Add `tests/eval-skills/live-skill-runtime-eval.sh` as the Livingware Eval entrypoint.
 - [x] Add `scripts/compile-live-skill-eval.py` as the deterministic summary-to-Eval-IR operator.
 - [x] Compile live executions as `livingware.eval-run.v1` with `OBSERVED` provenance.
+- [x] Bind each live artifact to production run id, repository commit, Livingware version, and Codex CLI version.
 - [x] Preserve routing, behavior, and runtime as separate claims.
 - [x] Map missing required explicit skill-load evidence to `UNKNOWN` instead of inferring routing from output behavior.
 - [x] Treat the no-workflow baseline differently: verified absence of forbidden workflow skills is positive routing evidence.

@@ -1,0 +1,110 @@
+{
+  "schema_version": "livingware.eval-dogfood.v1",
+  "targets": [
+    {
+      "target_id": "systematic-debugging-runtime",
+      "target_kind": "SKILL_RUNTIME",
+      "skill": "systematic-debugging",
+      "contract_ref": "skills/systematic-debugging/SKILL.md",
+      "cases": [
+        {
+          "case_id": "debug-explicit-activate",
+          "class": "SHOULD_ACTIVATE",
+          "source_parent": "tests/explicit-skill-requests/prompts/use-systematic-debugging.txt",
+          "expected": {
+            "activation": "systematic-debugging"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "debug-neighbor-plan-execution",
+          "class": "SHOULD_NOT_ACTIVATE",
+          "source_parent": "tests/explicit-skill-requests/prompts/action-oriented.txt",
+          "expected": {
+            "activation_not": "systematic-debugging",
+            "neighbor": "subagent-driven-development"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "debug-hard-negative-known-root-cause",
+          "class": "HARD_NEGATIVE",
+          "input": "The root cause is already established: parse_config drops nested keys. Implement the fix and add a regression test.",
+          "expected": {
+            "activation_not": "systematic-debugging",
+            "neighbor": "test-driven-development"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "debug-lifecycle-contract",
+          "class": "CONTRACT",
+          "expected": {
+            "entry_contains": "observed failure is still unexplained",
+            "exit_contains": "root cause and affected behavior are sufficiently established"
+          },
+          "evidence_lane": "DETERMINISTIC_REPOSITORY_CONTRACT",
+          "status": "QUALIFIED"
+        }
+      ]
+    },
+    {
+      "target_id": "verification-before-completion-runtime",
+      "target_kind": "SKILL_RUNTIME",
+      "skill": "verification-before-completion",
+      "contract_ref": "skills/verification-before-completion/SKILL.md",
+      "cases": [
+        {
+          "case_id": "verify-imminent-claim",
+          "class": "SHOULD_ACTIVATE",
+          "input": "Implementation is finished and all expected changes are in. Verify whether we can claim this plan complete and merge.",
+          "expected": {
+            "activation": "verification-before-completion"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "verify-neighbor-unexplained-failure",
+          "class": "SHOULD_NOT_ACTIVATE",
+          "input": "One test is failing and I do not know why yet. Find the root cause.",
+          "expected": {
+            "activation_not": "verification-before-completion",
+            "neighbor": "systematic-debugging"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "verify-hard-negative-mid-implementation",
+          "class": "HARD_NEGATIVE",
+          "input": "Task 1 is done. Continue implementing Task 2; this is not a completion check.",
+          "expected": {
+            "activation_not": "verification-before-completion"
+          },
+          "evidence_lane": "LIVE_HARNESS_REQUIRED",
+          "status": "UNVERIFIED"
+        },
+        {
+          "case_id": "verify-lifecycle-contract",
+          "class": "CONTRACT",
+          "expected": {
+            "entry_contains": "a correctness, completion, integration, merge, or release claim is imminent",
+            "exit_contains": "the claim is supported, falsified, or narrowed"
+          },
+          "evidence_lane": "DETERMINISTIC_REPOSITORY_CONTRACT",
+          "status": "QUALIFIED"
+        }
+      ]
+    }
+  ],
+  "dogfood_disposition": {
+    "contract_level": "QUALIFIED",
+    "native_harness_activation": "UNVERIFIED",
+    "regression_witness_created": false,
+    "reason": "No qualified failure was found in deterministic lifecycle contracts; live native-routing cases require an authorized harness execution."
+  }
+}

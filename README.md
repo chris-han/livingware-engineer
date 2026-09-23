@@ -198,6 +198,21 @@ Restart active Hermes sessions after installation.
 
 Livingware Engineer includes a general `frontend-design` skill for product UI work. It composes the engineering workflow with a pinned upstream Impeccable skill for visual craft and anti-slop review. When a project already has a `DESIGN.md`, that project document remains the design authority: its visual language, information architecture, component conventions, and stated consistency objectives override generic design taste. A design-system replacement happens only when the task explicitly calls for one.
 
+## Evaluation Skills
+
+Livingware Engineer includes a product- and runtime-specific evaluation skill family for agentic software systems. The architecture is defined in [docs/livingware-evaluation-architecture.md](docs/livingware-evaluation-architecture.md).
+
+Use the family progressively rather than loading every skill at once:
+
+- `evaluating-livingware` — route an evaluation request to the smallest relevant workflow.
+- `discovering-failures` — discover failure modes from traces before freezing a taxonomy.
+- `designing-evaluators` — design deterministic, interpreted, or hybrid evaluators for bounded claims.
+- `qualifying-evaluators` — validate evaluator fitness with held-out evidence, hard negatives, invariance checks, and explicit limitations.
+- `generating-eval-cases` — fill declared coverage gaps instead of generating large generic synthetic benchmarks.
+- `evaluating-skill-runtime` — evaluate actual skill activation, routing, workflow, actions, evidence, and exit behavior.
+
+The central rules are: evaluator output is measurement evidence rather than behavioral authority; deterministic checks come before interpreted judgment where possible; synthetic cases repair coverage rather than manufacture observed evidence; and any learning/change authority follows failure attribution to the smallest durable owner.
+
 ## Development Workflow
 
 MVL is not a separate skill. For product features, it is the **feature-development unit carried through the existing workflow**.

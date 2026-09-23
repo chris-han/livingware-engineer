@@ -101,3 +101,21 @@ def test_eval_ir_can_reference_existing_counterfactual_fixture_without_new_runti
     assert source["mode"] == "MONTE_CARLO"
     assert source["seed"] == data["eval_case"]["input_basis"]["seed"]
     assert source["rollouts"] == data["eval_case"]["input_basis"]["rollouts"]
+
+
+def main():
+    tests = [
+        test_eval_skill_family_exists_with_discriminating_metadata,
+        test_architecture_freezes_non_authority_and_provenance_contracts,
+        test_architecture_does_not_create_second_runtime_or_universal_threshold,
+        test_skill_runtime_eval_preserves_skill_review_boundary,
+        test_evaluator_design_prefers_deterministic_checks_and_supports_unknown,
+        test_eval_ir_can_reference_existing_counterfactual_fixture_without_new_runtime,
+    ]
+    for test in tests:
+        test()
+        print(f"PASS {test.__name__}")
+
+
+if __name__ == "__main__":
+    main()

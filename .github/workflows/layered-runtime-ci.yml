@@ -10,6 +10,8 @@ on:
       - 'docs/skill-token-economics.md'
       - 'skills/**'
       - 'scripts/simulate-workflow-counterfactual.py'
+      - 'scripts/compile-live-skill-eval.py'
+      - 'scripts/compile-live-skill-eval.py'
       - 'scripts/bump-version.sh'
       - 'tests/counterfactual/**'
       - 'tests/codex/**'

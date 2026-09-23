@@ -1,0 +1,45 @@
+{
+  "schema_version": "livingware.eval-ir.v1",
+  "evaluation_target": {
+    "target_id": "routing-whatif-v1",
+    "target_kind": "ROUTING",
+    "version_pins": {
+      "workflow": "systematic-debugging:v-current",
+      "policy": "livingware:current"
+    }
+  },
+  "eval_case": {
+    "case_id": "routing-whatif-v1-provenance-contract",
+    "target_id": "routing-whatif-v1",
+    "task_or_fixture_identity": "tests/counterfactual/fixtures/routing-whatif-v1.json",
+    "input_basis": {
+      "decision_point": "after-direct-source-inspection",
+      "mode": "MONTE_CARLO",
+      "seed": 7,
+      "rollouts": 10000
+    },
+    "expected_claims": [
+      "counterfactual-provenance-remains-visible"
+    ],
+    "provenance": "SIMULATED",
+    "source_parent": "tests/counterfactual/fixtures/routing-whatif-v1.json",
+    "coverage_dimensions": {
+      "layer": "ROUTING",
+      "counterfactual_mode": "MONTE_CARLO"
+    }
+  },
+  "evaluation_claim": {
+    "claim_id": "counterfactual-provenance-remains-visible",
+    "description": "The counterfactual fixture preserves metric provenance and simulated evidence is not represented as independent observed learning evidence.",
+    "evaluator_kind": "DETERMINISTIC",
+    "frontier": [
+      "PASS",
+      "FAIL",
+      "UNKNOWN",
+      "NOT_APPLICABLE"
+    ],
+    "required_inputs": [
+      "tests/counterfactual/fixtures/routing-whatif-v1.json"
+    ]
+  }
+}

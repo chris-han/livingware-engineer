@@ -37,11 +37,13 @@ def _maybe_int(value: str | None) -> int | None:
     return int(value)
 
 
-def _routing_frontier(value: str) -> str:
+def _routing_frontier(value: str, expected_skill: str | None) -> str:
     if value == "pass":
         return "PASS"
     if value == "fail":
         return "FAIL"
+    if value == "unobserved" and expected_skill is None:
+        return "PASS"
     return "UNKNOWN"
 
 
@@ -97,11 +99,13 @@ def compile_summary(summary_path: Path, probe_exit_code: int) -> dict:
                 },
                 "evaluation": {
                     "routing": {
-                        "frontier": _routing_frontier(routing),
+                        "frontier": _routing_frontier(routing, contract["expected_skill"]),
                         "evidence_kind": "DETERMINISTIC_TRACE_CHECK",
                         "note": (
-                            "UNKNOWN means no explicit skill-load event was observed; "
-                            "behavior evidence must not be promoted into routing evidence."
+                            "For scenarios requiring a skill, UNKNOWN means no explicit skill-load event "
+                            "was observed; behavior evidence must not be promoted into routing "
+                            "evidence. For a no-skill baseline, absence of forbidden skill-load "
+                            "events is the expected routing evidence."
                         ),
                     },
                     "behavior": {

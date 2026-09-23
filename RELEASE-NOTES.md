@@ -1,3 +1,12 @@
+## v6.11.0 (2026-09-24)
+
+- Add the Livingware-native evaluation skill family: `evaluating-livingware`, `discovering-failures`, `designing-evaluators`, `qualifying-evaluators`, `generating-eval-cases`, and `evaluating-skill-runtime`.
+- Add `docs/livingware-evaluation-architecture.md` and the Eval IR for targets, cases, traces, claims, failure observations/modes/attribution, evaluator candidates/qualification, regression witnesses, and learning candidates.
+- Freeze evaluator non-authority, evidence-first failure discovery, deterministic-before-interpreted evaluation, coverage-directed synthetic cases, and failure-attribution-based learning authority.
+- Add zero-dependency Eval IR contract tests, skill-runtime dogfood fixtures, a live Codex skill-runtime runner, and a deterministic live-summary-to-Eval-IR compiler with explicit `PASS | FAIL | UNKNOWN` routing semantics.
+- Reuse the existing progressive-routing and counterfactual owners rather than adding a second runtime, meta-router, evaluation database, or autonomous mutation loop.
+- Synchronize declared package/plugin version surfaces to 6.11.0.
+
 ## v6.10.11 (2026-09-20)
 
 - Add request, raw-content, and derived-processing deduplication guidance to the data-collection pipeline.

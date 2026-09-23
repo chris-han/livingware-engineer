@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -17,6 +19,8 @@ SKILLS = {
 IR_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "routing-whatif-eval-ir-v1.json"
 COUNTERFACTUAL_FIXTURE = ROOT / "tests" / "counterfactual" / "fixtures" / "routing-whatif-v1.json"
 DOGFOOD_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "skill-runtime-dogfood-v1.json"
+LIVE_SUMMARY_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "live-probe-summary-v1.tsv"
+LIVE_COMPILER = ROOT / "scripts" / "compile-live-skill-eval.py"
 
 
 def test_eval_skill_family_exists_with_discriminating_metadata():
@@ -139,6 +143,62 @@ def test_skill_runtime_dogfood_distinguishes_contract_evidence_from_live_routing
         assert expected["entry_contains"] in skill_text
         assert expected["exit_contains"] in skill_text
 
+
+def test_live_eval_compiler_preserves_routing_epistemics():
+    with tempfile.TemporaryDirectory() as tmp:
+        output = Path(tmp) / "eval-run.json"
+        subprocess.run(
+            [
+                "python3",
+                str(LIVE_COMPILER),
+                str(LIVE_SUMMARY_FIXTURE),
+                str(output),
+                "--probe-exit-code",
+                "0",
+            ],
+            check=True,
+            cwd=ROOT,
+        )
+        data = json.loads(output.read_text(encoding="utf-8"))
+
+    assert data["schema_version"] == "livingware.eval-run.v1"
+    assert data["evidence_provenance"] == "OBSERVED"
+    assert data["overall_disposition"] == "QUALIFIED_BOUNDED"
+
+    cases = {case["task_or_fixture_identity"]: case for case in data["cases"]}
+
+    # No workflow skill is the expected baseline, so explicit absence is evidence.
+    assert cases["baseline"]["evaluation"]["routing"]["frontier"] == "PASS"
+
+    # When a skill is required, absence of an explicit skill-load event is unknown,
+    # not success inferred from behavior and not an automatic failure.
+    assert (
+        cases["completion-claim"]["evaluation"]["routing"]["frontier"]
+        == "UNKNOWN"
+    )
+    assert cases["completion-claim"]["evaluation"]["behavior"]["frontier"] == "PASS"
+
+
+def test_live_eval_compiler_respects_source_probe_failure():
+    with tempfile.TemporaryDirectory() as tmp:
+        output = Path(tmp) / "eval-run.json"
+        subprocess.run(
+            [
+                "python3",
+                str(LIVE_COMPILER),
+                str(LIVE_SUMMARY_FIXTURE),
+                str(output),
+                "--probe-exit-code",
+                "1",
+            ],
+            check=True,
+            cwd=ROOT,
+        )
+        data = json.loads(output.read_text(encoding="utf-8"))
+
+    assert data["overall_disposition"] == "FAIL"
+    assert data["probe_exit_code"] == 1
+
 def main():
     tests = [
         test_eval_skill_family_exists_with_discriminating_metadata,
@@ -148,6 +208,8 @@ def main():
         test_evaluator_design_prefers_deterministic_checks_and_supports_unknown,
         test_eval_ir_can_reference_existing_counterfactual_fixture_without_new_runtime,
         test_skill_runtime_dogfood_distinguishes_contract_evidence_from_live_routing,
+        test_live_eval_compiler_preserves_routing_epistemics,
+        test_live_eval_compiler_respects_source_probe_failure,
     ]
     for test in tests:
         test()

@@ -51,7 +51,15 @@ def _binary_frontier(value: str) -> str:
     return "PASS" if value == "pass" else "FAIL"
 
 
-def compile_summary(summary_path: Path, probe_exit_code: int) -> dict:
+def compile_summary(
+    summary_path: Path,
+    probe_exit_code: int,
+    *,
+    run_id: str | None = None,
+    repository_commit: str | None = None,
+    livingware_version: str | None = None,
+    codex_version: str | None = None,
+) -> dict:
     with summary_path.open(newline="", encoding="utf-8") as fh:
         rows = list(csv.DictReader(fh, delimiter="\t"))
 
@@ -139,6 +147,12 @@ def compile_summary(summary_path: Path, probe_exit_code: int) -> dict:
         "source_probe": "tests/codex/live-progressive-skill-probe.sh",
         "evidence_provenance": "OBSERVED",
         "probe_exit_code": probe_exit_code,
+        "production_run_id": run_id,
+        "runtime_pins": {
+            "repository_commit": repository_commit,
+            "livingware_version": livingware_version,
+            "codex_cli_version": codex_version,
+        },
         "overall_disposition": overall,
         "cases": cases,
         "limitations": [
@@ -154,9 +168,20 @@ def main() -> int:
     parser.add_argument("summary", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--probe-exit-code", type=int, default=0)
+    parser.add_argument("--run-id")
+    parser.add_argument("--repository-commit")
+    parser.add_argument("--livingware-version")
+    parser.add_argument("--codex-version")
     args = parser.parse_args()
 
-    payload = compile_summary(args.summary, args.probe_exit_code)
+    payload = compile_summary(
+        args.summary,
+        args.probe_exit_code,
+        run_id=args.run_id,
+        repository_commit=args.repository_commit,
+        livingware_version=args.livingware_version,
+        codex_version=args.codex_version,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     print(args.output)

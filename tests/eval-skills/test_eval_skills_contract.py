@@ -155,6 +155,14 @@ def test_live_eval_compiler_preserves_routing_epistemics():
                 str(output),
                 "--probe-exit-code",
                 "0",
+                "--run-id",
+                "20260924T000000Z",
+                "--repository-commit",
+                "deadbeef",
+                "--livingware-version",
+                "6.11.0",
+                "--codex-version",
+                "codex-test 1.0",
             ],
             check=True,
             cwd=ROOT,
@@ -163,6 +171,12 @@ def test_live_eval_compiler_preserves_routing_epistemics():
 
     assert data["schema_version"] == "livingware.eval-run.v1"
     assert data["evidence_provenance"] == "OBSERVED"
+    assert data["production_run_id"] == "20260924T000000Z"
+    assert data["runtime_pins"] == {
+        "repository_commit": "deadbeef",
+        "livingware_version": "6.11.0",
+        "codex_cli_version": "codex-test 1.0",
+    }
     assert data["overall_disposition"] == "QUALIFIED_BOUNDED"
 
     cases = {case["task_or_fixture_identity"]: case for case in data["cases"]}

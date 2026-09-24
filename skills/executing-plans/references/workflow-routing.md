@@ -38,7 +38,7 @@ Confirm only the execution-critical contract:
 - required real components and forbidden mocks;
 - user/repository authority boundaries.
 
-If a critical gap can be resolved from standing delegation, repository evidence, established convention, or a safe reversible default, resolve it and continue. Stop for human judgment only under the root skill's Human Judgment Necessity Test.
+If a critical gap can be resolved from standing delegation, repository evidence, established convention, or a safe reversible default, resolve it and continue. Stop for human judgment only under the root skill's User Intervention Necessity Test.
 
 Route to `PREREQUISITES` when a load-bearing dependency/setup gate exists; otherwise route to `TASK_EXECUTION`.
 

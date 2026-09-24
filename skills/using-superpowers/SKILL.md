@@ -11,7 +11,7 @@ Prefer the platform's native skill discovery and matching. Skills should be sele
 
 Choose the smallest change, context, verification surface, and review process that satisfies the request. Reuse existing code, contracts, tests, evidence, and recovery state. Preserve correctness, security, authority, permissions, data integrity, required audit semantics, and explicit repository requirements.
 
-Safe reversible in-scope work continues without repeated approval. Stop only for missing authority, material unresolved design choices, security risk, destructive operations, or irreversible external actions that require human judgment.
+Safe reversible in-scope work continues without repeated approval. Progress reports are concise observations, not checkpoints. Interrupt the user only when the next required action genuinely depends on user-owned judgment, authority, secure access/credentials, sensitive-data disclosure, destructive action, or another consequential external action that cannot be resolved through standing delegation or an authorized reversible recovery path.
 
 ## Evidence Reuse Discipline
 

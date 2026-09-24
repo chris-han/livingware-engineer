@@ -1,3 +1,12 @@
+## v6.11.1 (2026-09-24)
+
+- Add Continuous Execution Until Terminality across plan generation, execution, verification, subagent execution, worktree setup, and review reception.
+- Replace the narrow Human Judgment Necessity Test with a User Intervention Necessity Test covering genuinely user-owned judgment, authority, secure access/credentials, sensitive-data disclosure, and consequential external actions.
+- Make progress reporting concise and non-blocking; intermediate GREEN, review, browser, integration, and progress states advance work but do not implicitly close a plan or host goal.
+- Align Livingware plan terminality with Codex `/goal`: the host Goal remains the persistent objective while the plan supplies the executable stopping criterion and evidence contract.
+- Preserve GitHub Copilot portability through the existing Agent Skills `SKILL.md` surface; no Copilot-specific workflow fork is introduced.
+- Add deterministic cross-skill regression coverage.
+
 ## v6.11.0 (2026-09-24)
 
 - Add the Livingware-native evaluation skill family: `evaluating-livingware`, `discovering-failures`, `designing-evaluators`, `qualifying-evaluators`, `generating-eval-cases`, and `evaluating-skill-runtime`.

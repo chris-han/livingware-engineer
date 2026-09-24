@@ -9,7 +9,7 @@ description: Use when receiving code review feedback, before implementing sugges
 
 Code review requires technical evaluation, not emotional performance.
 
-**Core principle:** Verify before implementing. Ask before assuming. Technical correctness over social comfort.
+**Core principle:** Verify before implementing. Resolve from evidence before asking. Technical correctness over social comfort.
 
 ## The Response Pattern
 
@@ -28,13 +28,13 @@ WHEN receiving code review feedback:
 
 Lead with the technical finding, evidence, or fix—not performative agreement. Keep acknowledgments natural and concise; wording rituals are not correctness gates.
 
-For unclear feedback, identify whether it affects shared requirements, authority, or dependent work. Pause that dependent work and ask the specific question. Independently understood, authorized fixes may continue when their correctness does not depend on the answer. Never guess through a security or product decision.
+For unclear feedback, identify whether it affects shared requirements, authority, or dependent work. Inspect binding contract and code evidence first; pause only dependent work whose correctness truly requires unresolved user-owned input. Independently understood, authorized fixes may continue when their correctness does not depend on the answer. Never guess through a security or product decision.
 
 ## Source-Specific Handling
 
 ### From your human partner
 - **Trusted** - implement after understanding
-- **Still ask** if scope unclear
+- **Resolve scope from request/spec/evidence first; ask only if user intervention remains necessary
 - **No performative agreement**
 - **Skip to action** on authorized changes, or give a technical acknowledgment
 
@@ -51,7 +51,7 @@ IF suggestion seems wrong:
   Push back with technical reasoning
 
 IF can't easily verify:
-  Say so: "I can't verify this without [X]. Should I [investigate/ask/proceed]?"
+  Investigate the smallest relevant evidence surface first; ask only if the missing input is genuinely user-owned and required.
 
 IF conflicts with your human partner's prior decisions:
   Stop and discuss with your human partner first

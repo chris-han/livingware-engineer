@@ -13,7 +13,7 @@ Before claiming correctness or completion:
 1. **Name the scope of the claim.** Distinguish a focused task, integrated implementation, and completion of a declared MVL Contract.
 2. **Identify the check that can falsify it.** Choose the smallest check capable of catching the mistake; cover real component boundaries when the claim depends on them.
 3. **Run that check, or reuse a valid unchanged-state result.** Run the full selected command, not a partial substitute.
-4. **Read the result and update the actual state.** Inspect the output, exit code, failures, and relevant measurements. A failed or unverified required check means the claimed scope is not complete. Record/report passing scope and remaining gaps concisely, then continue immediately to the next actionable repair or verification step unless the Human Judgment Necessity Test in `docs/mvl-laws.md` is met. Reporting status is never itself a stop condition.
+4. **Read the result and update the actual state.** Inspect the output, exit code, failures, and relevant measurements. A failed or unverified required check means the claimed scope is not complete. Record/report passing scope and remaining gaps concisely, then continue immediately to the next actionable repair or verification step unless the User Intervention Necessity Test in `docs/mvl-laws.md` is met. Reporting status is never itself a stop condition.
 
 ## Result Validity and Scope
 
@@ -23,7 +23,7 @@ Run focused tests during implementation and expensive integration at coherent sp
 
 Do not rerun checks merely to send a progress update, delegate an independent task, express a non-technical acknowledgment, or enter another workflow phase.
 
-Verification decides technical claims, not whether execution should pause. A green gate advances automatically. A red gate normally creates repair/debug work. An unverified gate creates the next verification action. None of these require user judgment unless the remaining decision passes the Human Judgment Necessity Test.
+Verification decides technical claims, not whether execution should pause. A green gate advances automatically. A red gate normally creates repair/debug work. An unverified gate creates the next verification action. None of these require user judgment unless the remaining decision passes the User Intervention Necessity Test.
 
 Use existing test output and version history. Do not create duplicate verification packages, intermediate reports, or status ledgers unless the user or repository explicitly requires them. Required product audit/replay, persistence, and recovery contracts remain intact.
 

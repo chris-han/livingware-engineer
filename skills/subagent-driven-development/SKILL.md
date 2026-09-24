@@ -14,7 +14,7 @@ Execute the plan's bounded implementation and review units. `superpowers:writing
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
 
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are the four named below, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in between tasks. Execute all dependency-ready obligations through the plan's authorized stopping criterion. Brief progress updates are allowed after meaningful milestones or material findings, but they are non-blocking: do not ask “Should I continue?”, wait for acknowledgment, or narrate every routine step.
 
 **Rulings, not stalls.** A running plan does not wait on a human. Conflicts,
 ambiguities, plan defects, a cap you would have asked to exceed — decide
@@ -24,11 +24,7 @@ judgment settles ordinary in-scope implementation ambiguity. Record consequentia
 going. A wrong ruling costs rework your human partner can see and undo; a
 session parked on a question costs their whole day and buys nothing.
 
-Four things stop you, and only these: an irreversible or destructive
-operation; a security-sensitive action; a side effect outside this worktree
-that norms say you ask about first (a merge, a push to a shared branch, a
-publish); and a plan so broken that every path forward is a guess. For those,
-stop and ask.
+User interruption follows the shared User Intervention Necessity Test in `docs/mvl-laws.md`. Typical triggers are irreversible/destructive action, security-sensitive authority or disclosure, consequential external side effects lacking standing authorization, user-owned credentials/access, or a plan/spec gap whose materially different outcomes cannot be resolved from evidence or a safe reversible ruling. Failed tasks, review findings, retry exhaustion, and ordinary ambiguity route to diagnosis or recovery rather than automatically returning control to the user.
 
 ## When to Use
 
@@ -70,8 +66,7 @@ Use `superpowers:verification-before-completion` for test-result validity and re
 ## Setup
 
 Use superpowers:using-git-worktrees to choose in-place or isolated work from the observed risk and existing authorization.
-Never start implementation on a main/master branch without your human
-partner's explicit consent.
+If direct work on main/master is not already authorized, use the safe isolation path from `using-git-worktrees` when repository and harness policy permit it. Ask only when no safe authorized isolation path exists.
 
 Use one existing durable tracker for recovery: plan identity, completed-unit commit ranges, unresolved blockers, consequential decisions, fix-loop position, and the next action. After compaction, inspect that tracker and Git before dispatching; never restart accepted work merely because conversation context was lost.
 

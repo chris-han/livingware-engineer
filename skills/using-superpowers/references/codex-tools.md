@@ -1,3 +1,9 @@
+## Codex Goals
+
+When a Codex `/goal` is active, keep it as the host-level persistent objective. Livingware plans refine that objective with an executable stopping criterion, verification surface, recovery policy, and permitted terminal dispositions; they must not create a second competing goal authority.
+
+Map the lifecycle as: Goal outcome/constraints -> Livingware plan execution -> check evidence -> continue after non-terminal observations -> complete only on the plan/Goal finish line -> report blocked only when no authorized path remains or user intervention is required. An intermediate GREEN, completed task, review, or browser pass must not complete the Goal unless it is the Goal's declared finish line. Progress messages remain non-blocking. Respect Codex's own Goal pause/resume/clear controls and host-enforced budget stops.
+
 ## Subagent dispatch requires multi-agent support
 
 Add to your Codex config (`~/.codex/config.toml`):

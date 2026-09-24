@@ -1,36 +1,36 @@
 ---
 name: executing-plans
-description: Use when a written implementation plan is ready to execute continuously through its authorized stopping criterion, involving the user only when judgment is genuinely necessary.
+description: Use when a written implementation plan is ready to execute continuously through its authorized stopping criterion, involving the user only when intervention is genuinely necessary.
 ---
 
 # Executing Plans
 
-Load the authoritative plan/spec, preserve its contract across task boundaries, and execute continuously until the declared stopping criterion is satisfied or a genuine non-delegable human decision is required.
+Load the authoritative plan/spec, preserve its contract across task boundaries, and execute continuously until a declared terminal disposition is supported by evidence or the User Intervention Necessity Test is met.
 
 ## Lifecycle
 
 Entry: a written plan has been selected for implementation.
-Exit: the plan's authorized stopping criterion is supported by evidence, or the Human Judgment Necessity Test is met.
+Exit: the plan's authorized stopping criterion yields a declared terminal disposition supported by evidence, or the User Intervention Necessity Test is met.
 
 A completed task, sprint exit, review, integration slice, or list of remaining gates is progress evidence, not a stop condition. Continue with the next dependency-ready state.
 
-Never start implementation directly on `main`/`master` without explicit user consent. Preserve any stronger repository-specific branch/worktree rule.
+If direct implementation on `main`/`master` is not already authorized, use the safe isolation path defined by `using-git-worktrees` when repository and harness policy permit it. Do not ask merely to choose branch ceremony; involve the user only when no safe authorized isolation path exists.
 
-## Human Judgment Necessity Test
+## Continuous execution and progress reporting
 
-Apply standing user delegation first. Stop for human judgment only when all three are true:
+After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.
 
-1. a real decision is required before the next action can proceed;
-2. the decision is not already delegated and cannot be resolved from binding plan/spec/policy, observed evidence, established convention, executable checks, or a safe reversible default; and
-3. choosing wrong has a material, not-cheaply-reversible consequence.
+For long-running work, progress updates may be one or two concise sentences after a meaningful milestone, material finding, or recovery-state change. They are observational, not approval checkpoints: do not end them with “Should I continue?”, do not wait for acknowledgment, and do not narrate every routine task or test.
 
-Examples include genuinely subjective product intent, a non-delegable legal/compliance determination, sensitive-data disclosure, irreversible/destructive action, or consequential external/production state change.
+A predeclared negative or inconclusive terminal disposition is legitimate closure when its predicate is satisfied. It is not a reason to retry indefinitely or ask whether the user wants to continue.
 
-Ordinary implementation ambiguity, failed tests, review findings, unavailable local fixtures, phase transitions, or incomplete gates do not satisfy this test by themselves.
+## User Intervention Necessity Test
+
+Apply the cross-cutting test in `docs/mvl-laws.md` after standing user delegation. Stop for the user only when the next required action cannot proceed autonomously, authorized recovery paths are exhausted, and the missing capability is genuinely user-owned. Ordinary implementation ambiguity, failed tests, review findings, unavailable local fixtures, phase transitions, incomplete gates, or a completed checkpoint do not satisfy this test by themselves.
 
 ## Plan and MVL continuity
 
-Treat the plan as authoritative dynamic context. Preserve its target/stopping criterion, prerequisites, dependency contract, impact/integration scope, required real components, permitted substitutes, forbidden mocks, and authority boundaries.
+Treat the plan as authoritative dynamic context. Preserve its target/stopping criterion, permitted terminal dispositions, prerequisites, dependency contract, impact/integration scope, required real components, permitted substitutes, forbidden mocks, and authority boundaries.
 
 For product features, preserve the same MVL target user/job, value hypothesis, smallest real journey, trial inputs, metrics, feedback surface, improvement levers, and comparable re-test through completion. Local task success is not permission to redefine the feature contract.
 
@@ -86,4 +86,4 @@ Do not carry complete prior skill bodies, broad repository dumps, or duplicate t
 
 Before claiming fixed/correct/complete/integrated/ready-to-merge/release, enter `verification-before-completion` for the exact claim. After supported completion evidence, use the already-authorized branch action or the branch-completion workflow. Evidence boundaries are not human approval checkpoints.
 
-For whole-plan completion, apply that skill's Plan completion gate to the original acceptance contract. Keep incomplete requirements visible through task boundaries; a green command list or completed implementation slice cannot authorize closing the plan or goal.
+For whole-plan completion, apply that skill's Plan completion gate to the original acceptance contract. Keep incomplete requirements visible through task boundaries; a green command list or completed implementation slice cannot authorize closing the plan or host goal. A declared negative/inconclusive terminal disposition may close the plan only when its own predicate and evidence requirements are satisfied.

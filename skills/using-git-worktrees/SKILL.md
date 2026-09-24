@@ -54,11 +54,7 @@ Work in place without asking about a branch or worktree only when every conditio
 
 Use isolation when any of these signals is present: multiple repositories or independently coordinated tasks, governed implementation-plan execution, public contracts, persistence/migrations, dependencies, deployment/runtime configuration, generated artifacts, risky refactoring, a dirty checkout that may overlap, or uncertainty about the impact radius.
 
-If isolation is indicated and the user has not already expressed a worktree preference, ask for consent before creating one:
-
-> "Would you like me to set up an isolated worktree? It protects your current branch from changes."
-
-Honor any existing declared preference without asking. If the user declines consent, work in place and skip to Step 2.
+If isolation is indicated, create or enter a safe isolated workspace automatically when repository and harness policy permit it. Worktree creation is a reversible local safety action, not a default approval gate. Honor any explicit user preference against isolation or for a specific workspace strategy; involve the user only when no safe authorized isolation path exists.
 
 ## Step 1: Create Isolated Workspace
 
@@ -66,7 +62,7 @@ Honor any existing declared preference without asking. If the user declines cons
 
 ### 1a. Native Worktree Tools (preferred)
 
-The user has asked for an isolated workspace (Step 0 consent). Do you already have a way to create a worktree? It might be a tool with a name like `EnterWorktree`, `WorktreeCreate`, a `/worktree` command, or a `--worktree` flag. If you do, use it and skip to Step 2.
+Isolation has been selected by the impact-radius decision. Do you already have a way to create a worktree? It might be a tool with a name like `EnterWorktree`, `WorktreeCreate`, a `/worktree` command, or a `--worktree` flag. If you do, use it and skip to Step 2.
 
 Native tools handle directory placement, branch creation, and cleanup automatically. Using `git worktree add` when you have a native tool creates phantom state your harness can't see or manage.
 
@@ -147,8 +143,7 @@ unchanged; otherwise run the smallest baseline capable of exposing pre-existing
 failures relevant to the planned change. Run a full suite only when repository
 policy or demonstrated impact requires it.
 
-**If relevant required checks fail:** Report them and investigate or ask how to
-proceed. Existing failures proven unrelated to the task should be reported with
+**If relevant required checks fail:** Report them concisely and investigate. Route unexplained related failures to debugging; ask the user only when the User Intervention Necessity Test is met. Existing failures proven unrelated to the task should be reported with
 their baseline provenance; they do not automatically block isolated work.
 
 **If tests pass:** Report ready.
@@ -168,7 +163,7 @@ Ready to implement <feature-name>
 | Already in linked worktree | Skip creation (Step 0) |
 | In a submodule | Treat as normal repo (Step 0 guard) |
 | Clean, single-repo, reversible, boundary-preserving change | Work in place without asking |
-| Cross-repo, plan-driven, boundary-changing, dirty, or uncertain change | Use isolation; ask consent if preference is unknown |
+| Cross-repo, plan-driven, boundary-changing, dirty, or uncertain change | Use isolation automatically unless explicitly prohibited or user intervention is required |
 | Native worktree tool available | Use it (Step 1a) |
 | No native tool | Git worktree fallback (Step 1b) |
 | `.worktrees/` exists | Use it (verify ignored) |
@@ -177,7 +172,7 @@ Ready to implement <feature-name>
 | Neither exists | Check instruction file, then default `.worktrees/` |
 | Directory not ignored | Add to .gitignore + commit |
 | Permission error on create | Preserve required isolation; resolve permissions or get explicit authorization for an allowed alternative |
-| Relevant baseline checks fail | Report and investigate or ask |
+| Relevant baseline checks fail | Report concisely and investigate; ask only if user intervention is required |
 | Proven unrelated baseline failure | Record provenance; do not blanket-block isolated work |
 | Prerequisites already present | Skip installation |
 

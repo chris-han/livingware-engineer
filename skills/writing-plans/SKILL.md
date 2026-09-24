@@ -7,9 +7,9 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 ## MVL Law 1 — Fast-to-Aha
 
-For product MVLs where governance is in the path, treat time-to-first-useful-result as an acceptance criterion. Distinguish recorded default-pass gates from blocking gates; ordinary low-risk journeys must not stop for approval ceremony. A human-judgment gate is allowed only when the Human Judgment Necessity Test in `docs/mvl-laws.md` is satisfied after applying any standing user delegation.
+For product MVLs where governance is in the path, treat time-to-first-useful-result as an acceptance criterion. Distinguish recorded default-pass gates from blocking gates; ordinary low-risk journeys must not stop for approval ceremony. A user-intervention gate is allowed only when the User Intervention Necessity Test in `docs/mvl-laws.md` is satisfied after applying any standing user delegation.
 
-Classify every planned gate as either **machine-verifiable** or **human-judgment-required**. Machine-verifiable gates (tests, typecheck, lint, build, contract checks, service/browser fixtures, integration/E2E evidence, deterministic review findings) advance automatically when satisfied and never require a human checkpoint. A human-judgment gate is allowed only when standing delegation plus the Human Judgment Necessity Test in `docs/mvl-laws.md` says the decision cannot be resolved mechanically or reversibly. Do not create approval or checkpoint tasks merely to mark a phase boundary.
+Classify every planned gate as either **autonomous** or **user-intervention-required**. Autonomous gates include tests, typecheck, lint, build, contract checks, service/browser fixtures, integration/E2E evidence, deterministic review findings, and ordinary reversible engineering rulings; they advance automatically when satisfied and never require a human checkpoint. A user-intervention-required gate is allowed only when standing delegation plus the User Intervention Necessity Test says the next required action genuinely depends on user-owned judgment, authority, access, credentials, or consequential external action. Do not create approval or checkpoint tasks merely to mark a phase boundary.
 
 ## Overview
 
@@ -25,6 +25,16 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+
+## Execution Continuity Contract
+
+Every executable multi-step plan MUST declare near the top an **authorized stopping criterion** and any **permitted terminal dispositions**. The plan is a completion contract, not merely an ordered checklist.
+
+Unless explicitly declared otherwise, intermediate tasks, gates, reviews, test/browser/integration passes, commits, and workstream completion are non-terminal progress evidence. After every non-terminal observation, advance to the next dependency-ready obligation. Recoverable failures route to debugging, repair, retry, bounded replanning, or verification rather than back to the user. Concise progress updates are non-blocking and do not wait for acknowledgment. A declared negative or inconclusive outcome may be terminal when its predeclared predicate is satisfied. User involvement is permitted only when the User Intervention Necessity Test is satisfied.
+
+If the authorized scope is intentionally bounded, state it explicitly—for example, “stop after W1 evidence is sealed.” Otherwise an intermediate GREEN MUST NOT be interpreted as plan completion.
+
+When the host provides a persistent objective or goal primitive, keep it as the outer objective. The plan supplies its executable completion contract; it must not create a competing goal authority or mark the host objective complete from an intermediate gate.
 
 ## Architecture Delta Before Architecture Work
 
@@ -239,9 +249,13 @@ After writing the plan, check:
 7. Integration credibility.
 8. Placeholder scan.
 9. Type consistency.
+10. Authorized stopping criterion and permitted terminal dispositions are explicit.
+11. Intermediate gates cannot be mistaken for terminal states.
+12. Any user-intervention gate satisfies the User Intervention Necessity Test.
+13. A host persistent goal/objective, when present, remains the outer objective.
 
 If architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
 
 ## Execution Handoff
 
-After saving the plan, continue with the execution approach already authorized by the user. Machine-verifiable gates advance automatically; involve the user only when the Human Judgment Necessity Test is met.
+After saving the plan, continue with the execution approach already authorized by the user. Autonomous gates advance automatically; involve the user only when the User Intervention Necessity Test is met.

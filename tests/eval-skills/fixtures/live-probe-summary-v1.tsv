@@ -1,0 +1,5 @@
+scenario	required_skill	forbidden_skills	routing	behavior	runtime	attempts	duration_seconds	input-count	cached-input-count	uncached-input-count	output-count	reasoning-output-count	jsonl	stderr
+baseline	none	systematic-debugging,test-driven-development,verification-before-completion	unobserved	pass	pass	1	8	7000	1000	6000	120	20	/tmp/baseline.jsonl	/tmp/baseline.stderr
+unexplained-failure	systematic-debugging	test-driven-development,verification-before-completion	pass	pass	pass	1	30	18000	3000	15000	500	100	/tmp/debug.jsonl	/tmp/debug.stderr
+implementation	test-driven-development	systematic-debugging,verification-before-completion	pass	pass	pass	1	28	16000	2500	13500	600	120	/tmp/implementation.jsonl	/tmp/implementation.stderr
+completion-claim	verification-before-completion	systematic-debugging,test-driven-development	unobserved	pass	pass	1	22	12000	2000	10000	350	80	/tmp/verify.jsonl	/tmp/verify.stderr

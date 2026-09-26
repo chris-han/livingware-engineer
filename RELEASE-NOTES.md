@@ -1,3 +1,12 @@
+## v6.11.2 (2026-09-26)
+
+- Strengthen product-feature planning with an explicit Product Value Validation contract inside `writing-plans` rather than adding a competing top-level skill.
+- Require product plans to distinguish observed problem evidence from assumptions, user-facing value from implementation language, Aha from technical completion, and behavioral/economic evidence from stated preference.
+- Add an E0–E5 value-evidence ladder, falsifiable value hypotheses, explicit counter-evidence, time-to-Aha / first-actionable-value framing, and a feature-level PMF claim boundary.
+- Add `READY_TO_PLAN | VALIDATE_FIRST | NOT_APPLICABLE` dispositions so unresolved value uncertainty routes to the smallest validation experiment without creating a human approval checkpoint.
+- Preserve an escape hatch for verified defects, refactors, platform/dependency maintenance, mandatory security/legal/contractual work, architecture-integrity work, and technical qualification where product-value validation is not applicable.
+- Synchronize declared package/plugin version surfaces to 6.11.2.
+
 ## v6.11.1 (2026-09-24)
 
 - Add Continuous Execution Until Terminality across plan generation, execution, verification, subagent execution, worktree setup, and review reception.

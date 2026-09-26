@@ -87,6 +87,22 @@ Every feature plan MUST define, near the top:
 
 These are not a separate skill or optional appendix. They are part of the plan contract and constrain task design, dependency readiness, test design, integration scope, and completion evidence.
 
+### Product Value Validation
+
+For product features whose justification depends on user value, adoption, activation, retention, workflow insertion, or market pull, apply the Product Value Validation contract in `references/product-value-validation.md` before implementation tasks are admitted.
+
+The review must distinguish:
+
+- **problem evidence** from an internal assumption;
+- **value proposition** from implementation description;
+- **Aha** from onboarding or technical completion;
+- **behavioral/economic evidence** from stated preference;
+- **feature success** from product-market fit.
+
+Record the strongest supported value-evidence level (`E0` through `E5`), a falsifiable value hypothesis, the first observable Aha event and time-to-Aha target when meaningful, counter-evidence that would weaken the hypothesis, and the product-level PMF signal the feature may contribute to without claiming that the feature itself establishes PMF.
+
+Use `READY_TO_PLAN`, `VALIDATE_FIRST`, or `NOT_APPLICABLE`. `VALIDATE_FIRST` changes the plan target to the smallest useful validation experiment; it is not a human-approval checkpoint. For verified defects, behavior-preserving refactors, dependency/platform maintenance, mandatory security/legal/contractual work, architecture-integrity work, or technical qualification with no user-value claim, record `NOT_APPLICABLE` with the authoritative requirement source or reason rather than inventing a value proposition.
+
 For non-product maintenance work where no user-learning loop exists, state `MVL: not applicable — <reason>` rather than inventing one.
 
 ## IA Before UI
@@ -194,6 +210,27 @@ Task boundaries MUST preserve the MVL journey. Do not decompose the work in a wa
 Every plan must include the relevant review blocks before implementation tasks:
 
 ```markdown
+## Product Value Validation
+
+**Applicability:** REQUIRED | NOT_APPLICABLE
+**Target user / triggering situation:** ...
+**Job-to-be-done:** ...
+**Current workaround / cost:** ...
+**Evidence provenance:** OBSERVED | INFERRED | ASSUMED | ...
+**Evidence level:** E0 | E1 | E2 | E3 | E4 | E5
+**Value proposition:** ...
+**Start event:** ...
+**Aha event:** ...
+**Target time-to-Aha:** ...
+**Pre-Aha friction:** ...
+**Hypothesis:** ...
+**Positive evidence:** ...
+**Counter-evidence / falsifier:** ...
+**Minimum validation surface:** ...
+**PMF-relevant signal:** ...
+**Claim boundary:** ...
+**Disposition:** READY_TO_PLAN | VALIDATE_FIRST | NOT_APPLICABLE
+
 ## Architecture Delta Review
 
 **Applicability:** REQUIRED | NOT_APPLICABLE
@@ -242,19 +279,20 @@ After writing the plan, check:
 
 1. Spec coverage.
 2. MVL continuity.
-3. Dependency readiness.
-4. Architecture Delta applicability, evidence, minimality, and disposition.
-5. IA-before-UI applicability and disposition.
-6. Verification Impact Analysis and R0–R3 scope.
-7. Integration credibility.
-8. Placeholder scan.
-9. Type consistency.
-10. Authorized stopping criterion and permitted terminal dispositions are explicit.
-11. Intermediate gates cannot be mistaken for terminal states.
-12. Any user-intervention gate satisfies the User Intervention Necessity Test.
-13. A host persistent goal/objective, when present, remains the outer objective.
+3. Product Value Validation applicability, evidence level, Aha contract, falsifier, PMF claim boundary, and disposition.
+4. Dependency readiness.
+5. Architecture Delta applicability, evidence, minimality, and disposition.
+6. IA-before-UI applicability and disposition.
+7. Verification Impact Analysis and R0–R3 scope.
+8. Integration credibility.
+9. Placeholder scan.
+10. Type consistency.
+11. Authorized stopping criterion and permitted terminal dispositions are explicit.
+12. Intermediate gates cannot be mistaken for terminal states.
+13. Any user-intervention gate satisfies the User Intervention Necessity Test.
+14. A host persistent goal/objective, when present, remains the outer objective.
 
-If architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
+If required Product Value Validation is missing or has unresolved material value uncertainty while claiming `READY_TO_PLAN`, if architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
 
 ## Execution Handoff
 

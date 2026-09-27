@@ -16,6 +16,14 @@ A completed task, sprint exit, review, integration slice, or list of remaining g
 
 If direct implementation on `main`/`master` is not already authorized, use the safe isolation path defined by `using-git-worktrees` when repository and harness policy permit it. Do not ask merely to choose branch ceremony; involve the user only when no safe authorized isolation path exists.
 
+## Repository plan-state gate
+
+Before the first implementation edit, inspect and obey the repository's governed-plan lifecycle contract when one exists. Do not invent or normalize plan status from memory. If the repository provides a plan-state validator/linter, run it before execution and again before completion/commit.
+
+Keep task/phase state separate from plan-level state. An intermediate task marked completed advances the plan but does not imply that the whole plan is complete. Likewise, do not use a lifecycle label such as `active` as a plan-status value when the repository schema owns those concepts separately.
+
+When the repository requires execution metadata, bind the active execution method/workspace (for example this skill plus isolated-worktree vs explicitly-authorized-main mode) before continuing. If an existing selected plan uses legacy or inconsistent execution metadata, normalize it to the repository contract before further implementation; do not rewrite historical archived plans merely for style.
+
 ## Continuous execution and progress reporting
 
 After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.

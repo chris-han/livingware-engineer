@@ -1,3 +1,11 @@
+## v6.11.3 (2026-09-27)
+
+- Add a repository plan-state gate to `executing-plans`: agents must obey the host repository's governed-plan lifecycle contract and run its plan-state validator/linter when one exists.
+- Keep task/phase completion separate from plan-level completion, preventing intermediate GREEN milestones from silently terminalizing a plan or conflating lifecycle labels such as `active` with plan status.
+- Require legacy/inconsistent active-plan metadata to be normalized before further implementation while leaving historical archived plans untouched.
+- Preserve the already-released 6.11.2 Product Value Validation contract while synchronizing the source repository with the installed 6.11.2 release basis.
+- Synchronize declared package/plugin version surfaces to 6.11.3.
+
 ## v6.11.2 (2026-09-26)
 
 - Strengthen product-feature planning with an explicit Product Value Validation contract inside `writing-plans` rather than adding a competing top-level skill.

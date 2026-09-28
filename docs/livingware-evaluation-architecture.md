@@ -418,7 +418,7 @@ Run the held-out qualification under pinned evaluator/model versions. A material
 
 ## Skill family
 
-The evaluation architecture is exposed through six discoverable skills:
+The evaluation architecture is exposed through seven discoverable skills:
 
 - `evaluating-livingware` — entry/router for substantial Livingware evaluation work;
 - `discovering-failures` — evidence-first error discovery and failure-mode induction;
@@ -426,6 +426,7 @@ The evaluation architecture is exposed through six discoverable skills:
 - `qualifying-evaluators` — evaluator validation and bounded qualification;
 - `generating-eval-cases` — coverage-directed case generation;
 - `evaluating-skill-runtime` — behavior evaluation of skill trigger/routing/workflow/actions/evidence/exit contracts.
+- `governed-experimental-evolution` — bounded DEV/QUAL/CONFIRM evolution after failure attribution.
 
 These are workflow-entry packages, not new authority owners.
 
@@ -478,3 +479,120 @@ The first implementation is complete when:
 4. existing counterfactual provenance semantics remain unchanged;
 5. at least one existing skill runtime fixture can be represented as the Eval IR without a new service or database; and
 6. README documentation makes the evaluation skill family discoverable without turning it into always-loaded process.
+
+
+## Governed Experimental Evolution
+
+Governed Experimental Evolution (GEE) controls how evaluation evidence may produce experimental changes without turning a hillclimber, evaluator, or benchmark into behavioral authority.
+
+The governing invariant is:
+
+```text
+improvement = evidence
+improvement != authority
+```
+
+The lifecycle is:
+
+```text
+Observation
+  -> typed failure attribution
+  -> hypothesis
+  -> InterventionCandidate
+  -> DEV
+  -> QUAL
+  -> admit/reject working baseline
+  -> architecture freeze
+  -> sealed CONFIRM
+  -> confirmed / not confirmed
+```
+
+### DEV / QUAL / CONFIRM
+
+**DEV** is discovery-only. Historically exposed, generated, mined, counterexample, hard-negative, and permitted production-derived cases may be used repeatedly. DEV improvement is candidate evidence, not qualification.
+
+**QUAL** is development qualification. It tests whether a DEV-discovered intervention survives the current contract, regressions, invariance checks, calibration requirements, and other declared gates. Because QUAL may be consulted repeatedly during development, QUAL evidence is not sealed confirmatory evidence.
+
+**CONFIRM** is sealed confirmation. Before CONFIRM, freeze the model, prompt, representation, scorer, frontier semantics, evaluator contract, acceptance thresholds, code/runtime pins, and confirmation manifest. CONFIRM cases and reference labels must not participate in intervention selection, prompt/scorer shaping, threshold tuning, model selection, or failure-taxonomy construction.
+
+A CONFIRM failure closes that confirmation run. Reopening development makes the used confirmation population historically exposed; a later confirmatory claim requires a new independent confirmation campaign. Do not patch against a failed CONFIRM population and continue calling it sealed.
+
+### Typed experimental failure classes
+
+Use the smallest supported class and preserve alternatives when attribution is uncertain:
+
+```text
+REFERENCE_FAILURE
+STRUCTURAL_ADMISSIBILITY_FAILURE
+PROJECTION_FAILURE
+FRONTIER_FAILURE
+SEMANTIC_DISCRIMINATION_FAILURE
+CALIBRATION_FAILURE
+ROBUSTNESS_FAILURE
+SCORER_PROTOCOL_FAILURE
+MODEL_CAPACITY_FAILURE
+INFRASTRUCTURE_FAILURE
+EVALUATION_DESIGN_FAILURE
+```
+
+These classes complement the durable owner attribution in `FailureAttribution`. The typed class explains what failed experimentally; owner attribution still determines what repository/runtime surface may change.
+
+`MODEL_CAPACITY_FAILURE` is admissible only after materially plausible structural, projection, frontier, scorer/protocol, calibration, robustness, reference, and infrastructure explanations have been evaluated. A bad score alone is not evidence that a larger model is required.
+
+`EVALUATION_DESIGN_FAILURE` invalidates the measurement claim rather than becoming a target-system failure.
+
+### Intervention lineage
+
+Every retained or rejected intervention preserves:
+
+```yaml
+intervention:
+  intervention_id: string
+  parent_baseline_id: string
+  hypothesis:
+    target_failure_class: string
+    causal_claim: string
+    expected_metric_effect: string
+  mutation:
+    authority_class: M0 | M1 | M2 | M3
+    surface: string
+    before_hash: string
+    after_hash: string
+    diff_hash: string
+  evaluation:
+    dev_run_refs: []
+    qual_run_refs: []
+  effect:
+    primary_metric_delta: optional
+    secondary_metric_deltas: optional
+    uncertainty: optional
+    regressions: []
+  disposition: RETAIN | REVERT | INCONCLUSIVE | INVALID_EXPERIMENT | INVALID_EVAL
+```
+
+Default to one attributable intervention per round. Composite interventions are allowed only when components cannot meaningfully be isolated and must declare weaker attribution. Negative and reverted trials remain durable evidence. Historical experimental truth is append-oriented: corrections supersede rather than rewrite prior runs.
+
+### Authority-bounded mutation surfaces
+
+- **M0 — automatically mutable in DEV:** low-authority experimental knobs such as prompt wording/order, non-semantic formatting, runtime effort, and batch parameters.
+- **M1 — experiment mutable:** representation/projection mechanics, context contraction, scorer/readout protocol, calibration method, and model choice. These require QUAL before working-baseline admission.
+- **M2 — governed semantic surface:** predicate/frontier semantics, `UNKNOWN` meaning, structural admissibility, authority/precedence semantics, ontology primitives, and acceptance-policy semantics. An optimizer may propose a candidate but must not autonomously activate it.
+- **M3 — sealed experimental authority:** CONFIRM corpus/reference labels, frozen acceptance thresholds/protocol, historical run records, and manifest hashes. Mutation invalidates the campaign.
+
+The candidate under optimization must not control the basis that judges its own admission.
+
+### Admission gate
+
+```text
+DEV_PASS
+AND QUAL_PASS
+AND NO_HARD_REGRESSION
+AND ATTRIBUTION_SUPPORTED
+AND MUTATION_AUTHORITY_VALID
+```
+
+Score improvement alone is insufficient. Evaluator qualification and intervention qualification remain distinct: `qualifying-evaluators` establishes measurement fitness; GEE governs whether a change survives DEV/QUAL and may enter a frozen confirmation campaign.
+
+### Replay identity
+
+Material GEE runs should pin repository/code identity, model/tokenizer identity where relevant, prompt/representation/projection/scorer versions, dataset/reference manifest hashes, acceptance-policy hash, runtime environment, and seed policy. A result without sufficient pins may remain diagnostic evidence but must not silently become qualification or confirmation evidence.

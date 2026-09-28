@@ -1,3 +1,12 @@
+## v6.12.0 (2026-09-28)
+
+- Add the generic `research-methodology` skill for goal-anchored research discovery and experiment selection.
+- Introduce the Research Discovery Kanban / Uncertainty Convergence Graph as derived epistemic state: design goal -> uncertainty frontier -> discriminating action -> evidence-bound result -> zero-or-one next question or stop.
+- Require MICE-style uncertainty decomposition, durable scoped falsification/negative knowledge, experiment-to-uncertainty mapping, cross-thread cumulative discovery state, and evidence/contract/scope-bound closure.
+- Route substantive research activity through `research-methodology` in Livingware's contributor/agent guidance while preserving native skill discovery and project-specific authority.
+- Keep literature review, hypothesis generation, experimental design, statistics, and evaluation as specialist operations beneath the convergence methodology rather than duplicating them.
+- Synchronize declared package/plugin version surfaces to 6.12.0.
+
 ## v6.11.3 (2026-09-27)
 
 - Add a repository plan-state gate to `executing-plans`: agents must obey the host repository's governed-plan lifecycle contract and run its plan-state validator/linter when one exists.

@@ -17,7 +17,8 @@ Read `../../docs/livingware-evaluation-architecture.md` for the Eval IR, evaluat
 4. If a known failure claim has no evaluator, use `designing-evaluators`.
 5. If an interpreted evaluator exists but its reliability is not established, use `qualifying-evaluators`.
 6. If the target is the observed behavior of a skill lifecycle, use `evaluating-skill-runtime`.
-7. Use replay, real re-execution, or simulation only under the counterfactual contract in `../../docs/skill-runtime-architecture.md`.
+7. If a failure is attributed and the task is to iteratively change the system, compare interventions, hillclimb, or freeze a capability claim, use `governed-experimental-evolution`.
+8. Use replay, real re-execution, or simulation only under the counterfactual contract in `../../docs/skill-runtime-architecture.md`.
 
 Load only the skill required by the current state. Do not eagerly load the entire family.
 
@@ -27,7 +28,7 @@ Resolve from available evidence before asking the user:
 
 - What target is being evaluated?
 - What exact claim or bounded frontier matters?
-- Is the problem discovery, evaluator design, evaluator qualification, coverage, or runtime behavior?
+- Is the problem discovery, evaluator design, evaluator qualification, coverage, runtime behavior, or governed experimental evolution?
 - What evidence provenance is available?
 - Which existing repository owner would own a confirmed failure?
 

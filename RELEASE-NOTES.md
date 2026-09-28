@@ -1,3 +1,9 @@
+## v6.13.0 (2026-09-28)
+
+- Promote the new `research-methodology` capability to the correct next minor release after reconciling the authoritative 6.12.0 baseline.
+- Preserve the 6.12.0 research Discovery Kanban / Uncertainty Convergence Graph implementation and routing semantics unchanged; this release corrects the package/plugin release version to reflect the newly added first-class methodology capability.
+- Synchronize every declared package/plugin version surface to 6.13.0.
+
 ## v6.12.0 (2026-09-28)
 
 - Add the generic `research-methodology` skill for goal-anchored research discovery and experiment selection.

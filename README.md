@@ -230,8 +230,9 @@ Use the family progressively rather than loading every skill at once:
 - `qualifying-evaluators` — validate evaluator fitness with held-out evidence, hard negatives, invariance checks, and explicit limitations.
 - `generating-eval-cases` — fill declared coverage gaps instead of generating large generic synthetic benchmarks.
 - `evaluating-skill-runtime` — evaluate actual skill activation, routing, workflow, actions, evidence, and exit behavior.
+- `governed-experimental-evolution` — evolve an attributed failure through DEV/QUAL, authority-bounded interventions, architecture freeze, and sealed CONFIRM.
 
-The central rules are: evaluator output is measurement evidence rather than behavioral authority; deterministic checks come before interpreted judgment where possible; synthetic cases repair coverage rather than manufacture observed evidence; and any learning/change authority follows failure attribution to the smallest durable owner.
+The central rules are: evaluator output is measurement evidence rather than behavioral authority; DEV improvement is not qualification; repeatedly consulted QUAL evidence is not sealed confirmation; CONFIRM remains independent of the optimization loop; deterministic checks come before interpreted judgment where possible; synthetic cases repair coverage rather than manufacture observed evidence; and any learning/change authority follows failure attribution to the smallest durable owner.
 
 ## Development Workflow
 

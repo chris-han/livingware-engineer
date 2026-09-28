@@ -19,6 +19,26 @@ Read `../../docs/livingware-evaluation-architecture.md` for `FailureObservation`
 6. Promote a pattern to a `FailureModeCandidate` only when multiple observations support a reusable boundary.
 7. Attribute the failure only after the observed pattern is sufficiently clear.
 
+## Experimental failure typing
+
+After an observation becomes sufficiently supported to diagnose, it may be typed for experimental evolution as:
+
+```text
+REFERENCE_FAILURE
+STRUCTURAL_ADMISSIBILITY_FAILURE
+PROJECTION_FAILURE
+FRONTIER_FAILURE
+SEMANTIC_DISCRIMINATION_FAILURE
+CALIBRATION_FAILURE
+ROBUSTNESS_FAILURE
+SCORER_PROTOCOL_FAILURE
+MODEL_CAPACITY_FAILURE
+INFRASTRUCTURE_FAILURE
+EVALUATION_DESIGN_FAILURE
+```
+
+Do not force early free-form observations into this list. The type explains the experimental mechanism; existing `FailureAttribution` still determines what may change. Do not label residual error `MODEL_CAPACITY_FAILURE` until materially plausible architecture, representation, scorer/protocol, reference, robustness, calibration, and infrastructure explanations have been evaluated.
+
 ## Annotation rule
 
 Initial review should favor free-text observations over a preloaded checklist. A pre-existing taxonomy may be shown as reference when the task is regression verification, but it must not force novel observations into existing labels.

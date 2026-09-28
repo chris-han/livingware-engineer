@@ -1,5 +1,14 @@
 ## v6.13.0 (2026-09-28)
 
+## v6.13.1 (2026-09-29)
+
+- Add Governed Experimental Evolution (GEE): attributed failures may generate bounded interventions, but score improvement remains evidence rather than behavioral authority.
+- Introduce explicit DEV -> QUAL -> sealed CONFIRM stages; repeatedly consulted QUAL evidence is development evidence, while a failed CONFIRM campaign cannot be patched and rerun as still-sealed confirmation.
+- Add typed experimental failure classes, intervention lineage, durable negative/reverted trials, and M0-M3 authority-bounded mutation surfaces.
+- Add the `governed-experimental-evolution` skill and route it from `evaluating-livingware`; strengthen evaluator qualification and failure discovery around the new boundaries.
+- Synchronize declared package/plugin version surfaces to 6.13.1.
+
+
 - Promote the new `research-methodology` capability to the correct next minor release after reconciling the authoritative 6.12.0 baseline.
 - Preserve the 6.12.0 research Discovery Kanban / Uncertainty Convergence Graph implementation and routing semantics unchanged; this release corrects the package/plugin release version to reflect the newly added first-class methodology capability.
 - Synchronize every declared package/plugin version surface to 6.13.0.

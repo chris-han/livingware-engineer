@@ -28,12 +28,14 @@ Use domain-grounded labeled data and keep development examples disjoint from hel
 A typical split is:
 
 ```text
-training examples -> prompt/scorer shaping
-dev               -> iteration and disagreement analysis
-held-out test     -> final qualification measurement
+training/shaping examples -> prompt/scorer shaping
+DEV                       -> iteration and disagreement analysis
+QUAL                      -> evaluator fitness measurement
 ```
 
-Do not copy train/dev/test percentages mechanically when data is scarce; preserve disjointness and enough positive/negative or per-class cases to support the declared claim.
+Do not copy split percentages mechanically when data is scarce; preserve disjointness and enough positive/negative or per-class cases to support the declared claim.
+
+If QUAL results are consulted to shape a later evaluator version, QUAL is development evidence for that later version. A final capability claim that requires independence uses a separate sealed CONFIRM population under `governed-experimental-evolution`.
 
 For binary claims, report the confusion matrix and at least TPR/TNR. Raw accuracy alone is insufficient under class imbalance.
 
@@ -68,7 +70,8 @@ Requalify after material changes to:
 
 ## Invariants
 
-- Held-out evidence is not used to tune the evaluator after measurement.
+- QUAL evidence may guide a later evaluator version, but it is then development evidence rather than sealed confirmation.
+- Sealed CONFIRM evidence is never used to tune the evaluator, target system, thresholds, representation, scorer, or model while preserving the same confirmatory claim.
 - Model confidence is not authority.
 - Evaluator qualification does not authorize a routing/workflow/tool/policy change.
 - Preserve evidence and dataset provenance.

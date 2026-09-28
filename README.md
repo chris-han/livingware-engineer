@@ -198,6 +198,26 @@ Restart active Hermes sessions after installation.
 
 Livingware Engineer includes a general `frontend-design` skill for product UI work. It composes the engineering workflow with a pinned upstream Impeccable skill for visual craft and anti-slop review. When a project already has a `DESIGN.md`, that project document remains the design authority: its visual language, information architecture, component conventions, and stated consistency objectives override generic design taste. A design-system replacement happens only when the task explicitly calls for one.
 
+## Research Methodology
+
+Livingware Engineer includes a generic `research-methodology` skill for substantive research work. It treats research as **goal-anchored uncertainty contraction**, not as an accumulation of papers, experiments, or TODOs.
+
+The method maintains a derived **Research Discovery Kanban / Uncertainty Convergence Graph**:
+
+```text
+Design goal
+  -> current uncertainty frontier
+  -> smallest discriminating research action
+  -> evidence-bound result
+  -> eliminate / retain explanations
+  -> update shared cross-thread state
+  -> exactly one next question or stop
+```
+
+The skill uses MICE-style decomposition to keep material explanations distinguishable and collectively sufficient for the current decision; preserves falsified and negative branches with scope/provenance; requires every experiment to name the uncertainty it can reduce; and prevents a new thread from silently reopening settled work. It routes literature review, hypothesis generation, experimental design, statistics, and evaluation to specialist skills when available, then returns to the discovery graph for closure.
+
+The discovery graph is **not an authority surface**. Project roadmaps, specifications, experiment contracts, datasets, code, and terminal evidence remain authoritative at their natural owners. The graph is a cumulative epistemic projection that tells each research thread what is known, what remains uncertain, and what evidence would actually change the design decision.
+
 ## Evaluation Skills
 
 Livingware Engineer includes a product- and runtime-specific evaluation skill family for agentic software systems. The architecture is defined in [docs/livingware-evaluation-architecture.md](docs/livingware-evaluation-architecture.md).

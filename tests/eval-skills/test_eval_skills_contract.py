@@ -15,6 +15,7 @@ SKILLS = {
     "qualifying-evaluators",
     "generating-eval-cases",
     "evaluating-skill-runtime",
+    "governed-experimental-evolution",
 }
 IR_FIXTURE = ROOT / "tests" / "eval-skills" / "fixtures" / "routing-whatif-eval-ir-v1.json"
 COUNTERFACTUAL_FIXTURE = ROOT / "tests" / "counterfactual" / "fixtures" / "routing-whatif-v1.json"
@@ -213,6 +214,41 @@ def test_live_eval_compiler_respects_source_probe_failure():
     assert data["overall_disposition"] == "FAIL"
     assert data["probe_exit_code"] == 1
 
+
+def test_governed_experimental_evolution_contract():
+    arch = ARCH.read_text(encoding="utf-8")
+    skill = (ROOT / "skills" / "governed-experimental-evolution" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+
+    for stage in ("DEV", "QUAL", "CONFIRM"):
+        assert stage in arch
+        assert stage in skill
+
+    for failure_class in (
+        "REFERENCE_FAILURE",
+        "STRUCTURAL_ADMISSIBILITY_FAILURE",
+        "PROJECTION_FAILURE",
+        "FRONTIER_FAILURE",
+        "SEMANTIC_DISCRIMINATION_FAILURE",
+        "CALIBRATION_FAILURE",
+        "ROBUSTNESS_FAILURE",
+        "SCORER_PROTOCOL_FAILURE",
+        "MODEL_CAPACITY_FAILURE",
+        "INFRASTRUCTURE_FAILURE",
+        "EVALUATION_DESIGN_FAILURE",
+    ):
+        assert failure_class in arch
+
+    for authority_class in ("M0", "M1", "M2", "M3"):
+        assert authority_class in arch
+        assert authority_class in skill
+
+    assert "improvement != authority" in arch
+    assert "Score improvement alone is insufficient" in arch
+    assert "candidate under optimization must not control the basis" in arch
+    assert "failed CONFIRM" in skill
+
 def main():
     tests = [
         test_eval_skill_family_exists_with_discriminating_metadata,
@@ -224,6 +260,7 @@ def main():
         test_skill_runtime_dogfood_distinguishes_contract_evidence_from_live_routing,
         test_live_eval_compiler_preserves_routing_epistemics,
         test_live_eval_compiler_respects_source_probe_failure,
+        test_governed_experimental_evolution_contract,
     ]
     for test in tests:
         test()

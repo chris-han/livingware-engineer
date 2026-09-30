@@ -48,6 +48,29 @@ This determines which menu to show and how cleanup works:
 | `GIT_DIR != GIT_COMMON`, named branch | Standard 3 options | Creation-ownership or explicit authorization (see Step 6) |
 | `GIT_DIR != GIT_COMMON`, detached HEAD | Reduced 2 options (no merge) | Externally managed — leave in place |
 
+## Worktree closure preflight
+
+If this branch/worktree is bound to an authoritative plan, load that binding before choosing or executing the integration action. Prefer plan-declared values over guesses:
+
+```text
+execution_worktree
+execution_branch
+execution_base_branch / integration target
+execution_commit
+worktree_created_by
+worktree_cleanup_authorized
+worktree_state
+```
+
+Verify that the current worktree path and branch match the plan. If they do not, stop the branch-completion workflow and repair the binding; do not merge a different branch merely because it contains similar changes.
+
+If the user already delegated an integration target/action (for example, "continue until merged") or the current plan explicitly authorizes a merge action and target, honor it without presenting the integration menu again. Otherwise use Step 4.
+
+Before merge/PR/discard actions, ensure every load-bearing artifact is committed. A clean working tree is required for merge/retirement; uncommitted evidence is not recoverable closure.
+
+If `execution_commit` exists, treat it as the minimum frozen snapshot that must survive integration. Later commits may add fixes or metadata, but closure must prove that the frozen snapshot is an ancestor of the integrated target.
+
+
 ## Step 3: Determine Base Branch
 
 The base branch is whatever this work forked from — usually named in the

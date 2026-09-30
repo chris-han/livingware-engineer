@@ -24,6 +24,43 @@ Keep task/phase state separate from plan-level state. An intermediate task marke
 
 When the repository requires execution metadata, bind the active execution method/workspace (for example this skill plus isolated-worktree vs explicitly-authorized-main mode) before continuing. If an existing selected plan uses legacy or inconsistent execution metadata, normalize it to the repository contract before further implementation; do not rewrite historical archived plans merely for style.
 
+## Worktree execution tracking
+
+When execution runs in an isolated worktree, the worktree lifecycle binding is part of the plan contract, not incidental environment state.
+
+Before the first substantive edit and again before every hard execution gate, verify:
+
+```text
+actual worktree root == plan.execution_worktree
+actual branch        == plan.execution_branch
+intended merge target == plan.execution_base_branch
+```
+
+If the repository uses different metadata names, verify equivalent semantics. A mismatch is a plan/workspace drift error: repair it before continuing.
+
+For governed or recoverable work:
+
+- keep all task edits, generated evidence, and plan-state changes in the bound worktree unless the plan explicitly owns a cross-repository action;
+- checkpoint meaningful completed gates in commits so evidence does not exist only as uncommitted worktree state;
+- when a gate intentionally freezes the exact executable/evidence state for the next phase, update `execution_commit` to that commit and state what it binds;
+- do not move `execution_commit` merely because documentation metadata changed afterward;
+- do not claim a phase is reproducible when its required artifacts are still uncommitted;
+- do not switch to `main` or another worktree to 'finish one small thing' without rebasing the plan/workspace binding first.
+
+At a terminal plan disposition, execution is not operationally closed while the verified branch remains stranded in an active worktree. Route to `finishing-a-development-branch` unless the explicit terminal action is to preserve the branch/worktree or keep it for PR review.
+
+For submodule-backed work, preserve the two-level closure boundary:
+
+```text
+submodule worktree branch
+  -> merge/verify inside submodule
+  -> update parent repository submodule pointer
+  -> verify/commit parent pointer
+  -> only then retire the submodule worktree
+```
+
+A merged submodule branch with an unupdated parent pointer is not integrated closure.
+
 ## Continuous execution and progress reporting
 
 After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.

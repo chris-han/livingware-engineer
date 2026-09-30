@@ -134,8 +134,64 @@ If tests fail on the merged result: stop, leave the worktree and branch in
 place, and investigate — nothing has been pushed, so the merge is local
 and recoverable.
 
-Once the merged result is green: clean up the worktree (Step 6), then
-delete the branch:
+#### Prove integration reachability
+
+Before cleanup, prove that the intended work is actually present on the integration target:
+
+```bash
+# Frozen execution/evidence snapshot from the plan, when present
+git merge-base --is-ancestor <execution-commit> <base-branch>
+
+# Feature head should also be reachable unless repository policy intentionally
+# uses a squash/rebase workflow. For squash/rebase, bind and verify the resulting
+# integrated commit explicitly instead of using ancestry as a false requirement.
+git merge-base --is-ancestor <feature-head> <base-branch>
+```
+
+For squash/rebase integration, record the resulting integrated commit in the
+authoritative plan and verify the resulting tree/evidence against the frozen
+snapshot. Never declare closure merely because a PR/merge command returned
+success.
+
+#### Submodule / parent-repository closure
+
+If this branch belongs to a git submodule, local merge inside the submodule is
+only the first half of integration:
+
+```text
+merge + verify submodule branch
+    ->
+checkout intended parent-repository integration workspace
+    ->
+update parent submodule pointer to the merged submodule commit
+    ->
+verify parent diff and affected parent checks
+    ->
+commit/merge the parent pointer update
+```
+
+Do not remove the submodule worktree while the parent still points at the old
+commit. A merged submodule branch with an uncommitted or unmerged parent pointer
+is `INTEGRATION_INCOMPLETE`.
+
+#### Reconcile the authoritative plan
+
+When the current plan owns the worktree lifecycle metadata and remains editable
+on the integration target, update it before retirement:
+
+```yaml
+worktree_state: MERGED
+integrated_branch: <base-branch>
+integrated_commit: <verified integrated commit>
+```
+
+Do not overwrite a historical `execution_commit`; it records the frozen
+execution/evidence snapshot. `integrated_commit` records where that snapshot
+landed.
+
+Once the merged result, reachability proof, parent/submodule closure when
+applicable, and plan reconciliation are green: clean up the worktree (Step 6),
+then delete the branch:
 
 ```bash
 git branch -d <feature-branch>

@@ -292,6 +292,32 @@ Which?
 
 Carry out the choice, then remove the worktree.
 
+### Prove retirement
+
+After authorized removal, verify all of the following before reporting the worktree closed:
+
+```bash
+git worktree list --porcelain
+test ! -d "$WORKTREE_PATH"
+```
+
+- the removed path is no longer registered as a worktree;
+- the removed path no longer exists as an active checkout;
+- the feature branch has no unmerged load-bearing commits relative to the intended integration target, unless it was intentionally preserved for PR review;
+- any required parent/submodule pointer update is integrated;
+- the authoritative plan's worktree state is reconciled on the surviving integration branch when that plan owns the lifecycle metadata.
+
+When the plan owns lifecycle state, the final merged/retired form should distinguish integration from cleanup, for example:
+
+```yaml
+worktree_state: RETIRED
+integrated_branch: <base-branch>
+integrated_commit: <verified integrated commit>
+retired_worktree: <former absolute path>
+```
+
+A deleted directory without merge reachability is not closure. A merged commit with a still-active abandoned worktree is not retirement.
+
 ### Remove the Deleted Worktree's Graph Index
 
 When codebase-memory MCP is available, capture the exact worktree-root/project mapping from `list_projects` before removal. Only after authorized worktree removal succeeds, confirm the captured path is no longer a registered worktree and has not reappeared. Recheck that the same project still maps to that exact root, then call `delete_project` for that project and verify its absence with `list_projects`.

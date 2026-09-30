@@ -13,6 +13,53 @@ Choose workspace isolation in proportion to the change's impact radius. Keep sma
 
 **Announce at start:** "I'm using the using-git-worktrees skill to choose the workspace strategy from the change's impact radius."
 
+## Worktree lifecycle contract
+
+A worktree is not merely a temporary directory. For governed or plan-driven work it is an execution resource with an explicit owner, integration target, and retirement condition.
+
+When an authoritative current plan/spec exists, bind the worktree lifecycle in that owner as soon as the workspace is selected. Use repository-native metadata fields when available; otherwise record the smallest equivalent fields in the current editable plan:
+
+```yaml
+execution_mode: isolated_worktree
+execution_worktree: <absolute worktree path>
+execution_branch: <branch name>
+execution_base_branch: <intended merge target>
+worktree_base_commit: <commit the branch/worktree forked from>
+worktree_created_by: <this workflow | external | unknown>
+worktree_cleanup_authorized: <true | false | unknown>
+execution_commit: <latest frozen execution/evidence snapshot, when one exists>
+worktree_state: ACTIVE
+```
+
+`execution_commit` is a **snapshot binding**, not a moving alias for HEAD. Update it only when a plan intentionally freezes a new execution/evidence snapshot. A later metadata-only plan commit does not silently rewrite the snapshot it documents.
+
+The authoritative plan is the lifecycle ledger. Do not create a second worktree-tracking document merely to remember path/branch state.
+
+### Entry invariants
+
+Before substantive work in a linked worktree:
+
+- verify the actual `git rev-parse --show-toplevel`, branch, and common-dir state;
+- verify the worktree path and branch match the authoritative plan when the plan already declares them;
+- resolve and record the intended integration/base branch before execution, unless the repository workflow explicitly defers that choice;
+- record whether this workflow created the exact worktree and therefore owns cleanup;
+- if a pre-existing worktree is reused, do not claim creation or cleanup ownership unless explicitly granted;
+- commit the lifecycle binding early enough that later recovery does not depend on chat history.
+
+If observed workspace state conflicts with the plan, fail closed and repair the plan/workspace binding before continuing. Do not execute from one worktree while the authoritative plan points at another.
+
+### Exit invariant
+
+Creating the worktree does not complete its lifecycle. A linked worktree remains `ACTIVE` until the branch-completion workflow proves one of these states:
+
+- `MERGED`: the frozen/verified work is reachable from the intended integration target;
+- `PR_OPEN`: the branch is pushed and the worktree is intentionally retained for review;
+- `PRESERVED`: the user/workflow intentionally keeps the branch/worktree;
+- `RETIRED`: merge/discard closure is complete and authorized cleanup has removed the worktree.
+
+Use `finishing-a-development-branch` to perform merge, parent/submodule pointer updates when needed, merged-state verification, branch deletion, and worktree retirement. Never treat a final commit or a green test run as implicit worktree closure.
+
+
 ## Step 0: Detect Existing Isolation
 
 **Before creating anything, check if you are already in an isolated workspace.**

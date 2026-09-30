@@ -48,6 +48,29 @@ This determines which menu to show and how cleanup works:
 | `GIT_DIR != GIT_COMMON`, named branch | Standard 3 options | Creation-ownership or explicit authorization (see Step 6) |
 | `GIT_DIR != GIT_COMMON`, detached HEAD | Reduced 2 options (no merge) | Externally managed — leave in place |
 
+## Worktree closure preflight
+
+If this branch/worktree is bound to an authoritative plan, load that binding before choosing or executing the integration action. Prefer plan-declared values over guesses:
+
+```text
+execution_worktree
+execution_branch
+execution_base_branch / integration target
+execution_commit
+worktree_created_by
+worktree_cleanup_authorized
+worktree_state
+```
+
+Verify that the current worktree path and branch match the plan. If they do not, stop the branch-completion workflow and repair the binding; do not merge a different branch merely because it contains similar changes.
+
+If the user already delegated an integration target/action (for example, "continue until merged") or the current plan explicitly authorizes a merge action and target, honor it without presenting the integration menu again. Otherwise use Step 4.
+
+Before merge/PR/discard actions, ensure every load-bearing artifact is committed. A clean working tree is required for merge/retirement; uncommitted evidence is not recoverable closure.
+
+If `execution_commit` exists, treat it as the minimum frozen snapshot that must survive integration. Later commits may add fixes or metadata, but closure must prove that the frozen snapshot is an ancestor of the integrated target.
+
+
 ## Step 3: Determine Base Branch
 
 The base branch is whatever this work forked from — usually named in the
@@ -111,8 +134,64 @@ If tests fail on the merged result: stop, leave the worktree and branch in
 place, and investigate — nothing has been pushed, so the merge is local
 and recoverable.
 
-Once the merged result is green: clean up the worktree (Step 6), then
-delete the branch:
+#### Prove integration reachability
+
+Before cleanup, prove that the intended work is actually present on the integration target:
+
+```bash
+# Frozen execution/evidence snapshot from the plan, when present
+git merge-base --is-ancestor <execution-commit> <base-branch>
+
+# Feature head should also be reachable unless repository policy intentionally
+# uses a squash/rebase workflow. For squash/rebase, bind and verify the resulting
+# integrated commit explicitly instead of using ancestry as a false requirement.
+git merge-base --is-ancestor <feature-head> <base-branch>
+```
+
+For squash/rebase integration, record the resulting integrated commit in the
+authoritative plan and verify the resulting tree/evidence against the frozen
+snapshot. Never declare closure merely because a PR/merge command returned
+success.
+
+#### Submodule / parent-repository closure
+
+If this branch belongs to a git submodule, local merge inside the submodule is
+only the first half of integration:
+
+```text
+merge + verify submodule branch
+    ->
+checkout intended parent-repository integration workspace
+    ->
+update parent submodule pointer to the merged submodule commit
+    ->
+verify parent diff and affected parent checks
+    ->
+commit/merge the parent pointer update
+```
+
+Do not remove the submodule worktree while the parent still points at the old
+commit. A merged submodule branch with an uncommitted or unmerged parent pointer
+is `INTEGRATION_INCOMPLETE`.
+
+#### Reconcile the authoritative plan
+
+When the current plan owns the worktree lifecycle metadata and remains editable
+on the integration target, update it before retirement:
+
+```yaml
+worktree_state: MERGED
+integrated_branch: <base-branch>
+integrated_commit: <verified integrated commit>
+```
+
+Do not overwrite a historical `execution_commit`; it records the frozen
+execution/evidence snapshot. `integrated_commit` records where that snapshot
+landed.
+
+Once the merged result, reachability proof, parent/submodule closure when
+applicable, and plan reconciliation are green: clean up the worktree (Step 6),
+then delete the branch:
 
 ```bash
 git branch -d <feature-branch>
@@ -212,6 +291,32 @@ Which?
 ```
 
 Carry out the choice, then remove the worktree.
+
+### Prove retirement
+
+After authorized removal, verify all of the following before reporting the worktree closed:
+
+```bash
+git worktree list --porcelain
+test ! -d "$WORKTREE_PATH"
+```
+
+- the removed path is no longer registered as a worktree;
+- the removed path no longer exists as an active checkout;
+- the feature branch has no unmerged load-bearing commits relative to the intended integration target, unless it was intentionally preserved for PR review;
+- any required parent/submodule pointer update is integrated;
+- the authoritative plan's worktree state is reconciled on the surviving integration branch when that plan owns the lifecycle metadata.
+
+When the plan owns lifecycle state, the final merged/retired form should distinguish integration from cleanup, for example:
+
+```yaml
+worktree_state: RETIRED
+integrated_branch: <base-branch>
+integrated_commit: <verified integrated commit>
+retired_worktree: <former absolute path>
+```
+
+A deleted directory without merge reachability is not closure. A merged commit with a still-active abandoned worktree is not retirement.
 
 ### Remove the Deleted Worktree's Graph Index
 

@@ -1,3 +1,13 @@
+## v6.13.4 (2026-09-30)
+
+- Add a cross-skill worktree lifecycle contract spanning `using-git-worktrees`, `executing-plans`, and `finishing-a-development-branch`.
+- Require governed/plan-driven work to bind the active worktree path, branch, base/integration branch, base commit, cleanup ownership, and frozen `execution_commit` in the authoritative plan instead of relying on chat history.
+- Define `execution_commit` as an immutable execution/evidence snapshot binding rather than a moving alias for HEAD; later metadata-only commits do not silently rewrite it.
+- Require execution to re-verify plan/worktree/branch binding at hard gates, checkpoint load-bearing evidence in commits, and route terminal plans into branch/worktree closure instead of leaving verified work stranded in an active worktree.
+- Strengthen merge closure: prove the frozen execution snapshot is integrated, handle squash/rebase explicitly, update and verify parent-repository submodule pointers, reconcile plan lifecycle metadata, then retire the worktree and delete the branch.
+- Add post-removal retirement proof so a deleted directory without merge reachability, or a merged branch with an abandoned active worktree, cannot be reported as closed.
+- Synchronize all declared package/plugin version surfaces to 6.13.4.
+
 ## v6.13.3 (2026-09-30)
 
 - Add a mandatory fail-closed pre-experiment context gate to `research-methodology`.

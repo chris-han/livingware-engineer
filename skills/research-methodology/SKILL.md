@@ -156,6 +156,46 @@ Before opening a new research thread or experiment:
 
 A new conversation is not a new research program. Cross-thread state belongs to the shared discovery graph.
 
+## Mandatory pre-experiment context gate
+
+Before drafting, creating, promoting, or authorizing any new research or experiment plan, reload the maintained research state even if it was already read earlier in the same thread.
+
+The gate MUST reload and re-read:
+
+1. the current owning roadmap/spec or other explicit research owner;
+2. the latest directly relevant research memo or guide that may have changed the framing;
+3. the latest terminal reports and sealed results that could change the active frontier;
+4. the already-tested candidate/model/tool census, including negative and superseded results;
+5. the currently active uncertainty node, including its competing explanations, dependencies, and closure condition.
+
+Then restate the smallest sufficient context before plan drafting:
+
+```text
+Pre-experiment context gate:
+Owner:
+Roadmap:
+Latest memo / guide:
+Terminal / sealed evidence:
+Tested candidates:
+Reuse classification:
+Active uncertainty:
+Already closed / ruled out:
+Single next discriminating action:
+Possible outcomes -> next state:
+Gate: PRE_EXPERIMENT_CONTEXT_GREEN | PRE_EXPERIMENT_CONTEXT_NOT_READY
+```
+
+`PRE_EXPERIMENT_CONTEXT_GREEN` is valid only when the owner, roadmap, memo/guide, terminal evidence, tested-candidate census, reuse classifications, and active uncertainty are mutually consistent enough to identify exactly one next discriminating action or STOP.
+
+If any required context is missing, stale, ambiguous, contradictory, or cannot be bound to its production context, the gate is `PRE_EXPERIMENT_CONTEXT_NOT_READY`. In that state:
+
+- do not draft a new experiment plan;
+- do not promote an existing draft as the next experiment;
+- do not let the downstream plan itself substitute for the missing research context;
+- repair the maintained roadmap/memo/discovery state first.
+
+A new conversation, a recently written plan, or an already-loaded skill does not waive this reload. The purpose of the gate is to prevent a locally coherent plan from drifting away from the maintained research program after new evidence changes the frontier.
+
 ## Experiment admissibility
 
 A research experiment is eligible only when all are true:

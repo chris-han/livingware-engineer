@@ -1,3 +1,11 @@
+## v6.13.3 (2026-09-30)
+
+- Add a mandatory fail-closed pre-experiment context gate to `research-methodology`.
+- Before any new research/experiment plan is drafted or promoted, require a fresh reload of the owning roadmap, latest relevant memo/guide, terminal/sealed results, tested-candidate census, reuse classifications, and active uncertainty node.
+- Introduce `PRE_EXPERIMENT_CONTEXT_GREEN | PRE_EXPERIMENT_CONTEXT_NOT_READY`; missing, stale, ambiguous, or contradictory maintained context blocks plan drafting until the research owner is repaired.
+- Prevent a recently written plan, a previous read in the same thread, or a new conversation from substituting for maintained cross-thread research state.
+- Synchronize all declared package/plugin version surfaces to 6.13.3 and add the Claude marketplace manifest to the managed version-bump matrix.
+
 ## v6.13.0 (2026-09-28)
 
 ## v6.13.1 (2026-09-29)

@@ -67,7 +67,7 @@ After every non-terminal observation, choose the next dependency-ready required 
 
 For long-running work, progress updates may be one or two concise sentences after a meaningful milestone, material finding, or recovery-state change. They are observational, not approval checkpoints: do not end them with “Should I continue?”, do not wait for acknowledgment, and do not narrate every routine task or test.
 
-A predeclared negative or inconclusive terminal disposition is legitimate closure when its predicate is satisfied. It is not a reason to retry indefinitely or ask whether the user wants to continue.
+A predeclared negative or inconclusive terminal disposition is legitimate plan closure when its predicate is satisfied. It is not a reason to retry the same plan indefinitely or ask whether the user wants to continue. Check the user's outer objective separately: if the requested end state remains unmet, preserve that goal as incomplete and route to the next authorized recovery or successor action. If no such action is available, report the stopping evidence and the unmet outcome; do not claim the outer goal is complete.
 
 ## User Intervention Necessity Test
 

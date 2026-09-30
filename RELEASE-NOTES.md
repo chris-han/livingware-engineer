@@ -1,3 +1,9 @@
+## v6.13.5 (2026-09-30)
+
+- Distinguish a proved negative plan disposition from completion of the user's outer goal in `executing-plans` and `verification-before-completion`.
+- Require the requested end state to be proved before host goal completion; otherwise continue authorized recovery or report the unmet outcome.
+- Synchronize all declared package and plugin version surfaces to 6.13.5.
+
 ## v6.13.4 (2026-09-30)
 
 - Add a cross-skill worktree lifecycle contract spanning `using-git-worktrees`, `executing-plans`, and `finishing-a-development-branch`.

@@ -102,23 +102,57 @@ Before designing experiments, decompose the explanation space so branches are:
 
 This is a research decomposition rule, not a requirement that real-world causes be perfectly independent.
 
+## Existing-evidence-first law
+
+When research occurs inside a project with maintained research state, project evidence is the starting point, not optional background.
+
+Before external discovery, model/tool recommendation, candidate nomination, benchmark comparison, or a new experiment proposal:
+
+1. resolve the current owning roadmap/spec or other explicit research owner;
+2. inventory directly relevant terminal reports, sealed results, memos/guides, active/stopped/superseded experiments, already-tested candidates, and protected/unopened evidence;
+3. bind reused evidence to its production context and classify reuse as `EXACT_REUSE | PARTIAL_REUSE | STALE`;
+4. state what the internal evidence already supports, rules out, or leaves unresolved;
+5. only then use external literature, benchmarks, repositories, model cards, leaderboards, or OpenResearch-style discovery to fill a named residual evidence gap, challenge a retained hypothesis, or nominate a genuinely non-duplicative candidate.
+
+The governing order is:
+
+```text
+current owner + existing project evidence
+  -> current uncertainty / evidence gap
+  -> external research targeted at that gap
+  -> bounded candidate or hypothesis
+  -> smallest discriminating experiment, or STOP
+```
+
+This is **internal evidence first, evidence quality always**. Project evidence is not privileged merely because it is local: stale, incomparable, exposed, or contract-invalid evidence must be downgraded explicitly. External evidence does not reset a maintained research program to a blank slate.
+
+Every newly proposed candidate must state:
+
+- **evidence gap addressed** — what material uncertainty remains after considering existing evidence;
+- **non-duplication delta** — what this candidate can establish that current evidence/candidates cannot;
+- **expected information gain** — which explanation or downstream decision can be eliminated, retained, or unlocked.
+
+Novelty, popularity, leaderboard position, availability, or a new paper/repository is not by itself a valid research delta.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:
 
-1. Resolve the current design goal from the nearest authoritative roadmap/spec.
+1. Resolve the current design goal and current research owner from the nearest authoritative roadmap/spec.
 2. Load the current discovery context:
    - closed uncertainties;
    - falsified/retired hypotheses;
    - active/open uncertainties;
    - blocked downstream questions;
    - protected/unopened evidence;
-   - active experiments and owners.
-3. Identify exactly one primary uncertainty this thread addresses.
-4. Search for existing current, archived, or parallel work that already owns or resolved it.
-5. Bind reused evidence to its production context. Classify reuse as `EXACT_REUSE | PARTIAL_REUSE | STALE` when contracts changed.
-6. State the expected information gain: which explanation or downstream decision can this work eliminate, retain, or unlock?
-7. If no new information delta exists, stop instead of reopening work.
+   - active experiments and owners;
+   - directly relevant terminal/sealed evidence and already-tested candidates.
+3. Complete the existing-evidence-first census before substantive external discovery.
+4. Identify exactly one primary uncertainty this thread addresses.
+5. Search for existing current, archived, or parallel work that already owns or resolved it.
+6. Bind reused evidence to its production context. Classify reuse as `EXACT_REUSE | PARTIAL_REUSE | STALE` when contracts changed.
+7. For every new candidate, state the evidence gap addressed, non-duplication delta, and expected information gain.
+8. If no new information delta exists, stop instead of reopening work.
 
 A new conversation is not a new research program. Cross-thread state belongs to the shared discovery graph.
 
@@ -240,6 +274,8 @@ Return to this skill after the specialist operation to update the uncertainty fr
 
 Do not:
 
+- begin external discovery or nominate a new model/tool/candidate before reconstructing the maintained project evidence state;
+- treat a new paper, benchmark, leaderboard result, repository, or model family as permission to reset the research program;
 - start with a preferred solution and collect confirming papers;
 - open a new experiment because a previous result was "interesting";
 - repeat a closed experiment under a new name;
@@ -261,6 +297,8 @@ Current frontier:
 This thread addresses:
 Already closed / ruled out:
 Evidence reusable:
+Evidence gap addressed:
+Candidate non-duplication delta:
 Competing explanations:
 Discriminating action:
 Possible outcomes -> next state:

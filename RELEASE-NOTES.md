@@ -1,3 +1,11 @@
+## v6.13.6 (2026-10-01)
+
+- Add an authoritative-plan / execution-worktree separation law to `executing-plans`: plan authority may remain outside the bound execution worktree.
+- Forbid copying, duplicating, relocating, or synthesizing a plan merely to make relative paths resolve; absence of an explicitly external authoritative plan from the execution worktree is not workspace drift.
+- Amend plan-state handling so implementation/evidence stays in the bound worktree while plan-state changes go to the authoritative plan owner/location unless ownership is explicitly transferred.
+- Define copied/diverged second plans as plan-authority drift and keep later branch integration distinct from execution prerequisites.
+- Synchronize all declared package and plugin version surfaces to 6.13.6.
+
 ## v6.13.5 (2026-09-30)
 
 - Distinguish a proved negative plan disposition from completion of the user's outer goal in `executing-plans` and `verification-before-completion`.

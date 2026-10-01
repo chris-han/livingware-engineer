@@ -38,9 +38,42 @@ intended merge target == plan.execution_base_branch
 
 If the repository uses different metadata names, verify equivalent semantics. A mismatch is a plan/workspace drift error: repair it before continuing.
 
+### Authoritative plan and execution workspace are separate identities
+
+The authoritative plan source and the bound execution workspace are separate identities. Path locality is an implementation convenience, never an authority rule.
+
+A plan may remain authoritative at a repository or worktree location different from the worktree named by `execution_worktree`. When that occurs:
+
+- read and validate the plan from its authoritative source location;
+- execute authorized implementation, generated evidence, checkpoints, and experiment artifacts inside the bound execution worktree;
+- preserve the plan's declared `execution_worktree`, `execution_branch`, and `execution_base_branch` independently from the plan file's physical location;
+- treat the authoritative plan path as the single mutable plan authority unless the plan explicitly transfers plan ownership to the execution worktree;
+- resolve plan-relative references against the authoritative plan's repository context when their meaning depends on plan location;
+- record an explicit authoritative-plan path or equivalent source binding when the plan is intentionally external to the execution worktree.
+
+Do not:
+
+- copy, duplicate, relocate, regenerate, or synthesize the plan inside the execution worktree merely to make a relative path resolve;
+- treat absence of the plan file from the execution worktree as workspace drift when the plan explicitly binds an external authoritative source;
+- create a second mutable plan ledger in the execution worktree or silently switch plan authority to a convenience copy;
+- rebase, merge, or recreate a worktree solely so the authoritative plan becomes physically colocated with execution.
+
+If execution requires a plan-state change, write that change to the authoritative plan owner/location unless the plan explicitly declares that plan ownership has transferred to the execution worktree. A later branch rebase, merge, or integration step may naturally bring the plan file into the execution branch; that is an integration outcome, not an execution prerequisite.
+
+Verify plan authority and workspace binding independently:
+
+```text
+authoritative plan identity/path is still valid
+actual worktree root == plan.execution_worktree
+actual branch        == plan.execution_branch
+intended merge target == plan.execution_base_branch
+```
+
+A valid authoritative plan located outside the execution worktree is not workspace drift. A copied or diverged second plan authority is plan-authority drift and must be repaired before execution continues.
+
 For governed or recoverable work:
 
-- keep all task edits, generated evidence, and plan-state changes in the bound worktree unless the plan explicitly owns a cross-repository action;
+- keep implementation edits, generated execution evidence, stage receipts, and execution checkpoints in the bound execution worktree unless the plan explicitly owns a cross-repository action; write plan-state changes to the authoritative plan owner/location unless the plan explicitly assigns plan ownership to the execution worktree;
 - checkpoint meaningful completed gates in commits so evidence does not exist only as uncommitted worktree state;
 - when a gate intentionally freezes the exact executable/evidence state for the next phase, update `execution_commit` to that commit and state what it binds;
 - do not move `execution_commit` merely because documentation metadata changed afterward;

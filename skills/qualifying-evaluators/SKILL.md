@@ -39,7 +39,7 @@ If QUAL results are consulted to shape a later evaluator version, QUAL is develo
 
 For binary claims, report the confusion matrix and at least TPR/TNR. Raw accuracy alone is insufficient under class imbalance.
 
-For typed frontiers, report per-class behavior and test candidate-order/permutation invariance when ordering could leak semantics.
+For typed frontiers, report per-class behavior and test candidate-order/permutation invariance when ordering could leak semantics. For composition-level evaluators, include paired cases that distinguish genuine semantic/behavioral regression from harmless wording, formatting, or trace-shape variation across harnesses.
 
 For probabilistic outputs, include the calibration/selective-risk measures appropriate to the contract.
 
@@ -65,7 +65,8 @@ Requalify after material changes to:
 - model/scorer;
 - frontier;
 - evidence inputs;
-- runtime behavior distribution; or
+- runtime behavior distribution;
+- harness identity or any model-visible context/tool/control-flow contract the evaluator depends on; or
 - the failure-mode definition itself.
 
 ## Invariants
@@ -74,6 +75,7 @@ Requalify after material changes to:
 - Sealed CONFIRM evidence is never used to tune the evaluator, target system, thresholds, representation, scorer, or model while preserving the same confirmatory claim.
 - Model confidence is not authority.
 - Evaluator qualification does not authorize a routing/workflow/tool/policy change.
+- An evaluator that cannot distinguish harmless harness presentation variation from semantic regression is not qualified for harness-composition gating.
 - Preserve evidence and dataset provenance.
 
 ## Output

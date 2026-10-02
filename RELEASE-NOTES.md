@@ -1,5 +1,8 @@
 ## v6.13.6 (2026-10-01)
 
+- Extend 6.13.6 with a canonical qualified-change lifecycle from replay-bound observation through attribution, falsifiable hypothesis, bounded experiment, multi-seed qualification, admission, shadow, activation, rollback, and supersession.
+- Extend Governed Experimental Evolution with `NO_CHANGE`, non-parametric-before-parameter-change ordering, value-of-experiment selection, governed training-data admission, and explicit `PASS | FAIL | INCONCLUSIVE` qualification.
+- Preserve the authority boundary: observation is not truth, experiment result is not qualification, qualification is not admission, and admission is not activation; no learner may grant itself runtime authority.
 - Add an authoritative-plan / execution-worktree separation law to `executing-plans`: plan authority may remain outside the bound execution worktree.
 - Forbid copying, duplicating, relocating, or synthesizing a plan merely to make relative paths resolve; absence of an explicitly external authoritative plan from the execution worktree is not workspace drift.
 - Amend plan-state handling so implementation/evidence stays in the bound worktree while plan-state changes go to the authoritative plan owner/location unless ownership is explicitly transferred.

@@ -1,3 +1,9 @@
+## v6.14.1 (2026-10-02)
+
+- Patch release following the 6.14.0 Harness Qualification capability release.
+- No generic harness-qualification semantics are changed; Semantier-specific Hermes qualification remains a downstream specialization rather than being folded into Livingware.
+- Synchronize all declared package and plugin version surfaces to 6.14.1.
+
 ## v6.14.0 (2026-10-02)
 
 - Add canonical Harness Qualification for agentic runtime composition: impact categories I0-I7, deterministic H0 contract conformance, representative H1 behavioral invariance, and domain-owned H2 qualification.

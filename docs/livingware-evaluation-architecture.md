@@ -163,7 +163,7 @@ Identifies what is being evaluated.
 
 ```yaml
 target_id: string
-target_kind: ROUTING | WORKFLOW | TOOL | POLICY | SKILL_RUNTIME | OUTCOME | EVIDENCE
+target_kind: ROUTING | WORKFLOW | TOOL | POLICY | SKILL_RUNTIME | HARNESS_COMPOSITION | OUTCOME | EVIDENCE
 version_pins:
   repository: optional
   skill: optional
@@ -337,6 +337,67 @@ admission_status: PROPOSED | QUALIFIED | REJECTED
 
 A learning candidate is never auto-applied merely because an evaluator reports `FAIL`.
 
+## Harness Qualification
+
+Harness/runtime composition is a first-class evaluation target. A change to context construction, memory, tool surface, skill routing, control flow, provider/model policy, or workflow runtime can alter effective behavior even when individual components remain locally qualified.
+
+The canonical impact categories, H0/H1/H2 gates, default thresholds, waiver rules, and qualification identity are defined in [Harness Qualification Contract](harness-qualification-contract.md).
+
+The Eval IR adds three composition-level records:
+
+### `HarnessIdentity`
+
+```yaml
+harness_version: string
+routing_version: string | null
+workflow_version: string | null
+tool_surface_version: string | null
+context_policy_version: string | null
+memory_policy_version: string | null
+provider_policy_version: string | null
+model_id: string | null
+model_revision: string | null
+environment_version: string | null
+```
+
+### `HarnessImpact`
+
+```yaml
+category: I0 | I1 | I2 | I3 | I4 | I5 | I6 | I7
+context_changed: boolean
+tools_changed: boolean
+tool_schema_changed: boolean
+memory_changed: boolean
+skills_changed: boolean
+routing_changed: boolean
+control_flow_changed: boolean
+provider_or_model_policy_changed: boolean
+workflow_runtime_changed: boolean
+authority_surface_changed: boolean
+replay_shape_changed: boolean
+reasons: []
+```
+
+### `HarnessQualification`
+
+```yaml
+qualification_id: string
+baseline_identity: HarnessIdentity
+candidate_identity: HarnessIdentity
+impact: HarnessImpact
+required_gates: [H0, H1, H2]
+suite_refs: []
+metrics: {}
+disagreements: []
+provenance_refs: []
+disposition: QUALIFIED | QUALIFIED_WITH_WAIVER | NOT_QUALIFIED | BLOCKED_PENDING_H2
+waiver_ref: string | null
+```
+
+Harness qualification measures a composition but does not become a new learning owner. A failure should still be attributed to the smallest durable ROUTING, WORKFLOW, TOOL/CAPABILITY, POLICY, IMPLEMENTATION, or ENVIRONMENT owner when evidence supports that reduction. Use `HARNESS_INDUCED_FAILURE` only for composition/interface failures that cannot yet be reduced safely.
+
+> Component qualification does not imply composition qualification.
+
 ## Failure discovery loop
 
 When the failure taxonomy is immature, alternate breadth and depth.
@@ -425,7 +486,7 @@ The evaluation architecture is exposed through seven discoverable skills:
 - `designing-evaluators` — deterministic/interpreted/hybrid evaluator design;
 - `qualifying-evaluators` — evaluator validation and bounded qualification;
 - `generating-eval-cases` — coverage-directed case generation;
-- `evaluating-skill-runtime` — behavior evaluation of skill trigger/routing/workflow/actions/evidence/exit contracts.
+- `evaluating-skill-runtime` — behavior evaluation of skill trigger/routing/workflow/actions/evidence/exit contracts, including cross-harness invariance when the runtime surface changes.
 - `governed-experimental-evolution` — bounded DEV/QUAL/CONFIRM evolution after failure attribution.
 
 These are workflow-entry packages, not new authority owners.

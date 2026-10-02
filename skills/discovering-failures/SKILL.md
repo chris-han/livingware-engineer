@@ -35,7 +35,10 @@ SCORER_PROTOCOL_FAILURE
 MODEL_CAPACITY_FAILURE
 INFRASTRUCTURE_FAILURE
 EVALUATION_DESIGN_FAILURE
+HARNESS_INDUCED_FAILURE
 ```
+
+`HARNESS_INDUCED_FAILURE` is reserved for failures caused by composition/interface interaction across otherwise plausible components when current evidence cannot safely reduce the cause to ROUTING, WORKFLOW, CAPABILITY/TOOL, POLICY, IMPLEMENTATION, or ENVIRONMENT. It is a diagnostic classification, not a new mutation authority.
 
 Do not force early free-form observations into this list. The type explains the experimental mechanism; existing `FailureAttribution` still determines what may change. Do not label residual error `MODEL_CAPACITY_FAILURE` until materially plausible architecture, representation, scorer/protocol, reference, robustness, calibration, and infrastructure explanations have been evaluated.
 

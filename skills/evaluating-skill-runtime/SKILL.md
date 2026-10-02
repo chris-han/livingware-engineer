@@ -9,7 +9,7 @@ Evaluate observed or reproducible skill behavior, not just its instruction text.
 
 Use `skill-review` when the task is to audit `SKILL.md`, `AGENTS.md`, activation wording, layer placement, progressive disclosure, or token/tool-loop architecture.
 
-Read `../../docs/livingware-evaluation-architecture.md` for the Eval IR and `../../docs/skill-runtime-architecture.md` for routing/workflow/tool/policy ownership.
+Read `../../docs/livingware-evaluation-architecture.md` for the Eval IR, `../../docs/skill-runtime-architecture.md` for routing/workflow/tool/policy ownership, and `../../docs/harness-qualification-contract.md` when the evaluated change alters harness composition.
 
 ## Runtime contract
 
@@ -62,7 +62,9 @@ Not every skill requires every field. Keep the contract proportional to the skil
    - mechanical capability -> CAPABILITY / TOOL;
    - invariant violation -> POLICY;
    - product code or fixture problems -> IMPLEMENTATION / ENVIRONMENT.
-7. Add durable regression witnesses for qualified failures.
+7. When the harness/runtime surface changed, bind baseline and candidate `HarnessIdentity`, classify `HarnessImpact`, and run the required H0/H1/H2 gates.
+8. For model-visible harness changes, compare semantically equivalent harness presentations when feasible and measure decision/routing agreement, calibration drift, tool/token economy, and context-integrity behavior.
+9. Add durable regression witnesses for qualified failures.
 
 ## Required case classes
 
@@ -110,6 +112,8 @@ Do not convert historical live runs into current-version evidence. They may serv
 
 - A failed skill-runtime eval does not automatically authorize editing the skill.
 - Change the smallest owner identified by failure attribution.
+- Do not treat harmless wording/trace-shape variation as a semantic regression.
+- Do not infer composition qualification from individually qualified routing, workflow, tool, policy, or model components.
 - Do not replace real harness claims with a fake matcher.
 - Do not use this skill to duplicate `skill-review`.
 

@@ -1,3 +1,11 @@
+## v6.14.0 (2026-10-02)
+
+- Add canonical Harness Qualification for agentic runtime composition: impact categories I0-I7, deterministic H0 contract conformance, representative H1 behavioral invariance, and domain-owned H2 qualification.
+- Extend the Eval IR with `HARNESS_COMPOSITION`, `HarnessIdentity`, `HarnessImpact`, and `HarnessQualification`; freeze the law that component qualification does not imply composition qualification.
+- Extend the Livingware eval skill family with cross-harness runtime evaluation, harness-induced failure attribution, paired semantic case generation, composition-level evaluator design, and evaluator fitness requirements that separate semantic regression from harmless presentation variation.
+- Add deterministic contract coverage for impact categories, H0/H1/H2 gates, non-compensable authority/replay invariants, and Eval IR linkage.
+- Synchronize all declared package and plugin version surfaces to 6.14.0.
+
 ## v6.13.7 (2026-10-02)
 
 - Add a canonical qualified-change lifecycle from replay-bound observation through attribution, falsifiable hypothesis, bounded experiment, multi-seed qualification, admission, shadow, activation, rollback, and supersession.

@@ -32,7 +32,8 @@ Each evaluator must state:
 - the bounded output frontier;
 - what `UNKNOWN` means;
 - what evidence is intentionally out of scope; and
-- the runtime/semantic owner whose behavior is being measured.
+- the runtime/semantic owner whose behavior is being measured; and
+- when the claim is composition-level, the baseline and candidate `HarnessIdentity` plus the impacted dimensions.
 
 Default atomic frontier:
 
@@ -71,5 +72,7 @@ expected failure boundaries
 qualification plan
 non-authority statement
 ```
+
+For composition-level claims, the evaluator measures the pinned runtime combination rather than pretending one component owns the whole outcome. It still must not become a second authority.
 
 Then use `qualifying-evaluators` for interpreted or materially composite evaluators.

@@ -1,7 +1,7 @@
 # Livingware Qualified Change Lifecycle
 
 **Status:** canonical methodology contract  
-**Release:** 6.13.6  
+**Release:** 6.13.7  
 **Owner relationship:** extends `docs/livingware-evaluation-architecture.md` and `skills/governed-experimental-evolution`; it does not create a second runtime, evaluator authority, deployment authority, or autonomous self-modification service.
 
 ## Purpose

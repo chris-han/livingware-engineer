@@ -17,8 +17,9 @@ Read `../../docs/livingware-evaluation-architecture.md` for `EvalCase`, provenan
 4. Construct abstract scenario tuples for those cells.
 5. Validate the tuples for realism and relevance.
 6. Render each tuple into a concrete task/input separately from tuple construction.
-7. Execute the real system and capture the resulting trace.
-8. Verify that the intended condition was actually exercised before admitting the case.
+7. When testing harness invariance, derive paired or multi-surface cases from the same semantic case identity while holding the admissible evidence basis fixed.
+8. Execute the real system and capture the resulting trace.
+9. Verify that the intended condition was actually exercised before admitting the case.
 
 Example dimensions:
 
@@ -38,6 +39,7 @@ x expected routing
 - Prefer real observed cases when they cover the cell adequately.
 - Create hard negatives around decision boundaries.
 - Preserve `source_parent` so close variants do not leak across held-out splits.
+- For harness-invariance cases, preserve one semantic parent and record the harness surface separately; do not count surface variants as independent semantic evidence.
 - Avoid synthetic domain artifacts when no qualified reviewer can judge realism.
 - Generated input provenance remains synthetic even if its subsequent runtime execution is observed.
 

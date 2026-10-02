@@ -596,3 +596,20 @@ Score improvement alone is insufficient. Evaluator qualification and interventio
 ### Replay identity
 
 Material GEE runs should pin repository/code identity, model/tokenizer identity where relevant, prompt/representation/projection/scorer versions, dataset/reference manifest hashes, acceptance-policy hash, runtime environment, and seed policy. A result without sufficient pins may remain diagnostic evidence but must not silently become qualification or confirmation evidence.
+
+## Qualified Change Lifecycle Handoff
+
+Evaluation produces measurement and attribution evidence. When attributed evidence is used to change the system, the subsequent lifecycle is owned by [Livingware Qualified Change Lifecycle](livingware-change-lifecycle.md).
+
+```text
+FailureAttribution / LearningCandidate
+  -> ChangeHypothesis
+  -> ExperimentCandidate
+  -> ScientificResult
+  -> QualificationResult
+  -> ChangeCandidate
+  -> external admission / shadow / activation authority
+```
+
+Evaluation does not gain admission or activation authority through this handoff. Training-data admission, experiment selection, multi-seed qualification, rollback, and the `NO_CHANGE` disposition are defined by the qualified-change lifecycle and operationalized by `governed-experimental-evolution`.
+

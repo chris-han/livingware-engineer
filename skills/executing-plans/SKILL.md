@@ -10,7 +10,7 @@ Load the authoritative plan/spec, preserve its contract across task boundaries, 
 ## Lifecycle
 
 Entry: a written plan has been selected for implementation.
-Exit: the plan's authorized stopping criterion yields a declared terminal disposition supported by evidence, or the User Intervention Necessity Test is met.
+Exit: the plan's authorized stopping criterion and applicable integration/retirement obligations are proved, or the User Intervention Necessity Test is met.
 
 A completed task, sprint exit, review, integration slice, or list of remaining gates is progress evidence, not a stop condition. Continue with the next dependency-ready state.
 
@@ -80,7 +80,7 @@ For governed or recoverable work:
 - do not claim a phase is reproducible when its required artifacts are still uncommitted;
 - do not switch to `main` or another worktree to 'finish one small thing' without rebasing the plan/workspace binding first.
 
-At a terminal plan disposition, execution is not operationally closed while the verified branch remains stranded in an active worktree. Route to `finishing-a-development-branch` unless the explicit terminal action is to preserve the branch/worktree or keep it for PR review.
+At a terminal plan disposition, apply [Plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md) and route to `finishing-a-development-branch`. An isolated GREEN or negative disposition does not close workspace obligations. Integrate eligible implementation or negative-outcome evidence, verify the target and retire the owned worktree/branch before marking whole-plan completion. Honor preservation/PR exceptions only when bound to an actual user instruction or repository policy; an agent-written plan clause cannot create that authority.
 
 For submodule-backed work, preserve the two-level closure boundary:
 

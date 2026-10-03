@@ -7,7 +7,7 @@ description: Use when implementation has passed required verification and is rea
 
 ## Overview
 
-**Core principle:** Verify tests → Detect environment → Present options → Execute choice → Clean up.
+**Core principle:** Verify → Resolve authorized integration → Integrate → Verify target → Retire workspace.
 
 **Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
 
@@ -15,7 +15,7 @@ description: Use when implementation has passed required verification and is rea
 
 Use `superpowers:verification-before-completion` as the owner of verification scope and result validity. Verify the required integration or release scope; reuse inspected passing results for unchanged relevant state. Run the full suite only when repository policy or demonstrated impact requires it. Unresolved required behavior or load-bearing review findings prevent claiming completion.
 
-**If required checks fail or remain unverified**, report the gaps and preserve the branch; do not present it as complete:
+**If required checks fail or remain unverified**, diagnose/repair within scope and preserve state meanwhile; do not present the implementation as complete. A proved negative plan outcome instead follows the evidence-only integration path in the shared policy referenced below:
 
 ```
 Tests failing (<N> failures). Must fix before completing:
@@ -40,7 +40,7 @@ or explicit user authorization. Record `created by this workflow`, `cleanup
 authorized for this exact path`, or `unknown`; never derive it from the directory
 name.
 
-This determines which menu to show and how cleanup works:
+For non-plan work this determines which menu to show. Plan execution follows the default closure path below. In both cases it determines cleanup ownership:
 
 | State | Menu | Cleanup |
 |-------|------|---------|
@@ -64,7 +64,7 @@ worktree_state
 
 Verify that the current worktree path and branch match the plan. If they do not, stop the branch-completion workflow and repair the binding; do not merge a different branch merely because it contains similar changes.
 
-If the user already delegated an integration target/action (for example, "continue until merged") or the current plan explicitly authorizes a merge action and target, honor it without presenting the integration menu again. Otherwise use Step 4.
+For plan execution, use the default integration-and-retirement path in [Plan integration and retirement](references/plan-integration-and-retirement.md). Apply user/repository integration requirements and proceed to local merge/verification/cleanup without a menu. A plan-authored restriction is binding only when its actual user/repository source is recorded. For non-plan work, honor an already delegated action; otherwise use Step 4.
 
 Before merge/PR/discard actions, ensure every load-bearing artifact is committed. A clean working tree is required for merge/retirement; uncommitted evidence is not recoverable closure.
 
@@ -80,7 +80,9 @@ Confirm before merging: merging into the wrong base is expensive to undo.
 
 ## Step 4: Honor the Integration Decision
 
-If the user already explicitly selected the integration action and target, execute that choice within repository policy; do not ask again. Otherwise present the applicable menu below.
+For plan execution, proceed with the default local integration and retirement action, or the narrower action explicitly required by the user/repository. Do not stop at branch preservation merely because an agent wrote it into the plan.
+
+Only non-plan work without a delegated integration action uses the menu below. If the user already selected an action/target, execute it within repository policy without asking again.
 
 **Normal repo and named-branch worktree — present exactly these 3 options:**
 
@@ -338,7 +340,8 @@ Never delete main's index, an index shared with another checkout, or an ambiguou
 | Excuse | Reality |
 |--------|---------|
 | "Tests passed earlier this session" | Inspect the result and relevant state under verification-before-completion; reuse if valid, rerun affected checks if invalidated. |
-| "They obviously want it merged" | Do not infer authorization. Honor an explicit action and target; otherwise ask. |
+| "The plan says preserve, so I can finish here" | Agent-authored text cannot create an exception. Apply the default plan closure or cite the actual user/repository instruction. |
+| "They obviously want it merged" | Approved plan execution carries standing local integration/cleanup authorization. For non-plan work, honor delegation or resolve the choice. |
 | "They seem done with this feature — I'll offer to discard it" | The menu is complete as written. Discard happens only when your human partner asks for it in so many words. |
 | "'Yeah, get rid of it' counts as confirmation" | Only the typed word `discard` authorizes deletion. |
 | "The PR is up, so the worktree is clutter now" | PR feedback gets fixed in that worktree. It stays until the work lands. |

@@ -29,3 +29,10 @@ User intervention is **not** required merely because a phase ended, a checkpoint
 Progress reporting is observational, not a synchronization barrier. For long-running work, concise updates may report a meaningful milestone, material finding, or recovery-state change, but execution continues immediately afterward unless this test is satisfied. Do not turn routine updates into “should I continue?” checkpoints.
 
 A predeclared negative or inconclusive terminal disposition is not a blocker. When its terminal predicate is satisfied by evidence, close the plan with that disposition rather than asking whether to continue.
+
+## Plan integration and retirement
+
+[Plan integration and retirement](../skills/finishing-a-development-branch/references/plan-integration-and-retirement.md)
+owns the default local integration/cleanup authorization, exception provenance,
+negative-outcome evidence retention and completion evidence. It is packaged with
+the skills so installed plugins can resolve the same policy as source checkouts.

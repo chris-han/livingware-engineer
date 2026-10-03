@@ -54,10 +54,12 @@ Creating the worktree does not complete its lifecycle. A linked worktree remains
 
 - `MERGED`: the frozen/verified work is reachable from the intended integration target;
 - `PR_OPEN`: the branch is pushed and the worktree is intentionally retained for review;
-- `PRESERVED`: the user/workflow intentionally keeps the branch/worktree;
+- `PRESERVED`: an explicit user instruction or repository policy requires keeping the branch/worktree;
 - `RETIRED`: merge/discard closure is complete and authorized cleanup has removed the worktree.
 
 Use `finishing-a-development-branch` to perform merge, parent/submodule pointer updates when needed, merged-state verification, branch deletion, and worktree retirement. Never treat a final commit or a green test run as implicit worktree closure.
+
+Apply [Plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md). `MERGED` alone is not plan completion: cleanup must reach `RETIRED` for workflow-owned execution worktrees unless a user/repository exception is bound. Do not set preservation or cleanup-denial metadata merely to manufacture an earlier stopping point.
 
 
 ## Step 0: Detect Existing Isolation

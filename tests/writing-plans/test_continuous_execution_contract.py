@@ -14,6 +14,34 @@ def test_contract():
  assert "progress summaries waste their time" not in t("skills/subagent-driven-development/SKILL.md")
  assert "When a Codex `/goal` is active" in t("skills/using-superpowers/references/codex-tools.md")
 
+def test_plan_integration_authority_contract():
+ policy=t("skills/finishing-a-development-branch/references/plan-integration-and-retirement.md")
+ assert "## Plan integration and retirement" in t("docs/mvl-laws.md")
+ for invariant in (
+  "local merge into `main`",
+  "Agent-authored plan text is not an independent authorization source",
+  "push, publication, deployment, admission or activation",
+  "unqualified production changes",
+  "exception's actual user instruction or repository policy",
+ ):
+  assert invariant in policy, invariant
+ for skill in ("writing-plans", "executing-plans", "finishing-a-development-branch", "verification-before-completion", "using-git-worktrees"):
+  assert "references/plan-integration-and-retirement.md" in t(f"skills/{skill}/SKILL.md"),skill
+
+
+def test_plan_completion_requires_retirement_evidence():
+ finish=t("skills/finishing-a-development-branch/SKILL.md")
+ assert "For plan execution, use the default integration-and-retirement path" in finish
+ assert "Only non-plan work without a delegated integration action uses the menu below" in finish
+ verify=t("skills/verification-before-completion/SKILL.md")
+ assert "merged-result verification" in verify
+ assert "worktree removal and execution-branch retirement" in verify
+ worktree=t("skills/using-git-worktrees/SKILL.md")
+ assert "`MERGED` alone is not plan completion" in worktree
+
+
 if __name__ == '__main__':
     test_contract()
-    print('Continuous execution contract: PASS')
+    test_plan_integration_authority_contract()
+    test_plan_completion_requires_retirement_evidence()
+    print('Continuous execution and plan integration contract: PASS')

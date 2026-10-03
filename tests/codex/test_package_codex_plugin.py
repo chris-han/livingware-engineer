@@ -84,11 +84,14 @@ def main() -> int:
         paths = zip_paths(out_zip)
         require(".codex-plugin/plugin.json" in paths, "archive includes Codex manifest")
         require("skills/brainstorming/SKILL.md" in paths, "archive includes skills")
+        policy_path = "skills/finishing-a-development-branch/references/plan-integration-and-retirement.md"
+        require(policy_path in paths, "archive includes the shared plan integration policy")
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
         require(not any(p.startswith("tests/") or p.startswith("docs/") or p.startswith("scripts/") for p in paths), "archive excludes source-only paths")
 
         with zipfile.ZipFile(out_zip) as zf:
             manifest = json.loads(zf.read(".codex-plugin/plugin.json"))
+            require(zf.read(policy_path) == (ROOT / policy_path).read_bytes(), "archive preserves the canonical integration policy exactly")
             require(manifest["name"] == "livingware-engineer", "archive preserves plugin identity")
             require(manifest["version"] == json.loads((ROOT / "package.json").read_text())["version"], "archive preserves current version")
             require({i.date_time for i in zf.infolist()} == {(1980, 1, 1, 0, 0, 0)}, "ZIP timestamps are deterministic")

@@ -1,3 +1,11 @@
+## v6.14.2 (2026-10-03)
+
+- Make approved plan execution include local integration into the user/repository target, merged-result verification, evidence retention and owned worktree/branch retirement before whole-plan completion.
+- Require preservation, qualification-only and PR handoff exceptions to cite an actual user instruction or repository policy; agent-authored plan clauses cannot create their own authorization to stop.
+- Preserve negative/inconclusive evidence without promoting unqualified production changes. Push, publication and production/runtime activation remain separate authorization boundaries.
+- Align writing, execution, verification, workspace and branch-finishing workflows with one packaged policy reference; add deterministic contract regression coverage to CI.
+- Synchronize all declared package/plugin version surfaces to 6.14.2. Contract checks and scenario review cover instruction consistency; no claim of measured agent behavior improvement is made.
+
 ## v6.14.1 (2026-10-02)
 
 - Patch release following the 6.14.0 Harness Qualification capability release.

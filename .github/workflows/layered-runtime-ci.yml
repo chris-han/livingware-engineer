@@ -6,6 +6,7 @@ on:
     paths:
       - 'AGENTS.md'
       - 'docs/architecture-delta-principle.md'
+      - 'docs/mvl-laws.md'
       - 'docs/skill-runtime-architecture.md'
       - 'docs/skill-token-economics.md'
       - 'skills/**'
@@ -16,6 +17,7 @@ on:
       - 'tests/counterfactual/**'
       - 'tests/codex/**'
       - 'tests/writing-skills/**'
+      - 'tests/writing-plans/**'
       - 'tests/systematic-debugging/**'
       - 'tests/data-collection-pipeline/**'
       - 'tests/eval-skills/**'
@@ -32,6 +34,7 @@ on:
     paths:
       - 'AGENTS.md'
       - 'docs/architecture-delta-principle.md'
+      - 'docs/mvl-laws.md'
       - 'docs/skill-runtime-architecture.md'
       - 'docs/skill-token-economics.md'
       - 'skills/**'
@@ -40,6 +43,7 @@ on:
       - 'tests/counterfactual/**'
       - 'tests/codex/**'
       - 'tests/writing-skills/**'
+      - 'tests/writing-plans/**'
       - 'tests/systematic-debugging/**'
       - 'tests/data-collection-pipeline/**'
       - 'tests/eval-skills/**'
@@ -68,6 +72,8 @@ jobs:
         run: bash tests/codex/test-bump-version-no-jq.sh
       - name: Progressive skill loading
         run: bash tests/codex/test-progressive-skill-loading.sh
+      - name: Continuous plan integration and retirement contract
+        run: python3 tests/writing-plans/test_continuous_execution_contract.py
       - name: Architecture routing and delta
         run: bash tests/writing-skills/test-architecture-routing.sh
       - name: Layered skill and token economics

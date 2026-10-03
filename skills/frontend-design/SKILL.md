@@ -21,6 +21,8 @@ Pure visual-token corrections, renderer-performance work, implementation-only re
 
 Use Livingware's engineering workflow for the work process and Impeccable for frontend craft. Existing project design context is evidence and constraint, not optional inspiration.
 
+Any request that designs, changes, refactors, audits, or reviews frontend UX/IA (layout, navigation, interaction flows, controls, content hierarchy, readability, responsive behavior, or information architecture) MUST route through this skill before substantive design reasoning or UI edits.
+
 **REQUIRED SUB-SKILL:** Use `impeccable` for visual craft, critique, anti-slop detection, accessibility, responsive behavior, interaction states, and polish.
 
 ## Project design authority

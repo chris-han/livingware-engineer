@@ -134,6 +134,10 @@ Every newly proposed candidate must state:
 
 Novelty, popularity, leaderboard position, availability, or a new paper/repository is not by itself a valid research delta.
 
+### Literature intake qualification
+
+When an external paper is being considered for a maintained research program, do not equate topical relevance with research value. First qualify whether the paper can create a defensible change in the current research state: challenge or support an active hypothesis, introduce a materially new mechanism, change an experiment or gate, supply missing evidence, or alter the next research action. Use `references/literature-qualification.md` for the bounded `ResearchCatalystAssessment` contract and depth-of-reading policy. Use `references/scholar-catalyst-benchmark.md` only when evaluating or benchmarking this qualification behavior against ScholarCatalyst-style positive versus topical-hard-negative cases.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:

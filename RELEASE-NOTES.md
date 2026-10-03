@@ -1,3 +1,18 @@
+## v6.14.4 (2026-10-03)
+
+- Add model-training intervention qualification under `research-methodology`, separating observed model deficits from training necessity, admissibility, efficacy, admission and activation.
+- Add the Residual Experimental Frontier (REF): freeze structural contracts, derive mechanically determined variables, and search only causally unresolved choices that can change the named research decision.
+- Add stage-attributed training, held-out report-card guidance, qualified-learning-information accounting, and constrained automated/reward-driven optimization while preserving regression, retention and authority gates.
+- Keep project-specific decision semantics, evidence contracts, verifier rules and learning-unit economics downstream; Livingware owns the generic qualification workflow, not domain authority.
+- Synchronize all declared package/plugin version surfaces to 6.14.4. This release adds methodology/contracts; it does not claim measured model-training performance improvement.
+
+## v6.14.3 (2026-10-03)
+
+- Add catalyst-aware literature intake under `research-methodology`: topical relevance is separated from decision-relevant research value.
+- Add `ResearchCatalystAssessment` with `CATALYST | EVIDENCE | CONTEXT | SKIP` dispositions and progressive reading-depth allocation.
+- Add a ScholarCatalyst benchmark adapter that separates candidate formation from catalyst qualification and treats the upstream benchmark as evidence rather than Livingware authority.
+- Synchronize all declared package/plugin version surfaces to 6.14.3.
+
 ## v6.14.2 (2026-10-03)
 
 - Make approved plan execution include local integration into the user/repository target, merged-result verification, evidence retention and owned worktree/branch retirement before whole-plan completion.

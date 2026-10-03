@@ -138,6 +138,10 @@ Novelty, popularity, leaderboard position, availability, or a new paper/reposito
 
 When an external paper is being considered for a maintained research program, do not equate topical relevance with research value. First qualify whether the paper can create a defensible change in the current research state: challenge or support an active hypothesis, introduce a materially new mechanism, change an experiment or gate, supply missing evidence, or alter the next research action. Use `references/literature-qualification.md` for the bounded `ResearchCatalystAssessment` contract and depth-of-reading policy. Use `references/scholar-catalyst-benchmark.md` only when evaluating or benchmarking this qualification behavior against ScholarCatalyst-style positive versus topical-hard-negative cases.
 
+### Model-training intervention qualification
+
+When parameter learning is being considered, do not infer `training required` from an observed model error or benchmark gap. First separate reference/evaluator validity, deterministic computability, representation/context sufficiency, readout/interface/numerical integrity, existing-system sufficiency, calibration, residual attribution, and training admissibility. Use `references/model-training-qualification.md` to choose the smallest non-training repair, bounded training candidate, learning-system candidate, or evidence-supported STOP, and to contract any eligible training design to a Residual Experimental Frontier before automated search.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:

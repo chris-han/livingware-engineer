@@ -1,3 +1,11 @@
+## v6.14.8 (2026-10-09)
+
+- Require an explicit three-part research validation contract in `research-methodology`: claim-relevant benchmark/evidence coverage, an auditable evaluation protocol, and a result-driven improvement/decision loop.
+- Carry the contract into experiment admissibility, proposal outputs and closeout, including reference validity, full-denominator accounting, distinct unknown/invalid/failure treatment, attribution, bounded change ownership and comparable re-evaluation.
+- Keep real-use corrections provisional, protect evaluation evidence from repeated tuning, and require a common versioned comparison basis before claiming improvement. Preserve retain/reject/STOP outcomes, proportionate non-empirical methods and existing authority boundaries.
+- Quote the existing activation description so the skill frontmatter parses as valid YAML. Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.8.
+- This release updates methodology and templates; it does not claim measured agent-behavior or ontology-performance improvement.
+
 ## v6.14.7 (2026-10-09)
 
 - Strengthen the existing IA-before-UI contract: establish or revalidate JTBD and cognitive-work allocation before visual composition, then map IA to current project design authority, templates and showcase components.

@@ -1,3 +1,10 @@
+## v6.14.6 (2026-10-09)
+
+- Add optional bounded QuickE2E exploration and Playwright test authoring to the existing browser lifecycle contract. Keep direct Playwright/CDP execution and required Lightpanda behavior/Chrome rendering evidence.
+- Require qualified project adapters, finite enforced budgets, real authentication and internal wiring, independent outcome/identity assertions, and fresh-context replay without model access. Route unsupported or exhausted exploration to deterministic authoring.
+- Keep QuickE2E external and optional; add no plugin runtime dependency. This release defines workflow guidance and does not claim product qualification, measured speed/cost gains, or improved agent behavior.
+- Align all declared release manifests and the legacy Hermes manifest to 6.14.6, repairing pre-existing version drift without changing version-bump tool prerequisites.
+
 ## v6.14.4 (2026-10-03)
 
 - Add model-training intervention qualification under `research-methodology`, separating observed model deficits from training necessity, admissibility, efficacy, admission and activation.

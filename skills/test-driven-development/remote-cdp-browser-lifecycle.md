@@ -65,6 +65,34 @@ Keep Lightpanda behavior testing and Chrome rendering diagnostics in WSL/CDP whi
 
 Only when a RENDERING test actually requires Windows Chrome and `http://127.0.0.1:9222` is unavailable should you ask the user to start the Windows debug instance with a host-side command. Chrome availability must not block a BEHAVIOR test that belongs on Lightpanda.
 
+## Optional QuickE2E Exploration and Test Authoring
+
+Use an already-installed, project-qualified QuickE2E adapter when a new or changing user journey benefits from exploratory navigation or Playwright test generation. Direct Playwright/CDP authoring remains the default for known deterministic paths. QuickE2E is an optional external authoring tool, not a Livingware runtime dependency; do not install it, switch providers, or add a mandatory exploration gate merely to run existing tests.
+
+Before exploration:
+
+- Read the project's adapter README and qualification evidence. Bind the exact QuickE2E version, local bridge/provider configuration, application revision, and supported browser interactions. A disposable-form qualification does not qualify an authenticated product journey.
+- Derive acceptance criteria and expected results from the JTBD/product contract and an independent oracle. Name the exact source, build, verification, answer, or equivalent domain identities the journey must preserve.
+- Declare finite limits for actions, model calls, retries/repairs, elapsed time, and input/output tokens where observable. Enforce them in the runner/bridge; stop on exhaustion. If a required limit cannot be enforced, use direct deterministic authoring. Record unavailable usage or provider cost as UNKNOWN, never zero.
+- Use the existing qualified local CLI/provider bridge when supplied by the project. Keep credentials out of prompts, exported code, traces, and committed artifacts. Establish disposable authentication through the real application fixture/login path in [writing-good-tests.md](writing-good-tests.md); browser-storage injection or API interception must not substitute for internal production wiring.
+
+Run the bounded journey through exact accessible labels on real routes and real internal services. For a Chrome-qualified adapter, use a fixture-owned page on Windows Chrome CDP while preserving all shared-browser ownership and cleanup rules above. Use an isolated browser/profile for exact synthetic viewport coverage. Do not assume QuickE2E supports Lightpanda merely because both expose CDP.
+
+Export a successful journey to Playwright, then review it as authored code:
+
+1. Replace brittle selectors and incidental waits with stable accessible locators and observable state transitions.
+2. Strengthen assertions against independent expected outcomes and exact domain identities. Reaching a success screen does not prove arithmetic, authorization, persistence, ontology/evidence binding, or tenant isolation.
+3. Reject hidden login shortcuts, internal-service mocks, API interception, model-derived expected values, swallowed failures, and silent assertion weakening or self-healing.
+4. Replay the reviewed test in a fresh authenticated context with the model bridge stopped or inaccessible to the replay process. Keep required dataset/version identities fixed; explicitly reconstruct disposable fixtures where needed. A replay requiring model calls is not deterministic acceptance evidence.
+
+Do not stop an operator-owned bridge just to prove model-free replay; isolate the replay's model access instead. Confirm the replay performs no model calls and use its actual assertions to determine which acceptance requirements it proves.
+
+Exploration failure, an unsupported interaction, or budget exhaustion is a handoff to direct Playwright/CDP authoring for the affected path, not permission to weaken acceptance or silently change browser lanes. Preserve the specific failure and only the useful exported artifacts at their existing project owner; do not create a parallel evidence ledger.
+
+QuickE2E Chrome exploration does not replace required Lightpanda BEHAVIOR acceptance, Chrome RENDERING checks, or independently authored negative/security/arithmetic/concurrency tests. Keep missing lanes and unexercised assertions explicitly unverified. Avoid duplicate exploration/replay when adequate unchanged tests already cover the contract.
+
+Record exploration failures, actions, retries, model calls, observed input/output tokens, elapsed time, provider cost or UNKNOWN, and exported/replayed artifact identities in the existing test evidence. Separate exploration cost from replay cost. Do not claim faster authoring, lower cost, improved agent behavior, or human benefit without comparable observed evidence.
+
 ## Cleanup Evidence
 
 Before completion, verify the lifecycle appropriate to the browser that was actually used.

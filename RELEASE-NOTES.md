@@ -1,3 +1,11 @@
+## v6.14.7 (2026-10-09)
+
+- Strengthen the existing IA-before-UI contract: establish or revalidate JTBD and cognitive-work allocation before visual composition, then map IA to current project design authority, templates and showcase components.
+- Carry the contract through brainstorming, frontend design and implementation plans, including bounded UI work and design reviews, without adding routine human-approval checkpoints.
+- Add conditional Asimov alignment guidance that distinguishes the current Showcase2 shell, original graph/control reference and component showcase; require exact source mapping and resolution of stale-template drift.
+- Require a task-effort acceptance check while keeping automated/browser evidence separate from measured human usability. No measured cognitive-load reduction or generalized agent-behavior improvement is claimed.
+- Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.7.
+
 ## v6.14.6 (2026-10-09)
 
 - Add optional bounded QuickE2E exploration and Playwright test authoring to the existing browser lifecycle contract. Keep direct Playwright/CDP execution and required Lightpanda behavior/Chrome rendering evidence.

@@ -110,11 +110,11 @@ For non-product maintenance work where no user-learning loop exists, state `MVL:
 
 ## IA Before UI
 
-Before production UI implementation, determine whether the work introduces or materially changes user-facing information architecture. If it does, apply `docs/ia-before-ui.md` and record an `IA-Before-UI Review` before implementation tasks begin.
+For any UI design or review, carry forward or establish the `IA-Before-UI Review` from `docs/ia-before-ui.md` before detailed visual design or production UI tasks. Start with the JTBD and cognitive-work allocation, establish the task flow and hierarchy, then map it to current `DESIGN.md` / `design.md`, template/showcase sources and shared primitives. For Asimov work, apply `skills/frontend-design/references/asimov-alignment.md`; do not substitute a generic layout or stale showcase example.
 
-The review must establish the user task/domain model, canonical semantic owners, region hierarchy, Fast-to-Aha path, state/recovery ownership, action semantics, responsive constraints, shared-pattern reuse, and planned verification evidence. Its disposition is `GO_FOR_UI` only when all stop conditions are clear; unresolved duplicated semantic ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, or responsive ambiguity yields `REVISE_IA` and blocks production UI implementation until the IA is repaired.
+When an IA review is required, only `GO_FOR_UI` admits production UI tasks. Missing workload allocation, unresolved duplicated semantic ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, responsive ambiguity, or unresolved design-source mapping yields `REVISE_IA`. Repair the IA rather than scheduling the unresolved design decision after coding.
 
-This is a machine-verifiable structural engineering gate, not a default human-approval checkpoint. Pure visual-token fixes, renderer-performance work, implementation-only refactors, and accessibility corrections with no IA change may record `NOT_APPLICABLE` with a brief reason.
+This is a machine-verifiable structural gate, not a default human-approval checkpoint. Use the policy's narrow `NOT_APPLICABLE` exception for IA-preserving corrections with a reason. Reuse valid design evidence and put the review in the existing plan, not a separate ledger. Bind UI tasks and browser acceptance to the same JTBD, source mapping and task-effort target; report human usability as unmeasured unless supported by actual human evidence.
 
 ## Impact Radius Before Test Scope
 
@@ -249,11 +249,14 @@ Every plan must include the relevant review blocks before implementation tasks:
 ## IA-Before-UI Review
 
 **Applicability:** REQUIRED | NOT_APPLICABLE
-**User task:** ...
+**User task / JTBD:** target user, trigger, desired outcome, observable success; evidence vs assumptions
+**Cognitive-work allocation:** user burden → system support → remaining user judgment and reason
 **Primary domain objects:** ...
 **Canonical semantic owners:** ...
-**Proposed region hierarchy:** ...
+**Task flow / proposed region hierarchy:** ...
+**Design-source mapping:** exact DESIGN.md/design.md sections, current template/showcase paths, shared primitives/variants and token owners; resolved drift
 **Fast-to-Aha path:** ...
+**Task-effort check:** baseline if available, target, verification method and evidence provenance
 **States/recovery ownership:** ...
 **Responsive constraints:** ...
 **Verification evidence:** ...
@@ -285,7 +288,7 @@ After writing the plan, check:
 3. Product Value Validation applicability, evidence level, Aha contract, falsifier, PMF claim boundary, and disposition.
 4. Dependency readiness.
 5. Architecture Delta applicability, evidence, minimality, and disposition.
-6. IA-before-UI applicability and disposition.
+6. IA-before-UI applicability, JTBD/cognitive-work allocation, design-source mapping, task-effort check and disposition.
 7. Verification Impact Analysis and R0–R3 scope.
 8. Integration credibility.
 9. Placeholder scan.

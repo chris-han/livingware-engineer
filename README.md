@@ -198,6 +198,8 @@ Restart active Hermes sessions after installation.
 
 Livingware Engineer includes a general `frontend-design` skill for product UI work. It composes the engineering workflow with a pinned upstream Impeccable skill for visual craft and anti-slop review. When a project already has a `DESIGN.md`, that project document remains the design authority: its visual language, information architecture, component conventions, and stated consistency objectives override generic design taste. A design-system replacement happens only when the task explicitly calls for one.
 
+UI design follows one sequence: **JTBD → cognitive-work allocation → IA → project design-system mapping → visual design and implementation → task-path and conformance verification**. The [IA-before-UI contract](docs/ia-before-ui.md) applies across brainstorming, planning, frontend design and reviews. It assigns avoidable remembering, comparison, calculation and recovery to the system while preserving user judgment and authority. For Asimov projects, the [alignment reference](skills/frontend-design/references/asimov-alignment.md) requires inspection of the current workbench template and showcase components; Asimov is not imposed on unrelated projects.
+
 ## Research Methodology
 
 Livingware Engineer includes a generic `research-methodology` skill for substantive research work. It treats research as **goal-anchored uncertainty contraction**, not as an accumulation of papers, experiments, or TODOs.

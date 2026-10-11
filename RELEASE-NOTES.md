@@ -1,3 +1,11 @@
+## v6.14.9 (2026-10-11)
+
+- Add conditional intervention-placement guidance to research-methodology: distinguish evidence/context, execution scaffolding, residual content quality and exploration diversity before choosing a change target.
+- Require harness-by-weights cross-evaluation when claiming training internalizes a runtime benefit; distinguish diagnostic first signals and changing failure denominators from causal attribution.
+- Retain Fork-and-Flush as an opt-in, finite-budget search candidate with preserved evidence/authority, matched-budget controls and independent winner verification. Do not enable automatic branching, training, or behavioral-learning runs.
+- Retain the two motivating papers with exact supported premises and limits in the owning reference; link existing training qualification to the shared guidance.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.9. This release adopts methodology; it does not claim measured local agent-performance improvement.
+
 ## v6.14.8 (2026-10-09)
 
 - Require an explicit three-part research validation contract in `research-methodology`: claim-relevant benchmark/evidence coverage, an auditable evaluation protocol, and a result-driven improvement/decision loop.

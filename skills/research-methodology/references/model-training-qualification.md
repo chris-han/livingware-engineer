@@ -72,6 +72,8 @@ Before opening an optimizer, verify in order:
 
 If the evidence cannot distinguish these explanations, choose `STOP_INSUFFICIENT_EVIDENCE` or the appropriate repair disposition rather than training through ambiguity.
 
+For harness-versus-weight attribution or claims that an adapter can replace a runtime mechanism, use [Intervention Placement and Research Search](intervention-placement-and-search.md). Distinguish changes to available evidence from changes to actor behavior; use the conditional harness-by-weights comparison rather than interpreting a process-repaired content deficit as automatic training authority.
+
 ## Derive before search
 
 Partition the adjustable training design into three classes:

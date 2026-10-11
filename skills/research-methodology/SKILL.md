@@ -173,6 +173,10 @@ When an external paper is being considered for a maintained research program, do
 
 When parameter learning is being considered, do not infer `training required` from an observed model error or benchmark gap. First separate reference/evaluator validity, deterministic computability, representation/context sufficiency, readout/interface/numerical integrity, existing-system sufficiency, calibration, residual attribution, and training admissibility. Use `references/model-training-qualification.md` to choose the smallest non-training repair, bounded training candidate, learning-system candidate, or evidence-supported STOP, and to contract any eligible training design to a Residual Experimental Frontier before automated search.
 
+### Harness, weight, and search intervention placement
+
+When agent improvement could change evidence/context, execution scaffolding, weights, or exploration diversity, use `references/intervention-placement-and-search.md`. Diagnose evidence sufficiency, execution integrity, and residual content quality before choosing a lever; first failure signals and aggregate plateaus are not causal attribution. Use harness-by-weights cross-evaluation when claiming transfer into parameters. Keep fresh-context branching optional and budgeted within one owned experiment; do not enable automatic fan-out or a default Fork-and-Flush schedule without local evidence and existing authorization.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:

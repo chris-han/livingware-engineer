@@ -2,6 +2,33 @@
 
 Use this reference when agent improvement could target evidence/context, execution scaffolding, model behavior, or research-search diversity. Reuse the owning plan and evaluation contract; do not create another ledger or an autonomous optimization loop.
 
+## Two steering points
+
+Use the diagram as a conditional decision map, not a mandatory experiment itinerary. Steering point 1 chooses the intervention surface; steering point 2 chooses how to search within one already-authorized experiment. A plateau alone establishes neither a model deficit nor an idea basin.
+
+```mermaid
+flowchart TD
+    A["Named uncertainty and qualified evidence"] --> S1{"Steering 1: Which intervention is supported?"}
+    S1 -->|"Evidence or context gap"| E["Repair what the actor sees"]
+    S1 -->|"Execution or harness defect"| H["Repair how the actor executes"]
+    S1 -->|"Learnable residual qualified"| W["Nominate bounded weight intervention"]
+    S1 -->|"Attribution unresolved or no decision value"| X["Repair evidence basis or STOP"]
+
+    E --> P["Bounded candidate and frozen evaluation contract"]
+    H --> P
+    W --> P
+    P --> S2{"Steering 2: Search-diversity uncertainty and branching authorized?"}
+    S2 -->|"No; experiment otherwise eligible"| C["Use existing search within budget"]
+    S2 -->|"Yes; opt-in experiment"| F["Preserve workspace and constraints; fresh-context branches"]
+    F --> B["Explore under matched total budget"]
+    B --> R["Select on development evidence; independently recheck winner"]
+    C --> V["Comparable evaluation and protected confirmation where required"]
+    R --> V
+    V --> D["Retain, reject or unresolved; zero or one next question"]
+```
+
+For a weight-transfer claim at steering point 1, use the harness-by-weights comparison below. For a search-mechanism claim at steering point 2, compare continuous search, reset only, fork only, and fork plus reset when needed. If the experiment itself is not admissible or authorized, stop before either search route. Selection and evaluation produce evidence and candidates; admission and activation remain separate transitions.
+
 ## Diagnose before choosing the lever
 
 Apply the existing model-training qualification before nominating parameter learning. For harness or search changes, inspect the same material alternatives proportionately:

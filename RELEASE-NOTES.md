@@ -1,3 +1,11 @@
+## v6.14.10 (2026-10-11)
+
+- Add conditional decision-model evaluation guidance to the existing evaluation entry and evaluator qualification skills, covering split/exposure controls, class-specific decisions, ranking, probability calibration, and offline attribution.
+- Keep JEVal as an optional public-development reference with pinned snapshot identity, explicit typed-adapter coverage, grouped panels, CAL-only fitting, and replay boundaries.
+- Require separate real-use evidence and declared utility/error-cost gates before claiming business value; distinguish repair of collapsed predictions from fine-tuning superiority.
+- Preserve native skill discovery and existing evaluation ownership; add no mandatory benchmark, runtime dependency, automatic training, or successor experiment.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.10. This release adopts methodology; it does not claim measured local agent-performance improvement.
+
 ## v6.14.9 (2026-10-11)
 
 - Add conditional intervention-placement guidance to research-methodology: distinguish evidence/context, execution scaffolding, residual content quality and exploration diversity before choosing a change target.

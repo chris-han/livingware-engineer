@@ -34,6 +34,12 @@ Resolve from available evidence before asking the user:
 - Is the target a component or a harness/runtime composition, and what is the candidate `HarnessIdentity`?
 - Which existing repository owner would own a confirmed failure?
 
+## Conditional decision-model evaluation
+
+For a bounded typed decision model or probabilistic evaluator, load [decision-model evaluation](references/decision-model-evaluation.md) for split design, calibration, offline attribution, and real-use confirmation. Load [JEVal](references/jeval.md) only when that benchmark is explicitly selected. Public benchmark results do not establish business suitability.
+
+Keep native discovery and the current-state routes above; these references do not add a mandatory benchmark, runtime, or dependency. Ordinary code verification remains outside this skill.
+
 ## Invariants
 
 - Evaluation does not authorize mutation.

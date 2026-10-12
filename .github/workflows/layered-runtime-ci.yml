@@ -21,6 +21,7 @@ on:
       - 'tests/systematic-debugging/**'
       - 'tests/data-collection-pipeline/**'
       - 'tests/eval-skills/**'
+      - 'tests/frontend-design/**'
       - '.version-bump.json'
       - 'package.json'
       - '.codex-plugin/plugin.json'
@@ -47,6 +48,7 @@ on:
       - 'tests/systematic-debugging/**'
       - 'tests/data-collection-pipeline/**'
       - 'tests/eval-skills/**'
+      - 'tests/frontend-design/**'
       - '.version-bump.json'
       - 'package.json'
       - '.codex-plugin/plugin.json'
@@ -92,6 +94,8 @@ jobs:
         env:
           CRAWLEE_BOOTSTRAP_TEST_RUNTIME: ${{ runner.temp }}/livingware-crawlee-bootstrap-cache
         run: bash tests/data-collection-pipeline/test_crawlee_bootstrap_offline.sh
+      - name: Bundled Asimov reference package
+        run: python3 tests/frontend-design/test_asimov_reference_package.py
       - name: Livingware eval skill contracts
         run: python3 tests/eval-skills/test_eval_skills_contract.py
       - name: Counterfactual evaluator

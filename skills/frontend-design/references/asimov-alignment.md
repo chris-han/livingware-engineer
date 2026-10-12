@@ -1,19 +1,29 @@
 # Asimov workbench alignment
 
-Read this reference only when the target project uses Asimov. The project's current `DESIGN.md` / `design.md` and its designated implementations own the design; this reference is a discovery and alignment procedure, not a second design system.
+Read this reference only when the target project uses Asimov. The project's declared design guide and designated implementations own the design; this reference is a discovery and alignment procedure, not a second design system. The Asimov guidance is bundled with `frontend-design`; do not require a separately installed `asimov-ui-design` skill, a ChatGPT-only skill URI, or a version-specific cache path.
 
 ## Inspect current sources
 
-Locate and read the applicable document and actual implementations before choosing geometry or components. In the established Asimov workspace, discovery anchors are:
+Locate and read the applicable document and actual implementations before choosing geometry or components. Repository instructions identify the maintained design guide; its declared precedence wins. For example, the current Semantier repository uses `docs/operational/design.md` as its single UI design law and `hermes-workspace/src/styles.css` as its sole application stylesheet; `docs/canonical/architecture.md` separately owns runtime semantics. Do not revive retired guide or stylesheet files. In other Asimov workspaces, possible discovery anchors are:
 
-- `DESIGN.md`: design philosophy, reference implementation, workbench geometry, information architecture, supported layout variants, and component rules;
-- `src/asimov.css`: the single physical Asimov stylesheet and `--asimov-*` token owner;
+- the declared design guide, sometimes `DESIGN.md` or `design.md`: philosophy, reference implementation, geometry, information architecture, supported layouts, and component rules;
+- the declared stylesheet, sometimes `src/styles.css` or `src/asimov.css`: physical implementation of the project's `--asimov-*` tokens;
 - `src/screens/knowledge-base/graph/showcase/semantica-showcase2-screen.tsx`: current analytical shell and responsive composition;
 - `src/screens/knowledge-base/graph/showcase/semantica-showcase-screen.tsx`: graph/data/control behavior reference;
 - `src/routes/AsimovShowcase.tsx`: shared component variants and interaction states;
 - `src/components/ui`: canonical wrappers, behavior and accessibility; `src/components/ui/icon.tsx`: canonical icon boundary.
 
-These are discovery anchors, not assumed files in every repository. Follow renamed/project-local owners. If an installed `asimov-ui-design` skill is available, use it for regional detail while preserving current project authority. Report stale bundled guidance rather than allowing it to override the target's current design policy.
+These are discovery anchors, not assumed files in every repository. Follow renamed/project-local owners. Apply the current written laws within their UI scope and inspect physical implementations for conformance; a stale showcase or stylesheet does not override declared authority. Keep permissions, domain states and runtime meaning with their existing semantic owners.
+
+## Preserve the incumbent design
+
+Classify the request before changing composition: refinement preserves the incumbent structure unless a demonstrated defect requires a change; redesign can replace composition within the requested region while preserving product truth, behavior, destinations and accessibility. Asimov applies to authenticated product surfaces unless the user explicitly expands scope to marketing.
+
+Use the smallest supported composition for the job. Preserve stable geometry across hover, focus and selection; express selection with the project's surface, border, indicator or icon treatment. Use existing tokens and shared wrappers for spacing, typography, icons and control states. Keep natural-language chrome in the UI font and data-bearing values in the designated value role. Do not introduce route-local skins, copied private showcase selectors, decorative shadows/glow/gradients, oversized rounding, layout-shifting hover or `!important`.
+
+## Regional guidance
+
+For a persistent or collapsible global left navigation sidebar, read [asimov-left-navigation.md](asimov-left-navigation.md). Keep regional guidance conditional; ordinary workbench changes do not require loading every playbook. Add a regional reference only when a demonstrated pattern is reusable, rather than documenting a one-off workaround as a system rule.
 
 ## Map IA to composition
 
@@ -39,6 +49,6 @@ Do not copy showcase-private selectors, create a route-local palette, hardcode a
 
 ## Verify the mapping
 
-Use the selected browser evidence lanes to check the actual task path, keyboard/focus return, state/recovery, desktop and narrow/short layouts, and drawer behavior against the chosen reference. Inspect the affected bilingual, long-content, theme and reduced-motion states where relevant. Keep current behavior and rendering requirements; optional QuickE2E exploration does not replace deterministic replay or rendering evidence.
+Use the selected browser evidence lanes to check the actual task path, keyboard/focus return, state/recovery, desktop and narrow/short layouts, and drawer behavior against the chosen reference. Batch desktop and narrow visual inspection, fix the resulting defects together, and use at most one confirmation pass for visual polish; necessary correctness repairs still follow the affected verification contract. Inspect the affected bilingual, long-content, theme and reduced-motion states where relevant. Keep current behavior and rendering requirements; optional QuickE2E exploration does not replace deterministic replay or rendering evidence.
 
 Report separately: design-source conformance, automated task-path evidence, and any human usability measurement. A matching screenshot proves neither task success nor reduced human cognitive workload.

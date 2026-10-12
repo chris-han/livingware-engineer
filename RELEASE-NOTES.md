@@ -1,3 +1,10 @@
+## v6.14.11 (2026-10-12)
+
+- Consolidate Asimov alignment and left-navigation guidance into conditional references under the existing frontend-design skill; remove the need for a separately installed asimov-ui-design skill.
+- Follow the project's declared design-guide and stylesheet owners, including renamed/consolidated paths, rather than assuming retired filenames or letting stale examples override current authority.
+- Preserve generic frontend routing, IA-before-UI, existing design systems and runtime ownership; do not impose Asimov on unrelated projects.
+- Verify bundled reference closure and synchronize declared release manifests and the legacy Hermes manifest. This packaging/consolidation fix does not claim measured agent-performance or human-usability improvement.
+
 ## v6.14.10 (2026-10-11)
 
 - Add conditional decision-model evaluation guidance to the existing evaluation entry and evaluator qualification skills, covering split/exposure controls, class-specific decisions, ranking, probability calibration, and offline attribution.

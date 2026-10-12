@@ -1,3 +1,11 @@
+## v6.14.12 (2026-10-12)
+
+- Add 16 IA/UX principles and 40 evidence-linked review checks as conditional frontend-design references, synthesizing original usability, spatial/distributed cognition and cognitive-offloading sources with explicit reading and inference limits.
+- Make context observable before scoped actions even when automatically resolved; distinguish task progress, object lifecycle, dependency-based disclosure, cross-panel state, stale responses and recovery.
+- Retain Semantier workspace/header and recruitment examples as conditional product guidance under existing design/runtime authority, preserving Fast-to-Aha and assessment/admission/activation boundaries.
+- Link the existing IA-before-UI, planning and completion contracts to the same evidence, without a new skill, approval gate, learning loop or duplicate checklist ledger.
+- Synchronize declared release manifests and the legacy Hermes manifest. Packaging/structural verification does not establish improved agent behavior, measured human cognitive-load reduction or implemented Semantier UI changes. Norman reading covers the obtained chapter 2 and author materials, not the full book.
+
 ## v6.14.11 (2026-10-12)
 
 - Consolidate Asimov alignment and left-navigation guidance into conditional references under the existing frontend-design skill; remove the need for a separately installed asimov-ui-design skill.

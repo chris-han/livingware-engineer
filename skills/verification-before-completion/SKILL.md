@@ -24,6 +24,8 @@ When the deliverable is a human-readable evidence or research artifact, acceptan
 
 A focused pass is not a full-suite or integrated pass. Architectural claims require real-component evidence through the affected production path. Frontend completion requires affected real-browser evidence. A declared MVL is complete only when its own stopping criterion is satisfied; do not invent MVL requirements for work that has none.
 
+For an affected frontend IA/UX contract, reuse the applicable check IDs and evidence selected during design under `docs/ia-before-ui.md`. Report design-source conformance, automated context/task-path correctness and measured human usability separately. Screenshots, click counts, AI walkthroughs and browser success cannot establish reduced human cognitive load; keep that claim unmeasured without appropriate human evidence, and do not waive an explicit benefit requirement.
+
 ## Plan completion gate
 
 For a plan or declared acceptance contract, passing commands is necessary evidence, not proof that the contract was exercised. Before changing completion state:

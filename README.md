@@ -200,6 +200,8 @@ Livingware Engineer includes a general `frontend-design` skill for product UI wo
 
 UI design follows one sequence: **JTBD → cognitive-work allocation → IA → project design-system mapping → visual design and implementation → task-path and conformance verification**. The [IA-before-UI contract](docs/ia-before-ui.md) applies across brainstorming, planning, frontend design and reviews. It assigns avoidable remembering, comparison, calculation and recovery to the system while preserving user judgment and authority. For Asimov projects, the [alignment reference](skills/frontend-design/references/asimov-alignment.md) requires inspection of the current workbench template and showcase components; Asimov is not imposed on unrelated projects.
 
+For context, information order, disclosure and recovery, the bundled [IA/UX principles](skills/frontend-design/references/ia-ux-principles.md) and [40 review checks](skills/frontend-design/references/ia-ux-checklist.md) make that contract concrete. Their [source evidence](skills/frontend-design/references/ia-ux-evidence.md) separates Nielsen, Norman, Kirsh, distributed cognition and cognitive offloading from project synthesis and unmeasured benefit hypotheses. Conditional Semantier examples cover workspace orientation, material/basis progression and Inspector/Chat coordination; they neither impose that product on others nor claim its UI has been changed by this release.
+
 ## Research Methodology
 
 Livingware Engineer includes a generic `research-methodology` skill for substantive research work. It treats research as **goal-anchored uncertainty contraction**, not as an accumulation of papers, experiments, or TODOs.

@@ -116,6 +116,8 @@ When an IA review is required, only `GO_FOR_UI` admits production UI tasks. Miss
 
 This is a machine-verifiable structural gate, not a default human-approval checkpoint. Use the policy's narrow `NOT_APPLICABLE` exception for IA-preserving corrections with a reason. Reuse valid design evidence and put the review in the existing plan, not a separate ledger. Bind UI tasks and browser acceptance to the same JTBD, source mapping and task-effort target; report human usability as unmeasured unless supported by actual human evidence.
 
+When context, hierarchy, disclosure, cross-panel state or recovery is affected, select applicable checks from `skills/frontend-design/references/ia-ux-checklist.md` through the existing frontend-design entry. Carry their IDs, actual scope/object basis and required evidence into the same IA review and acceptance tasks; do not copy the whole checklist. Separate inferred effort targets, automated task evidence and actual human measurement, preserving any explicitly required human-benefit acceptance condition.
+
 ## Impact Radius Before Test Scope
 
 Verification Impact Analysis (VIA) chooses the smallest verification surface capable of falsifying the implementation claim. Do **not** choose integration/E2E scope from diff size or intuition alone.

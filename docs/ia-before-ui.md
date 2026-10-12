@@ -32,6 +32,8 @@ Record:
 
 Keep the allocation and source mapping concise and traceable; do not duplicate an existing JTBD or MVL contract.
 
+For affected task context, hierarchy, disclosure, coordination or recovery, use the conditional [IA/UX principles](../skills/frontend-design/references/ia-ux-principles.md) and [review checklist](../skills/frontend-design/references/ia-ux-checklist.md). Record only applicable principle/check IDs and evidence in the existing review. The [source evidence](../skills/frontend-design/references/ia-ux-evidence.md) owns bibliographic premises and limits; project design sources and runtime contracts retain their existing authority.
+
 ## Offload cognitive work to the system
 
 Use **Fix → Infer → Recommend → Ask** within existing authority: automatically resolve deterministic, safe problems; infer reversible defaults from available context and expose their basis; recommend a next action with relevant evidence; ask only for missing information or judgment that materially changes the outcome. Do not turn uncertain inference into a fact or silently perform an authority-changing action.
@@ -41,6 +43,14 @@ Prefer recognition over recall, computed summaries/comparisons over manual recon
 Avoid exporting implementation choices, internal IDs, engine settings, or orchestration steps into the ordinary user journey unless they support a real user decision. Fewer controls are not automatically less cognitive work: preserve task-relevant density and make relationships and state understandable.
 
 Define a proportionate acceptance check before implementation, such as required decisions before first value, repeated inputs, manual cross-panel comparisons, navigation detours, or recovery steps. Record a baseline when available and a target tied to the JTBD; label walkthrough estimates as inferred. Browser success or an AI walkthrough does not establish measured human cognitive-load reduction.
+
+### Make context progression observable
+
+Resolve any scope that determines ownership or behavior before enabling scoped upload, mutation or execution. Display that scope before its actions in the information hierarchy even when selection is automatic. Distinguish global identity, workspace, task/session, selected object and view; use one semantic owner and canonical mutation contract for each state, allowing consistent read-only cues or justified controls sharing that contract. The exact header or other placement follows project authority rather than a universal layout rule.
+
+Order inputs, derived judgment basis, outputs and existing-basis reuse by their real dependencies. Keep task progress separate from object lifecycle and allow backward review/correction. Progressive disclosure may defer secondary details; it must not conceal necessary context, material consequences, uncertainty or evidence gaps. Dynamic updates must preserve orientation and reachable actions rather than unexpectedly stealing focus or scrolling.
+
+Bind affected panels and asynchronous responses to the actual scope and object/version basis; a label change alone does not establish context integrity. Verify entry, switching, stale responses and recovery when those paths are affected. Keep structural conformance, automated task-path correctness and measured human usability separate; missing human measurements do not introduce a new approval gate, but cannot satisfy an explicit human-benefit acceptance requirement.
 
 ## Align with the existing design system
 

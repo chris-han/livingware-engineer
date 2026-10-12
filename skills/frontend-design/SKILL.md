@@ -15,6 +15,8 @@ For every UI design, redesign, extension, audit, or review, apply `docs/ia-befor
 
 This is a structural engineering gate, not a default human-approval checkpoint. Proceed directly with `GO_FOR_UI` when stop conditions clear; repair `REVISE_IA` before detailed visual design or production UI code. Use the policy's narrow `NOT_APPLICABLE` exception only for changes that preserve IA; bounded scope and “polish” do not excuse task-flow changes.
 
+When task context, information order, cross-panel coordination, disclosure, or recovery changes, read [IA/UX principles](references/ia-ux-principles.md) and select the applicable [review checks](references/ia-ux-checklist.md). Use [source evidence](references/ia-ux-evidence.md) for rationale or literature review. Keep the current scope visible before scoped actions even when it is resolved automatically; retain necessary judgment, uncertainty and authority. These are conditional references within the existing gate, not another checklist ledger or approval step.
+
 ## Overview
 
 Use Livingware's engineering workflow for the work process and Impeccable for frontend craft. Existing project design context is evidence and constraint, not optional inspiration.

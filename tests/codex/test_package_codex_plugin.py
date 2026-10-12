@@ -84,6 +84,11 @@ def main() -> int:
         paths = zip_paths(out_zip)
         require(".codex-plugin/plugin.json" in paths, "archive includes Codex manifest")
         require("skills/brainstorming/SKILL.md" in paths, "archive includes skills")
+        ia_references = [
+            f"skills/frontend-design/references/ia-ux-{name}.md"
+            for name in ("principles", "checklist", "evidence")
+        ]
+        require(all(path in paths for path in ia_references), "archive includes the complete IA/UX reference package")
         policy_path = "skills/finishing-a-development-branch/references/plan-integration-and-retirement.md"
         require(policy_path in paths, "archive includes the shared plan integration policy")
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
@@ -92,6 +97,10 @@ def main() -> int:
         with zipfile.ZipFile(out_zip) as zf:
             manifest = json.loads(zf.read(".codex-plugin/plugin.json"))
             require(zf.read(policy_path) == (ROOT / policy_path).read_bytes(), "archive preserves the canonical integration policy exactly")
+            require(
+                all(zf.read(path) == (ROOT / path).read_bytes() for path in ia_references),
+                "archive preserves IA/UX principles, checks and source evidence exactly",
+            )
             require(manifest["name"] == "livingware-engineer", "archive preserves plugin identity")
             require(manifest["version"] == json.loads((ROOT / "package.json").read_text())["version"], "archive preserves current version")
             require({i.date_time for i in zf.infolist()} == {(1980, 1, 1, 0, 0, 0)}, "ZIP timestamps are deterministic")

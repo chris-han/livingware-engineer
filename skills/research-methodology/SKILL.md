@@ -177,6 +177,12 @@ When parameter learning is being considered, do not infer `training required` fr
 
 When agent improvement could change evidence/context, execution scaffolding, weights, or exploration diversity, use `references/intervention-placement-and-search.md`. Diagnose evidence sufficiency, execution integrity, and residual content quality before choosing a lever; first failure signals and aggregate plateaus are not causal attribution. Use harness-by-weights cross-evaluation when claiming transfer into parameters. Keep fresh-context branching optional and budgeted within one owned experiment; do not enable automatic fan-out or a default Fork-and-Flush schedule without local evidence and existing authorization.
 
+## Unified experiment execution
+
+When an eligible action invokes training, inference, rollouts, evaluation, or sandbox execution, use `references/research-services.md` for a provider-independent service contract, scoped permissions, shared budget accounting, code-mediated result reduction, evidence visibility, and optional RSI-Index reporting. Reuse host adapters and existing experiment records; load only the capabilities and schemas required by the current action.
+
+The skill selects and interprets the experiment; the host execution boundary enforces each call. A documented interface does not prove service availability, budget enforcement, complete evidence inspection, or resumable approval. Improved scores remain evidence, not admission or activation authority.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:

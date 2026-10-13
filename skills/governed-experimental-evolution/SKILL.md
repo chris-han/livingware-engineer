@@ -11,6 +11,7 @@ Read:
 
 - `../../docs/livingware-change-lifecycle.md` for the canonical observation-to-activation state machine, authority boundaries, experiment selection, training-data admission, and multi-seed qualification.
 - `../../docs/livingware-evaluation-architecture.md` for Eval IR, evaluator non-authority, provenance, and failure attribution.
+- `../research-methodology/references/research-services.md` when executing through research services or reporting normalized improvement; reuse host enforcement and the frozen evaluation basis.
 
 ## Preconditions
 

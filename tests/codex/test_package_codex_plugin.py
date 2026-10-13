@@ -91,12 +91,18 @@ def main() -> int:
         require(all(path in paths for path in ia_references), "archive includes the complete IA/UX reference package")
         policy_path = "skills/finishing-a-development-branch/references/plan-integration-and-retirement.md"
         require(policy_path in paths, "archive includes the shared plan integration policy")
+        research_services = "skills/research-methodology/references/research-services.md"
+        require(research_services in paths, "archive includes the shared research-service contract")
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
         require(not any(p.startswith("tests/") or p.startswith("docs/") or p.startswith("scripts/") for p in paths), "archive excludes source-only paths")
 
         with zipfile.ZipFile(out_zip) as zf:
             manifest = json.loads(zf.read(".codex-plugin/plugin.json"))
             require(zf.read(policy_path) == (ROOT / policy_path).read_bytes(), "archive preserves the canonical integration policy exactly")
+            require(
+                zf.read(research_services) == (ROOT / research_services).read_bytes(),
+                "archive preserves research-service guidance and source evidence exactly",
+            )
             require(
                 all(zf.read(path) == (ROOT / path).read_bytes() for path in ia_references),
                 "archive preserves IA/UX principles, checks and source evidence exactly",

@@ -1,3 +1,12 @@
+## v6.14.13 (2026-10-13)
+
+- Add a conditional unified research-service contract for training, inference, rollout, evaluation, and sandbox capabilities, shared by research-methodology and governed-experimental-evolution.
+- Keep execution and per-call authorization with host adapters; specify atomic budget reservation/settlement, recovery receipts, and truthful capability availability without a new runtime or dependency.
+- Incorporate code-mediated result processing, schema discovery, and large-result artifact references with explicit visibility/coverage and approval-resumption limits.
+- Define optional RSI-Index-style remaining-gap aggregation with frozen domains/weights/basis, regressions, undefined ceiling cases, and distinct UNKNOWN/invalid/NOT_RUN treatment.
+- Retain RSIGym and pinned TrueForge evidence with adoption limits. This release updates methodology/interface guidance; it does not ship backend services, prove enforcement, or claim measured agent or recursive improvement.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.13.
+
 ## v6.14.12 (2026-10-12)
 
 - Add 16 IA/UX principles and 40 evidence-linked review checks as conditional frontend-design references, synthesizing original usability, spatial/distributed cognition and cognitive-offloading sources with explicit reading and inference limits.

@@ -72,9 +72,12 @@ Batch only independent work within the existing authorized concurrency and budge
 For large results, use the host artifact boundary and return, as applicable:
 
 ```yaml
-raw_result_ref: <durable artifact identity>
-raw_result_hash: <digest>
+raw_result_ref: <immutable artifact identity, or unavailable>
+raw_result_hash: <digest with declared algorithm and byte/serialization scope, or unknown>
 storage_status: STORED | FAILED | UNAVAILABLE
+retention: COMPLETE | PARTIAL | UNKNOWN
+original_bytes: <size in the declared encoding/serialization, or unknown>
+stored_bytes: <retained size in the same representation, or unknown>
 schema_ref: <native or explicitly inferred schema identity>
 projection_ref: <script/filter/summary identity>
 visibility: FULL | PROJECTED | TRUNCATED | UNAVAILABLE
@@ -82,9 +85,13 @@ coverage: <seen ranges/records, omitted scope and denominator>
 decision_coverage: COMPLETE_FOR_DECLARED_CLAIM | PARTIAL | UNKNOWN
 ```
 
-Apply per-result and aggregate context budgets according to the host; do not copy another project's token thresholds as universal defaults. Head/tail previews and summaries are navigation aids, not proof that all evidence was inspected. Claim complete coverage only when the retained evidence and procedure establish it for the declared claim. Preserve omitted limitations, unresolved candidates, and source/version links.
+Treat storage status, retained completeness, model visibility, and decision coverage as independent facts. `STORED` means a write succeeded, not that all original bytes survived. Mark a capped artifact `PARTIAL` even if its write succeeded; use `UNKNOWN` when completeness cannot be established. A digest of the retained subset does not authenticate the missing original. Define the source boundary of any `COMPLETE` claim; complete capture of an already-limited tool response does not establish complete upstream retrieval. Report unknown original size explicitly rather than inferring it from stored size.
 
-If storage fails, report that failure and incomplete visibility; do not state that the full result was saved or checked. Retain claim-bearing evidence before a temporary sandbox is retired. Replay uses pinned artifacts and transformations, not live tools, models, or regenerated summaries.
+Keep artifacts within the owning host's authorized session/experiment storage boundary. Bind each retained content part to its call/attempt and stable part identity; different parts or attempts must not overwrite one another. Published references must resolve to the same content after flush/reload and retry. An unavailable artifact store does not authorize a fallback outside that boundary.
+
+Apply per-result and aggregate context budgets according to the host; do not copy another project's token thresholds as universal defaults. Declare the counting unit and its encoding/tokenizer or estimation basis. Count actual context-bearing content across every result and content part, including previews and reference metadata, rather than list length or object count. Account for non-text parts under the host's modality policy; a text-only count is not a total multimodal budget. Enforce storage byte caps on encoded bytes, not character counts, while preserving valid encoding. If required receipt metadata or other irreducible content exceeds the budget, report the overrun/unsatisfied limit explicitly. Head/tail previews and summaries are navigation aids, not proof that all evidence was inspected. Claim complete coverage only when the retained evidence and procedure establish it for the declared claim. Preserve omitted limitations, unresolved candidates, and source/version links.
+
+If storage fails or retention is partial/unknown, report that state and its coverage consequence; do not state that the full result was saved or checked. Retain claim-bearing evidence before a temporary sandbox is retired. Replay uses pinned artifacts and transformations, not live tools, models, or regenerated summaries.
 
 ## Permissions, suspension, and recovery
 

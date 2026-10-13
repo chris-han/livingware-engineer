@@ -1,3 +1,11 @@
+## v6.14.14 (2026-10-13)
+
+- Distinguish successful artifact writes from complete retention, model visibility, and decision coverage; declare original/stored byte counts and digest scope.
+- Require host-owned artifact boundaries, stable content-part/attempt identities, and immutable references across flush/reload and retry.
+- Clarify aggregate context accounting across all content parts, modality costs, metadata overhead, and encoded-byte storage caps; report unsatisfied limits explicitly.
+- Synchronize release manifests, including the legacy Hermes manifest, to 6.14.14.
+- This patch clarifies the existing research-service contract. It does not implement or qualify host runtime behavior, and no new agent behavioral evaluation is claimed.
+
 ## v6.14.13 (2026-10-13)
 
 - Add a conditional unified research-service contract for training, inference, rollout, evaluation, and sandbox capabilities, shared by research-methodology and governed-experimental-evolution.

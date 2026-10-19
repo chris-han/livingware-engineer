@@ -1,3 +1,11 @@
+## v6.14.15 (2026-10-19)
+
+- Specify continuous reading across overview/outcome, judgment/process and concrete evidence in the existing frontend-design P06 reference and IA-before-UI review.
+- Define owner-supplied relationship types, exact version/occurrence bindings, forward/reverse navigation, coordinated focal selection, reading-position return and truthful missing/degraded evidence states.
+- Add conditional C41-C46 review checks covering multiple relationships, repeated passages, stale asynchronous responses, compact-width and keyboard access, while preserving existing state and authority owners.
+- Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.15.
+- Structural/reference checks and version tooling checks passed. This patch updates design guidance; it does not implement product UI, update installed plugin caches, or claim measured agent-behavior or human-usability improvement.
+
 ## v6.14.14 (2026-10-13)
 
 - Distinguish successful artifact writes from complete retention, model visibility, and decision coverage; declare original/stored byte counts and digest scope.

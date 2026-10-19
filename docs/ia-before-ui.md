@@ -23,6 +23,7 @@ Record:
 - canonical semantic owner for every major state/action;
 - **Cognitive-work allocation:** what the user currently must remember, find, compare, calculate, configure, decide, or recover; what the system will do; what judgment remains with the user and why;
 - proposed task flow, region hierarchy, primary/secondary actions, and placement rationale;
+- **Linked-reading contract, when applicable:** use P06 in the existing IA/UX reference to bind overview/outcome, judgment/process and evidence by owner-supplied relation types and exact object/version/occurrence identities; define forward/reverse navigation, coordinated focal selection, return/recovery, missing-link behavior and asynchronous alignment; choose applicable C41–C46 checks without a new ledger or mandatory panel arrangement;
 - ordinary Fast-to-Aha path to the first useful result;
 - loading, empty, partial, stale, forbidden, error, retry/recovery, disabled/submitting and relevant lifecycle states;
 - separation of navigation/selection from mutation, admission, activation, execution, or other authority-changing actions;

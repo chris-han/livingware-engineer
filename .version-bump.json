@@ -36,6 +36,10 @@
     {
       "path": "gemini-extension.json",
       "field": "version"
+    },
+    {
+      "path": ".hermes-plugin/plugin.yaml",
+      "field": "version"
     }
   ],
   "audit": {

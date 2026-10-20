@@ -15,7 +15,7 @@ Livingware Engineer is designed around six principles:
 3. **Dependencies are architecture, not setup trivia.** Any new dependency must be discussed during design, declared and pinned in the plan, installed as a prerequisite, and smoke/contract-tested before feature code depends on it.
 4. **Test scope follows impact radius, not diff size.** Use `codebase-memory-mcp` when available to inspect callers, consumers, dependency edges, persistence, routes, trust boundaries, and user paths. Escalate from local TDD to focused integration, real-component integration, or vertical/E2E only when the observed production radius requires it.
 5. **Mocks cannot prove architecture exists.** Changed in-repo production components that matter to the completion path must appear as their real implementations in at least one integration path. True external systems may be substituted at their explicit boundary.
-6. **User-visible frontend work requires a real browser.** Follow the [browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md); only the browser required by the selected evidence lane can block its gate. Mock-only UI tests are not completion evidence.
+6. **User-visible frontend work requires a real browser.** Follow the [browser selection and lifecycle contract](skills/test-driven-development/remote-cdp-browser-lifecycle.md); only the browser required by the selected evidence lane can block its gate. Mock-only UI tests are not completion evidence. The same contract includes optional bounded QuickE2E exploration and test generation, followed by reviewed, model-free Playwright replay; required behavior and rendering lanes remain unchanged.
 
 The methodology keeps many upstream skill IDs and internal compatibility surfaces so Superpowers improvements can still be merged selectively.
 
@@ -198,6 +198,10 @@ Restart active Hermes sessions after installation.
 
 Livingware Engineer includes a general `frontend-design` skill for product UI work. It composes the engineering workflow with a pinned upstream Impeccable skill for visual craft and anti-slop review. When a project already has a `DESIGN.md`, that project document remains the design authority: its visual language, information architecture, component conventions, and stated consistency objectives override generic design taste. A design-system replacement happens only when the task explicitly calls for one.
 
+UI design follows one sequence: **JTBD → cognitive-work allocation → IA → project design-system mapping → visual design and implementation → task-path and conformance verification**. The [IA-before-UI contract](docs/ia-before-ui.md) applies across brainstorming, planning, frontend design and reviews. It assigns avoidable remembering, comparison, calculation and recovery to the system while preserving user judgment and authority. For Asimov projects, the [alignment reference](skills/frontend-design/references/asimov-alignment.md) requires inspection of the current workbench template and showcase components; Asimov is not imposed on unrelated projects.
+
+For context, information order, disclosure and recovery, the bundled [IA/UX principles](skills/frontend-design/references/ia-ux-principles.md) and [40 review checks](skills/frontend-design/references/ia-ux-checklist.md) make that contract concrete. Their [source evidence](skills/frontend-design/references/ia-ux-evidence.md) separates Nielsen, Norman, Kirsh, distributed cognition and cognitive offloading from project synthesis and unmeasured benefit hypotheses. Conditional Semantier examples cover workspace orientation, material/basis progression and Inspector/Chat coordination; they neither impose that product on others nor claim its UI has been changed by this release.
+
 ## Research Methodology
 
 Livingware Engineer includes a generic `research-methodology` skill for substantive research work. It treats research as **goal-anchored uncertainty contraction**, not as an accumulation of papers, experiments, or TODOs.
@@ -217,6 +221,8 @@ Design goal
 The skill uses MICE-style decomposition to keep material explanations distinguishable and collectively sufficient for the current decision; preserves falsified and negative branches with scope/provenance; requires every experiment to name the uncertainty it can reduce; and prevents a new thread from silently reopening settled work. It routes literature review, hypothesis generation, experimental design, statistics, and evaluation to specialist skills when available, then returns to the discovery graph for closure.
 
 The discovery graph is **not an authority surface**. Project roadmaps, specifications, experiment contracts, datasets, code, and terminal evidence remain authoritative at their natural owners. The graph is a cumulative epistemic projection that tells each research thread what is known, what remains uncertain, and what evidence would actually change the design decision.
+
+Eligible experiments can use the conditional [unified research-service contract](skills/research-methodology/references/research-services.md) for training, inference, rollouts, evaluation, and sandbox execution through existing host adapters. It covers per-call permissions, shared budget reservation/settlement, code-mediated result reduction, evidence visibility, and optional RSI-Index-style normalized improvement; documenting the interface does not install services or establish runtime enforcement or measured benefit.
 
 ## Evaluation Skills
 

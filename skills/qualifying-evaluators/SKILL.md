@@ -41,7 +41,7 @@ For binary claims, report the confusion matrix and at least TPR/TNR. Raw accurac
 
 For typed frontiers, report per-class behavior and test candidate-order/permutation invariance when ordering could leak semantics. For composition-level evaluators, include paired cases that distinguish genuine semantic/behavioral regression from harmless wording, formatting, or trace-shape variation across harnesses.
 
-For probabilistic outputs, include the calibration/selective-risk measures appropriate to the contract.
+For probabilistic outputs, include the calibration/selective-risk measures appropriate to the contract. When qualifying a typed decision model or diagnosing collapsed predictions, use the shared [decision-model evaluation reference](../evaluating-livingware/references/decision-model-evaluation.md).
 
 ## Qualification gate
 

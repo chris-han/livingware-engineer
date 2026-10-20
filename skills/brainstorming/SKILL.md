@@ -29,6 +29,12 @@ Classify the request before choosing the amount of process. Briefly explain the 
 
 Choose the least process justified by observed scope and risk. Reclassify when new evidence changes those facts; pause for approval only when the Authorization Boundary requires it.
 
+## UI Design Starts With IA
+
+When any path involves UI design or review, apply `docs/ia-before-ui.md` before proposing detailed visual composition or choosing components. Establish or revalidate the JTBD and cognitive-work allocation, then the task flow, semantic owners, state/recovery and responsive hierarchy; only then map the IA to current `DESIGN.md` / `design.md`, templates and shared showcase components. For Asimov projects, read `skills/frontend-design/references/asimov-alignment.md` for source discovery and current workbench mapping.
+
+Carry the review and a task-effort acceptance check in the existing design output: a concise in-chat record is sufficient for bounded work; architectural work carries it into the spec and plan. Clear `GO_FOR_UI` before detailed visual design; resolve `REVISE_IA` from available evidence and authority. The policy's narrow `NOT_APPLICABLE` exception covers IA-preserving corrections, not “small” task-flow changes. This adds no approval turn and does not invoke an implementation skill during architectural brainstorming.
+
 ## Architecture Delta Probe
 
 For architecture-affecting work in an existing project, read and apply `docs/architecture-delta-principle.md` before exploring implementation approaches. The probe is the design workflow's current-state admissibility check, not a separate architecture mode or human approval ceremony.
@@ -246,7 +252,8 @@ After writing the spec document, look at it with fresh eyes:
 3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
 4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
 5. **Architecture Delta check:** Does every architecture-changing proposal trace to a `PARTIAL` or `UNSATISFIED` required property backed by current evidence? Are `UNKNOWN` items investigations rather than changes, is the scope fenced, and would an empty delta have stopped the design?
-6. **Dependency decision check:** Does every meaningful new capability have a resolved build/reuse/adopt decision? If a new package is chosen, are rationale, constraints, version/pinning intent, and required smoke/contract verification clear enough for writing-plans?
+6. **UI design check:** When UI is involved, does the design carry the JTBD, cognitive-work allocation, IA disposition, exact design-source/template/component mapping and a task-effort check? Does it resolve material source drift without claiming unmeasured human benefit?
+7. **Dependency decision check:** Does every meaningful new capability have a resolved build/reuse/adopt decision? If a new package is chosen, are rationale, constraints, version/pinning intent, and required smoke/contract verification clear enough for writing-plans?
 
 Fix any issues inline. No need to re-review — just fix and move on.
 

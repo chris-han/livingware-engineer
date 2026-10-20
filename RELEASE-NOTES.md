@@ -1,3 +1,97 @@
+## v6.14.15 (2026-10-19)
+
+- Specify continuous reading across overview/outcome, judgment/process and concrete evidence in the existing frontend-design P06 reference and IA-before-UI review.
+- Define owner-supplied relationship types, exact version/occurrence bindings, forward/reverse navigation, coordinated focal selection, reading-position return and truthful missing/degraded evidence states.
+- Add conditional C41-C46 review checks covering multiple relationships, repeated passages, stale asynchronous responses, compact-width and keyboard access, while preserving existing state and authority owners.
+- Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.15.
+- Structural/reference checks and version tooling checks passed. This patch updates design guidance; it does not implement product UI, update installed plugin caches, or claim measured agent-behavior or human-usability improvement.
+
+## v6.14.14 (2026-10-13)
+
+- Distinguish successful artifact writes from complete retention, model visibility, and decision coverage; declare original/stored byte counts and digest scope.
+- Require host-owned artifact boundaries, stable content-part/attempt identities, and immutable references across flush/reload and retry.
+- Clarify aggregate context accounting across all content parts, modality costs, metadata overhead, and encoded-byte storage caps; report unsatisfied limits explicitly.
+- Synchronize release manifests, including the legacy Hermes manifest, to 6.14.14.
+- This patch clarifies the existing research-service contract. It does not implement or qualify host runtime behavior, and no new agent behavioral evaluation is claimed.
+
+## v6.14.13 (2026-10-13)
+
+- Add a conditional unified research-service contract for training, inference, rollout, evaluation, and sandbox capabilities, shared by research-methodology and governed-experimental-evolution.
+- Keep execution and per-call authorization with host adapters; specify atomic budget reservation/settlement, recovery receipts, and truthful capability availability without a new runtime or dependency.
+- Incorporate code-mediated result processing, schema discovery, and large-result artifact references with explicit visibility/coverage and approval-resumption limits.
+- Define optional RSI-Index-style remaining-gap aggregation with frozen domains/weights/basis, regressions, undefined ceiling cases, and distinct UNKNOWN/invalid/NOT_RUN treatment.
+- Retain RSIGym and pinned TrueForge evidence with adoption limits. This release updates methodology/interface guidance; it does not ship backend services, prove enforcement, or claim measured agent or recursive improvement.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.13.
+
+## v6.14.12 (2026-10-12)
+
+- Add 16 IA/UX principles and 40 evidence-linked review checks as conditional frontend-design references, synthesizing original usability, spatial/distributed cognition and cognitive-offloading sources with explicit reading and inference limits.
+- Make context observable before scoped actions even when automatically resolved; distinguish task progress, object lifecycle, dependency-based disclosure, cross-panel state, stale responses and recovery.
+- Retain Semantier workspace/header and recruitment examples as conditional product guidance under existing design/runtime authority, preserving Fast-to-Aha and assessment/admission/activation boundaries.
+- Link the existing IA-before-UI, planning and completion contracts to the same evidence, without a new skill, approval gate, learning loop or duplicate checklist ledger.
+- Synchronize declared release manifests and the legacy Hermes manifest. Packaging/structural verification does not establish improved agent behavior, measured human cognitive-load reduction or implemented Semantier UI changes. Norman reading covers the obtained chapter 2 and author materials, not the full book.
+
+## v6.14.11 (2026-10-12)
+
+- Consolidate Asimov alignment and left-navigation guidance into conditional references under the existing frontend-design skill; remove the need for a separately installed asimov-ui-design skill.
+- Follow the project's declared design-guide and stylesheet owners, including renamed/consolidated paths, rather than assuming retired filenames or letting stale examples override current authority.
+- Preserve generic frontend routing, IA-before-UI, existing design systems and runtime ownership; do not impose Asimov on unrelated projects.
+- Verify bundled reference closure and synchronize declared release manifests and the legacy Hermes manifest. This packaging/consolidation fix does not claim measured agent-performance or human-usability improvement.
+
+## v6.14.10 (2026-10-11)
+
+- Add conditional decision-model evaluation guidance to the existing evaluation entry and evaluator qualification skills, covering split/exposure controls, class-specific decisions, ranking, probability calibration, and offline attribution.
+- Keep JEVal as an optional public-development reference with pinned snapshot identity, explicit typed-adapter coverage, grouped panels, CAL-only fitting, and replay boundaries.
+- Require separate real-use evidence and declared utility/error-cost gates before claiming business value; distinguish repair of collapsed predictions from fine-tuning superiority.
+- Preserve native skill discovery and existing evaluation ownership; add no mandatory benchmark, runtime dependency, automatic training, or successor experiment.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.10. This release adopts methodology; it does not claim measured local agent-performance improvement.
+
+## v6.14.9 (2026-10-11)
+
+- Add conditional intervention-placement guidance to research-methodology: distinguish evidence/context, execution scaffolding, residual content quality and exploration diversity before choosing a change target.
+- Require harness-by-weights cross-evaluation when claiming training internalizes a runtime benefit; distinguish diagnostic first signals and changing failure denominators from causal attribution.
+- Retain Fork-and-Flush as an opt-in, finite-budget search candidate with preserved evidence/authority, matched-budget controls and independent winner verification. Do not enable automatic branching, training, or behavioral-learning runs.
+- Retain the two motivating papers with exact supported premises and limits in the owning reference; link existing training qualification to the shared guidance.
+- Synchronize declared release manifests and the legacy Hermes manifest to 6.14.9. This release adopts methodology; it does not claim measured local agent-performance improvement.
+
+## v6.14.8 (2026-10-09)
+
+- Require an explicit three-part research validation contract in `research-methodology`: claim-relevant benchmark/evidence coverage, an auditable evaluation protocol, and a result-driven improvement/decision loop.
+- Carry the contract into experiment admissibility, proposal outputs and closeout, including reference validity, full-denominator accounting, distinct unknown/invalid/failure treatment, attribution, bounded change ownership and comparable re-evaluation.
+- Keep real-use corrections provisional, protect evaluation evidence from repeated tuning, and require a common versioned comparison basis before claiming improvement. Preserve retain/reject/STOP outcomes, proportionate non-empirical methods and existing authority boundaries.
+- Quote the existing activation description so the skill frontmatter parses as valid YAML. Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.8.
+- This release updates methodology and templates; it does not claim measured agent-behavior or ontology-performance improvement.
+
+## v6.14.7 (2026-10-09)
+
+- Strengthen the existing IA-before-UI contract: establish or revalidate JTBD and cognitive-work allocation before visual composition, then map IA to current project design authority, templates and showcase components.
+- Carry the contract through brainstorming, frontend design and implementation plans, including bounded UI work and design reviews, without adding routine human-approval checkpoints.
+- Add conditional Asimov alignment guidance that distinguishes the current Showcase2 shell, original graph/control reference and component showcase; require exact source mapping and resolution of stale-template drift.
+- Require a task-effort acceptance check while keeping automated/browser evidence separate from measured human usability. No measured cognitive-load reduction or generalized agent-behavior improvement is claimed.
+- Synchronize all declared release manifests and the legacy Hermes manifest to 6.14.7.
+
+## v6.14.6 (2026-10-09)
+
+- Add optional bounded QuickE2E exploration and Playwright test authoring to the existing browser lifecycle contract. Keep direct Playwright/CDP execution and required Lightpanda behavior/Chrome rendering evidence.
+- Require qualified project adapters, finite enforced budgets, real authentication and internal wiring, independent outcome/identity assertions, and fresh-context replay without model access. Route unsupported or exhausted exploration to deterministic authoring.
+- Keep QuickE2E external and optional; add no plugin runtime dependency. This release defines workflow guidance and does not claim product qualification, measured speed/cost gains, or improved agent behavior.
+- Align all declared release manifests and the legacy Hermes manifest to 6.14.6, repairing pre-existing version drift without changing version-bump tool prerequisites.
+
+## v6.14.4 (2026-10-03)
+
+- Add model-training intervention qualification under `research-methodology`, separating observed model deficits from training necessity, admissibility, efficacy, admission and activation.
+- Add the Residual Experimental Frontier (REF): freeze structural contracts, derive mechanically determined variables, and search only causally unresolved choices that can change the named research decision.
+- Add stage-attributed training, held-out report-card guidance, qualified-learning-information accounting, and constrained automated/reward-driven optimization while preserving regression, retention and authority gates.
+- Keep project-specific decision semantics, evidence contracts, verifier rules and learning-unit economics downstream; Livingware owns the generic qualification workflow, not domain authority.
+- Synchronize all declared package/plugin version surfaces to 6.14.4. This release adds methodology/contracts; it does not claim measured model-training performance improvement.
+
+## v6.14.3 (2026-10-03)
+
+- Add catalyst-aware literature intake under `research-methodology`: topical relevance is separated from decision-relevant research value.
+- Add `ResearchCatalystAssessment` with `CATALYST | EVIDENCE | CONTEXT | SKIP` dispositions and progressive reading-depth allocation.
+- Add a ScholarCatalyst benchmark adapter that separates candidate formation from catalyst qualification and treats the upstream benchmark as evidence rather than Livingware authority.
+- Synchronize all declared package/plugin version surfaces to 6.14.3.
+
 ## v6.14.2 (2026-10-03)
 
 - Make approved plan execution include local integration into the user/repository target, merged-result verification, evidence retention and owned worktree/branch retirement before whole-plan completion.

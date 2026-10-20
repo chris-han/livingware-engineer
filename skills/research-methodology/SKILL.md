@@ -1,6 +1,6 @@
 ---
 name: research-methodology
-description: Use when doing substantive research: reviewing evidence, comparing literature or systems, forming/refining hypotheses, designing or running experiments, interpreting results, or deciding what research should happen next. Keeps research anchored to a design goal and contracts uncertainty through a shared Discovery Kanban / Uncertainty Convergence Graph.
+description: "Use when doing substantive research: reviewing evidence, comparing literature or systems, forming/refining hypotheses, designing or running experiments, interpreting results, or deciding what research should happen next. Keeps research anchored to a design goal and contracts uncertainty through a shared Discovery Kanban / Uncertainty Convergence Graph."
 ---
 
 # Research Methodology
@@ -21,6 +21,35 @@ Every substantial research action MUST answer four questions before work begins:
 4. **Convergence effect** — how will each possible outcome contract the uncertainty frontier, route to exactly one next question, or stop?
 
 If an experiment cannot change the state of a named uncertainty, do not run it.
+
+## Three-part research validation contract
+
+Every research proposal MUST state **what evidence covers, how its conclusions can be checked, and how each result changes the next decision**. Make these three parts explicit in the existing owning plan or memo; reuse qualified evidence and protocols by reference instead of creating another document or benchmark.
+
+For empirical research and system-improvement proposals, all three parts are required before decisive evaluation. For literature, theoretical, or exploratory work, specify the proportionate evidence basis, review/proof/probe method, and decision loop; explain any inapplicable benchmark or statistical element. Exploration may form hypotheses, but evidence used to form a claim is not independent confirmation of it.
+
+### 1. Benchmark / evidence coverage
+
+- Map each claim or capability to representative tasks, cases, or evidence, the target population, and explicit uncovered scope. Use an existing benchmark, native case corpus, deterministic tests, literature, or proof obligations as the claim requires; do not force a public leaderboard or a new benchmark.
+- Include relevant positive, negative, boundary, and failure cases. For usage-derived cases, state sampling, frequency/severity, and selection bias; a collection of reported failures alone does not establish production-wide performance.
+- Separate development/diagnostic cases from protected evaluation evidence. Identify frozen dataset/case versions, splits, leakage risks, and any freshness or distribution limits before interpreting aggregate scores.
+
+### 2. Auditable evaluation protocol
+
+- Establish that the reference, evaluator, and metrics actually test the claim and are independent enough for the inference. Reproducible scoring alone does not establish validity; inspect disagreements and reference gaps before attributing a model or system deficit.
+- Freeze the comparison basis before inspecting decisive/protected outcomes: baseline and intervention, material variables and controls, population and full denominator, scoring/aggregation, uncertainty treatment, resource budget, and success/failure/inconclusive/stop rules. Declare any adaptive or sequential decision rule in advance.
+- Distinguish semantic `UNKNOWN`/abstention, missing or disputed reference, invalid apparatus/run, and actor failure. Preserve their counts and treatment; do not silently drop them or turn them all into zero. Count genuine task failures under the declared valid scoring rule.
+- Preserve the identities, raw outputs, reduction procedure, exclusions, deviations, and provenance required by **Evidence discipline** so another reviewer can reconstruct the conclusion and its limits. State material reproduction limits explicitly.
+
+### 3. Result-driven improvement / decision loop
+
+- Before execution, map possible results to retained/eliminated hypotheses and zero or one next decision. At closeout, connect the actual evidence to attribution, the smallest justified change target and its owner, and a comparable re-evaluation or an evidence-supported retain/reject/STOP disposition.
+- Attribute before adapting: distinguish data/reference, evaluator, implementation, representation/ontology, model, routing/workflow, and policy causes. Real-use corrections are candidate evidence, not automatic ground truth or authority to change the ontology. Preserve unresolved attribution when evidence cannot distinguish causes.
+- If a change is justified, specify the bounded candidate/version, regression coverage, comparison basis, and retain/revert/stop rule. Keep failure-driven diagnostic cases useful for regression while reserving fresh independent or properly protected evidence for broader improvement claims. Do not repeatedly tune against a supposedly held-out set.
+- If a benchmark, ontology, label, scorer, or acceptance-contract change alters the measurement basis, version that basis and re-evaluate both baseline and candidate under it where valid. Otherwise report non-comparability; a score increase across different bases is not evidence of improvement.
+- Record a proposed or completed change and its re-evaluation status separately. Claim improvement only when comparable evidence supports the stated quality/cost/scope claim; an updated memo, completed experiment, or proposed repair is insufficient. Negative or inconclusive evidence may complete the decision loop without a change or another run.
+
+This contract specifies research completeness, not an autonomous optimization mandate. Preserve the one-next-question-or-stop rule, existing ownership, and the separation of evaluation, implementation, admission, and activation authority.
 
 ## Research Discovery Kanban
 
@@ -134,6 +163,26 @@ Every newly proposed candidate must state:
 
 Novelty, popularity, leaderboard position, availability, or a new paper/repository is not by itself a valid research delta.
 
+### Literature intake qualification
+
+When an external paper is being considered for a maintained research program, do not equate topical relevance with research value. First qualify whether the paper can create a defensible change in the current research state: challenge or support an active hypothesis, introduce a materially new mechanism, change an experiment or gate, supply missing evidence, or alter the next research action. Use `references/literature-qualification.md` for the bounded `ResearchCatalystAssessment` contract and depth-of-reading policy. Use `references/scholar-catalyst-benchmark.md` only when evaluating or benchmarking this qualification behavior against ScholarCatalyst-style positive versus topical-hard-negative cases.
+
+**Durable external-evidence retention is mandatory when literature changes project research state.** When external literature materially supports or changes a project hypothesis, taxonomy, roadmap claim, design/architecture rationale, or adopted principle, retain that evidence in the owning research memo/guide in the same research change. Record a stable bibliographic citation (at minimum author/title/year plus DOI or another durable source identifier when available), the exact premise the source supports, and explicit limits/non-claims. The owning roadmap, ADR, or equivalent decision record MUST link to that evidence owner; evidence must not exist only in chat, transient search results, or model memory. Keep `external evidence != project synthesis != validated hypothesis != adopted design/architecture law != authority transition`. Decision records should reference the evidence owner and state only the implications actually adopted rather than duplicating a literature review.
+
+### Model-training intervention qualification
+
+When parameter learning is being considered, do not infer `training required` from an observed model error or benchmark gap. First separate reference/evaluator validity, deterministic computability, representation/context sufficiency, readout/interface/numerical integrity, existing-system sufficiency, calibration, residual attribution, and training admissibility. Use `references/model-training-qualification.md` to choose the smallest non-training repair, bounded training candidate, learning-system candidate, or evidence-supported STOP, and to contract any eligible training design to a Residual Experimental Frontier before automated search.
+
+### Harness, weight, and search intervention placement
+
+When agent improvement could change evidence/context, execution scaffolding, weights, or exploration diversity, use `references/intervention-placement-and-search.md`. Diagnose evidence sufficiency, execution integrity, and residual content quality before choosing a lever; first failure signals and aggregate plateaus are not causal attribution. Use harness-by-weights cross-evaluation when claiming transfer into parameters. Keep fresh-context branching optional and budgeted within one owned experiment; do not enable automatic fan-out or a default Fork-and-Flush schedule without local evidence and existing authorization.
+
+## Unified experiment execution
+
+When an eligible action invokes training, inference, rollouts, evaluation, or sandbox execution, use `references/research-services.md` for a provider-independent service contract, scoped permissions, shared budget accounting, code-mediated result reduction, evidence visibility, and optional RSI-Index reporting. Reuse host adapters and existing experiment records; load only the capabilities and schemas required by the current action.
+
+The skill selects and interprets the experiment; the host execution boundary enforces each call. A documented interface does not prove service availability, budget enforcement, complete evidence inspection, or resumable approval. Improved scores remain evidence, not admission or activation authority.
+
 ## Start-of-thread protocol
 
 Before opening a new research thread or experiment:
@@ -201,6 +250,7 @@ A new conversation, a recently written plan, or an already-loaded skill does not
 A research experiment is eligible only when all are true:
 
 - it addresses a named live uncertainty;
+- benchmark/evidence coverage, an auditable evaluation protocol, and the result-driven decision loop are explicit under the three-part contract;
 - the expected outcomes are defined before protected results are inspected;
 - the changed variable(s) are explicit;
 - nuisance/confound controls are adequate for the claim;
@@ -264,9 +314,12 @@ Design goal
 Uncertainty addressed
 Evidence produced + provenance
 Result / uncertainty interval
+Coverage achieved / gaps and protocol deviations
 Hypotheses eliminated
 Hypotheses retained
 Bounded conclusion + scope
+Attribution / change target and owner, or retain / reject / STOP
+Comparable re-evaluation evidence / pending status / non-comparability
 Primary follow-up: NONE | exactly one bounded question
 Successor state: NOMINATED_NOT_AUTHORIZED | NO_AUTOMATIC_SUCCESSOR | BLOCKED
 ```
@@ -321,6 +374,7 @@ Do not:
 - repeat a closed experiment under a new name;
 - treat model/provider comparison as diagnosis when data/interface/representation uncertainty is unresolved;
 - treat aggregate accuracy as causal attribution;
+- treat benchmark presence as claim coverage, reproducibility as validity, or a recorded lesson as demonstrated improvement;
 - let protected test evidence leak into hypothesis or threshold formation;
 - convert `UNKNOWN` into failure or zero;
 - create multiple competing research ledgers;
@@ -341,6 +395,9 @@ Evidence gap addressed:
 Candidate non-duplication delta:
 Competing explanations:
 Discriminating action:
+Benchmark / evidence coverage: claims -> cases/population; gaps; development/protected split
+Auditable evaluation protocol: reference; baseline/controls; denominator; scoring/uncertainty; failure handling; frozen decisions; provenance
+Result-driven improvement / decision loop: attribution -> bounded change/owner -> comparable re-evaluation, or retain/reject/STOP
 Possible outcomes -> next state:
 Stop condition:
 Owner:
@@ -354,9 +411,14 @@ Then perform only the research needed to resolve that node.
 Uncertainty:
 Disposition:
 Evidence:
+Coverage achieved / gaps:
+Protocol validity / deviations:
 What is now ruled out:
 What remains possible:
 Design implication:
+Result attribution:
+Change target / owner, or retain / reject / STOP:
+Comparable re-evaluation result / pending status / non-comparability:
 Primary follow-up:
 Authority boundary:
 ```

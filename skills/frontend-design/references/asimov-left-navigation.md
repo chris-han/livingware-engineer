@@ -20,6 +20,8 @@ Use a stable vertical anatomy when the available content supports it:
 
 Keep one dominant active-route signal. Use a stable recessed surface, border/indicator, and readable foreground; do not combine several competing accents. Inactive hover must use a restrained background box without changing indentation, position, dimensions, or type weight. Avoid green-filled navigation rows unless the current project reference explicitly establishes that treatment.
 
+Express hierarchy with indentation and disclosure controls; do not add continuous vertical tree connector lines to product navigation. Keep the utility footer aligned with the main shell footer using the shared shell geometry. Include only actions supported by the current product/task contract: a generic Create button is not part of Asimov's sidebar anatomy. Trace an unexplained action to its component and introduction history before removing it, and preserve supported contextual creation paths.
+
 ## Expanded and collapsed behavior
 
 - Preserve the same destinations and ordering in both modes.
@@ -32,6 +34,8 @@ Keep one dominant active-route signal. Use a stable recessed surface, border/ind
 ## Typography and metadata
 
 - Keep destination labels and actions in the UI font.
+- Use one declared size, weight and line-height for labels at the same navigation level, including Search, Chat, Dashboard and Knowledge. Keep group captions and metadata as separate roles; route activity must not shift label weight or geometry.
+- Use the canonical Phosphor Thin boundary with stable icon size and alignment slots. Choose icons by destination meaning rather than reusing a checklist for unrelated tasks; keep disclosure and utility glyphs in their own consistent slots. Use an icon component instead of a text arrow.
 - Use the mono value role only for counts, versions, status values, IDs, or other data-bearing metadata.
 - Keep badges compact and rectangular; do not use pill-shaped decorative tags.
 - Ensure English and Chinese labels fit without truncating the only meaningful distinction between destinations.
@@ -47,3 +51,5 @@ Keep one dominant active-route signal. Use a stable recessed surface, border/ind
 ## Verification matrix
 
 Verify every destination and nested-route active state; pointer and keyboard activation; focus visibility in both themes; expanded, collapsed, and narrow layouts; accessible names and focus restoration; long English and Chinese labels; counts, empty groups, and overflow; absence of hover/selection layout shift; and sufficient remaining width for the primary stage and any screen-local rails.
+
+Compare computed font properties and icon bounds across same-level rows, check that expanded branches contain no continuous connector, and measure footer top/bottom alignment with the main status surface within one CSS pixel. Confirm supported create actions remain reachable in their owning task after removing an unsupported footer action.

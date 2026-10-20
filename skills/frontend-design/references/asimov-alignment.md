@@ -21,6 +21,8 @@ Classify the request before changing composition: refinement preserves the incum
 
 Use the smallest supported composition for the job. Preserve stable geometry across hover, focus and selection; express selection with the project's surface, border, indicator or icon treatment. Use existing tokens and shared wrappers for spacing, typography, icons and control states. Keep natural-language chrome in the UI font and data-bearing values in the designated value role. Do not introduce route-local skins, copied private showcase selectors, decorative shadows/glow/gradients, oversized rounding, layout-shifting hover or `!important`.
 
+Protect the declared palette across theme families and aliases. Semantier's authenticated Asimov light scheme uses neutral white/gray surfaces and neutral structural borders; cream, beige, tan, brown or olive chrome is a regression, not a warmer interpretation of Asimov. Keep semantic accents bounded to their declared roles. Trace the full token chain from theme definitions through compatibility aliases to shell, cards, controls and canvas; correct the owning definitions and contradictory guidance instead of layering a local color override. Generic Impeccable recommendations about tinted grays do not override this contract.
+
 ## Regional guidance
 
 For nested canvas/workbench headers or breadcrumb changes, read [asimov-canvas-header.md](asimov-canvas-header.md). Inspect the project’s current global brand and route/context owners before changing local orientation.
@@ -43,6 +45,8 @@ The current Showcase2 analytical template uses `context-main`: a structural left
 
 Keep the center usable when the drawer opens/closes, preserve selection and canvas/view context, and use the template's responsive and scroll ownership. Verify footer/status visibility and reachable controls at compact width and short height. Do not hide a missing space/layout decision by shrinking the whole interface or forcing users to pan through unused canvas.
 
+For shell refinements, align adjacent navigation and main status footers through the canonical shared height/row owner; verify both their top and bottom edges, not just nominal CSS heights. Keep header, content and footer tracks bounded so welcome content cannot be clipped by vertical centering or an incomplete flex chain. Full Chat puts conversation/composer in the center and keeps the existing global drawer Inspector-only; preserve the current non-Chat Inspector/Chat modes and the declared card boundaries. Do not transplant a graph canvas's decorative controls or palette into Chat.
+
 ## Reuse showcase components
 
 Map controls to existing wrappers and demonstrated variants rather than approximating their appearance. Inspect the relevant current contracts for selectors, inputs, secret fields, number steppers, sliders, segmented toggles, panels, property rows, and empty/state surfaces. Reuse canonical tokens for spacing, geometry, typography and interaction state.
@@ -52,5 +56,7 @@ Do not copy showcase-private selectors, create a route-local palette, hardcode a
 ## Verify the mapping
 
 Use the selected browser evidence lanes to check the actual task path, keyboard/focus return, state/recovery, desktop and narrow/short layouts, and drawer behavior against the chosen reference. Batch desktop and narrow visual inspection, fix the resulting defects together, and use at most one confirmation pass for visual polish; necessary correctness repairs still follow the affected verification contract. Inspect the affected bilingual, long-content, theme and reduced-motion states where relevant. Keep current behavior and rendering requirements; optional QuickE2E exploration does not replace deterministic replay or rendering evidence.
+
+For a shared theme or shell correction, compare resolved surface/border tokens and footer bounding rectangles on Chat and a representative analytical workbench in light and dark schemes. Include expanded/collapsed navigation and compact height. Add the smallest appropriate regression check at the token/component/browser owner; documentation alone cannot prevent a CSS regression.
 
 Report separately: design-source conformance, automated task-path evidence, and any human usability measurement. A matching screenshot proves neither task success nor reduced human cognitive workload.

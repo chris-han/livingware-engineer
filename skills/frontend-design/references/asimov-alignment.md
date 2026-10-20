@@ -37,7 +37,8 @@ First complete JTBD, cognitive-work allocation, task flow, ownership and recover
 | --- | --- |
 | Global product identity / local location / active context | Global navigation, route-owned orientation header and existing context selectors, respectively |
 | Structural navigation / inventory | Canonical left context panel; distinguish it from global product navigation |
-| Primary task and result | Flexible center stage with task-local controls |
+| Primary task and result | Largest uninterrupted center stage, using the project's approved stage surface |
+| Task input and representation controls | Attached full-width lower command band, distinct from the status footer |
 | Selected-object evidence / assistance | Current Inspector and Chat owner |
 | Progress and system state | Canonical status/footer surface, distinct from navigation |
 
@@ -45,7 +46,9 @@ The current Showcase2 analytical template uses `context-main`: a structural left
 
 Keep the center usable when the drawer opens/closes, preserve selection and canvas/view context, and use the template's responsive and scroll ownership. Verify footer/status visibility and reachable controls at compact width and short height. Do not hide a missing space/layout decision by shrinking the whole interface or forcing users to pan through unused canvas.
 
-For shell refinements, align adjacent navigation and main status footers through the canonical shared height/row owner; verify both their top and bottom edges, not just nominal CSS heights. Keep header, content and footer tracks bounded so welcome content cannot be clipped by vertical centering or an incomplete flex chain. Full Chat puts conversation/composer in the center and keeps the existing global drawer Inspector-only; preserve the current non-Chat Inspector/Chat modes and the declared card boundaries. Do not transplant a graph canvas's decorative controls or palette into Chat.
+For shell refinements, map each region's role before matching dimensions. Reuse the actual shared header and shell owners, including their utility actions, rather than drawing a parallel header with matching height. In Semantier these owners are `CanonicalAsimovWorkbenchShell` and `AsimovWorkbenchHeader`; follow current exports if renamed. The primary work stage and attached lower command band form one task surface. Full Chat maps conversation to the stage and prompt/composer input to the full-width lower command band; a detached composer card floating in a uniformly filled center does not preserve that hierarchy. Use the project's approved stage and command-surface tokens in each theme, not universal black or copied graph decoration. The separate-card contract for Chat inside the global assistance drawer does not turn full Chat's primary task surface into detached cards.
+
+Align adjacent navigation and main status footers through the canonical shared height/row owner; verify both their top and bottom edges, not just nominal CSS heights. Keep header, content and footer tracks bounded so welcome content cannot be clipped by vertical centering or an incomplete flex chain. Full Chat keeps the existing global drawer Inspector-only; preserve non-Chat Inspector/Chat modes and their declared independent card boundaries.
 
 ## Reuse showcase components
 
@@ -57,6 +60,6 @@ Do not copy showcase-private selectors, create a route-local palette, hardcode a
 
 Use the selected browser evidence lanes to check the actual task path, keyboard/focus return, state/recovery, desktop and narrow/short layouts, and drawer behavior against the chosen reference. Batch desktop and narrow visual inspection, fix the resulting defects together, and use at most one confirmation pass for visual polish; necessary correctness repairs still follow the affected verification contract. Inspect the affected bilingual, long-content, theme and reduced-motion states where relevant. Keep current behavior and rendering requirements; optional QuickE2E exploration does not replace deterministic replay or rendering evidence.
 
-For a shared theme or shell correction, compare resolved surface/border tokens and footer bounding rectangles on Chat and a representative analytical workbench in light and dark schemes. Include expanded/collapsed navigation and compact height. Add the smallest appropriate regression check at the token/component/browser owner; documentation alone cannot prevent a CSS regression.
+For a shared theme or shell correction, compare regional role mapping, actual shared component ownership, resolved surface/border tokens and footer bounding rectangles on Chat and a representative analytical workbench in light and dark schemes. Verify conversation occupies the primary stage, input occupies its attached command band, and canonical header utility actions remain available; equal heights alone do not prove shell alignment. Include expanded/collapsed navigation and compact height. Add the smallest appropriate regression check at the token/component/browser owner; documentation alone cannot prevent a CSS regression.
 
 Report separately: design-source conformance, automated task-path evidence, and any human usability measurement. A matching screenshot proves neither task success nor reduced human cognitive workload.

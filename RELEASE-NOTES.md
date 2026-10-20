@@ -1,3 +1,9 @@
+## v6.14.19 (2026-10-20)
+
+- Reconcile Asimov guidance by declared authority and scope: retire superseded rules while preserving documented public, authenticated, theme, container and native boundaries.
+- Keep design intent and semantic color ownership above generated token references; require correction at shared token, primitive, showcase and dependent-guidance owners without copied value tables.
+- Synchronize all declared release manifests. Reference-package and version-consistency checks cover packaging and source alignment; they do not establish measured agent behavior or human usability, and installed caches require a separate update.
+
 ## v6.14.16 (2026-10-20)
 
 - Add conditional Asimov canvas-orientation guidance: global identity, route-owned breadcrumbs/current heading, distinct scope and lifecycle, navigation without mutation, and accessible responsive allocation.

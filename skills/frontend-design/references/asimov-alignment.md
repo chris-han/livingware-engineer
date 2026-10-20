@@ -15,6 +15,12 @@ Locate and read the applicable document and actual implementations before choosi
 
 These are discovery anchors, not assumed files in every repository. Follow renamed/project-local owners. Apply the current written laws within their UI scope and inspect physical implementations for conformance; a stale showcase or stylesheet does not override declared authority. Keep permissions, domain states and runtime meaning with their existing semantic owners.
 
+## Reconcile conflicting guidance
+
+Before changing values, distinguish superseded rules from explicitly scoped exceptions and derived implementation values. Resolve conflicts within the same scope against the project's declared authority and current user corrections; preserve documented public/authenticated, theme, container and native boundaries. Different responsive thresholds or geometry in valid separate scopes are not automatically contradictions. Retire superseded normative text and examples at their owners, including dependent references and skills, rather than adding another competing rule.
+
+The design law owns visual and IA intent, permitted treatments and semantic color roles. A generated token reference may derive literal values from the physical stylesheet owner, but must not promote a stylesheet regression into design policy. Inspect shared tokens, primitives and showcases for conformance before regenerating references. Keep agency/interaction, intelligence/identity and status families distinct as the project declares them; use contrast-safe focus and foreground roles rather than assuming a bright base swatch is readable everywhere. Do not copy a second palette, geometry table or breakpoint system into this skill.
+
 ## Preserve the incumbent design
 
 Classify the request before changing composition: refinement preserves the incumbent structure unless a demonstrated defect requires a change; redesign can replace composition within the requested region while preserving product truth, behavior, destinations and accessibility. Asimov applies to authenticated product surfaces unless the user explicitly expands scope to marketing.

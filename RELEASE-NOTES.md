@@ -1,8 +1,8 @@
-## v6.14.16 (2026-10-20, source only; unpublished)
+## v6.14.16 (2026-10-20)
 
 - Add conditional Asimov canvas-orientation guidance: global identity, route-owned breadcrumbs/current heading, distinct scope and lifecycle, navigation without mutation, and accessible responsive allocation.
 - Keep project design authority and existing shared primitives authoritative; no Asimov requirement for unrelated projects.
-- Extend reference-closure packaging coverage. Source checks do not establish generalized agent behavior or human usability improvement. No publication or installed-cache update is part of this change.
+- Extend reference-closure packaging coverage. Source checks do not establish generalized agent behavior or human usability improvement. Installed plugin caches are not updated automatically by this release.
 
 ## v6.14.15 (2026-10-19)
 

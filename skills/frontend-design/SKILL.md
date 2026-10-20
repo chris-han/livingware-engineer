@@ -33,7 +33,7 @@ When a project has an established `DESIGN.md` (or `design.md`), **DESIGN.md wins
 
 Do not replace an existing design system merely because Impeccable would choose a different font, radius, palette, density, layout family, or interaction style. A redesign or replacement visual world requires an explicit request to change the design system itself.
 
-For Asimov projects, read [references/asimov-alignment.md](references/asimov-alignment.md) and inspect the current workbench template, composition showcase, and component showcase. This reference and its regional playbooks are bundled here; a separate `asimov-ui-design` skill is not required. Follow the project's declared source responsibilities; resolve material drift rather than copying stale examples. Do not impose Asimov on unrelated projects.
+For Asimov projects, read [references/asimov-alignment.md](references/asimov-alignment.md) and inspect the current workbench template, composition showcase, and component showcase. For canvas-header or breadcrumb work, follow its conditional canvas-orientation playbook. This reference and its regional playbooks are bundled here; a separate `asimov-ui-design` skill is not required. Follow the project's declared source responsibilities; resolve material drift rather than copying stale examples. Do not impose Asimov on unrelated projects.
 
 If no design system exists, use Impeccable's normal brief-inference and new-work process to establish a coherent direction from the product requirements and references.
 

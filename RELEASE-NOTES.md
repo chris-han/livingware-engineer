@@ -1,3 +1,9 @@
+## v6.14.16 (2026-10-20, source only; unpublished)
+
+- Add conditional Asimov canvas-orientation guidance: global identity, route-owned breadcrumbs/current heading, distinct scope and lifecycle, navigation without mutation, and accessible responsive allocation.
+- Keep project design authority and existing shared primitives authoritative; no Asimov requirement for unrelated projects.
+- Extend reference-closure packaging coverage. Source checks do not establish generalized agent behavior or human usability improvement. No publication or installed-cache update is part of this change.
+
 ## v6.14.15 (2026-10-19)
 
 - Specify continuous reading across overview/outcome, judgment/process and concrete evidence in the existing frontend-design P06 reference and IA-before-UI review.

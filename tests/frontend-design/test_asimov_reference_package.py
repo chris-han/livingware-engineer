@@ -32,7 +32,7 @@ class AsimovReferencePackageTests(unittest.TestCase):
     def test_frontend_entry_reaches_alignment_and_regional_guidance(self):
         reachable = reference_closure(PACKAGE)
         for filename in (
-            "asimov-alignment.md", "asimov-left-navigation.md",
+            "asimov-alignment.md", "asimov-left-navigation.md", "asimov-canvas-header.md",
             "ia-ux-principles.md", "ia-ux-checklist.md", "ia-ux-evidence.md",
         ):
             self.assertIn((PACKAGE / "references" / filename).resolve(), reachable)

@@ -23,6 +23,8 @@ Use the smallest supported composition for the job. Preserve stable geometry acr
 
 ## Regional guidance
 
+For nested canvas/workbench headers or breadcrumb changes, read [asimov-canvas-header.md](asimov-canvas-header.md). Inspect the project’s current global brand and route/context owners before changing local orientation.
+
 For a persistent or collapsible global left navigation sidebar, read [asimov-left-navigation.md](asimov-left-navigation.md). Keep regional guidance conditional; ordinary workbench changes do not require loading every playbook. Add a regional reference only when a demonstrated pattern is reusable, rather than documenting a one-off workaround as a system rule.
 
 ## Map IA to composition
@@ -31,7 +33,7 @@ First complete JTBD, cognitive-work allocation, task flow, ownership and recover
 
 | Information role | Mapping to verify |
 | --- | --- |
-| Identity and active context | Orientation header and existing context selectors |
+| Global product identity / local location / active context | Global navigation, route-owned orientation header and existing context selectors, respectively |
 | Structural navigation / inventory | Canonical left context panel; distinguish it from global product navigation |
 | Primary task and result | Flexible center stage with task-local controls |
 | Selected-object evidence / assistance | Current Inspector and Chat owner |

@@ -306,4 +306,6 @@ If required Product Value Validation is missing or has unresolved material value
 
 Before handing off execution, ensure the existing plan or its authoritative references preserve the current effective user requirements, confirmed requirement changes, key constraints, decision rationale that affects implementation tradeoffs, and acceptance criteria. Distinguish confirmed decisions from unverified assumptions; never treat an agent's inference as a user-approved requirement. Reuse precise file and section references and fill only missing information, rather than copying full conversations or creating a parallel decision ledger.
 
+When proposing concurrent implementation agents or multiple competing implementations, apply [Parallel implementation and candidate authorization](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization). Keep the disclosed cost basis, counts, comparison criteria, budget/stopping limits, and approval reference in this plan or its existing authority source; the plan cannot authorize its own parallel strategy. Default to the single-path approach until the required approval exists.
+
 After saving the plan, continue with the execution approach already authorized by the user. Autonomous gates advance automatically; involve the user only when the User Intervention Necessity Test is met.

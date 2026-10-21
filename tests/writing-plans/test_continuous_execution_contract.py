@@ -40,8 +40,50 @@ def test_plan_completion_requires_retirement_evidence():
  assert "`MERGED` alone is not plan completion" in worktree
 
 
+def test_parallel_candidate_authorization_source_contract():
+ # Source-contract checks only: these do not establish runtime enforcement.
+ source = t("skills/executing-plans/SKILL.md")
+ policy = source.split("## Parallel implementation and candidate authorization\n", 1)[1].split("\n## ", 1)[0]
+ for invariant in (
+  "Default to one implementation path",
+  "explicit prior user approval for that run",
+  "single-path baseline",
+  "model calls/tokens and estimated fees",
+  "human review and integration effort",
+  "budget ceiling and stopping conditions",
+  "unknown cost is not zero cost",
+  "silence",
+  "agent-authored plan",
+  "renewed explicit user approval",
+  "an autonomous implementation ruling cannot enlarge authorization",
+  "sequential delegation along one implementation path",
+  "ordinary repair of that implementation",
+  "existing risk-based review process",
+  "nested delegation does not bypass this rule",
+ ):
+  assert invariant in policy, invariant
+
+
+def test_parallel_authorization_entrypoints_share_owner():
+ reference = "../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization"
+ for skill in ("writing-plans", "dispatching-parallel-agents", "subagent-driven-development"):
+  path = R / "skills" / skill / "SKILL.md"
+  assert reference in path.read_text(), skill
+  assert (path.parent / reference.split("#", 1)[0]).resolve().is_file(), skill
+ parallel = t("skills/dispatching-parallel-agents/SKILL.md")
+ assert '"Dispatch authorized?" -> "Parallel dispatch" [label="yes"]' in parallel
+ assert '"Dispatch authorized?" -> "Sequential agents" [label="no"]' in parallel
+ assert '"Can they work in parallel?" -> "Parallel dispatch"' not in parallel
+ assert "must not silently expand into parallel fixes" in parallel
+ subagents = t("skills/subagent-driven-development/SKILL.md")
+ assert "a cap you would have asked to exceed" not in subagents
+ assert "A ruling cannot expand parallel/candidate authorization or its cost limits." in subagents
+
+
 if __name__ == '__main__':
     test_contract()
     test_plan_integration_authority_contract()
     test_plan_completion_requires_retirement_evidence()
-    print('Continuous execution and plan integration contract: PASS')
+    test_parallel_candidate_authorization_source_contract()
+    test_parallel_authorization_entrypoints_share_owner()
+    print('Continuous execution, parallel authorization and plan integration contract: PASS')

@@ -9,9 +9,11 @@ description: Use when facing 2+ independent tasks that can be worked on without 
 
 You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
 
-When you have multiple unrelated failures (different test files, different subsystems, different bugs), investigating them sequentially wastes time. Each investigation is independent and can happen in parallel.
+When you have multiple unrelated failures (different test files, different subsystems, different bugs), independent investigation may benefit from concurrency, but coordination, duplicated context, testing, and integration can outweigh the time saved.
 
-**Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
+**Core principle:** Independent ownership makes parallelism possible, not authorized or automatically cost-effective. Dispatch concurrently only within the applicable authorization and cost limits.
+
+Before parallel implementation or competing candidate generation, apply [Parallel implementation and candidate authorization](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization). This includes independent implementation tasks, not only alternative versions of one task. Read-only investigation follows existing user/repository authorization; it must not silently expand into parallel fixes. The examples below describe dispatch mechanics after the applicable authorization check, not permission to skip it.
 
 ## When to Use
 
@@ -22,14 +24,17 @@ digraph when_to_use {
     "Single agent investigates all" [shape=box];
     "One agent per problem domain" [shape=box];
     "Can they work in parallel?" [shape=diamond];
+    "Dispatch authorized?" [shape=diamond];
     "Sequential agents" [shape=box];
     "Parallel dispatch" [shape=box];
 
     "Multiple failures?" -> "Are they independent?" [label="yes"];
     "Are they independent?" -> "Single agent investigates all" [label="no - related"];
     "Are they independent?" -> "Can they work in parallel?" [label="yes"];
-    "Can they work in parallel?" -> "Parallel dispatch" [label="yes"];
+    "Can they work in parallel?" -> "Dispatch authorized?" [label="yes"];
     "Can they work in parallel?" -> "Sequential agents" [label="no - shared state"];
+    "Dispatch authorized?" -> "Parallel dispatch" [label="yes"];
+    "Dispatch authorized?" -> "Sequential agents" [label="no"];
 }
 ```
 
@@ -43,6 +48,7 @@ digraph when_to_use {
 - Failures are related (fix one might fix others)
 - Need to understand full system state
 - Agents would interfere with each other
+- Required approval or bounded cost basis is missing
 
 ## The Pattern
 
@@ -65,7 +71,7 @@ Each agent gets:
 
 ### 3. Dispatch in Parallel
 
-Issue all three subagent dispatches in the same response — they run in parallel:
+Only after the applicable authorization check is satisfied, issue the approved subagent dispatches in the same response. For an approved three-agent run:
 
 ```text
 Subagent (general-purpose): "Fix agent-tool-abort.test.ts failures"

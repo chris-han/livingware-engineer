@@ -16,6 +16,18 @@ A completed task, sprint exit, review, integration slice, or list of remaining g
 
 If direct implementation on `main`/`master` is not already authorized, use the safe isolation path defined by `using-git-worktrees` when repository and harness policy permit it. Do not ask merely to choose branch ceremony; involve the user only when no safe authorized isolation path exists.
 
+## Parallel implementation and candidate authorization
+
+Default to one implementation path. Before starting multiple implementation agents concurrently or generating multiple competing implementations of the same task, disclose the proposal and obtain explicit prior user approval for that run. Complexity, high risk, independent tasks, available parallel tools, or potential speedup are not authorization. Discussing design alternatives is allowed; do not start their implementation before approval. Generating candidates sequentially, in separate worktrees, or through nested delegation does not bypass this rule.
+
+The proposal must explain the concrete uncertainty or bottleneck, why a single implementation or sequential validation is insufficient, the intended agent and candidate counts and scope, common acceptance criteria, and how results will be compared, selected, and integrated. Assess total incremental cost against the single-path baseline: model calls/tokens and estimated fees, compute/runtime resources, duplicated testing, coordination, and human review and integration effort. State a budget ceiling and stopping conditions before launch. When costs cannot be reliably estimated, disclose the uncertainty and propose enforceable call/token/runtime/resource caps; unknown cost is not zero cost. Do not launch without a bounded cost basis the user has accepted.
+
+Approval of the development goal, an agent-authored plan, generic autonomy, silence, or approval of an unrelated run does not authorize this strategy. Explicit user approval of a plan that discloses this run and its limits counts; do not ask twice for the same authorized scope. Keep the approval and limits in the existing plan or tracker, or reference the existing user instruction; do not create a parallel authorization ledger.
+
+Stay within the approved agent/candidate counts, scope, and budget. Before increasing those counts, expanding the scope, or incurring costs expected to exceed the approved ceiling, obtain renewed explicit user approval. Stop launching additional work at the limit or stopping condition; an autonomous implementation ruling cannot enlarge authorization. Without approval, continue with the single-path or sequential approach when feasible; report a blocker only when no authorized path remains. This explicit authorization boundary takes precedence over generic continuous-execution or delegated-autonomy defaults.
+
+This rule does not require extra approval for ordinary tests, sequential delegation along one implementation path, ordinary repair of that implementation, or the existing risk-based review process. It is not a blanket approval checkpoint for all development work.
+
 ## Repository plan-state gate
 
 Before the first implementation edit, inspect and obey the repository's governed-plan lifecycle contract when one exists. Do not invent or normalize plan status from memory. If the repository provides a plan-state validator/linter, run it before execution and again before completion/commit.

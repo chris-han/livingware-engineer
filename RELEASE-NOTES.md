@@ -1,3 +1,9 @@
+## v6.14.22 (2026-10-22)
+
+- Add conditional corner-geometry guidance to frontend-design, covering planar G1/G2/G3 continuity, concentric circular insets, and the limits of nominal radius subtraction for continuous curves.
+- Preserve project design authority and semantic radius roles; apply derived radii only to boundaries intended to form a uniform inset, with shared clipping/stroke/focus geometry and bounded visual verification.
+- Synchronize all ten declared release version fields. Reference-package and version-consistency checks cover source packaging; this guidance update does not establish measured agent behavior or human usability improvement.
+
 ## v6.14.19 (2026-10-20)
 
 - Reconcile Asimov guidance by declared authority and scope: retire superseded rules while preserving documented public, authenticated, theme, container and native boundaries.

@@ -35,6 +35,8 @@ Do not replace an existing design system merely because Impeccable would choose 
 
 Treat current CSS and screenshots as evidence that may contain the reported regression. Resolve them against declared design authority and explicit user corrections before preserving them. Generic advice to tint neutrals, warm a surface, soften contrast, or add brand color never authorizes replacing an established palette. Verify the resolved tokens in every affected theme, including legacy aliases and canvas consumers, rather than fixing only the photographed element.
 
+For rounded-corner transitions, nested rounded surfaces, or corner clipping/stroke alignment, read [corner geometry](references/corner-geometry.md). Apply its geometry within the project's declared radius roles; preserve semantic tokens and derive radii only for boundaries intended to form a uniform inset.
+
 For Asimov projects, read [references/asimov-alignment.md](references/asimov-alignment.md) and inspect the current workbench template, composition showcase, and component showcase. For canvas-header or breadcrumb work, follow its conditional canvas-orientation playbook. This reference and its regional playbooks are bundled here; a separate `asimov-ui-design` skill is not required. Follow the project's declared source responsibilities; resolve material drift rather than copying stale examples. Do not impose Asimov on unrelated projects.
 
 If no design system exists, use Impeccable's normal brief-inference and new-work process to establish a coherent direction from the product requirements and references.

@@ -224,6 +224,10 @@ The discovery graph is **not an authority surface**. Project roadmaps, specifica
 
 Eligible experiments can use the conditional [unified research-service contract](skills/research-methodology/references/research-services.md) for training, inference, rollouts, evaluation, and sandbox execution through existing host adapters. It covers per-call permissions, shared budget reservation/settlement, code-mediated result reduction, evidence visibility, and optional RSI-Index-style normalized improvement; documenting the interface does not install services or establish runtime enforcement or measured benefit.
 
+## Requirements Clarification
+
+Use [requirements-clarification](skills/requirements-clarification/SKILL.md) when stakeholder requests, PRDs, policies, rules or specifications have material gaps, ambiguities, conflicts or unresolved changes. The [shared contract](skills/requirements-clarification/references/requirements-workflow.md) preserves source requirements, separates findings from accepted dispositions, and defines recovery from the existing task/artifact owner for interrupted work. Brainstorming, planning and skill authoring reuse it; domain authority and simple default-pass paths stay intact.
+
 ## Evaluation Skills
 
 Livingware Engineer includes a product- and runtime-specific evaluation skill family for agentic software systems. The architecture is defined in [docs/livingware-evaluation-architecture.md](docs/livingware-evaluation-architecture.md).

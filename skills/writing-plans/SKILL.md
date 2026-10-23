@@ -39,6 +39,12 @@ If the authorized scope is intentionally bounded, state it explicitly—for exam
 
 When the host provides a persistent objective or goal primitive, keep it as the outer objective. The plan supplies its executable completion contract; it must not create a competing goal authority or mark the host objective complete from an intermediate gate.
 
+## Requirement Basis Before Task Decomposition
+
+Consume the effective requirement basis under [the shared requirements workflow contract](../requirements-clarification/references/requirements-workflow.md). Reuse source/version references, accepted dispositions, assumptions, unresolved questions and affected acceptance criteria; do not reopen settled answers or copy the conversation into a new ledger. Resolve a material conflict before scheduling the action that depends on it, while independent safe tasks remain eligible.
+
+When the feature itself supports long-running elicitation/modeling/review, carry its runtime state owner, checkpoint/reload and receipt-recovery requirements into implementation and acceptance. The coding plan's progress is not the product workflow's persistence, and completing a plan task does not grant product admission/activation authority.
+
 ## Architecture Delta Before Architecture Work
 
 For a plan that introduces or changes a subsystem, service, store, contract, interface, ownership boundary, cross-component data flow, runtime responsibility, or structural architecture, apply `docs/architecture-delta-principle.md` before creating implementation tasks. Carry forward the design's current-state evidence and Architecture Delta Review rather than re-inventing the architecture from the spec title.

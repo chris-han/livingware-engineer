@@ -90,6 +90,12 @@ over a fixed long sequence that every task must follow.
 
 Keep compact handoffs between states: current state, intended/preserved behavior, affected surface, valid evidence, unresolved material risk, and next-state entry reason.
 
+## Requirements and Durable Task Design
+
+For any skill that elicits, clarifies, reconciles or changes requirements, use [the shared requirements workflow contract](../requirements-clarification/references/requirements-workflow.md). Keep domain semantics with the domain owner; use `requirements-clarification` for the standalone unresolved-requirement state rather than creating another generic clarification workflow.
+
+For an interruptible or cross-session procedure, identify the existing authoritative task/artifact owner and reload path, exact input/output pins, pending questions/answers, operation receipts and retry/concurrency semantics. Reuse the shared continuity contract instead of prescribing a new store or persisting a second skill-local ledger. Match any resumability claim to actual interruption/reopen evidence through that owner.
+
 ## Tool promotion
 
 Promote behavior into a tool/operator when all are substantially true:

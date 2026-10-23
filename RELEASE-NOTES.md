@@ -1,3 +1,12 @@
+## v6.15.0 (2026-10-23)
+
+- Add a cross-domain `requirements-clarification` entry for material elicitation, ambiguity, conflict and requirement-change work; keep software design, domain interpretation and execution authority at their existing owners.
+- Package one shared requirements workflow covering source preservation, scoped and multi-requirement compatibility, explicit proposed/accepted dispositions, targeted questions and affected-set revalidation.
+- Define conditional task continuity through existing durable owners: exact basis/output pins, saved questions/answers, committed-result adoption, idempotent retry, stale-revision recovery and truthful unknown external outcomes. Do not require a new database, ledger or approval ceremony.
+- Link brainstorming, writing-plans, writing-skills and runtime architecture to the shared owner. Add eight behavioral scenario fixtures for future evaluation.
+- Allow the packager to use a new skill's repo-owned metadata when a prior external metadata bundle has no entry; retain the missing-metadata failure when neither source exists.
+- Synchronize all ten declared release versions. Source/reference and packaging verification do not establish measured agent behavior or product runtime recovery; installed plugin caches require a separate update.
+
 ## v6.14.22 (2026-10-22)
 
 - Add conditional corner-geometry guidance to frontend-design, covering planar G1/G2/G3 continuity, concentric circular insets, and the limits of nominal radius subtraction for continuous curves.

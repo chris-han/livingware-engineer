@@ -84,6 +84,8 @@ def main() -> int:
         paths = zip_paths(out_zip)
         require(".codex-plugin/plugin.json" in paths, "archive includes Codex manifest")
         require("skills/brainstorming/SKILL.md" in paths, "archive includes skills")
+        requirements_contract = "skills/requirements-clarification/references/requirements-workflow.md"
+        require(requirements_contract in paths, "archive includes the shared requirements contract")
         ia_references = [
             f"skills/frontend-design/references/ia-ux-{name}.md"
             for name in ("principles", "checklist", "evidence")
@@ -99,6 +101,7 @@ def main() -> int:
         with zipfile.ZipFile(out_zip) as zf:
             manifest = json.loads(zf.read(".codex-plugin/plugin.json"))
             require(zf.read(policy_path) == (ROOT / policy_path).read_bytes(), "archive preserves the canonical integration policy exactly")
+            require(zf.read(requirements_contract) == (ROOT / requirements_contract).read_bytes(), "archive preserves the shared requirements contract exactly")
             require(
                 zf.read(research_services) == (ROOT / research_services).read_bytes(),
                 "archive preserves research-service guidance and source evidence exactly",
@@ -122,6 +125,23 @@ def main() -> int:
             require({m.mtime for m in tf.getmembers()} == {0}, "tar.gz timestamps are deterministic")
             task = tf.getmember("skills/subagent-driven-development/scripts/task-brief")
             require(task.mode & stat.S_IXUSR != 0, "tar.gz preserves executable script mode")
+
+        # A newly added skill can ship its own metadata before prior external
+        # metadata archives know about it.
+        new_skill_metadata = "skills/requirements-clarification/agents/openai.yaml"
+        (metadata / new_skill_metadata).unlink()
+        from_owned_metadata = tmp / "from-owned-metadata.zip"
+        owned_result = run_package(env, metadata, from_owned_metadata)
+        require(owned_result.returncode == 0, f"package accepts repo-owned metadata for a new skill\n{owned_result.stdout}")
+        with zipfile.ZipFile(from_owned_metadata) as zf:
+            require(zf.read(new_skill_metadata) == (ROOT / new_skill_metadata).read_bytes(), "archive preserves repo-owned metadata when external metadata is absent")
+
+        missing_metadata = metadata / "skills/brainstorming/agents/openai.yaml"
+        saved_metadata = missing_metadata.read_bytes()
+        missing_metadata.unlink()
+        missing_result = run_package(env, metadata, tmp / "missing-metadata.zip")
+        require(missing_result.returncode != 0 and "metadata source is incomplete" in missing_result.stdout, "package rejects skills with neither external nor repo-owned metadata")
+        missing_metadata.write_bytes(saved_metadata)
 
         metadata_zip = tmp / "metadata.zip"
         with zipfile.ZipFile(metadata_zip, "w", compression=zipfile.ZIP_DEFLATED) as zf:

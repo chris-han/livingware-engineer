@@ -59,11 +59,13 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 Use the template at [code-reviewer.md](code-reviewer.md) with:
 - `{DESCRIPTION}` — what changed and why
-- `{PLAN_OR_REQUIREMENTS}` — binding requirement/spec
+- `{PLAN_OR_REQUIREMENTS}` — directly accessible current effective plan/spec sections, including confirmed requirement changes, key constraints, necessary decision rationale, and acceptance criteria
 - `{BASE_SHA}` — start of the coherent review unit
 - `{HEAD_SHA}` — end of the coherent review unit
 
 Do not send the reviewer the session history. Give it the diff plus the requirements and concrete risks that justify the review.
+
+Include this review instruction: check the actual diff and verification evidence against those sources, not just the implementer's completion summary. Preserve original requirements for traceability, but evaluate acceptance against the confirmed effective version. Flag material conflicts, missing requirements, or unconfirmed changes; do not silently treat assumptions as approved requirements.
 
 **3. Act on findings:**
 - required correctness or security defects block completion

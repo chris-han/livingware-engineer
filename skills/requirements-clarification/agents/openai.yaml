@@ -1,0 +1,4 @@
+interface:
+  display_name: "Requirements Clarification"
+  short_description: "Clarify and reconcile source-backed requirements"
+  default_prompt: "Use $requirements-clarification to reconcile these requirements and identify the smallest material clarification."

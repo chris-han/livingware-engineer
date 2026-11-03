@@ -1,3 +1,24 @@
+## v6.15.0 (2026-10-23)
+
+- Add a cross-domain `requirements-clarification` entry for material elicitation, ambiguity, conflict and requirement-change work; keep software design, domain interpretation and execution authority at their existing owners.
+- Package one shared requirements workflow covering source preservation, scoped and multi-requirement compatibility, explicit proposed/accepted dispositions, targeted questions and affected-set revalidation.
+- Define conditional task continuity through existing durable owners: exact basis/output pins, saved questions/answers, committed-result adoption, idempotent retry, stale-revision recovery and truthful unknown external outcomes. Do not require a new database, ledger or approval ceremony.
+- Link brainstorming, writing-plans, writing-skills and runtime architecture to the shared owner. Add eight behavioral scenario fixtures for future evaluation.
+- Allow the packager to use a new skill's repo-owned metadata when a prior external metadata bundle has no entry; retain the missing-metadata failure when neither source exists.
+- Synchronize all ten declared release versions. Source/reference and packaging verification do not establish measured agent behavior or product runtime recovery; installed plugin caches require a separate update.
+
+## v6.14.22 (2026-10-22)
+
+- Add conditional corner-geometry guidance to frontend-design, covering planar G1/G2/G3 continuity, concentric circular insets, and the limits of nominal radius subtraction for continuous curves.
+- Preserve project design authority and semantic radius roles; apply derived radii only to boundaries intended to form a uniform inset, with shared clipping/stroke/focus geometry and bounded visual verification.
+- Synchronize all ten declared release version fields. Reference-package and version-consistency checks cover source packaging; this guidance update does not establish measured agent behavior or human usability improvement.
+
+## v6.14.19 (2026-10-20)
+
+- Reconcile Asimov guidance by declared authority and scope: retire superseded rules while preserving documented public, authenticated, theme, container and native boundaries.
+- Keep design intent and semantic color ownership above generated token references; require correction at shared token, primitive, showcase and dependent-guidance owners without copied value tables.
+- Synchronize all declared release manifests. Reference-package and version-consistency checks cover packaging and source alignment; they do not establish measured agent behavior or human usability, and installed caches require a separate update.
+
 ## v6.14.16 (2026-10-20)
 
 - Add conditional Asimov canvas-orientation guidance: global identity, route-owned breadcrumbs/current heading, distinct scope and lifecycle, navigation without mutation, and accessible responsive allocation.

@@ -161,10 +161,12 @@ def seed_metadata(stage: Path, metadata: Path) -> int:
     missing = []
     for skill_dir in skills:
         src = metadata / "skills" / skill_dir.name / "agents" / "openai.yaml"
+        dst = skill_dir / "agents" / "openai.yaml"
         if not src.is_file():
+            if dst.is_file():
+                continue
             missing.append(skill_dir.name)
             continue
-        dst = skill_dir / "agents" / "openai.yaml"
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
     if missing:

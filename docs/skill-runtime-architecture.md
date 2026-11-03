@@ -63,6 +63,10 @@ observation
 
 It should not encode every possible command, platform mechanic, or tool implementation.
 
+#### Requirements continuity across workflows
+
+Any workflow that elicits, clarifies, reconciles or materially changes requirements applies the [shared requirements workflow contract](../skills/requirements-clarification/references/requirements-workflow.md). It owns source preservation, scoped consistency and disposition semantics plus the conditional task-continuity contract. The discoverable `requirements-clarification` skill is an entry for that unresolved state; domain and software-design workflows remain separate owners. Durable application state stays with the existing runtime/task/artifact owner, not with the skill, transcript or a parallel ledger. A lightweight file-based workflow may use its existing authoritative versioned artifact; this policy adds no mandatory database or meta-router.
+
 ### Router
 
 Routing is dynamic, context-conditioned choice. Native harness matching owns first-hop skill discovery where the harness already supports it. After entry, routing is recurrent: every meaningful observation can change the next workflow state, operator, reference, or exit decision.

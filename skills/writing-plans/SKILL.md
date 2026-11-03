@@ -41,6 +41,12 @@ If the authorized scope is intentionally bounded, state it explicitly—for exam
 
 When the host provides a persistent objective or goal primitive, keep it as the outer objective. The plan supplies its executable completion contract; it must not create a competing goal authority or mark the host objective complete from an intermediate gate.
 
+## Requirement Basis Before Task Decomposition
+
+Consume the effective requirement basis under [the shared requirements workflow contract](../requirements-clarification/references/requirements-workflow.md). Reuse source/version references, accepted dispositions, assumptions, unresolved questions and affected acceptance criteria; do not reopen settled answers or copy the conversation into a new ledger. Resolve a material conflict before scheduling the action that depends on it, while independent safe tasks remain eligible.
+
+When the feature itself supports long-running elicitation/modeling/review, carry its runtime state owner, checkpoint/reload and receipt-recovery requirements into implementation and acceptance. The coding plan's progress is not the product workflow's persistence, and completing a plan task does not grant product admission/activation authority.
+
 ## Architecture Delta Before Architecture Work
 
 For a plan that introduces or changes a subsystem, service, store, contract, interface, ownership boundary, cross-component data flow, runtime responsibility, or structural architecture, apply `docs/architecture-delta-principle.md` before creating implementation tasks. Carry forward the design's current-state evidence and Architecture Delta Review rather than re-inventing the architecture from the spec title.
@@ -305,5 +311,9 @@ After writing the plan, check:
 If required Product Value Validation is missing or has unresolved material value uncertainty while claiming `READY_TO_PLAN`, if architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
 
 ## Execution Handoff
+
+Before handing off execution, ensure the existing plan or its authoritative references preserve the current effective user requirements, confirmed requirement changes, key constraints, decision rationale that affects implementation tradeoffs, and acceptance criteria. Distinguish confirmed decisions from unverified assumptions; never treat an agent's inference as a user-approved requirement. Reuse precise file and section references and fill only missing information, rather than copying full conversations or creating a parallel decision ledger.
+
+When proposing concurrent implementation agents or multiple competing implementations, apply [Parallel implementation and candidate authorization](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization). Keep the disclosed cost basis, counts, comparison criteria, budget/stopping limits, and approval reference in this plan or its existing authority source; the plan cannot authorize its own parallel strategy. Default to the single-path approach until the required approval exists.
 
 After saving the plan, continue with the execution approach already authorized by the user. Autonomous gates advance automatically; involve the user only when the User Intervention Necessity Test is met.

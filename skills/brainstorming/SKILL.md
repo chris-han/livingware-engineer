@@ -11,6 +11,10 @@ Start by classifying how much process the request needs, then work through your 
 
 Architecture design is not a parallel unguided mode. Reclassify when a conceptual or research discussion begins proposing code-level contracts, interfaces, services, stores, objects, or subsystems for a real project. In an existing repository, inspect the current project state and apply the Architecture Delta Probe in `docs/architecture-delta-principle.md` before proposing an architectural change, so an already-owned contract or subsystem is reused rather than redesigned from first principles. Purely conceptual research remains outside this workflow until a project design decision exists.
 
+## Requirements Elicitation and Clarification
+
+When eliciting or reconciling material requirements, apply [the shared requirements workflow contract](../requirements-clarification/references/requirements-workflow.md) before treating the basis as settled. Preserve original asks, distinguish contradictions from ambiguity or scoped exceptions, and carry accepted decisions plus remaining questions into design. Use the standalone `requirements-clarification` entry when clarification itself is the current task; this skill retains software-design ownership. Read the continuity section when the work spans sessions or waits. Do not add an interview or approval gate to a clear bounded request.
+
 ## Authorization Boundary
 
 For an explicit, fully specified, reversible bounded implementation request, the request itself authorizes the described change. State the approach briefly and proceed through affected tests; do not require another approval turn or a new plan/spec document.

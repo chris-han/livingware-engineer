@@ -16,9 +16,10 @@ ledger and the tool results carry the record.
 
 **Continuous execution:** Do not pause to check in between tasks. Execute all dependency-ready obligations through the plan's authorized stopping criterion. Brief progress updates are allowed after meaningful milestones or material findings, but they are non-blocking: do not ask “Should I continue?”, wait for acknowledgment, or narrate every routine step.
 
-**Rulings, not stalls.** A running plan does not wait on a human. Conflicts,
-ambiguities, plan defects, a cap you would have asked to exceed — decide
-them. The spec is the binding authority, the plan is its argument, and your
+**Rulings, not stalls.** Resolve ordinary in-scope conflicts,
+ambiguities, and plan defects within binding authority and approved budgets.
+A ruling cannot expand parallel/candidate authorization or its cost limits.
+The spec is the binding authority, the plan is its argument, and your
 judgment settles ordinary in-scope implementation ambiguity. Record consequential decisions in the recovery ledger as
 `Ruling: <what you decided> — <why> — <what it costs if wrong>`, and keep
 going. A wrong ruling costs rework your human partner can see and undo; a
@@ -137,7 +138,7 @@ and fix-round diffs need it.
   a pointer to that ledger entry in the dispatch.
 - Record the implementer's agent identity from the dispatch result —
   fix-loop rounds 1-3 resume this agent.
-- Parallel implementation requires authorized delegation, independent ownership, and no shared mutable test/runtime state. Serialize overlapping work; use dispatching-parallel-agents when independent work benefits from concurrency.
+- Before parallel implementation or competing candidate generation, apply [Parallel implementation and candidate authorization](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization). After approval, require independent ownership and no shared mutable test/runtime state; serialize overlapping work and use dispatching-parallel-agents only within the approved counts, scope, and budget.
 
 Template: [implementer-prompt.md](implementer-prompt.md)
 

@@ -26,6 +26,8 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
+**Plan authority:** Keep the single mutable plan in the repository’s main-branch checkout, in the location required by the repository. Draft, activate, update, and archive that authority on main; bind any isolated implementation worktree separately. A branch-worktree copy is a historical snapshot, not another plan authority. Preserve concurrent main-checkout edits. Explicit user or repository instructions for a different authority location take precedence.
+
 ## Execution Continuity Contract
 
 Every executable multi-step plan MUST declare near the top an **authorized stopping criterion** and any **permitted terminal dispositions**. The plan is a completion contract, not merely an ordered checklist.

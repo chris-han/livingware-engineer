@@ -40,14 +40,14 @@ If the repository uses different metadata names, verify equivalent semantics. A 
 
 ### Authoritative plan and execution workspace are separate identities
 
-The authoritative plan source and the bound execution workspace are separate identities. Path locality is an implementation convenience, never an authority rule.
+The single mutable plan authority belongs in the repository’s main-branch checkout, separate from any bound implementation worktree. Draft, activate, update, and archive it there; a copy in a branch worktree is a historical snapshot, not another authority. Preserve concurrent main-checkout edits. Explicit user or repository instructions for a different authority location take precedence.
 
 A plan may remain authoritative at a repository or worktree location different from the worktree named by `execution_worktree`. When that occurs:
 
 - read and validate the plan from its authoritative source location;
 - execute authorized implementation, generated evidence, checkpoints, and experiment artifacts inside the bound execution worktree;
 - preserve the plan's declared `execution_worktree`, `execution_branch`, and `execution_base_branch` independently from the plan file's physical location;
-- treat the authoritative plan path as the single mutable plan authority unless the plan explicitly transfers plan ownership to the execution worktree;
+- treat the main-checkout plan path as the single mutable plan authority;
 - resolve plan-relative references against the authoritative plan's repository context when their meaning depends on plan location;
 - record an explicit authoritative-plan path or equivalent source binding when the plan is intentionally external to the execution worktree.
 
@@ -58,7 +58,7 @@ Do not:
 - create a second mutable plan ledger in the execution worktree or silently switch plan authority to a convenience copy;
 - rebase, merge, or recreate a worktree solely so the authoritative plan becomes physically colocated with execution.
 
-If execution requires a plan-state change, write that change to the authoritative plan owner/location unless the plan explicitly declares that plan ownership has transferred to the execution worktree. A later branch rebase, merge, or integration step may naturally bring the plan file into the execution branch; that is an integration outcome, not an execution prerequisite.
+If execution requires a plan-state change, write it to the authoritative main-checkout plan, preserving concurrent edits. A later branch rebase, merge, or integration step may naturally bring the plan file into the execution branch; that is an integration outcome, not an execution prerequisite.
 
 Verify plan authority and workspace binding independently:
 
@@ -73,7 +73,7 @@ A valid authoritative plan located outside the execution worktree is not workspa
 
 For governed or recoverable work:
 
-- keep implementation edits, generated execution evidence, stage receipts, and execution checkpoints in the bound execution worktree unless the plan explicitly owns a cross-repository action; write plan-state changes to the authoritative plan owner/location unless the plan explicitly assigns plan ownership to the execution worktree;
+- keep implementation edits, generated execution evidence, stage receipts, and execution checkpoints in the bound execution worktree unless the plan explicitly owns a cross-repository action; write plan-state changes to the authoritative main-checkout plan;
 - checkpoint meaningful completed gates in commits so evidence does not exist only as uncommitted worktree state;
 - when a gate intentionally freezes the exact executable/evidence state for the next phase, update `execution_commit` to that commit and state what it binds;
 - do not move `execution_commit` merely because documentation metadata changed afterward;

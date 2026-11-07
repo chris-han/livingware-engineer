@@ -1,3 +1,10 @@
+## v6.15.3 (2026-11-07)
+
+- Default to silent routine execution in `executing-plans` and `subagent-driven-development`: no obligatory narration per tool call, test, commit, checkpoint, or subagent wait/poll; preserve concise material-risk, blocker, host-required and terminal reporting.
+- Add one shared token-efficient execution reference for bounded passing/failing test output, retained full failure evidence, source-SHA context reuse, compact subagent dispatch/results, progressive skill loading, proportionate model effort, and measured token economics without weaker verification.
+- Align `using-superpowers` and `writing-plans` communication guidance, removing ceremonial skill-announcement messages while retaining explicit higher-priority user/host reporting requirements.
+- Synchronize all ten declared version fields to 6.15.3. Skill-source guidance only: installed caches are not automatically updated, tests of live agent token savings have not yet been run, and no savings are claimed.
+
 ## v6.15.2 (2026-11-07)
 
 - Add an autonomous, risk-based pre-execution failure review to `writing-plans` for cross-boundary and lifecycle-sensitive implementations, including source-bound counterexamples and early native validation.

@@ -47,6 +47,12 @@ Consume the effective requirement basis under [the shared requirements workflow 
 
 When the feature itself supports long-running elicitation/modeling/review, carry its runtime state owner, checkpoint/reload and receipt-recovery requirements into implementation and acceptance. The coding plan's progress is not the product workflow's persistence, and completing a plan task does not grant product admission/activation authority.
 
+## Risk-based pre-execution failure review
+
+For R2/R3 or cross-owner tasks involving async state, profile/tenant boundaries, caches, timeouts, native lifecycle or external adapters, perform **one bounded adversarial review before plan activation**. First freeze a small source-owner map and existing-evidence census; then test the plan's riskiest assumptions against concrete cold/warm, profile-change, delayed-response, failure, empty-result, auth and timeout counterexamples as applicable. Use an independent reviewer/fresh scoped context when available, not a second competing implementation. Document the top material findings in the *existing* plan as `REVISE | TEST_EARLY | ACCEPT_WITH_REASON`. Put the highest-value real-component/native synthetic smoke **before the first expensive merge/integration where feasible**; still complete the final verification contract. See [Pre-Execution Failure Review](references/pre-execution-failure-review.md).
+
+This is an **autonomous and proportionate** quality/efficiency check, not a universal approval gate or a requirement to consume more tokens. Skip it for ordinary bounded fixes. Stop reviewing when no new material risk remains, and do not make a percentage token quota mandatory. If execution economics is being compared, reference the historical [Semantier Windows baseline](../../docs/engineering-economics/2026-11-07-windows-provider-query-only-baseline.md), recording actual comparability limitations rather than claiming causal savings.
+
 ## Architecture Delta Before Architecture Work
 
 For a plan that introduces or changes a subsystem, service, store, contract, interface, ownership boundary, cross-component data flow, runtime responsibility, or structural architecture, apply `docs/architecture-delta-principle.md` before creating implementation tasks. Carry forward the design's current-state evidence and Architecture Delta Review rather than re-inventing the architecture from the spec title.

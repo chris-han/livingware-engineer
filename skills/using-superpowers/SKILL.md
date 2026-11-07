@@ -11,7 +11,7 @@ Prefer the platform's native skill discovery and matching. Skills should be sele
 
 Choose the smallest change, context, verification surface, and review process that satisfies the request. Reuse existing code, contracts, tests, evidence, and recovery state. Preserve correctness, security, authority, permissions, data integrity, required audit semantics, and explicit repository requirements.
 
-Safe reversible in-scope work continues without repeated approval. Progress reports are concise observations, not checkpoints. Interrupt the user only when the next required action genuinely depends on user-owned judgment, authority, secure access/credentials, sensitive-data disclosure, destructive action, or another consequential external action that cannot be resolved through standing delegation or an authorized reversible recovery path.
+Safe reversible in-scope work continues without repeated approval. **User-visible progress is silent by default** for routine tool calls, tests and checkpoints; report only consequential findings, genuine blockers or substantial useful milestones when appropriate. Interrupt the user only when the next required action genuinely depends on user-owned judgment, authority, secure access/credentials, sensitive-data disclosure, destructive action, or another consequential external action that cannot be resolved through standing delegation or an authorized reversible recovery path.
 
 ## Evidence Reuse Discipline
 
@@ -27,7 +27,7 @@ Read [Progressive Skill Loading](references/progressive-skill-loading.md) only w
 
 ## Context Cost Discipline
 
-Keep stable instructions short and structurally stable for prefix caching. Keep session-specific state in compact handoffs. Prefer focused tool output, reusable evidence, and deterministic checks over repeated prose. Parallelize independent work when useful; do not add agent turns solely for ceremony.
+Keep stable instructions short and structurally stable for prefix caching. Keep session-specific state in compact handoffs. Prefer focused tool output, reusable evidence, and deterministic checks over repeated prose. Parallelize independent work only when authorized and useful; do not add agent turns solely for ceremony. For long-running work use [Token-Efficient Execution](references/token-efficient-execution.md): silent routine execution, bounded tool output, lazy skill loading, source-hash reuse and concise final evidence. Preserve host/user reporting requirements and required verification.
 
 Platform-specific tool mapping and codebase-index mechanics belong in the matching reference adapter, not this core skill.
 

@@ -19,7 +19,7 @@ Keep useful step-by-step detail; eliminate duplicated work, not implementation s
 
 Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+**Communication:** deliver the useful plan or material decision directly; do not generate a ceremonial standalone status message merely to announce skill use. Follow the host's explicit progress-reporting requirements when they apply.
 
 **Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
 

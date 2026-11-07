@@ -11,10 +11,9 @@ Execute the plan's bounded implementation and review units. `superpowers:writing
 
 **Core principle:** Clear ownership + plan-defined review units + scoped fix review + verified integration. In this skill, “task review” means the plan's review unit, which may contain several related tasks.
 
-**Narration:** between tool calls, narrate at most one short line — the
-ledger and the tool results carry the record.
+**Narration:** default to silence between routine tool calls, child dispatches, tests, commits, and fix attempts. Do not emit a status message because a tool call completed. The existing ledger and tool results carry the trace; see [Token-Efficient Execution](../using-superpowers/references/token-efficient-execution.md).
 
-**Continuous execution:** Do not pause to check in between tasks. Execute all dependency-ready obligations through the plan's authorized stopping criterion. Brief progress updates are allowed after meaningful milestones or material findings, but they are non-blocking: do not ask “Should I continue?”, wait for acknowledgment, or narrate every routine step.
+**Continuous execution:** Do not pause to check in between tasks. Execute all dependency-ready obligations through the plan's authorized stopping criterion. Give concise user-visible updates only for material blockers, consequential findings, or substantial independently useful milestones (and whenever the host/user explicitly requires them); never narrate routine steps.
 
 **Rulings, not stalls.** Resolve ordinary in-scope conflicts,
 ambiguities, and plan defects within binding authority and approved budgets.
@@ -100,20 +99,13 @@ one subagent per task. Compose ONE dispatch brief listing every file and
 its change, send the whole batch to a single subagent, and review its diff
 as one unit. Use separate dispatches where ownership, risk, or context requires them; honor the plan's integrated review unit.
 
-Everything you paste into a dispatch prompt — and everything a subagent
-prints back — stays resident in your context for the rest of the session
-and is re-read on every later turn. Reference existing sources; use a file only when it materially reduces a large handoff's context cost.
+Everything you paste into a dispatch prompt — and everything a subagent prints back — may remain in your context for subsequent turns. Use short SHA-bound source/plan references, scoped files and a compact response contract (outcome, commit/diff, tests, material findings, blockers); do not embed full skill bodies, files, repetitive test logs or subagent transcripts. Expand an artifact only when diagnosis or proof requires it.
 
 **Waiting on dispatched subagents:** never poll a wait interface with
 short timeouts, and never sit in one silent, open-ended wait either.
 While you have local work — ledger updates, packaging the next review,
 reading reports — keep working; child results arrive on their own.
-When you are genuinely idle, wait in bounded stretches (five to ten
-minutes, where your platform allows), and between stretches post one
-line of status and reconcile your live children: list them, and chase
-any that finished without reporting. A bounded stretch keeps nearly
-all of a long wait's efficiency while guaranteeing a stuck or lost
-child is noticed within minutes, not at the end of the session.
+When genuinely idle, wait in bounded stretches (five to ten minutes where supported). Reconcile live children internally between waits: list them, and chase any that finished without reporting. **Do not post a user-visible status line for every wait or poll.** Notify the user only if a real stalled dependency changes the plan, substantial progress merits a user-facing update, or higher-priority host/user reporting requirements apply. The bounded wait still detects stuck or lost children.
 
 ### 1. Dispatch the implementer
 

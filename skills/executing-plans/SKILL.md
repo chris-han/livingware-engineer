@@ -28,6 +28,14 @@ Stay within the approved agent/candidate counts, scope, and budget. Before incre
 
 This rule does not require extra approval for ordinary tests, sequential delegation along one implementation path, ordinary repair of that implementation, or the existing risk-based review process. It is not a blanket approval checkpoint for all development work.
 
+## Execution economics and evidence reuse
+
+When the task is materially cross-boundary, or the user requests an efficiency comparison, use [Execution Economics](references/execution-economics.md). Before implementation, consume the plan's risk-based failure review (or record a justified skip). Schedule the high-risk cold/warm, identity-transition and timeout counterexample smoke **before the first expensive integration when feasible**, while retaining real-component and terminal acceptance requirements. Do not reopen settled discovery or repeat the same owner map without new evidence.
+
+Keep compact, SHA-bound stage receipts listing completed contracts, unresolved risk, focused tests, reused unchanged evidence and the next discriminating step. Use impact-radius test cadence: focused checks after changes; broad verification at a suitable frozen candidate; after a narrow patch, rerun affected surfaces and explicitly justify which unchanged results are reusable. Do not equate necessary regression checks with waste or mark a flaky failure as a pass.
+
+When telemetry is accessible, report planning/review, input/output/cache tokens, total accounting convention, wall time, repeat source reads and test/rework counts; when it is not, report `UNKNOWN` rather than guessing. Compare with a prior baseline only after verified terminal completion and with task/risk comparability disclosed. Lower tokens without equivalent correctness is not improvement. Economic instrumentation must not block routine autonomous execution or expose secrets.
+
 ## Repository plan-state gate
 
 Before the first implementation edit, inspect and obey the repository's governed-plan lifecycle contract when one exists. Do not invent or normalize plan status from memory. If the repository provides a plan-state validator/linter, run it before execution and again before completion/commit.

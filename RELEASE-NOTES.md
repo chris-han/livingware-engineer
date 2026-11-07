@@ -1,3 +1,10 @@
+## v6.15.2 (2026-11-07)
+
+- Add an autonomous, risk-based pre-execution failure review to `writing-plans` for cross-boundary and lifecycle-sensitive implementations, including source-bound counterexamples and early native validation.
+- Extend `executing-plans` with compact SHA-bound stage checkpoints, impact-radius-aware regression reuse, and evidence-based execution economics measurement.
+- Establish the 2026-11-07 Semantier Windows Provider-query-only historical baseline and next-run token/wall-time comparison template, explicitly retaining unknown token splits and task-comparability limits.
+- Synchronize all ten declared plugin version fields to 6.15.2. This release updates skill guidance and measurement documentation; it does not establish measured token savings or automatically update already-installed plugin caches.
+
 ## v6.15.0 (2026-10-23)
 
 - Add a cross-domain `requirements-clarification` entry for material elicitation, ambiguity, conflict and requirement-change work; keep software design, domain interpretation and execution authority at their existing owners.

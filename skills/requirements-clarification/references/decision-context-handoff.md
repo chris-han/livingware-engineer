@@ -14,6 +14,8 @@ Discuss goals, examples and ambiguities with the user in natural language. Incre
 
 When an essential fact is unknown, use the contract's unknown/unresolved representation. If a material distinction cannot be represented or a required producer is unavailable, retain the useful candidate work at the existing owner, name the precise contract/capability gap, and avoid claiming an operative handoff. Continue independent in-scope work; do not manufacture a successful object or demand a second ledger.
 
+Treat unresolved assumptions as advisory wherever the current contract supports a provisional or bounded-learning step. Carry the assumption and its consequence forward and continue authorized work. A missing prerequisite restricts only the specific operation that actually requires it; it does not by itself halt elicitation, analysis or preparation. Use the existing owner to distinguish those states without fabricating admission or bypassing a required authority condition.
+
 Stop at the smallest context sufficient for the current bounded decision or learning step. This does not require eliminating every uncertainty; it does require retaining mandatory evidence, dependencies, conflicts and authority conditions for that step.
 
 ## Semantier binding: reuse the implemented owner

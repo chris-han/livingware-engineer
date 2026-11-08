@@ -1,3 +1,9 @@
+## v6.15.10 (2026-11-09)
+
+- Make warn-and-proceed explicit for authorized, reversible steps supported by a stated provisional assumption. Carry uncertainty, consequences and a useful later check in the existing context; avoid repeated warnings and confirmation loops.
+- Scope missing prerequisites to the specific operation that requires them. Preserve existing schema, admission and authority boundaries while continuing supported elicitation, analysis and preparation.
+- Add one advisory-uncertainty review fixture and synchronize all ten declared version fields. This is skill guidance and an unexecuted evaluation fixture, not measured agent behavior or a runtime integration claim.
+
 ## v6.15.9 (2026-11-09)
 
 - Make minimum sufficient decision context the purpose of requirements elicitation across physical, software, service and sociotechnical systems. Explicitly distinguish the system of interest, change/control scope and external dependencies.

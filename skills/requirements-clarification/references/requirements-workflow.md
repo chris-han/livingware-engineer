@@ -55,6 +55,8 @@ Preserve each original requirement's mapping to the resulting requirement(s), th
 
 Respect control over the source. An owner may revise its policy or draft; an external binding source remains immutable. An authorized interpretation or scoped applicability decision is recorded separately and does not rewrite external law, contracts or history. Apply actual jurisdiction and delegation rather than demanding a new person or historical approval paperwork for every decision.
 
+Default to an advisory warning and continued progress when a clearly stated provisional assumption supports an authorized, reversible next step. Briefly identify the assumption, its material consequence and the useful later check, then proceed; preserve the uncertainty in the existing context. Do not turn every unknown into a blocker, require all assumptions to be confirmed, or repeatedly ask for permission already granted. Repeat a warning only when its basis or consequence materially changes.
+
 Ask only the smallest question whose alternatives change the next decision and cannot be resolved from existing authority/evidence, standing delegation or a safe reversible in-scope default. State the relevant source/condition and consequence of the alternatives. Record the answer at the existing owner; do not re-ask it after a session change unless the basis changed.
 
 After a material answer or revision, recheck the affected dependency set, including exceptions and downstream acceptance criteria. Preserve unaffected valid evidence. Continue parsing, candidate modeling and independent analysis where safe; hold only an action whose correctness or authority actually depends on the unresolved item. Diagnostics, assessment, admission and activation remain separate.

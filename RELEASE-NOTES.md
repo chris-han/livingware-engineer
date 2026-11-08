@@ -1,3 +1,10 @@
+## v6.15.8 (2026-11-09)
+
+- Extend the existing requirements workflow with outcome/need/mechanism distinctions, context-sensitive evidence actions and proportionate checks for omitted stakeholders and lifecycle conditions.
+- Add a separate outcome-adequacy check: satisfying stated requirements may still leave the stakeholder goal unmet because of material external assumptions or obstacles. Preserve proposed/accepted distinctions and readiness for a sufficiently supported reversible next step.
+- Add an on-demand discovery reference with bounded research attribution and four review/evaluation fixtures. Reuse the existing requirements-clarification, design and planning owners; add no new skill, mandatory interview, ledger or approval gate.
+- Synchronize all ten declared release version fields to 6.15.8. Source, version and reference checks do not establish measured model-behavior improvement; the scenario fixtures are not executed model results, and installed plugin caches require a separate update.
+
 ## v6.15.4 (2026-11-08)
 
 - Clarify existing MVL Law 1: acceptance criteria define the finish line, not execution order. Start with a bounded real user journey and repair its first failing boundary before broad validation or polish.

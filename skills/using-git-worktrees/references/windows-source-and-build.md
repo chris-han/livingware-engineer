@@ -36,6 +36,24 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File $deploy -WhatIf
 
 Use process-scoped execution-policy handling only for inspected trusted scripts; never change machine/user policy. Scope native Git ownership exceptions to exact source roots for the invocation; never use `safe.directory=*`. Do not invoke WSL/Linux Git as a Windows build-process proxy.
 
+### Execution policy and early preflight
+
+The existing Windows build operator owns the execution-policy diagnostic. At startup, inspect the effective policy and MachinePolicy/UserPolicy scopes before expensive work. Report actionable guidance for unsigned helpers and network-source scripts; never silently alter persistent policy. Respect enforced Group Policy and require administrator-approved signing when it prevents execution.
+
+A blocked script cannot run its own preflight. Keep this launch guidance available outside the script. Default to the process-scoped `powershell.exe -NoProfile -ExecutionPolicy Bypass -File <trusted-operator> ...` invocation above. Preserve all original build/resume arguments. UNC/R: paths may be treated as remote under RemoteSigned; a plain `& <script>` is therefore not an equivalent tested launch.
+
+Only when the user explicitly asks for a permanent per-user setting, use native PowerShell:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force
+Get-ExecutionPolicy -List
+Get-ExecutionPolicy
+```
+
+This permits unsigned scripts for that Windows user; it is not restricted to the build script. Verify both saved scope and effective policy, since Group Policy and a current Process policy take precedence. Leave LocalMachine, MachinePolicy and UserPolicy unchanged. Do not weaken managed policy or describe a persistent change as temporary. Never set CurrentUser Bypass merely because a build failed.
+
+Test the operator's effective-policy and managed-policy branches, plus its actual native PowerShell launch in WhatIf mode. Distinguish policy/preflight validation from a completed build or publication. A documented skill requirement is not evidence that the owning script implements it.
+
 ## WSL/Linux entry
 
 Use Linux paths, Bash and `/usr/bin/git` for source inspection, editing and commits. Keep Windows tool execution explicit and use interop only when available. Do not run Windows Git against this repository from WSL. If the declared distro or path differs, resolve the actual existing mapping rather than silently choosing another checkout.

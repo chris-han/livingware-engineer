@@ -1,6 +1,6 @@
 ---
 name: using-git-worktrees
-description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback
+description: Use when choosing workspace isolation for feature work or implementation plans, or separating shared WSL source from a native Windows desktop build environment.
 ---
 
 # Using Git Worktrees
@@ -61,6 +61,10 @@ Use `finishing-a-development-branch` to perform merge, parent/submodule pointer 
 
 Apply [Plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md). `MERGED` alone is not plan completion: cleanup must reach `RETIRED` for workflow-owned execution worktrees unless a user/repository exception is bound. Do not set preservation or cleanup-denial metadata merely to manufacture an earlier stopping point.
 
+
+## Shared WSL source and Windows build environments
+
+Before Windows desktop build/setup work against a WSL-hosted source, read [Windows source and build contract](references/windows-source-and-build.md). It covers native PowerShell and WSL/Linux entry, single-source authority, local dependency/output roots, UNC child-process limitations and existing-tool preflight. Apply its explicit source-location contract before selecting any worktree or local clone; D: build storage is not permission to create a second source.
 
 ## Step 0: Detect Existing Isolation
 

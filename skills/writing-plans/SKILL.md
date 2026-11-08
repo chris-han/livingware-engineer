@@ -11,6 +11,8 @@ For product MVLs where governance is in the path, treat time-to-first-useful-res
 
 Classify every planned gate as either **autonomous** or **user-intervention-required**. Autonomous gates include tests, typecheck, lint, build, contract checks, service/browser fixtures, integration/E2E evidence, deterministic review findings, and ordinary reversible engineering rulings; they advance automatically when satisfied and never require a human checkpoint. A user-intervention-required gate is allowed only when standing delegation plus the User Intervention Necessity Test says the next required action genuinely depends on user-owned judgment, authority, access, credentials, or consequential external action. Do not create approval or checkpoint tasks merely to mark a phase boundary.
 
+Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execution-first-real-loop-before-breadth): schedule the smallest real user-journey smoke as the first implementation milestone, naming its bounded attempt, observable pass/fail and indispensable prerequisites. Put the full acceptance matrix after that initial proof; do not turn it into a front-loaded execution checklist.
+
 ## Overview
 
 Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.

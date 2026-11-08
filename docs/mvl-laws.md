@@ -14,6 +14,12 @@ Passing a low-risk gate never grants consequential-action authorization or highe
 
 Review question: if an approval step delays the first useful result without changing risk, remove or default-pass it.
 
+### Engineering execution: first real loop before breadth
+
+For a product or integration MVL, first make the smallest real user journey work or expose its first concrete failing boundary. **Acceptance criteria define the finish line, not the execution order.** Put a bounded real-path smoke before broad validation, polish and documentation that do not enable or protect that path. Retain necessary authentication, tenant, authority, safety and data-integrity checks; never fake internal components or weaken a boundary to get a pass.
+
+On failure, repair the first failed seam and repeat that same journey rather than expanding the plan or running unrelated checks. A working first loop is progress, not completion: finish affected negative controls, required acceptance and integration afterward.
+
 ### User Intervention Necessity Test
 
 User intervention is a scarce input, not a generic workflow gate. Apply standing user delegation first. A running plan or workflow may interrupt the user only when all three are true:

@@ -108,6 +108,8 @@ A merged submodule branch with an unupdated parent pointer is not integrated clo
 
 ## Continuous execution and progress reporting
 
+Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execution-first-real-loop-before-breadth) when selecting the next action. Until the initial real journey works, prioritize its first failing boundary and smallest repair over broader checks or metadata work; preserve necessary security/correctness prerequisites and the final acceptance contract.
+
 After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.
 
 For long-running work, progress updates may be one or two concise sentences after a meaningful milestone, material finding, or recovery-state change. They are observational, not approval checkpoints: do not end them with “Should I continue?”, do not wait for acknowledgment, and do not narrate every routine task or test.

@@ -4,9 +4,11 @@ This is the shared workflow contract for any skill that elicits, interprets, cla
 
 ## 1. Scope the next decision
 
-Start from the outcome and the next decision that needs a requirement basis. Reuse existing sources, answers, contracts and standing delegation. Scale the review to material uncertainty: a clear, reversible bounded request needs no new interview, ledger or approval gate.
+Start from the outcome and the next decision that needs a basis. Elicitation builds the minimum sufficient decision context: explicit requirements, relevant alternatives, boundaries, constraints/dependencies, stakeholder perspectives, evidence and decision-changing uncertainty. Reuse existing sources, answers, contracts and standing delegation. Scale the review to material uncertainty: a clear, reversible bounded request needs no new interview, ledger or approval gate.
 
 Distinguish the intended stakeholder outcome, the underlying need or capability, and a proposed implementation mechanism. Preserve a deliberately mandated mechanism as a constraint; do not reopen settled choices merely to restate them as needs.
+
+Frame the system of interest around the outcome and real operating setting, including relevant people, institutions, processes, physical resources and software. Distinguish the analysis boundary from what the decision owner can change or control. Identify material interactions, external dependencies and enabling conditions across that boundary. An implementation boundary does not make outside dependencies irrelevant; retain uncertain boundary choices when they affect the next decision.
 
 When needs remain tacit or their basis is uncertain, choose the smallest evidence action that can change the next decision: inspect existing artifacts, walk through a real episode, ask a focused question, observe authorized work, or use a proportionate prototype. Use [Discovering needs in context](elicitation-discovery.md) for method selection and its evidence limits. Do not turn these options into a mandatory itinerary or claim an observation that has not occurred.
 
@@ -17,6 +19,8 @@ Identify source assertions that actually express requirements; do not turn every
 Keep each original requirement visible through a source reference, version/hash and exact span or stable item identity where available. Preserve source wording while recording an interpretation separately. Distinguish explicit requests, observed facts, assumptions, proposed changes and accepted decisions.
 
 Use existing domain types. Make these dimensions explicit when they can change the decision: actor, obligation/prohibition/permission, action or outcome, target, scope, triggering conditions, exceptions, temporal validity, threshold/unit and observable acceptance criteria. Record unresolved dimensions rather than guessing. A flat sensitive-word list may require context, matching and exception semantics before it can act as a rule.
+
+Distinguish physical laws and evidenced capability/environment limits, formal institutional requirements, informal norms/practices, preferences and assumptions. Preserve material sources, operating conditions, units and uncertainty. A repeated practice can affect feasibility without establishing authority; a formal rule may differ from actual practice. Tacit know-how and cultural explanations are context, not automatically obligations. Use concrete episodes or authorized observation where useful, retain differing accounts, and do not infer a whole group's culture from one account.
 
 Where it can change the next decision, check for materially affected people beyond the requester and for omitted operating, handover, support, maintenance, change or retirement conditions. Include the relevant role or scenario at its existing owner; do not require exhaustive stakeholder inventories or lifecycle workshops for clear bounded work.
 
@@ -32,6 +36,8 @@ Compare requirements within and across relevant sources under overlapping actors
 - **Supported coexistence or resolution:** different scope/time, an explicit exception, version supersession or a governed precedence relation explains the apparent clash.
 
 Use deterministic operators for computable constraints; use semantic interpretation only for the residual meaning. Preserve the source-to-formalization mapping: a solver proves properties of its encoding, not that the source was interpreted correctly.
+
+Check feasibility against evidenced real-world limits and cross-boundary dependencies as well as logical compatibility. Keep a measured limit tied to its conditions; do not turn one observation into a universal bound or an untested explanation into a proven obstacle. An authorized change can revise an imposed constraint within that authority, but cannot waive physical feasibility.
 
 Check interacting sets when pairwise comparison is insufficient. For example, allowed values {a,b}, {b,c} and {a,c} intersect pairwise but have no common value across all three requirements. Preserve the actual conflict set; do not fabricate contradictory pairs. Call a conflict core minimal only when minimality was checked.
 
@@ -82,8 +88,10 @@ Recovery is from committed state, not from partially generated model reasoning. 
 
 Match verification to the claimed capability. Requirement work should consider omitted conditions/exceptions, true versus apparent contradictions, multi-requirement conflicts, unresolved cases and source-to-disposition conservation. Keep quality (extraction/semantic coverage, conflict precision/recall, erroneous blocking and repair correctness) separate from efficiency (latency, tokens, repeated questions and user effort).
 
-Check outcome adequacy separately from compatibility: could all stated requirements be satisfied while the intended stakeholder outcome still fails? Where material, identify the external behavior, environmental assumption or obstacle that makes the difference. Treat an unverified counterexample as a hypothesis, then obtain the smallest decision-changing evidence or retain the explicit uncertainty. A derived requirement or mitigation remains proposed until accepted under the existing authority. This check neither requires a broader redesign nor prevents a sufficiently supported reversible next step.
+Check outcome adequacy separately from compatibility: could all stated requirements be satisfied while the intended stakeholder outcome still fails? Where material, identify the physical limit, institutional dependency, human practice, environmental assumption or other obstacle that makes the difference. Treat an unverified counterexample as a hypothesis, then obtain the smallest decision-changing evidence or retain the explicit uncertainty. A derived requirement or mitigation remains proposed until accepted under the existing authority. This check neither requires a broader redesign nor prevents a sufficiently supported reversible next step.
 
 Where runtime resumability is claimed, verify actual interruption/reopen, output-committed/progress-not-advanced, duplicate delivery, stale revision and changed-input behavior through the real persistence owner. Substitute only genuine external/nondeterministic boundaries.
+
+When the next consumer requires structured decision context, use [the existing schema and formation owner](decision-context-handoff.md). Keep schema validation, semantic sufficiency for the named decision, and admission/authorization distinct. Preserve decision-changing unknowns and conflicts under the contract; never fill required fields with invented facts or treat complete serialization as sufficient context. A context handoff does not choose or authorize a decision.
 
 A written workflow or a passed packaging/link check does not demonstrate runtime durability, generalized agent behavior, legal correctness or measured human benefit.

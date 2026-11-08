@@ -1,3 +1,10 @@
+## v6.15.9 (2026-11-09)
+
+- Make minimum sufficient decision context the purpose of requirements elicitation across physical, software, service and sociotechnical systems. Explicitly distinguish the system of interest, change/control scope and external dependencies.
+- Include physical/capability limits, institutions, social relations, culture and tacit practice with their evidence and uncertainty. Preserve the distinction between observed custom and binding authority.
+- Add a conditional structured handoff through the calling host's existing schema and formation owner. Document Semantier's accepted Decision Context / WorkingContext mapping and governed formation boundary without adding a new schema, store or runtime adapter.
+- Add four review/evaluation fixtures and source references. Synchronize all ten declared release versions to 6.15.9. These are skill-source changes; fixtures are not executed model results, and runtime integration or behavioral improvement is not claimed.
+
 ## v6.15.8 (2026-11-09)
 
 - Extend the existing requirements workflow with outcome/need/mechanism distinctions, context-sensitive evidence actions and proportionate checks for omitted stakeholders and lifecycle conditions.

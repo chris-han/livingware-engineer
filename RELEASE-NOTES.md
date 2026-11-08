@@ -1,3 +1,9 @@
+## v6.15.4 (2026-11-08)
+
+- Clarify existing MVL Law 1: acceptance criteria define the finish line, not execution order. Start with a bounded real user journey and repair its first failing boundary before broad validation or polish.
+- Link planning and execution guidance to the existing MVL owner; retain necessary security, tenant and data-integrity checks and full final acceptance.
+- Synchronize declared release versions. Focused contract checks cover source consistency, not measured improvement in agent behavior.
+
 ## v6.15.3 (2026-11-07)
 
 - Default to silent routine execution in `executing-plans` and `subagent-driven-development`: no obligatory narration per tool call, test, commit, checkpoint, or subagent wait/poll; preserve concise material-risk, blocker, host-required and terminal reporting.

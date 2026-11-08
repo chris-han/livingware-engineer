@@ -28,6 +28,14 @@ Stay within the approved agent/candidate counts, scope, and budget. Before incre
 
 This rule does not require extra approval for ordinary tests, sequential delegation along one implementation path, ordinary repair of that implementation, or the existing risk-based review process. It is not a blanket approval checkpoint for all development work.
 
+## Execution economics and evidence reuse
+
+When the task is materially cross-boundary, or the user requests an efficiency comparison, use [Execution Economics](references/execution-economics.md) and the cross-cutting [Token-Efficient Execution Policy](../using-superpowers/references/token-efficient-execution.md). Before implementation, consume the plan's risk-based failure review (or record a justified skip). Schedule the high-risk cold/warm, identity-transition and timeout counterexample smoke **before the first expensive integration when feasible**, while retaining real-component and terminal acceptance requirements. Do not reopen settled discovery or repeat the same owner map without new evidence.
+
+Keep compact, SHA-bound stage receipts listing completed contracts, unresolved risk, focused tests, reused unchanged evidence and the next discriminating step. Use impact-radius test cadence: focused checks after changes; broad verification at a suitable frozen candidate; after a narrow patch, rerun affected surfaces and explicitly justify which unchanged results are reusable. Do not equate necessary regression checks with waste or mark a flaky failure as a pass.
+
+When telemetry is accessible, report planning/review, input/output/cache tokens, total accounting convention, wall time, repeat source reads and test/rework counts; when it is not, report `UNKNOWN` rather than guessing. Compare with a prior baseline only after verified terminal completion and with task/risk comparability disclosed. Lower tokens without equivalent correctness is not improvement. Economic instrumentation must not block routine autonomous execution or expose secrets.
+
 ## Repository plan-state gate
 
 Before the first implementation edit, inspect and obey the repository's governed-plan lifecycle contract when one exists. Do not invent or normalize plan status from memory. If the repository provides a plan-state validator/linter, run it before execution and again before completion/commit.
@@ -112,7 +120,7 @@ Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execut
 
 After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.
 
-For long-running work, progress updates may be one or two concise sentences after a meaningful milestone, material finding, or recovery-state change. They are observational, not approval checkpoints: do not end them with “Should I continue?”, do not wait for acknowledgment, and do not narrate every routine task or test.
+**Silent-by-default execution:** do not emit a user-visible update for each tool call, test, commit, normal fix, successful checkpoint or phase transition. Keep those details in the existing plan/evidence ledger. Communicate only a meaningful independently useful milestone on an extended run, a material change to risk/scope/outcome, or a genuine blocker requiring user attention; use one compact update and continue unless user intervention is necessary. Obey explicit host/user progress requirements. Do not end updates with “Should I continue?” or wait for acknowledgment.
 
 A predeclared negative or inconclusive terminal disposition is legitimate plan closure when its predicate is satisfied. It is not a reason to retry the same plan indefinitely or ask whether the user wants to continue. Check the user's outer objective separately: if the requested end state remains unmet, preserve that goal as incomplete and route to the next authorized recovery or successor action. If no such action is available, report the stopping evidence and the unmet outcome; do not claim the outer goal is complete.
 

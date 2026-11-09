@@ -33,7 +33,7 @@ Start with the uncertainty that can change the next decision and the evidence al
 | Success depends on external people or systems | Examine the relevant handoff, operating condition or failure case | Separate system obligations from environmental assumptions and responsibility that has actually been assigned |
 | Formal procedure and actual work diverge | Compare the applicable rule with a concrete episode and relevant participants' accounts | Preserve disagreement; observed custom can affect feasibility without conferring authority or proving its cause |
 
-Ask only a question whose alternatives still change the next decision after reusing existing evidence. Keep an active discovery exchange short; reserve a complete record for a requested handoff or report. If evidence is sufficient for the named step, return to the owning workflow.
+Ask only a question whose alternatives still change the next decision after reusing existing evidence. Apply the shared workflow's [token-economy rules](requirements-workflow.md#token-economy-required); expand only for the requested deliverable or required context. If evidence is sufficient for the named step, return to the owning workflow.
 
 ## Detect a consequential omission
 

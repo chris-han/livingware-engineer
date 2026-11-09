@@ -9,7 +9,7 @@ Build the minimum sufficient decision context for the next accountable decision 
 
 ## Entry and ownership
 
-Read [the shared requirements workflow contract](references/requirements-workflow.md). Locate the current requirement source and its owner before eliciting more information. Domain skills keep domain interpretation, legal authority, execution, and admission/activation ownership.
+Read [the shared requirements workflow contract](references/requirements-workflow.md) once per current context/version and apply its required token-economy rules. Locate the current requirement source and its owner before eliciting more information. Domain skills keep domain interpretation, legal authority, execution, and admission/activation ownership.
 
 Enter at the actual unresolved state: elicit missing intent, clarify meaning, test compatibility, reconcile a change, or recover an interrupted review. Do not restart the whole interview for each state.
 

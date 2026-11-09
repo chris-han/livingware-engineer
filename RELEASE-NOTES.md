@@ -1,3 +1,9 @@
+## v6.15.11 (2026-11-09)
+
+- Require token economy in the shared requirements workflow: load only relevant context, reuse valid evidence, keep ordinary clarification compact and remove duplicate summaries.
+- Preserve decision-changing evidence, conditions, uncertainty and authority; requested complete reports and structured handoffs remain complete. Retain the existing minimum-sufficient-context and warn-and-proceed behavior.
+- Add a focused review fixture and synchronize all ten declared version fields. Text-length observations are not token/cost measurements or evidence of generalized improvement.
+
 ## v6.15.10 (2026-11-09)
 
 - Make warn-and-proceed explicit for authorized, reversible steps supported by a stated provisional assumption. Carry uncertainty, consequences and a useful later check in the existing context; avoid repeated warnings and confirmation loops.

@@ -1,3 +1,7 @@
+# 6.15.12
+
+- Move project-specific Windows build paths, shell requirements and release procedures to the consuming project skill. Keep only generic shared-source isolation, cache reuse and owned-stage cleanup in Livingware.
+
 ## v6.15.11 (2026-11-09)
 
 - Require token economy in the shared requirements workflow: load only relevant context, reuse valid evidence, keep ordinary clarification compact and remove duplicate summaries.

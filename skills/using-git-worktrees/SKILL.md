@@ -64,7 +64,7 @@ Apply [Plan integration and retirement](../finishing-a-development-branch/refere
 
 ## Shared WSL source and Windows build environments
 
-Before Windows desktop build/setup work against a WSL-hosted source, read [Windows source and build contract](references/windows-source-and-build.md). It covers native PowerShell and WSL/Linux entry, single-source authority, local dependency/output roots, UNC child-process limitations and existing-tool preflight. Apply its source/staging contract before selecting paths: R:/UNC is the only maintained source; D: may contain an exact temporary build copy, with no code edits there and verified deletion after the build attempt. Preserve caches and final artifacts outside the disposable stage.
+For shared-source Windows builds, read [generic source/build isolation](references/windows-source-and-build.md). The consuming project owns concrete source/cache paths, supported shells, toolchains and build/release procedures in its project skill and existing operator. Keep the maintained source separate from disposable execution state; preserve reusable caches and verify owned-stage cleanup.
 
 ## Step 0: Detect Existing Isolation
 

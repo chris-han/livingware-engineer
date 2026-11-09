@@ -37,4 +37,4 @@ These principles never authorize weakening correctness, architecture, safety/sec
 - The layered runtime and counterfactual-evaluation architecture is owned by [docs/skill-runtime-architecture.md](docs/skill-runtime-architecture.md). Keep detailed routing/eval mechanics out of this constitutional file.
 - Honor explicit user/repository requirements over generic workflow defaults.
 
-For Windows desktop builds or environment setup using shared WSL source, read [the Windows source/build contract](skills/using-git-worktrees/references/windows-source-and-build.md) before selecting paths or invoking tools. It supports both WSL/Linux Bash and native Windows PowerShell, keeps source authority separate from local Windows build state, and requires a disposable local build copy with no code edits on D: and verified cleanup after the build attempt. R:/UNC remains the only maintained source.
+For shared-source Windows builds, use [generic source/build isolation](skills/using-git-worktrees/references/windows-source-and-build.md). Concrete source/cache paths, PowerShell versions and release procedures belong to the consuming project skill and operator.

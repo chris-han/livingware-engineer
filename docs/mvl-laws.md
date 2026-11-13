@@ -16,9 +16,11 @@ Review question: if an approval step delays the first useful result without chan
 
 ### Engineering execution: first real loop before breadth
 
-For a product or integration MVL, first make the smallest real user journey work or expose its first concrete failing boundary. **Acceptance criteria define the finish line, not the execution order.** Put a bounded real-path smoke before broad validation, polish and documentation that do not enable or protect that path. Retain necessary authentication, tenant, authority, safety and data-integrity checks; never fake internal components or weaken a boundary to get a pass.
+For a product or integration MVL, implement toward the smallest real user journey rather than building unrelated breadth. **Acceptance criteria define the finish line, not the execution order.** Apply [goal-level E2E, task-level focused verification](verification-impact-analysis-v1.md#goal-level-e2e-task-level-focused-verification): finish the implementation task list with focused tests, then run one consolidated real-UI campaign on the integration-ready candidate before declaring the goal achieved.
 
-On failure, repair the first failed seam and repeat that same journey rather than expanding the plan or running unrelated checks. A working first loop is progress, not completion: finish affected negative controls, required acceptance and integration afterward.
+An early bounded real-path diagnostic smoke is justified only by a named unresolved boundary risk or an explicit requirement; it is not a default milestone or a full E2E prerequisite for every task. Keep necessary authentication, tenant, authority, safety, data-integrity and dependency checks early. Never fake internal components or weaken a boundary to get a pass.
+
+On failure, repair the failed seam and rerun the affected journey or checks rather than expanding the plan or repeating unrelated evidence. First-loop success is progress, not goal completion; all required acceptance and integration conditions still apply.
 
 ### User Intervention Necessity Test
 

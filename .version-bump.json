@@ -1,52 +1,16 @@
 {
-  "version": "6.15.12",
+  "version": "6.15.13",
   "files": [
-    {
-      "path": ".version-bump.json",
-      "field": "version"
-    },
-    {
-      "path": "package.json",
-      "field": "version"
-    },
-    {
-      "path": ".codex-plugin/plugin.json",
-      "field": "version"
-    },
-    {
-      "path": ".claude-plugin/plugin.json",
-      "field": "version"
-    },
-    {
-      "path": ".claude-plugin/marketplace.json",
-      "field": "plugins.0.version"
-    },
-    {
-      "path": ".cursor-plugin/plugin.json",
-      "field": "version"
-    },
-    {
-      "path": ".devin-plugin/plugin.json",
-      "field": "version"
-    },
-    {
-      "path": ".kimi-plugin/plugin.json",
-      "field": "version"
-    },
-    {
-      "path": "gemini-extension.json",
-      "field": "version"
-    },
-    {
-      "path": ".hermes-plugin/plugin.yaml",
-      "field": "version"
-    }
+    {"path": ".version-bump.json", "field": "version"},
+    {"path": "package.json", "field": "version"},
+    {"path": ".codex-plugin/plugin.json", "field": "version"},
+    {"path": ".claude-plugin/plugin.json", "field": "version"},
+    {"path": ".claude-plugin/marketplace.json", "field": "plugins.0.version"},
+    {"path": ".cursor-plugin/plugin.json", "field": "version"},
+    {"path": ".devin-plugin/plugin.json", "field": "version"},
+    {"path": ".kimi-plugin/plugin.json", "field": "version"},
+    {"path": "gemini-extension.json", "field": "version"},
+    {"path": ".hermes-plugin/plugin.yaml", "field": "version"}
   ],
-  "audit": {
-    "exclude": [
-      "RELEASE-NOTES.md",
-      "CHANGELOG.md",
-      "docs"
-    ]
-  }
+  "audit": {"exclude": ["RELEASE-NOTES.md", "CHANGELOG.md", "docs"]}
 }

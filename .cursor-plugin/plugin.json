@@ -2,22 +2,12 @@
   "name": "livingware-engineer",
   "displayName": "Livingware Engineer",
   "description": "Governed planning, TDD, integration verification, debugging, and delivery workflows",
-  "version": "6.15.12",
-  "author": {
-    "name": "chris-han"
-  },
+  "version": "6.15.13",
+  "author": {"name": "chris-han"},
   "homepage": "https://github.com/chris-han/livingware-engineer",
   "repository": "https://github.com/chris-han/livingware-engineer",
   "license": "MIT",
-  "keywords": [
-    "skills",
-    "tdd",
-    "integration-testing",
-    "debugging",
-    "collaboration",
-    "best-practices",
-    "workflows"
-  ],
+  "keywords": ["skills", "tdd", "integration-testing", "debugging", "collaboration", "best-practices", "workflows"],
   "skills": "./skills/",
   "hooks": "./hooks/hooks-cursor.json"
 }

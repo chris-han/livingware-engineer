@@ -30,9 +30,11 @@ This rule does not require extra approval for ordinary tests, sequential delegat
 
 ## Execution economics and evidence reuse
 
-When the task is materially cross-boundary, or the user requests an efficiency comparison, use [Execution Economics](references/execution-economics.md) and the cross-cutting [Token-Efficient Execution Policy](../using-superpowers/references/token-efficient-execution.md). Before implementation, consume the plan's risk-based failure review (or record a justified skip). Schedule the high-risk cold/warm, identity-transition and timeout counterexample smoke **before the first expensive integration when feasible**, while retaining real-component and terminal acceptance requirements. Do not reopen settled discovery or repeat the same owner map without new evidence.
+Follow [goal-level E2E, task-level focused verification](../../docs/verification-impact-analysis-v1.md#goal-level-e2e-task-level-focused-verification). Complete all implementation tasks with focused tests and necessary local integration; assemble the real candidate and prepare services/fixtures, then run one consolidated UI-driven E2E campaign before claiming the goal. Explicit target ordering belongs inside final acceptance, not automatically between implementation tasks. A bounded early diagnostic smoke needs a concrete unresolved boundary risk or explicit requirement; it is not routine E2E.
 
-Keep compact, SHA-bound stage receipts listing completed contracts, unresolved risk, focused tests, reused unchanged evidence and the next discriminating step. Use impact-radius test cadence: focused checks after changes; broad verification at a suitable frozen candidate; after a narrow patch, rerun affected surfaces and explicitly justify which unchanged results are reusable. Do not equate necessary regression checks with waste or mark a flaky failure as a pass.
+Use the latest checkpoint, relevant diff and existing assertions/results. Do not rebuild the requirement-to-evidence mapping, reload full history, or emit a new receipt for each passing task. Update only meaningful recovery state, remaining gaps and references to reusable results in the existing tracker. After a failure, rerun the failed and invalidated paths, expanding only for demonstrated impact. Reuse unchanged integrated results through merge and completion; do not equate necessary regression checks with waste or mark a flaky failure as a pass.
+
+When a task is materially cross-boundary or the user requests an efficiency comparison, consult [Execution Economics](references/execution-economics.md) and the cross-cutting [Token-Efficient Execution Policy](../using-superpowers/references/token-efficient-execution.md) only for the unresolved economic question. Consume the plan's bounded failure review without reopening settled discovery. For CDP, use deterministic scripts and bounded summaries; leave raw logs locally and inspect only relevant failure excerpts.
 
 When telemetry is accessible, report planning/review, input/output/cache tokens, total accounting convention, wall time, repeat source reads and test/rework counts; when it is not, report `UNKNOWN` rather than guessing. Compare with a prior baseline only after verified terminal completion and with task/risk comparability disclosed. Lower tokens without equivalent correctness is not improvement. Economic instrumentation must not block routine autonomous execution or expose secrets.
 
@@ -65,7 +67,7 @@ The single mutable plan authority belongs in the repository’s main-branch chec
 A plan may remain authoritative at a repository or worktree location different from the worktree named by `execution_worktree`. When that occurs:
 
 - read and validate the plan from its authoritative source location;
-- execute authorized implementation, generated evidence, checkpoints, and experiment artifacts inside the bound execution worktree;
+- execute authorized implementation and necessary recovery/test artifacts inside the bound execution worktree;
 - preserve the plan's declared `execution_worktree`, `execution_branch`, and `execution_base_branch` independently from the plan file's physical location;
 - treat the main-checkout plan path as the single mutable plan authority;
 - resolve plan-relative references against the authoritative plan's repository context when their meaning depends on plan location;
@@ -93,8 +95,8 @@ A valid authoritative plan located outside the execution worktree is not workspa
 
 For governed or recoverable work:
 
-- keep implementation edits, generated execution evidence, stage receipts, and execution checkpoints in the bound execution worktree unless the plan explicitly owns a cross-repository action; write plan-state changes to the authoritative main-checkout plan;
-- checkpoint meaningful completed gates in commits so evidence does not exist only as uncommitted worktree state;
+- keep implementation edits and required execution/recovery evidence in the bound execution worktree unless the plan owns a cross-repository action; write plan-state changes to the authoritative main-checkout plan;
+- checkpoint meaningful recovery boundaries in commits so load-bearing evidence is preserved; do not create a report or evidence commit for every PASS;
 - when a gate intentionally freezes the exact executable/evidence state for the next phase, update `execution_commit` to that commit and state what it binds;
 - do not move `execution_commit` merely because documentation metadata changed afterward;
 - do not claim a phase is reproducible when its required artifacts are still uncommitted;
@@ -116,11 +118,11 @@ A merged submodule branch with an unupdated parent pointer is not integrated clo
 
 ## Continuous execution and progress reporting
 
-Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execution-first-real-loop-before-breadth) when selecting the next action. Until the initial real journey works, prioritize its first failing boundary and smallest repair over broader checks or metadata work; preserve necessary security/correctness prerequisites and the final acceptance contract.
+Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execution-first-real-loop-before-breadth): implement toward the real journey, use focused checks during the task list, and reserve the consolidated E2E campaign for integration readiness. Diagnose the first concrete failing boundary without turning each task into a full UI run. Preserve necessary security/correctness prerequisites and final acceptance.
 
 After every non-terminal observation, choose the next dependency-ready required action and continue. A GREEN checkpoint advances plan state; it does not return control to the user. A RED or unverified checkpoint normally creates debugging, repair, retry, replanning, or verification work.
 
-**Silent-by-default execution:** do not emit a user-visible update for each tool call, test, commit, normal fix, successful checkpoint or phase transition. Keep those details in the existing plan/evidence ledger. Communicate only a meaningful independently useful milestone on an extended run, a material change to risk/scope/outcome, or a genuine blocker requiring user attention; use one compact update and continue unless user intervention is necessary. Obey explicit host/user progress requirements. Do not end updates with “Should I continue?” or wait for acknowledgment.
+**Silent-by-default execution:** do not emit a user-visible update for each tool call, test, commit, normal fix, successful checkpoint or phase transition. Routine passing output needs no additional durable narration. Communicate a meaningful independently useful milestone on an extended run, a material risk/scope/outcome change, or a genuine blocker; use one compact update and continue unless user intervention is necessary. Obey explicit host/user progress requirements. Do not end updates with “Should I continue?” or wait for acknowledgment.
 
 A predeclared negative or inconclusive terminal disposition is legitimate plan closure when its predicate is satisfied. It is not a reason to retry the same plan indefinitely or ask whether the user wants to continue. Check the user's outer objective separately: if the requested end state remains unmet, preserve that goal as incomplete and route to the next authorized recovery or successor action. If no such action is available, report the stopping evidence and the unmet outcome; do not claim the outer goal is complete.
 
@@ -144,10 +146,11 @@ A successful install alone is not readiness; exercise the minimum real API/behav
 
 ## Dynamic workflow routing
 
-Read `references/workflow-routing.md` when the next execution state is non-obvious. It owns the state topology:
+Read `references/workflow-routing.md` only when the next state is non-obvious:
 
 ```text
-plan review -> prerequisites -> task execution -> integration
+plan review -> prerequisites -> implementation tasks + focused tests
+           -> integration-ready candidate -> consolidated goal verification
            -> MVL closure when applicable -> completion handoff
 ```
 
@@ -155,35 +158,24 @@ Route by current evidence rather than preloading future workflows:
 
 - unexplained failure -> `systematic-debugging`;
 - authorized changed behavior -> `test-driven-development`;
-- completion/correctness claim -> `verification-before-completion`;
-- UI/browser evidence -> the existing browser lifecycle contract;
+- final goal/integration/merge/release claim needing an evidence check -> `verification-before-completion`;
+- required UI campaign or bounded UI diagnostic -> the existing browser lifecycle contract;
 - branch completion -> `finishing-a-development-branch` when supported and authorized.
 
-The owning downstream skill defines its mechanics. Do not duplicate debugging, TDD, verification, browser, review, packaging, or version-sync procedures here.
+Routine focused-test/task progress does not activate the completion verifier. The downstream owner defines its mechanics; do not duplicate debugging, TDD, verification, browser, review, packaging or version-sync procedures here.
 
 ## Real-path invariant
 
 When the claim crosses component boundaries, prove the smallest affected production path through the real in-repo components that matter. Substitute only genuine external or nondeterministic boundaries where the plan permits it. A mock of the internal architecture cannot prove that architecture is integrated.
 
-Reuse valid unchanged evidence. Rerun checks invalidated by changed code/config/dependencies/fixtures/environment; do not rerun expensive evidence merely because workflow state changed.
+Reuse valid unchanged evidence. Rerun checks invalidated by changed code/config/dependencies/fixtures/environment/acceptance; do not rerun expensive evidence merely because workflow state changed.
 
 ## Compact handoff
 
-Across workflow transitions carry only:
-
-```text
-current plan/task state
-binding intended/preserved behavior
-affected surface
-valid evidence already obtained
-unresolved material risk
-next-state entry reason
-```
-
-Do not carry complete prior skill bodies, broad repository dumps, or duplicate test narration.
+Across workflow transitions carry only current plan/task state, binding behavior, affected surface, valid result reference, unresolved material risk and next action. Do not carry complete prior skill bodies, broad repository dumps, duplicate matrices or test narration.
 
 ## Completion
 
-Before claiming fixed/correct/complete/integrated/ready-to-merge/release, enter `verification-before-completion` for the exact claim. After supported completion evidence, use the already-authorized branch action or the branch-completion workflow. Evidence boundaries are not human approval checkpoints.
+At the final goal/integration/merge/release claim, use `verification-before-completion` to check sufficiency of existing results and remaining gaps—not to launch a second campaign. Apply its Plan completion gate and authorized integration/retirement obligations. Do not preload it or invoke it for ordinary task progress. An unchanged merge reuses valid results; a changed merge needs affected checks.
 
-For whole-plan completion, apply that skill's Plan completion gate to the original acceptance contract. Keep incomplete requirements visible through task boundaries; a green command list or completed implementation slice cannot authorize closing the plan or host goal. A declared negative/inconclusive terminal disposition may close the plan only when its own predicate and evidence requirements are satisfied.
+Keep incomplete requirements visible; a green command list or completed implementation slice cannot close the plan or host goal. A declared negative/inconclusive disposition closes only the scope supported by its predicate and evidence. Evidence boundaries are not human approval checkpoints.

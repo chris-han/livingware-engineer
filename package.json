@@ -1,18 +1,11 @@
 {
   "name": "livingware-engineer",
-  "version": "6.15.12",
+  "version": "6.15.13",
   "description": "An agentic skills framework & software development methodology that works.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/chris-han/livingware-engineer.git"
   },
-  "keywords": [
-    "agentic",
-    "skills",
-    "software-engineering",
-    "codex",
-    "claude-code",
-    "hermes"
-  ]
+  "keywords": ["agentic", "skills", "software-engineering", "codex", "claude-code", "hermes"]
 }

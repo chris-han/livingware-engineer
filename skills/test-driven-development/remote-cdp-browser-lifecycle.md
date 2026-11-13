@@ -2,6 +2,14 @@
 
 Use this contract for real-browser verification from WSL. Select the browser by the evidence the test must prove rather than treating every frontend test as a Chrome test.
 
+## Campaign timing and token budget
+
+Follow [goal-level E2E, task-level focused verification](../../docs/verification-impact-analysis-v1.md#goal-level-e2e-task-level-focused-verification). Run the consolidated UI campaign after all implementation tasks are integration-ready, not after each task. Earlier browser use is a bounded diagnostic for a named unresolved risk or an explicit requirement, not routine full acceptance.
+
+Start acceptance from the actual UI. Batch deterministic actions/assertions in the existing CDP/Playwright runner; use the LLM for test design and exceptions, not every click. Read targeted DOM/accessible state and necessary network fields. Keep raw traces locally; return the scoped verdict and failing assertion, using the policy's default 20-line summary/80-line diagnostic budgets. Expand only relevant excerpts. Capture screenshots for failures or required visual assertions/key checkpoints, not every interaction. Bound actions, timeouts and retries; never weaken assertions or silently retry to green.
+
+Reuse the same controlled CDP connection where safe, but keep account/profile/session isolation and real authentication. Do not copy cookies or credentials to save setup cost. A required native Electron journey must use the actual native application; Lightpanda, Chrome or an embedded billing webview cannot stand in for another application's required Settings/Composer journey. Explicit acceptance targets take precedence over the generic engine defaults below.
+
 ## Select the Browser by Evidence
 
 - **BEHAVIOR tests** — interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript — use Lightpanda at `http://127.0.0.1:9223` by default.

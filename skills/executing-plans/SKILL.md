@@ -30,6 +30,8 @@ This rule does not require extra approval for ordinary tests, sequential delegat
 
 ## Execution economics and evidence reuse
 
+Honor the repository's development lane. Follow [development before container integration](../../docs/verification-impact-analysis-v1.md#development-before-container-integration): source/dev implementation and focused checks first; freeze an integration-ready candidate before application-container work. Missing dev packages do not justify moving development into Docker.
+
 Follow [goal-level E2E, task-level focused verification](../../docs/verification-impact-analysis-v1.md#goal-level-e2e-task-level-focused-verification). Complete all implementation tasks with focused tests and necessary local integration; assemble the real candidate and prepare services/fixtures, then run one consolidated UI-driven E2E campaign before claiming the goal. Explicit target ordering belongs inside final acceptance, not automatically between implementation tasks. A bounded early diagnostic smoke needs a concrete unresolved boundary risk or explicit requirement; it is not routine E2E.
 
 Use the latest checkpoint, relevant diff and existing assertions/results. Do not rebuild the requirement-to-evidence mapping, reload full history, or emit a new receipt for each passing task. Update only meaningful recovery state, remaining gaps and references to reusable results in the existing tracker. After a failure, rerun the failed and invalidated paths, expanding only for demonstrated impact. Reuse unchanged integrated results through merge and completion; do not equate necessary regression checks with waste or mark a flaky failure as a pass.

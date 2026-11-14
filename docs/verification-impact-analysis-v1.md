@@ -47,6 +47,14 @@ Earlier UI work is limited to a bounded diagnostic smoke when a named unresolved
 
 On failure, diagnose, repair and rerun the failed scenarios plus paths invalidated by the repair. Do not restart the whole campaign by default, retry until green, weaken assertions or erase failed attempts. Broaden reruns only for demonstrated shared-state/fan-out risk. Integration or merge invalidates evidence only when relevant contents, wiring, configuration, dependencies, fixtures, environment or acceptance contract changed; a new commit hash alone is not a full-rerun requirement. Final claims must cover the actual integrated candidate.
 
+## Development before container integration
+
+Use the repository's documented source/dev environment for implementation, debugging, functional tests and connectivity checks. Inspect and reuse the pinned dependencies and test runner; repair missing dev packages there once. A missing SDK or test package is not a reason to inspect images, build a test container or move ordinary development into Docker. Reuse retained dependency services such as PostgreSQL; preserve shared services and unrelated state.
+
+Freeze an integration-ready candidate with implementation complete and affected focused checks passing before inspecting, building or starting application containers for the final integration campaign. This is a readiness boundary, not a new approval checkpoint. Earlier container work requires an explicit user/repository requirement or a concrete container-specific uncertainty that cannot be resolved in the dev environment; keep that diagnostic bounded. Existing containerized dependencies may remain in use, and explicitly required native acceptance keeps its target and ordering.
+
+After a final integration failure, repair ordinary functional defects in the dev environment. Rebuild affected images only when their contents or wiring changed, then rerun failed and invalidated acceptance paths under the shared campaign policy above. A phase transition alone does not justify a new build or campaign.
+
 ## Incremental evidence and stopping
 
 Start from the current checkpoint, changed surfaces and existing executable assertions/results. Reuse supported coverage; inspect only changed, failed, missing or uncertain coverage. Read the original acceptance source when first establishing coverage, when it changes or when the checkpoint is insufficient—not at every phase. At final closure confirm no required condition remains failed or unverified; incrementality never permits silently dropping a requirement.

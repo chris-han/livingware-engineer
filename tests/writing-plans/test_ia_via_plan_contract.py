@@ -46,9 +46,9 @@ def test_plan_header_requires_both_reviews():
 
 def test_ia_gate_is_structural_not_default_human_approval():
     combined = SKILL.read_text(encoding="utf-8") + "\n" + IA.read_text(encoding="utf-8")
-    assert "not a default human-approval checkpoint" in combined
+    assert "No extra approval turn is implied" in combined
     assert "REVISE_IA" in combined
-    assert "duplicated semantic ownership" in combined
+    assert "duplicated semantic owners" in combined
 
 
 def test_via_keeps_test_scope_separate_from_mvl_value_evaluation():

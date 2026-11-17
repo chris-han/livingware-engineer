@@ -39,11 +39,11 @@ require "$REVIEW" "../../docs/skill-runtime-architecture.md" "review points to c
 require "$REVIEW" "../../docs/skill-token-economics.md" "review points to canonical token economics"
 
 require "$EXECUTING" "references/workflow-routing.md" "executing-plans routes transition topology to workflow reference"
-require "$EXECUTING" "unexplained failure -> `systematic-debugging`" "executing-plans delegates unresolved diagnosis"
-require "$EXECUTING" "authorized changed behavior -> `test-driven-development`" "executing-plans delegates implementation behavior"
+require "$EXECUTING" 'unexplained failure -> `systematic-debugging`' "executing-plans delegates unresolved diagnosis"
+require "$EXECUTING" 'authorized changed behavior -> `test-driven-development`' "executing-plans delegates implementation behavior"
 require "$EXECUTING" 'final goal/integration/merge/release claim needing an evidence check -> `verification-before-completion`' "executing-plans delegates completion claims"
 require "$EXECUTING_ROUTING" "PLAN_REVIEW" "execution workflow owns explicit state topology"
-require "$EXECUTING_ROUTING" "Do not preload those skills before their entry conditions are reached." "execution workflow preserves current-state loading"
+require "$EXECUTING_ROUTING" "Do not preload these skills." "execution workflow preserves current-state loading"
 
 require "$TOKEN_REF" "routing/discovery context" "token model measures routing context"
 require "$TOKEN_REF" "selected workflow context" "token model measures selected workflow context"

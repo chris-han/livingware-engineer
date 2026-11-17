@@ -23,7 +23,7 @@ Use Livingware's engineering workflow for the work process and Impeccable for fr
 
 Route material UX/IA, semantic ownership, task-flow, and design-system integration decisions through this skill. Explicit Impeccable craft/critique/polish commands with unchanged IA may start in `impeccable`; if they expose a material IA or semantic change, return here before implementing that change.
 
-**CONDITIONAL CRAFT, NOT A REQUIRED SUB-SKILL:** Use `impeccable` when visual composition, typography, color, accessibility critique, motion, or visual polish is a substantive outcome or a concrete risk requires its craft checks. Do not load it for pure IA, routine data/control wiring, semantics-preserving UI fixes, or deterministic implementation verification. Reuse the same project design authority and incumbent evidence; avoid duplicating setup, IA discovery, full-site critique, or browser verification between skills.
+**CONDITIONAL VISUAL CRAFT:** Use `impeccable` when visual composition, typography, color, accessibility critique, motion, or visual polish is a substantive outcome or a concrete risk requires its craft checks. Do not load it for pure IA, routine data/control wiring, semantics-preserving UI fixes, or deterministic implementation verification. Reuse the same project design authority and incumbent evidence; avoid duplicating setup, IA discovery, full-site critique, or browser verification between skills.
 
 ## Project design authority
 

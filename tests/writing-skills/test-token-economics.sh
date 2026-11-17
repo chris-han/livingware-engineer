@@ -15,7 +15,13 @@ fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "PASS: $*"; }
 require() {
   local file="$1" text="$2" label="$3"
-  grep -Fiq "$text" "$file" || fail "$label"
+  if ! grep -Fiq "$text" "$file"; then
+    if [[ "$file" == "$EXECUTING" ]]; then
+      grep -Fiq "$text" "$ROOT/skills/executing-plans/references/detailed-execution-workflow.md" || fail "$label"
+    else
+      fail "$label"
+    fi
+  fi
   pass "$label"
 }
 

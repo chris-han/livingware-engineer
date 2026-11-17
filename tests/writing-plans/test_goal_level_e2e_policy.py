@@ -12,6 +12,15 @@ def read(path):
     return (ROOT / path).read_text(encoding="utf-8")
 
 
+def skill_contract(name):
+    root = read(f"skills/{name}/SKILL.md")
+    detail = {
+        "writing-plans": "skills/writing-plans/references/detailed-plan-workflow.md",
+        "executing-plans": "skills/executing-plans/references/detailed-execution-workflow.md",
+    }.get(name)
+    return root + "\n" + (read(detail) if detail else "")
+
+
 def require(text, *parts):
     for part in parts:
         assert part in text, f"missing contract: {part}"
@@ -22,7 +31,7 @@ def test_goal_cadence():
             "Finish all implementation tasks", "one consolidated E2E campaign",
             "before declaring the goal achieved", "not a trigger")
     for skill in ("writing-plans", "executing-plans", "verification-before-completion"):
-        require(read(f"skills/{skill}/SKILL.md"),
+        require(skill_contract(skill),
                 "verification-impact-analysis-v1.md#goal-level-e2e-task-level-focused-verification")
 
 
@@ -66,7 +75,8 @@ def test_thin_verifier_and_closure():
 
 def test_reference_targets_exist():
     paths = [POLICY, "docs/mvl-laws.md",
-             "skills/writing-plans/SKILL.md", "skills/executing-plans/SKILL.md",
+             "skills/writing-plans/SKILL.md", "skills/writing-plans/references/detailed-plan-workflow.md",
+             "skills/executing-plans/SKILL.md", "skills/executing-plans/references/detailed-execution-workflow.md",
              "skills/executing-plans/references/workflow-routing.md",
              "skills/verification-before-completion/SKILL.md",
              "skills/verification-before-completion/references/detailed-playbook.md",

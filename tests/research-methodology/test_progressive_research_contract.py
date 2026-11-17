@@ -44,7 +44,7 @@ def test_references_preserve_research_validity_and_closure():
 
 def test_root_references_are_real_and_no_parallel_ledger():
     text = SKILL.read_text(encoding="utf-8")
-    for link in re.findall(r"\\]\\(([^)]+)\\)", text):
+    for link in re.findall(r"\]\(([^)]+)\)", text):
         if link.startswith(("http:", "https:", "#")):
             continue
         target = (SKILL.parent / link.split("#")[0]).resolve()

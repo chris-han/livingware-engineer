@@ -958,14 +958,13 @@ export function extractPlatform(product) {
 }
 
 /**
- * Read the installed skill's own version from the sibling SKILL.md frontmatter
- * (this file lives at `<skill>/scripts/context.mjs`). Returns null when the
- * frontmatter is missing or unreadable.
+ * Read the installed frontend-design skill version. Impeccable scripts are
+ * internal assets now, so no separate impeccable/SKILL.md exists.
  */
 function readLocalSkillVersion() {
   try {
     const here = path.dirname(fileURLToPath(import.meta.url));
-    const skillMd = path.join(here, '..', 'SKILL.md');
+    const skillMd = path.join(here, '..', '..', 'frontend-design', 'SKILL.md');
     const content = fs.readFileSync(skillMd, 'utf-8');
     const match = content.match(/^version:\s*(.+)$/m);
     return match ? match[1].trim().replace(/^["']|["']$/g, '') : null;

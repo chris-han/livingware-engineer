@@ -1,6 +1,6 @@
 ---
 name: impeccable
-description: Use for frontend visual design, UX critique, accessibility, interaction polish, or an explicit Impeccable command; not backend-only work
+description: Use for an explicit Impeccable craft/critique/audit/polish/visual command, or a frontend task whose primary outcome is visual craft, typography, color, accessibility critique, or motion. Not for standalone IA/task-flow decisions, routine UI wiring, or backend-only work.
 version: 4.1.2
 ---
 
@@ -11,6 +11,10 @@ Core principles:
 - Go all out. No hedging, no shortcuts. The deliverable must be complete (except assets the user must provide).
 - Dream big and bold. Distinct, beautiful, outstanding and highly inspiring work.
 - Verify in bounded passes, not a loop, and the ceiling covers the whole cycle: screenshots, defect scans, micro-edits, and rebuilds alike. Build fully, inspect once with a batched round (desktop and mobile together on the web; the shipped device classes on a native platform), fix everything it shows in one batch, confirm with at most one more round, and stop polishing. Open-ended self-QA burns the user's money doing worse what the finish handoffs do better.
+
+## Integration with an existing frontend-design workflow
+
+When entered after `frontend-design`, reuse its settled task/IA, project design authority, target files, and existing verification evidence. Do not rerun JTBD/IA discovery, create replacement PRODUCT.md/DESIGN.md, or repeat a general UI audit unless the specific craft request needs it. When a visual request would change task flow, information ownership, or consequential UX semantics, route those decisions to `frontend-design` before making them. An explicit Impeccable command remains usable on its own when the existing IA is not being changed. This is an activation/ownership boundary, not a change to Impeccable's visual craft rules.
 
 ## Setup
 

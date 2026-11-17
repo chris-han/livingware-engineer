@@ -40,6 +40,14 @@ When a task is materially cross-boundary or the user requests an efficiency comp
 
 When telemetry is accessible, report planning/review, input/output/cache tokens, total accounting convention, wall time, repeat source reads and test/rework counts; when it is not, report `UNKNOWN` rather than guessing. Compare with a prior baseline only after verified terminal completion and with task/risk comparability disclosed. Lower tokens without equivalent correctness is not improvement. Economic instrumentation must not block routine autonomous execution or expose secrets.
 
+### Evidence-triggered scope conservation
+
+Treat the plan's confirmed owner map, necessary delta, and reusable evidence as the starting execution frontier. Verify relevant identity/freshness when needed; do not re-run broad architecture discovery simply because a new agent or worktree started. Open the named source/test owners first. Use targeted search or a code graph only for a **specific unresolved relationship or impact question**; refresh an index only when demonstrated staleness affects that question, preferably for the affected scope.
+
+Before installing dependencies or starting services, check the actual pinned environment and whether the needed capability already works. Repair genuinely missing prerequisites using the repository owner; never sacrifice required readiness to save calls. Read focused failure summaries before long logs, and avoid repeated full-file reads when unchanged evidence suffices.
+
+Broaden source inspection, prerequisite work, testing, or workflow only when an observed failure, missing contract, changed scope, or material correctness/security risk demonstrates necessity. Tie the expansion to that reason and choose its smallest falsifying check; once resolved, return to the shortest path to the plan's final outcome. Do not create a per-run scope checklist, require an approval for ordinary recovery, or treat fewer tool calls as more important than real E2E acceptance.
+
 ## Repository plan-state gate
 
 Before the first implementation edit, inspect and obey the repository's governed-plan lifecycle contract when one exists. Do not invent or normalize plan status from memory. If the repository provides a plan-state validator/linter, run it before execution and again before completion/commit.

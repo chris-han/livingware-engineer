@@ -25,6 +25,16 @@ Write an implementation plan that names the affected files/owners, changes, focu
 
 **Plan authority:** Keep the single mutable plan in the repository’s main-branch checkout, in the repository-required location. Draft, activate, update and archive it there; bind an implementation worktree separately. A branch-worktree copy is historical, not another authority. Preserve concurrent main edits. Explicit user/repository location rules take precedence.
 
+## Minimum Sufficient Execution Frontier
+
+Before expanding a design into tasks, hand execution a **compact scope contract** inside the existing plan (not a second tracker or a mandatory new form):
+
+- **Already established:** known production owners and call path, existing functionality, pinned assumptions, reusable tests/evidence, and what each result actually proves. Distinguish inspected source from previously passing tests and fresh acceptance.
+- **Necessary delta:** the smallest behavior/contract change that closes the user-visible goal, its direct owner(s), and the new evidence that is genuinely missing. Separate files to edit from callers to verify and conditional diagnostics.
+- **Expansion triggers:** concrete unknowns, failures, changed contracts, or newly demonstrated dependencies that would justify broader discovery, installation, test scope, or architecture work. Speculative risks are not automatic tasks.
+
+Start with known owners rather than repository-wide rediscovery. Check whether an existing environment or dependency satisfies the required contract before prescribing installation. Reuse valid unaffected evidence; choose focused new checks and one goal-level E2E according to impact radius. Do not turn every referenced file, possible edge case, or review suggestion into mandatory implementation scope. Expand only as necessary for correctness, safety, authority, or the declared outcome. Keep this concise, with no per-task scope ledger or extra human checkpoint.
+
 ## Execution Continuity Contract
 
 Every executable multi-step plan MUST declare an **authorized stopping criterion** and **permitted terminal dispositions** near the top. A plan is a completion contract, not merely a checklist.

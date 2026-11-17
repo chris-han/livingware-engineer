@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Use when designing, implementing, refactoring, reviewing, auditing, or polishing frontend UI, product interfaces, dashboards, components, visual systems, or information architecture.
+description: Use for frontend user-task flows, information architecture, semantic ownership, design-system-constrained UI implementation and UX reviews. For standalone Impeccable visual-craft commands with unchanged IA, use impeccable instead; not for backend-only tasks.
 ---
 
 # Frontend Design
@@ -11,7 +11,7 @@ description: Use when designing, implementing, refactoring, reviewing, auditing,
 
 ## IA Before UI
 
-For every UI design, redesign, extension, audit, or review, apply `docs/ia-before-ui.md` before choosing visual composition or components. Establish or revalidate the JTBD, cognitive-work allocation, task flow, semantic owners, states/recovery and responsive hierarchy; then map the IA to the project's current design document, workbench template and showcase components. Carry the same evidence into implementation and review.
+For new UI, material task-flow/IA changes, or a review disputing existing IA, apply `docs/ia-before-ui.md` before visual choices. Establish or revalidate the JTBD, cognitive-work allocation, task flow, semantic owners, states/recovery and responsive hierarchy, and bind the current project design. For an IA-preserving fix or visual refinement, reuse the established IA; do not reconstruct a full IA contract.
 
 This is a structural engineering gate, not a default human-approval checkpoint. Proceed directly with `GO_FOR_UI` when stop conditions clear; repair `REVISE_IA` before detailed visual design or production UI code. Use the policy's narrow `NOT_APPLICABLE` exception only for changes that preserve IA; bounded scope and “polish” do not excuse task-flow changes.
 
@@ -21,9 +21,9 @@ When task context, information order, cross-panel coordination, disclosure, or r
 
 Use Livingware's engineering workflow for the work process and Impeccable for frontend craft. Existing project design context is evidence and constraint, not optional inspiration.
 
-Any request that designs, changes, refactors, audits, or reviews frontend UX/IA (layout, navigation, interaction flows, controls, content hierarchy, readability, responsive behavior, or information architecture) MUST route through this skill before substantive design reasoning or UI edits.
+Route material UX/IA, semantic ownership, task-flow, and design-system integration decisions through this skill. Explicit Impeccable craft/critique/polish commands with unchanged IA may start in `impeccable`; if they expose a material IA or semantic change, return here before implementing that change.
 
-**REQUIRED SUB-SKILL:** Use `impeccable` for visual craft, critique, anti-slop detection, accessibility, responsive behavior, interaction states, and polish.
+**CONDITIONAL CRAFT, NOT A REQUIRED SUB-SKILL:** Use `impeccable` when visual composition, typography, color, accessibility critique, motion, or visual polish is a substantive outcome or a concrete risk requires its craft checks. Do not load it for pure IA, routine data/control wiring, semantics-preserving UI fixes, or deterministic implementation verification. Reuse the same project design authority and incumbent evidence; avoid duplicating setup, IA discovery, full-site critique, or browser verification between skills.
 
 ## Project design authority
 
@@ -39,7 +39,7 @@ For rounded-corner transitions, nested rounded surfaces, or corner clipping/stro
 
 For Asimov projects, read [references/asimov-alignment.md](references/asimov-alignment.md) and inspect the current workbench template, composition showcase, and component showcase. For canvas-header or breadcrumb work, follow its conditional canvas-orientation playbook. This reference and its regional playbooks are bundled here; a separate `asimov-ui-design` skill is not required. Follow the project's declared source responsibilities; resolve material drift rather than copying stale examples. Do not impose Asimov on unrelated projects.
 
-If no design system exists, use Impeccable's normal brief-inference and new-work process to establish a coherent direction from the product requirements and references.
+If no design system exists and a visual system must be created, enter Impeccable's new-work process after the relevant task/IA decision. Absence of a `DESIGN.md` filename alone is not proof of missing product design authority.
 
 ## Working method
 
@@ -47,7 +47,7 @@ If no design system exists, use Impeccable's normal brief-inference and new-work
 2. Allocate remembering, finding, comparing, calculating, configuring and recovery to the system where safe. Preserve the user's necessary judgment and authority; apply Fix → Infer → Recommend → Ask.
 3. Establish or revalidate IA under the gate before detailed visual choices; record the review in the existing spec/plan or bounded-task response.
 4. Map information roles to exact design-document sections, current template/showcase paths, tokens and shared primitive variants before implementation.
-5. Use Impeccable for visual craft inside those constraints, preserving incumbent visual and IA rules during refinements.
+5. If visual craft is in scope, enter Impeccable only for that scoped phase; preserve the existing IA, tokens, and design authority. Otherwise continue without it.
 6. Verify both the task path and design conformance. Define a task-effort acceptance check; do not equate browser success with measured human cognitive-load reduction.
 7. Integrate genuinely reusable patterns into the existing design-system boundary instead of duplicating them locally.
 

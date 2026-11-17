@@ -36,7 +36,7 @@ def portable_env(tmp: Path) -> dict[str, str]:
 
 
 def write_metadata_fixture(root: Path) -> None:
-    for skill in sorted(p.name for p in (ROOT / "skills").iterdir() if p.is_dir()):
+    for skill in sorted(p.name for p in (ROOT / "skills").iterdir() if p.is_dir() and (p / "SKILL.md").is_file()):
         dst = root / "skills" / skill / "agents" / "openai.yaml"
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_text(

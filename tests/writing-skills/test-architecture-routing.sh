@@ -11,8 +11,14 @@ WORKFLOW="$ROOT/.github/workflows/layered-runtime-ci.yml"
 fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "PASS: $*"; }
 require() {
-  local file="$1" text="$2" label="$3"
-  grep -Fiq "$text" "$file" || fail "$label"
+  local file="$1" text="$2" label="$3" detail=""
+  case "$file" in
+    "$BRAINSTORM") detail="$ROOT/skills/brainstorming/references/detailed-design-workflow.md" ;;
+    "$PLANS") detail="$ROOT/skills/writing-plans/references/detailed-plan-workflow.md" ;;
+  esac
+  if ! grep -Fiq "$text" "$file"; then
+    [[ -n "$detail" ]] && grep -Fiq "$text" "$detail" || fail "$label"
+  fi
   pass "$label"
 }
 

@@ -26,6 +26,8 @@ on:
       - 'package.json'
       - '.codex-plugin/plugin.json'
       - '.claude-plugin/plugin.json'
+      - '.claude-plugin/marketplace.json'
+      - '.hermes-plugin/plugin.yaml'
       - '.cursor-plugin/plugin.json'
       - '.devin-plugin/plugin.json'
       - '.kimi-plugin/plugin.json'
@@ -53,6 +55,8 @@ on:
       - 'package.json'
       - '.codex-plugin/plugin.json'
       - '.claude-plugin/plugin.json'
+      - '.claude-plugin/marketplace.json'
+      - '.hermes-plugin/plugin.yaml'
       - '.cursor-plugin/plugin.json'
       - '.devin-plugin/plugin.json'
       - '.kimi-plugin/plugin.json'
@@ -68,7 +72,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Version manifest consistency
+      - name: Version manifest inventory and consistency
+        run: python3 tests/codex/test-version-manifest-coverage.py
+      - name: Version bump tool consistency
         run: bash scripts/bump-version.sh --check
       - name: Version tooling without jq
         run: bash tests/codex/test-bump-version-no-jq.sh

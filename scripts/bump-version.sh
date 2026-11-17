@@ -140,7 +140,10 @@ preflight_manifests() {
   require_tool python3 || return 1
   while IFS=$'\t' read -r path field; do
     fullpath="$REPO_ROOT/$path"
-    [[ -f "$fullpath" ]] || continue
+    if [[ ! -f "$fullpath" ]]; then
+      echo "error: required declared manifest missing: $path" >&2
+      return 1
+    fi
 
     if ! read_manifest_field "$fullpath" "$field" >/dev/null; then
       echo "error: cannot read declared manifest: $path ($field)" >&2
@@ -290,20 +293,41 @@ cmd_bump() {
 
   preflight_manifests
 
-  echo "Bumping all declared files to $new_version..."
-  echo ""
+  # Snapshot all manifests before changing any; roll back a failed bump.
+  local backup_dir
+  backup_dir=$(mktemp -d)
+  local -a backed_up=()
+  local path field fullpath old_ver failed=0
 
   while IFS=$'\t' read -r path field; do
-    local fullpath="$REPO_ROOT/$path"
-    if [[ ! -f "$fullpath" ]]; then
-      echo "  SKIP (missing): $path"
-      continue
+    fullpath="$REPO_ROOT/$path"
+    mkdir -p "$backup_dir/$(dirname "$path")"
+    cp "$fullpath" "$backup_dir/$path"
+    backed_up+=("$path")
+  done < <(declared_files)
+
+  echo "Bumping all declared files to $new_version..."
+  echo ""
+  while IFS=$'\t' read -r path field; do
+    fullpath="$REPO_ROOT/$path"
+    old_ver=$(read_manifest_field "$fullpath" "$field") || { failed=1; break; }
+    if ! write_manifest_field "$fullpath" "$field" "$new_version"; then
+      failed=1
+      break
     fi
-    local old_ver
-    old_ver=$(read_manifest_field "$fullpath" "$field")
-    write_manifest_field "$fullpath" "$field" "$new_version"
     printf "  %-45s  %s -> %s\n" "$path ($field)" "$old_ver" "$new_version"
   done < <(declared_files)
+
+  if [[ "$failed" -eq 0 ]]; then
+    cmd_check || failed=1
+  fi
+  if [[ "$failed" -ne 0 ]]; then
+    echo "error: version bump failed; restoring all declared manifests" >&2
+    for path in "${backed_up[@]}"; do cp "$backup_dir/$path" "$REPO_ROOT/$path"; done
+    rm -rf "$backup_dir"
+    return 1
+  fi
+  rm -rf "$backup_dir"
 
   echo ""
   echo "Done. Running audit to check for missed files..."

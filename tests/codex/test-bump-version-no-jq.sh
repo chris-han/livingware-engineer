@@ -69,4 +69,22 @@ assert json.loads((root / "package.json").read_text())["version"] == "2.3.4"
 assert json.loads((root / "plugin/plugin.json").read_text())["meta"][0]["version"] == "2.3.4"
 PY
 
-echo "PASS: version check/audit/bump require Python only; jq is not invoked"
+# Missing manifests must fail before any changes.
+cp "$FIXTURE/plugin/plugin.json" "$TMP/plugin.saved.json"
+rm "$FIXTURE/plugin/plugin.json"
+if bash "$FIXTURE/scripts/bump-version.sh" 3.4.5 > "$TMP/missing.log" 2>&1; then
+  echo "FAIL: bump accepted missing manifest" >&2
+  exit 1
+fi
+grep -Fq "required declared manifest missing" "$TMP/missing.log"
+python3 - "$FIXTURE" <<'PY'
+import json
+from pathlib import Path
+import sys
+root = Path(sys.argv[1])
+assert json.loads((root / "package.json").read_text())["version"] == "2.3.4"
+assert json.loads((root / ".version-bump.json").read_text())["version"] == "2.3.4"
+PY
+cp "$TMP/plugin.saved.json" "$FIXTURE/plugin/plugin.json"
+
+echo "PASS: version check/audit/bump require Python only; missing manifests fail without mutation"

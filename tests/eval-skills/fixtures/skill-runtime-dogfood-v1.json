@@ -92,8 +92,8 @@
           "case_id": "verify-lifecycle-contract",
           "class": "CONTRACT",
           "expected": {
-            "entry_contains": "a correctness, completion, integration, merge, or release claim is imminent",
-            "exit_contains": "the claim is supported, falsified, or narrowed"
+            "entry_contains": "Use at an imminent final goal, integration, merge or release claim",
+            "exit_contains": "Sufficient evidence ends verification"
           },
           "evidence_lane": "DETERMINISTIC_REPOSITORY_CONTRACT",
           "status": "QUALIFIED"

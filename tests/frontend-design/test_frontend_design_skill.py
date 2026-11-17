@@ -37,7 +37,7 @@ def test_livingware_ia_gap_is_preserved_without_duplicate_skill() -> None:
         "Verification Impact Analysis",
     ):
         assert phrase.lower() in text.lower(), phrase
-    assert "single discoverable skill" in text
+    assert "one discoverable skill" in text
     assert "without independent evidence" in text
 
 

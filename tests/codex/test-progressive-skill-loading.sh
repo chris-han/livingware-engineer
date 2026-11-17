@@ -66,14 +66,18 @@ require_text "$TDD" "Tool Economy" "TDD defaults to bounded tool use"
 require_text "$TDD" "A concise implementation-result report is not by itself a completion claim" "TDD result reporting does not trigger verification"
 require_text "$TDD" "references/detailed-playbook.md" "TDD preserves detailed guidance behind progressive disclosure"
 
-require_text "$VERIFY" "Use only when a correctness, completion, integration, merge, or release claim is imminent" \
-  "verification activates only for an imminent claim"
-require_text "$VERIFY" "Do not preload during diagnosis or implementation." \
-  "verification explicitly forbids preloading"
-require_text "$VERIFY" "## Lifecycle" "verification defines a lifecycle boundary"
-require_text "$VERIFY" "Tool Economy" "verification defaults to bounded tool use"
-require_text "$VERIFY" "do not activate codebase-memory" "bounded verification does not pair with codebase-memory"
-require_text "$VERIFY" "references/detailed-playbook.md" "verification preserves detailed guidance behind progressive disclosure"
+require_text "$VERIFY" "Use at an imminent final goal, integration, merge or release claim" \
+  "verification activates only for an imminent final claim"
+require_text "$VERIFY" "Do not preload during implementation" \
+  "verification explicitly forbids implementation preloading"
+require_text "$VERIFY" "This is a claim check, not a second test campaign" \
+  "verification stays a bounded evidence sufficiency check"
+require_text "$VERIFY" "Reuse existing assertions/results" \
+  "verification reuses prior evidence"
+require_text "$VERIFY" "No eager graph discovery" \
+  "verification keeps graph discovery conditional"
+require_text "$VERIFY" "references/detailed-playbook.md" \
+  "verification preserves progressive disclosure"
 
 require_text "$PROGRESSIVE" "Debugging, TDD, and verification are sequential states, not a default bundle." \
   "progressive contract forbids the default three-skill bundle"

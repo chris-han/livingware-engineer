@@ -34,6 +34,8 @@ Apply [Verification Impact Analysis](../../docs/verification-impact-analysis-v1.
 
 After each meaningful observation choose the next dependency-ready authorized step. A failure triggers the smallest diagnostic or repair/retest loop, not automatic human handoff or a duplicate test campaign. Do not repeatedly ask “should I continue?” Routine tool calls, tests and checkpoints need no ceremonial narration; communicate substantial independently useful progress, material risks, or blockers subject to host/user update rules.
 
+If the next workflow state is genuinely ambiguous, read [workflow routing](references/workflow-routing.md) and load only its current-state owner; do not preload debugging, TDD, or verification together.
+
 Only actual unavailable user-owned access, authorization, consequential external effect, or a materially unresolved choice after safe delegated recovery satisfies the **User Intervention Necessity Test** (`docs/mvl-laws.md`). A proven negative/inconclusive terminal is legitimate within its frozen predicate; do not claim it also proves the outer customer goal.
 
 For nonroutine execution economics compare complete loop cost, not just tokens: reuse [execution economics](references/execution-economics.md) and [token-efficient policy](../using-superpowers/references/token-efficient-execution.md) only when needed. No automatic telemetry reporting, huge model/CDP traces or speculative performance claim; inaccessible token counts are UNKNOWN.

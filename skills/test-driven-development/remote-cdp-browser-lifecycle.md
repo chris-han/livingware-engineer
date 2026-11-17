@@ -21,7 +21,7 @@ The project's AGENTS/spec/runner owns concrete browser executables, ports, start
 
 ## Process ownership and cleanup
 
-Reuse a qualified project-controlled browser if safe; keep operator-owned windows, tabs, context, profile, viewport, zoom and listeners unchanged. Create a fixture-owned page/context, and close only fixture-owned resources in a finally block. Never kill processes by port/name. A fixture-started browser must record its process identity and stop only that process; a shared browser stays running.
+Reuse a qualified project-controlled browser if safe; keep operator-owned windows, tabs, context, profile, viewport, zoom and listeners unchanged. Create a fixture-owned page/context, and close only fixture-owned resources in a finally block. Never kill processes by port/name. A fixture-started browser must record its process identity and stop only the process whose ownership the fixture can prove; a shared browser stays running.
 
 For shared CDP, use its documented disconnect (not a potentially destructive close), verify ownership before cleanup, and isolate authentication/session state. Exact viewport tests use an isolated owned browser/profile; do not set a persistent device-metrics/window override on an operator-owned browser. Use finite timeouts, minimize repeated log polling and keep the tool process terminating on completion.
 

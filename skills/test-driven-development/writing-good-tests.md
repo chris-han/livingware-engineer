@@ -179,12 +179,13 @@ Fixture requirements:
 
 Follow [remote-cdp-browser-lifecycle.md](remote-cdp-browser-lifecycle.md) for the required evidence lane, endpoint setup, process ownership, and cleanup.
 
-Use the browser by evidence type:
-- **BEHAVIOR:** use Lightpanda at `http://127.0.0.1:9223` for login interaction, clicks, typing, selection, navigation, DOM/state transitions, frontend/backend wiring, and other non-pixel behavior. If the Lightpanda endpoint is not running, start the installed Lightpanda CDP server according to the lifecycle contract and stop only the process the test owns.
-- **RENDERING:** use remote Windows Chrome at `http://127.0.0.1:9222` for pixel/layout/CSS/canvas/WebGL/WebGPU/visual correctness and rendered screenshot evidence.
-- **BOTH:** run both only when the acceptance criterion genuinely requires independent behavior and rendering evidence. Do not duplicate the same scenario in both engines merely for reassurance.
+Select the **product/frontend** and **evidence type** independently of the development host. Use the project's qualified browser or native application for the required claim:
+- **BEHAVIOR:** exercise the affected interaction/state through a real browser supporting the needed APIs.
+- **RENDERING:** use a rendering-capable browser for layout/pixels/fonts/canvas; the same engine may also satisfy behavior.
+- **NATIVE APP:** use the target native application only if its own integration or platform-specific behavior is within this phase's acceptance.
+- **BOTH:** combine assertions in one run when credible; add a separate engine/host only for a named compatibility or platform difference.
 
-Only the selected lane's missing browser can block its gate.
+Read the project instructions/specs and existing runner for concrete engine, executable, endpoint, host and fixture ownership. Do not promote Lightpanda, Windows Chrome, WSL, or any example port to universal prerequisites. An available tool or another product frontend does not authorize an additional test lane. Only the selected required capability can block its gate.
 
 ### UI Evidence Rules
 
@@ -199,9 +200,9 @@ A UI test used as completion evidence must:
 - capture screenshot, rendered DOM, accessibility tree, or equivalent evidence when useful
 - use the test cycle selected by test-driven-development: fail-then-pass for new behavior/defects, adequate green-before/green-after coverage for behavior-preserving refactors
 
-For visual changes, verify the rendered result in remote Chrome at the shared browser's natural viewport. Use an isolated Chrome/profile for exact synthetic viewport coverage when necessary. Testing only class names, props, tokens, or snapshots is insufficient.
+For visual changes, verify the rendered result in the qualified rendering browser. Preserve the natural viewport of shared browsers; use an isolated browser/profile for exact synthetic viewport coverage. Testing only class names, props, tokens, or snapshots is insufficient.
 
-For interactive changes that do not depend on rendered pixels, perform the actual interaction through Lightpanda: click, type, select, route transition, focus, keyboard navigation, DOM/state changes, and other supported browser behavior.
+For interactive changes that do not depend on rendered pixels, perform the actual interaction through the selected qualified browser: click, type, select, route transition, focus, keyboard navigation, DOM/state changes, and other supported behavior.
 
 ```text
 ✅ UI completion evidence
@@ -218,10 +219,11 @@ IF production change affects frontend/UI:
   Create any required authenticated fixture through real test persistence.
   Use temporary username/password credentials unless auth itself is under test.
 
-  Select the evidence lane:
-    behavior  -> Lightpanda :9223
-    rendering -> remote Chrome :9222
-    both      -> only when acceptance requires both
+  Select the target product surface and evidence lane:
+    behavior  -> project-qualified real browser
+    rendering -> project-qualified rendering browser
+    native    -> actual app only for native acceptance
+    both      -> same real journey when sufficient
 
   Start/connect and clean up according to remote-cdp-browser-lifecycle.
   Missing required selected browser → keep that gate unverified.
@@ -281,8 +283,8 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 | Need an authenticated frontend fixture | Create a disposable user in real test persistence; login with temporary username/password |
 | Auth flow itself is not under test | Do not use QR/device/OTP/OAuth merely to establish the fixture |
 | Change frontend/UI behavior | Run a real-browser UI test |
-| Verify browser behavior | Use Lightpanda `:9223` |
-| Verify rendering/pixels | Use remote Chrome `:9222` |
+| Verify browser behavior | Use the qualified real browser on the declared host |
+| Verify rendering/pixels | Use a qualified rendering browser |
 | Need both browser lanes | Run both only when acceptance genuinely requires both |
 | Finish a test file | Run the mutation check |
 
@@ -305,8 +307,8 @@ A mutation nothing catches marks the behavior as unprotected — or the test as 
 - Frontend work completed with no browser test
 - UI evidence is only jsdom, snapshots, shallow rendering, mocked components, source inspection, or CSS class assertions
 - Authenticated frontend setup depends on QR scanning, device pairing, OTP, OAuth approval, or long-lived shared credentials when authentication itself is not under test
-- Behavior-only frontend work routed to Chrome merely because Lightpanda was not already running
-- Rendering correctness claimed from Lightpanda behavior evidence
+- Extra browser or host introduced merely because one is installed or mentioned in a reference
+- Rendering correctness claimed from a non-rendering browser
 - The same browser scenario run in both engines without an acceptance or compatibility reason
 - Required browser evidence claimed while its selected lane remained unavailable
 - A browser installed merely to bypass the configured evidence-lane contract

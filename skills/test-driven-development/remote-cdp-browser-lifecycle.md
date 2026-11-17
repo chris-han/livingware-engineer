@@ -1,6 +1,6 @@
-# Browser CDP Lifecycle: Lightpanda and Shared Chrome
+# Browser Evidence Selection and Lifecycle
 
-Use this contract for real-browser verification from WSL. Select the browser by the evidence the test must prove rather than treating every frontend test as a Chrome test.
+Use this contract for real-browser verification. Resolve the target product surface, delivery phase, project-owned runner/browser configuration, execution host and required evidence first; do not infer them from available tools, output format or developer OS.
 
 ## Campaign timing and token budget
 
@@ -10,68 +10,28 @@ Start acceptance from the actual UI. Batch deterministic actions/assertions in t
 
 Reuse the same controlled CDP connection where safe, but keep account/profile/session isolation and real authentication. Do not copy cookies or credentials to save setup cost. A required native Electron journey must use the actual native application; Lightpanda, Chrome or an embedded billing webview cannot stand in for another application's required Settings/Composer journey. Explicit acceptance targets take precedence over the generic engine defaults below.
 
-## Select the Browser by Evidence
+## Select evidence, product surface and environment
 
-- **BEHAVIOR tests** — interaction, navigation, frontend state, DOM-visible results, application wiring, and browser-executed JavaScript — use Lightpanda at `http://127.0.0.1:9223` by default.
-- **RENDERING tests** — visual appearance, layout, paint, fonts, screenshots, canvas/WebGL/WebGPU output, or Chromium-specific rendering behavior — use Windows-host Chrome at `http://127.0.0.1:9222`.
-- Run the affected browser tests only, unless project instructions require a broader surface.
-- Do not run the same scenario in both browsers unless the acceptance criterion actually requires both behavioral and rendering evidence, or a browser-specific compatibility question is under investigation.
-- Never use Chrome merely because Lightpanda is not already running. Start Lightpanda when the behavior lane needs it.
+- **BEHAVIOR:** exercise the real affected UI, state transitions and backend wiring through the project's configured qualified browser/runner (normally an owned headless browser). A non-rendering engine is eligible only if its required DOM/API behavior is actually supported.
+- **RENDERING:** use a qualified real rendering browser with the needed CSS, font, screenshot, canvas or GPU capabilities. This does not imply a different host or another browser run when the same engine can establish both claims.
+- **NATIVE APPLICATION:** desktop/mobile-native behavior requires the actual native application at the environment named by the project acceptance. A browser or an embedded webview is not proof of the host app's native shell, installation, session integration or file-save behavior.
+- **COMBINED:** use one journey to prove multiple behavior/rendering assertions when sufficient. Run distinct engines/hosts only for a specified compatibility, platform, graphics or native-app claim. Report unsupported capabilities, not invented PASS.
 
-## Lightpanda Behavior Lifecycle
+The project's AGENTS/spec/runner owns concrete browser executables, ports, startup commands, WSL/Windows/macOS host boundary and target application. Examples such as Lightpanda, Chrome or Electron are options, never global defaults. If absent, inspect the existing runner and choose the least intrusive compatible owned browser; do not install/start another engine merely because an example mentions it. A different product frontend or next-phase integration is not a fallback target.
 
-Probe the designated Lightpanda endpoint first:
+## Process ownership and cleanup
 
-```bash
-curl -fsS http://127.0.0.1:9223/json/version
-```
+Reuse a qualified project-controlled browser if safe; keep operator-owned windows, tabs, context, profile, viewport, zoom and listeners unchanged. Create a fixture-owned page/context, and close only fixture-owned resources in a finally block. Never kill processes by port/name. A fixture-started browser must record its process identity and stop only that process; a shared browser stays running.
 
-If it is unavailable and the `lightpanda` binary is installed, start the CDP server instead of asking the user to remember the browser prerequisite:
+For shared CDP, use its documented disconnect (not a potentially destructive close), verify ownership before cleanup, and isolate authentication/session state. Exact viewport tests use an isolated owned browser/profile; do not set a persistent device-metrics/window override on an operator-owned browser. Use finite timeouts, minimize repeated log polling and keep the tool process terminating on completion.
 
-```bash
-lightpanda serve --host 127.0.0.1 --port 9223
-```
+## Diagnose rendering versus capture
 
-Automation or a fixture may background that command, record its PID, wait until `/json/version` responds, and then run the test. Ownership is strict:
+If geometry and screenshot disagree, compare in-page viewport/element bounds, protocol layout metrics, screenshot dimensions, device pixel ratio, zoom and stale automation clients **on the same target**. Change one variable at a time; terminate only owned clients. Do not jump from a mismatch to a new host or browser without a specific missing capability or reproduced failure.
 
-- If Lightpanda was already reachable, treat it as developer-owned and do not stop it.
-- If the test fixture started Lightpanda, stop only that recorded process during unconditional cleanup.
-- Do not kill Lightpanda by name or port; terminate only the process whose ownership the fixture can prove.
-- If the binary is unavailable, report the missing behavior-test prerequisite. Do not silently substitute Windows Chrome as a generic behavior fallback.
+## Execution-host boundary
 
-Lightpanda is headless and has no graphical rendering surface. Passing behavior tests therefore does not constitute rendering evidence.
-
-## Preserve Shared Chrome State
-
-Windows Chrome on `127.0.0.1:9222` is the rendering lane and is persistent operator-owned state.
-
-- Treat the existing browser, contexts, windows, tabs, zoom, and natural viewport as operator-owned state.
-- Create a dedicated fixture-owned page for the test. Never reuse the first existing page merely because it is convenient.
-- Do not call `page.setViewportSize`, `Emulation.setDeviceMetricsOverride`, `Browser.setWindowBounds`, or an equivalent persistent display override on the shared browser.
-- If the acceptance criterion requires an exact synthetic viewport, launch an isolated browser/profile instead of attaching to the persistent endpoint.
-- Close only pages created by the fixture. Never close an existing context, window, tab, or the shared browser.
-- Put cleanup in `finally`: clear any device-metrics override created by the fixture, detach CDP sessions, close fixture-owned pages, and disconnect the automation transport.
-- Do not assume a library's `close()` means “disconnect.” Use its documented disconnect operation; if semantics are ambiguous, let the harness end the client connection after explicit page/session cleanup and confirm Chrome remains reachable.
-- Give scripts finite timeouts and ensure their Node/Playwright/Puppeteer process exits. A stale client can keep emulation state active after the test appears finished.
-
-## Diagnose Layout Versus Capture State
-
-When DOM geometry is correct but the screenshot is not, do not guess at CSS.
-
-1. Capture in-page values such as `innerWidth`, `outerWidth`, `devicePixelRatio`, `visualViewport.width`, and document/body bounding rectangles.
-2. Capture protocol-level `Page.getLayoutMetrics` from the same target.
-3. Record the screenshot's actual pixel dimensions and compare it with the CSS and visual viewport.
-4. List CDP targets and automation processes. Identify stale Node, Playwright, Puppeteer, or browser-inspection clients before terminating only the proven owner.
-5. Check persistent per-origin site zoom and browser zoom state.
-6. Change one variable at a time, then rerun the same measurements and screenshot.
-
-Equality between a document's right edge and `innerWidth` proves only that the application fills the current CSS viewport. It does not prove that the CSS viewport matches the natural window, the visual viewport, or the screenshot surface.
-
-## WSL Host Boundary
-
-Keep Lightpanda behavior testing and Chrome rendering diagnostics in WSL/CDP while their designated endpoints are reachable. Do not invoke PowerShell merely because the rendering browser runs on Windows.
-
-Only when a RENDERING test actually requires Windows Chrome and `http://127.0.0.1:9222` is unavailable should you ask the user to start the Windows debug instance with a host-side command. Chrome availability must not block a BEHAVIOR test that belongs on Lightpanda.
+Portable frontend development and test authoring remain on the project's declared development host. A remote browser/CDP endpoint does not make that browser's host the default execution host or authorize new Windows/native scratch directories. Cross-host execution requires an explicit target-platform acceptance claim or a capability that cannot be established on the selected host. Prefer project-scoped configuration for executable/endpoint details; do not encode local ports, paths or machine names in this shared skill.
 
 ## Optional QuickE2E Exploration and Test Authoring
 
@@ -84,7 +44,7 @@ Before exploration:
 - Declare finite limits for actions, model calls, retries/repairs, elapsed time, and input/output tokens where observable. Enforce them in the runner/bridge; stop on exhaustion. If a required limit cannot be enforced, use direct deterministic authoring. Record unavailable usage or provider cost as UNKNOWN, never zero.
 - Use the existing qualified local CLI/provider bridge when supplied by the project. Keep credentials out of prompts, exported code, traces, and committed artifacts. Establish disposable authentication through the real application fixture/login path in [writing-good-tests.md](writing-good-tests.md); browser-storage injection or API interception must not substitute for internal production wiring.
 
-Run the bounded journey through exact accessible labels on real routes and real internal services. For a Chrome-qualified adapter, use a fixture-owned page on Windows Chrome CDP while preserving all shared-browser ownership and cleanup rules above. Use an isolated browser/profile for exact synthetic viewport coverage. Do not assume QuickE2E supports Lightpanda merely because both expose CDP.
+Run the bounded journey through exact accessible labels on real routes and real internal services. Use the adapter's actually qualified engine on a fixture-owned page and the project-selected execution host. Preserve shared-browser ownership and cleanup; use an isolated profile for synthetic viewport coverage. Do not assume that different CDP engines support identical interactions.
 
 Export a successful journey to Playwright, then review it as authored code:
 
@@ -97,26 +57,10 @@ Do not stop an operator-owned bridge just to prove model-free replay; isolate th
 
 Exploration failure, an unsupported interaction, or budget exhaustion is a handoff to direct Playwright/CDP authoring for the affected path, not permission to weaken acceptance or silently change browser lanes. Preserve the specific failure and only the useful exported artifacts at their existing project owner; do not create a parallel evidence ledger.
 
-QuickE2E Chrome exploration does not replace required Lightpanda BEHAVIOR acceptance, Chrome RENDERING checks, or independently authored negative/security/arithmetic/concurrency tests. Keep missing lanes and unexercised assertions explicitly unverified. Avoid duplicate exploration/replay when adequate unchanged tests already cover the contract.
+QuickE2E exploration does not replace required affected behavior/rendering/native-app checks or independently authored negative/security/arithmetic/concurrency tests. Keep missing lanes and unexercised assertions explicitly unverified. Avoid duplicate exploration/replay when adequate unchanged tests already cover the contract.
 
 Record exploration failures, actions, retries, model calls, observed input/output tokens, elapsed time, provider cost or UNKNOWN, and exported/replayed artifact identities in the existing test evidence. Separate exploration cost from replay cost. Do not claim faster authoring, lower cost, improved agent behavior, or human benefit without comparable observed evidence.
 
 ## Cleanup Evidence
 
-Before completion, verify the lifecycle appropriate to the browser that was actually used.
-
-For Lightpanda:
-
-- the behavior test ran through `127.0.0.1:9223`;
-- a pre-existing Lightpanda process was left running;
-- or, if the fixture started Lightpanda, only that recorded process was stopped;
-- the automation client exited cleanly.
-
-For shared Chrome:
-
-- the shared Chrome endpoint is still reachable;
-- no device-metrics override from the fixture remains active;
-- fixture-owned pages and CDP sessions are gone;
-- the automation process has exited;
-- operator-owned tabs remain open;
-- the final rendering evidence was captured at the natural viewport, or in a separately launched isolated browser when an exact viewport was required.
+At completion, record which browser/engine and application were actually used, the selected host and why it was required, whether operator-owned browser state remained intact, and whether only fixture-owned processes/pages/CDP sessions were retired. Do not manufacture separate per-engine evidence lanes, duplicate journeys or new logs when existing runner receipts suffice.

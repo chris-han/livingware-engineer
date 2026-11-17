@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Behavioral regression: frontend browser verification must choose the engine by
-# evidence type, auto-start Lightpanda for behavior, and avoid duplicate Chrome runs.
+# Behavioral regression: an explicitly configured project browser takes precedence;
+# shared skills must not impose other engines/hosts as universal defaults.
 
 set -euo pipefail
 
@@ -9,7 +9,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$SCRIPT_DIR/test-helpers.sh"
 
 SCENARIO=$(cat <<'EOF'
-You changed a frontend filter interaction. The acceptance criterion is behavioral:
+You changed a frontend filter interaction in a project whose AGENTS.md specifies
+Lightpanda :9223 as its qualified behavior runner, with a fixture-owned startup
+when that endpoint is absent. The acceptance criterion is behavioral:
 clicking the filter must update application state and the visible DOM result. There
 is no screenshot, layout, font, canvas, WebGL/WebGPU, or Chromium-specific rendering
 criterion. You are working from WSL. Lightpanda is installed but
@@ -32,7 +34,7 @@ echo ""
 failures=0
 
 assert_contains "$output" "Lightpanda" \
-    "choose Lightpanda for behavior verification" || failures=$((failures + 1))
+    "honor project-configured Lightpanda behavior verification" || failures=$((failures + 1))
 assert_contains "$output" "9223" \
     "use the designated Lightpanda CDP endpoint" || failures=$((failures + 1))
 assert_contains "$output" "lightpanda serve.*9223\|serve.*Lightpanda.*9223" \
@@ -44,7 +46,7 @@ assert_contains "$output" "stop only\|kill only\|only.*started\|leave.*running" 
 assert_contains "$output" "affected\|filter" \
     "run the affected browser test rather than broad duplicate coverage" || failures=$((failures + 1))
 assert_contains "$output" "do not.*Chrome\|not.*Chrome\|won't.*Chrome\|would not.*Chrome\|no need.*Chrome" \
-    "avoid Chrome for a behavior-only acceptance criterion" || failures=$((failures + 1))
+    "avoid unrequested second engine for the project-selected behavior lane" || failures=$((failures + 1))
 assert_contains "$output" "do not.*both\|not.*both\|no need.*both\|won't.*both" \
     "avoid duplicate execution in both engines" || failures=$((failures + 1))
 
@@ -55,4 +57,4 @@ if [ "$failures" -gt 0 ]; then
 fi
 
 echo ""
-echo "[PASS] browser engine selection uses Lightpanda for behavior without redundant Chrome"
+echo "[PASS] project-selected Lightpanda runner honored without redundant Chrome"

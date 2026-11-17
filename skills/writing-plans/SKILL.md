@@ -25,6 +25,10 @@ Write an implementation plan that names the affected files/owners, changes, focu
 
 **Plan authority:** Keep the single mutable plan in the repository’s main-branch checkout, in the repository-required location. Draft, activate, update and archive it there; bind an implementation worktree separately. A branch-worktree copy is historical, not another authority. Preserve concurrent main edits. Explicit user/repository location rules take precedence.
 
+## Product-surface and execution-host resolution
+
+For user-facing work, identify the exact product/frontend surface and current delivery phase from the user's requirements and project-owned specifications before choosing files or test environments. Distinguish the development host, test browser, product interface, and any native/platform-specific acceptance host. Name next-phase or unintegrated interfaces as deferred, not implied coverage or current work. A file format, installed application or available cross-platform tool does not authorize another product/host validation lane. Store the resolution in the existing plan Scope section, not a new ledger; preserve separate success claims for independently delivered surfaces.
+
 ## Minimum Sufficient Execution Frontier
 
 Before expanding a design into tasks, hand execution a **compact scope contract** inside the existing plan (not a second tracker or a mandatory new form):
@@ -109,7 +113,7 @@ D0 deterministic invariants and D1 focused behavior/integration run during devel
 
 ### Consolidated goal acceptance
 
-Schedule one campaign after all implementation tasks are ready and before declaring the goal achieved. For UI goals, begin at the actual application UI, use deterministic CDP/qualified adapter actions and verify persisted/backend effects through real internal components. Include the required applications and ordering inside this campaign; do not turn Windows-first acceptance into an inferred ban on implementing Workspace earlier. Explicit user/repository restrictions still win.
+Schedule one campaign after all implementation tasks are ready and before declaring the goal achieved. For UI goals, begin at the actual application UI, use deterministic CDP/qualified adapter actions and verify persisted/backend effects through real internal components. Include only the explicitly scoped target applications and their required order; verification of one surface must not imply acceptance of a different interface or next delivery phase. Explicit user/repository restrictions still win.
 
 Specify required journey(s), candidate/environment, observable success, bounded runner limits and the existing result location. Keep one run reference capable of covering multiple assertions. No per-task full E2E, fresh requirement-to-evidence matrix or one evidence file per requirement. Reuse established coverage; final review checks remaining gaps and invalidated paths. Rerun failed/affected scenarios only, broadening for demonstrated shared impact. Unchanged merge results reuse evidence; the actual final candidate must be covered.
 

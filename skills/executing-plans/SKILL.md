@@ -40,6 +40,10 @@ When a task is materially cross-boundary or the user requests an efficiency comp
 
 When telemetry is accessible, report planning/review, input/output/cache tokens, total accounting convention, wall time, repeat source reads and test/rework counts; when it is not, report `UNKNOWN` rather than guessing. Compare with a prior baseline only after verified terminal completion and with task/risk comparability disclosed. Lower tokens without equivalent correctness is not improvement. Economic instrumentation must not block routine autonomous execution or expose secrets.
 
+### Product-surface and host continuity
+
+Read the current plan's named product/frontend, phase, real entrypoint, implementation host and required acceptance host as separate identities. Execute the existing target only. Browser access on a different OS, a portable output artifact, or an installed native tool is not permission to add another product UI, host or acceptance gate. A cross-host/native transition must close a named platform-specific requirement or demonstrated capability gap; otherwise preserve the project's development lane. Next-phase delivery remains unstarted unless separately authorized. Report acceptance separately for each actually exercised frontend; an application webview or browser alone never proves its native shell.
+
 ### Evidence-triggered scope conservation
 
 Treat the plan's confirmed owner map, necessary delta, and reusable evidence as the starting execution frontier. Verify relevant identity/freshness when needed; do not re-run broad architecture discovery simply because a new agent or worktree started. Open the named source/test owners first. Use targeted search or a code graph only for a **specific unresolved relationship or impact question**; refresh an index only when demonstrated staleness affects that question, preferably for the affected scope.

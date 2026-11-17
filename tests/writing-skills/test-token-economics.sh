@@ -41,7 +41,7 @@ require "$REVIEW" "../../docs/skill-token-economics.md" "review points to canoni
 require "$EXECUTING" "references/workflow-routing.md" "executing-plans routes transition topology to workflow reference"
 require "$EXECUTING" "unexplained failure -> `systematic-debugging`" "executing-plans delegates unresolved diagnosis"
 require "$EXECUTING" "authorized changed behavior -> `test-driven-development`" "executing-plans delegates implementation behavior"
-require "$EXECUTING" "final goal/integration/merge/release claim needing an evidence check -> `verification-before-completion`" "executing-plans delegates completion claims"
+require "$EXECUTING" 'final goal/integration/merge/release claim needing an evidence check -> `verification-before-completion`' "executing-plans delegates completion claims"
 require "$EXECUTING_ROUTING" "PLAN_REVIEW" "execution workflow owns explicit state topology"
 require "$EXECUTING_ROUTING" "Do not preload those skills before their entry conditions are reached." "execution workflow preserves current-state loading"
 

@@ -55,7 +55,7 @@ require "$PLANS" "## Architecture Delta Review" \
   "plan header carries the Architecture Delta review"
 require "$PLANS" "**Disposition:** PROCEED_WITH_DELTA | NO_CHANGE_REQUIRED | INVESTIGATE_UNKNOWN | REFRESH_CONTEXT | REDUCE_SCOPE | NOT_APPLICABLE" \
   "plan header exposes bounded Architecture Delta dispositions"
-require "$PLANS" "NO_CHANGE_REQUIRED` is terminal and must not manufacture implementation" \
+require "$PLANS" '`NO_CHANGE_REQUIRED` is terminal and must not manufacture implementation' \
   "writing-plans forbids implementation work for an empty delta"
 
 require "$ARCH" "Conceptual-to-engineering reclassification invariant" \

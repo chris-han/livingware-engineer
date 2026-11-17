@@ -1,13 +1,22 @@
 from pathlib import Path
 R=Path(__file__).resolve().parents[2]
 def t(p): return (R/p).read_text()
+
+def phase(name):
+ root = t(f"skills/{name}/SKILL.md")
+ detail = {
+  "writing-plans": "skills/writing-plans/references/detailed-plan-workflow.md",
+  "executing-plans": "skills/executing-plans/references/detailed-execution-workflow.md",
+ }.get(name)
+ return root + "\n" + (t(detail) if detail else "")
+
 def test_contract():
- assert "Execution Continuity Contract" in t("skills/writing-plans/SKILL.md")
- assert "intermediate GREEN MUST NOT be interpreted as plan completion" in t("skills/writing-plans/SKILL.md")
- assert "A GREEN checkpoint advances plan state; it does not return control to the user." in t("skills/executing-plans/SKILL.md")
- assert "Repository plan-state gate" in t("skills/executing-plans/SKILL.md")
- assert "plan-state validator/linter" in t("skills/executing-plans/SKILL.md")
- assert "Keep task/phase state separate from plan-level state." in t("skills/executing-plans/SKILL.md")
+ assert "Execution Continuity Contract" in phase("writing-plans")
+ assert "intermediate GREEN MUST NOT be interpreted as plan completion" in phase("writing-plans")
+ assert "A GREEN checkpoint advances plan state; it does not return control to the user." in phase("executing-plans")
+ assert "Repository plan-state gate" in phase("executing-plans")
+ assert "plan-state validator/linter" in phase("executing-plans")
+ assert "Keep task/phase state separate from plan-level state." in phase("executing-plans")
  assert "User Intervention Necessity Test" in t("docs/mvl-laws.md")
  assert "Progress reporting is observational, not a synchronization barrier." in t("docs/mvl-laws.md")
  assert "ask for consent before creating one" not in t("skills/using-git-worktrees/SKILL.md")
@@ -42,8 +51,8 @@ def test_plan_completion_requires_retirement_evidence():
 
 def test_parallel_candidate_authorization_source_contract():
  # Source-contract checks only: these do not establish runtime enforcement.
- source = t("skills/executing-plans/SKILL.md")
- policy = source.split("## Parallel implementation and candidate authorization\n", 1)[1].split("\n## ", 1)[0]
+ source = phase("executing-plans")
+ policy = t("skills/executing-plans/references/detailed-execution-workflow.md").split("## Parallel implementation and candidate authorization\n", 1)[1].split("\n## ", 1)[0]
  for invariant in (
   "Default to one implementation path",
   "explicit prior user approval for that run",

@@ -3,12 +3,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SKILL = ROOT / "skills" / "writing-plans" / "SKILL.md"
+DETAIL = ROOT / "skills" / "writing-plans" / "references" / "detailed-plan-workflow.md"
+
+
+def planning_contract() -> str:
+    return SKILL.read_text(encoding="utf-8") + "\n" + DETAIL.read_text(encoding="utf-8")
 IA = ROOT / "docs" / "ia-before-ui.md"
 VIA = ROOT / "docs" / "verification-impact-analysis-v1.md"
 
 
 def test_combined_ia_via_contract_is_explicit():
-    text = SKILL.read_text(encoding="utf-8")
+    text = planning_contract()
     for required in (
         "## IA Before UI", "docs/ia-before-ui.md", "GO_FOR_UI", "REVISE_IA",
         "## Impact Radius Before Test Scope", "Verification Impact Analysis",
@@ -19,7 +24,7 @@ def test_combined_ia_via_contract_is_explicit():
 
 
 def test_plan_orders_ia_and_focused_implementation_before_goal_e2e():
-    text = SKILL.read_text(encoding="utf-8")
+    text = planning_contract()
     ia = text.index("## IA Before UI")
     via = text.index("## Impact Radius Before Test Scope")
     goal = text.index("### Consolidated goal acceptance")
@@ -32,7 +37,7 @@ def test_plan_orders_ia_and_focused_implementation_before_goal_e2e():
 
 
 def test_plan_header_requires_both_reviews():
-    text = SKILL.read_text(encoding="utf-8")
+    text = planning_contract()
     header = text[text.index("## Plan Document Header"):]
     for required in (
         "## IA-Before-UI Review", "**Applicability:** REQUIRED | NOT_APPLICABLE",
@@ -45,7 +50,7 @@ def test_plan_header_requires_both_reviews():
 
 
 def test_ia_gate_is_structural_not_default_human_approval():
-    combined = SKILL.read_text(encoding="utf-8") + "\n" + IA.read_text(encoding="utf-8")
+    combined = planning_contract() + "\n" + IA.read_text(encoding="utf-8")
     assert "No extra approval turn is implied" in combined
     assert "REVISE_IA" in combined
     assert "duplicated semantic owners" in combined

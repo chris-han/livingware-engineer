@@ -76,17 +76,9 @@ Choose the mode from the requested surface, not the product, and persist it only
 
 Routing:
 
-- **No argument:** read [routing.md](../impeccable/reference/routing.md) and present its context-aware menu; never auto-run a command.
-- **Explicit or clearly implied command:** load its reference (native variant on native platforms) and follow it. Ask once if two commands fit.
-- **Otherwise:** treat the request as general design work. Missing PRODUCT.md routes a new surface or replacement world through init, then new-work; a narrow refinement of existing code proceeds on the incumbent implementation as context.mjs directs, offering init afterward rather than blocking on it.
-- `teach` aliases `init`. `craft` is a deprecated alias for ordinary new-work and adds nothing. `shape` owns task discovery, then enters new-work only for visual-world and surface-concept decisions.
+- **Ordinary frontend request:** follow the user's concrete IA/design outcome directly. Do not present the legacy Impeccable command menu, require init, or trigger a fresh design interview when the target and design authority are already settled.
+- **Explicit or clearly implied visual-craft command:** load only the corresponding playbook above; for an open-ended request to browse available design commands, read [routing.md](../impeccable/reference/routing.md) and present the options without automatically executing them. The playbook command names are modes of **this frontend-design skill**, not independently discoverable skills.
+- **New visual surface or replacement world:** use the existing [new-work](../impeccable/reference/new-work.md) procedure after any material IA gate; for a narrow refinement retain incumbent product/design truth.
+- `teach` aliases `init`; `craft` is a deprecated alias. `shape` is useful for unresolved task/design direction, not a mandatory round for already specified work.
 
-After init writes PRODUCT.md, resume without rerunning `context.mjs`; init loads the native platform reference itself when the platform it recorded is `ios`, `android`, or `adaptive`.
-
-**Pin / Unpin:** `node .agents/skills/impeccable/scripts/pin.mjs <pin|unpin> <command>` creates or removes a standalone `$<command>` shortcut. Report the script's result concisely; relay stderr verbatim on error.
-
-**Hooks:** `$impeccable hooks <on|off|status|ignore-rule|ignore-file|ignore-value|reset>` manages the design detector hook for this project (auto-runs the detector after UI file edits and surfaces findings). Load [reference/hooks.md](../impeccable/reference/hooks.md) when the user invokes it with any argument.
-
-**Doctor:** `$impeccable doctor` reports and repairs drift between this project's Impeccable artifacts (PRODUCT.md, DESIGN.md and its sidecar, config, surface briefs, the hook) and what this version reads. Load [reference/doctor.md](../impeccable/reference/doctor.md) when the user invokes it, or when they ask what is out of date, stale, or needs refreshing. A `CONTEXT_STALE` directive in Setup's output is the cheap subset of the same report; act on it there per its own instructions rather than running doctor unasked.
-
-**Never repair drift as a side effect of a design task.** A `CONTEXT_STALE` finding is reported, not acted on, unless the user asks. The one exception is a finding marked `auto`, which the next write to that file performs anyway.
+After init writes PRODUCT.md, resume without rerunning `context.mjs`. **Do not create standalone pinned Impeccable skill shortcuts**; the single discovery entry remains `frontend-design`. The internal [hooks](../impeccable/reference/hooks.md) and [doctor](../impeccable/reference/doctor.md) procedures are conditional tools only when explicitly requested; do not run them as automatic setup, drift repair, or completion checks.

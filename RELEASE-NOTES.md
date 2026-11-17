@@ -1,3 +1,11 @@
+# 6.17.0 (2026-11-17)
+
+- Progressive skill loading across design → planning → execution → completion verification: shrink the `brainstorming`, `writing-plans`, and `executing-plans` root contracts, retaining full prior deep procedures as conditional reference documents. Keep `verification-before-completion` thin.
+- Optimize `research-methodology` as a current-state router: discovery and mandatory pre-experiment census, experiment qualification/evidence validity, and research closeout/attribution in separate conditional references. Preserve original falsification, evidence-temporal binding, no-auto-successor, independent evaluation and admission/activation boundaries.
+- Source-level scope reduction: research root 25,374 → 7,054 bytes (72% fewer root bytes); three engineering roots jointly 67,025 → 16,815 bytes (75% fewer). These are static UTF-8 byte counts, **not** measured token savings.
+- Update source-contract tests to read conditional references without removing existing semantics, add focused research contract assertions, and retain one authoritative plan/evidence owner. No new runtime dependency or model calls.
+- Qualification: root/reference link and required-rule static checks plus Python/shell syntax checks are available. Full repository tests, installed Codex skill activation, model-behavior comparisons, real launcher execution and end-to-end token/latency improvements have **not** been verified in this GitHub-only integration environment. No claims of live behavioral/token gains.
+
 # 6.16.0 (2026-11-17)
 
 - Consolidate Livingware frontend design into one discoverable `frontend-design` skill derived from pinned upstream Impeccable 4.9.2. Preserve Impeccable's visual craft commands and toolkit while retaining Livingware IA-before-UI, semantic authority, cognitive-work allocation, evidence continuity, and governed action boundaries.

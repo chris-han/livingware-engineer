@@ -67,7 +67,7 @@ require "$DESIGN" "Do not preload planning, implementation, or verification skil
 require "$PLANNING" "Do not preload the UI craft tool" "planning does not preload visual craft"
 require "$PLANNING" "invoke `executing-plans` only when actual implementation begins" "planning exits before execution"
 require "$EXECUTING" "Do not preload verification" "execution does not preload completion verification"
-require "$EXECUTING" "parallel checkpoint ledgers" "execution reuses the plan as authority"
+require "$EXECUTING" "No parallel tracker." "execution reuses the plan as authority"
 require "$FINAL" "Do not preload during implementation" "final verification is a claim check only"
 for detail in \
  "$ROOT/skills/brainstorming/references/detailed-design-workflow.md" \

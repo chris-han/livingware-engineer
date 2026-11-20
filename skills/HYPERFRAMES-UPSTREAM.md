@@ -1,0 +1,1 @@
+HyperFrames skills are sourced from https://github.com/heygen-com/hyperframes at commit 63f32fefa958f16545c9d62a3920bc9dd9c2d5ae, under the Apache License 2.0 in HYPERFRAMES-LICENSE. OpenAI agent metadata was added for packaging.

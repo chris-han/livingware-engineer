@@ -23,7 +23,15 @@ SOURCE_PATHS = [
     "README.md",
     "assets",
     "skills",
+    "package.json",
+    "scripts/compile-live-skill-eval.py",
+    "scripts/update-installed-codex-plugin.sh",
+    "tests/codex/probe-isolation.sh",
+    "tests/codex/live-progressive-skill-probe.sh",
+    "tests/codex/live-ia-via-mvl-probe.sh",
+    "tests/eval-skills/live-skill-runtime-eval.sh",
 ]
+ALLOWED_SOURCE_FILES = frozenset(SOURCE_PATHS[6:])
 FORBIDDEN_PREFIXES = (
     "superpowers/", ".agents/", "hooks/", ".git", ".pytest_cache", ".ruff_cache",
     "scripts/", "tests/", "docs/", "evals/", "lib/", ".claude", ".cursor",
@@ -224,7 +232,7 @@ def archive_paths(output: Path, fmt: str) -> list[str]:
 def validate_paths(paths: list[str]) -> None:
     bad = []
     for p in paths:
-        if p in FORBIDDEN_FILES or p.startswith(FORBIDDEN_PREFIXES):
+        if (p in FORBIDDEN_FILES or p.startswith(FORBIDDEN_PREFIXES)) and p not in ALLOWED_SOURCE_FILES and p not in ("tests/codex", "tests/eval-skills"):
             bad.append(p)
     if bad:
         for p in bad:

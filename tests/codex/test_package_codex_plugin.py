@@ -96,9 +96,12 @@ def main() -> int:
         research_services = "skills/research-methodology/references/research-services.md"
         require(research_services in paths, "archive includes the shared research-service contract")
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
-        require(not any(p.startswith("tests/") or p.startswith("docs/") or p.startswith("scripts/") for p in paths), "archive excludes source-only paths")
+        probe_paths = ["tests/codex/probe-isolation.sh", "tests/codex/live-progressive-skill-probe.sh", "tests/codex/live-ia-via-mvl-probe.sh", "tests/eval-skills/live-skill-runtime-eval.sh", "scripts/compile-live-skill-eval.py", "package.json"]
+        require(all(p in paths for p in probe_paths), "archive includes isolated probes, callers, and runtime dependencies")
+        require(not any(p.startswith("docs/") for p in paths), "archive excludes source-only documentation")
 
         with zipfile.ZipFile(out_zip) as zf:
+            require(all(zf.read(path) == (ROOT / path).read_bytes() for path in probe_paths), "archive preserves probe code and dependencies exactly")
             manifest = json.loads(zf.read(".codex-plugin/plugin.json"))
             require(zf.read(policy_path) == (ROOT / policy_path).read_bytes(), "archive preserves the canonical integration policy exactly")
             require(zf.read(requirements_contract) == (ROOT / requirements_contract).read_bytes(), "archive preserves the shared requirements contract exactly")

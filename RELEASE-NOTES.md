@@ -1,3 +1,8 @@
+# 6.17.1 (2026-11-21)
+
+- Isolate Codex live probes from user configuration, sessions and temporary state.
+- Bundle the pinned HyperFrames skills and license in place of machine-local links, and ship the probe scripts with their runtime dependencies in Codex archives.
+
 # 6.17.0 (2026-11-17)
 
 - Progressive skill loading across design → planning → execution → completion verification: shrink the `brainstorming`, `writing-plans`, and `executing-plans` root contracts, retaining full prior deep procedures as conditional reference documents. Keep `verification-before-completion` thin.

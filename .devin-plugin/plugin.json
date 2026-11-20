@@ -1,10 +1,22 @@
 {
   "name": "livingware-engineer",
-  "version": "6.17.0",
+  "version": "6.17.1",
   "description": "Livingware Engineer: governed planning, TDD, integration verification, debugging, and collaboration workflows.",
-  "author": {"name": "chris-han"},
+  "author": {
+    "name": "chris-han"
+  },
   "homepage": "https://github.com/chris-han/livingware-engineer",
   "repository": "https://github.com/chris-han/livingware-engineer",
   "license": "MIT",
-  "keywords": ["brainstorming", "subagent-driven-development", "skills", "planning", "tdd", "integration-testing", "debugging", "code-review", "workflow"]
+  "keywords": [
+    "brainstorming",
+    "subagent-driven-development",
+    "skills",
+    "planning",
+    "tdd",
+    "integration-testing",
+    "debugging",
+    "code-review",
+    "workflow"
+  ]
 }

@@ -3,12 +3,13 @@ set -u -o pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 OUT_BASE="${CODEX_PROBE_OUTPUT_DIR:-$ROOT/.artifacts/ia-via-mvl-probe}"
-RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
-RUN_DIR="$OUT_BASE/$RUN_ID"
 TIMEOUT_SECONDS="${CODEX_PROBE_TIMEOUT:-180}"
 CODEX_BIN="${CODEX_BIN:-codex}"
+[[ "$TIMEOUT_SECONDS" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: CODEX_PROBE_TIMEOUT must be positive" >&2; exit 2; }
+source "$ROOT/tests/codex/probe-isolation.sh"
 
-mkdir -p "$RUN_DIR"
+mkdir -p "$OUT_BASE" || exit 2
+RUN_DIR="$(mktemp -d "$OUT_BASE/$(date -u +%Y%m%dT%H%M%SZ)-XXXXXXXX")" || exit 2
 SUMMARY="$RUN_DIR/summary.tsv"
 printf 'scenario\tbehavior\truntime\tduration_seconds\tjsonl\tstderr\n' > "$SUMMARY"
 
@@ -75,7 +76,7 @@ for i in 0 1 2; do
   err_file="$scenario_dir/attempt-1.stderr.log"
   echo "=== Scenario: $name ==="
   start="$(date +%s)"
-  timeout "$TIMEOUT_SECONDS" "$CODEX_BIN" exec --json --ephemeral --sandbox read-only -C "$ROOT" "$prompt" >"$json_file" 2>"$err_file"
+  timeout --kill-after=5 "$TIMEOUT_SECONDS" "$CODEX_BIN" exec --json --ephemeral --sandbox read-only -C "$ROOT" "$prompt" >"$json_file" 2>"$err_file"
   rc=$?
   end="$(date +%s)"
   duration=$((end-start))

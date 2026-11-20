@@ -1,24 +1,54 @@
 #!/usr/bin/env bash
 set -u -o pipefail
 
+# CODEX_PROBE_KEEP_TEMP=1 retains private probe state for debugging. The copied
+# auth.json is removed on exit, but retained configuration may contain secrets.
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 OUT_BASE="${CODEX_PROBE_OUTPUT_DIR:-$ROOT/.artifacts/codex-progressive-skill-probe}"
-RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
-RUN_DIR="$OUT_BASE/$RUN_ID"
 RETRIES="${CODEX_PROBE_RETRIES:-3}"
 TIMEOUT_SECONDS="${CODEX_PROBE_TIMEOUT:-120}"
 BACKOFF_SECONDS="${CODEX_PROBE_BACKOFF:-5}"
 CODEX_BIN="${CODEX_BIN:-codex}"
 PROBE_WORKDIR="${CODEX_PROBE_WORKDIR:-}"
+[[ "$RETRIES" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: CODEX_PROBE_RETRIES must be positive" >&2; exit 2; }
+[[ "$TIMEOUT_SECONDS" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: CODEX_PROBE_TIMEOUT must be positive" >&2; exit 2; }
+
+source "$ROOT/tests/codex/probe-isolation.sh"
+mkdir -p "$OUT_BASE" || exit 2
+RUN_DIR="$(mktemp -d "$OUT_BASE/$(date -u +%Y%m%dT%H%M%SZ)-XXXXXXXX")" || exit 2
 
 setup_fixture() {
   if [[ -n "$PROBE_WORKDIR" ]]; then
     [[ -d "$PROBE_WORKDIR" ]] || { echo "ERROR: CODEX_PROBE_WORKDIR does not exist: $PROBE_WORKDIR" >&2; exit 2; }
+    # The implementation scenario can edit its workspace. Snapshot an
+    # explicitly supplied project as well, so runs never share those edits.
+    local source_dir="$PROBE_WORKDIR" git_root relative_dir="."
+    git_root="$(git -C "$source_dir" rev-parse --show-toplevel 2>/dev/null || true)"
+    if [[ -n "$git_root" ]]; then
+      relative_dir="$(python3 -c 'import os,sys; print(os.path.relpath(os.path.realpath(sys.argv[1]), os.path.realpath(sys.argv[2])))' "$source_dir" "$git_root")" || exit 2
+      source_dir="$git_root"
+      git clone --quiet --no-hardlinks -- "$source_dir" "$TEMP_ROOT/project" || exit 2
+    else
+      mkdir -p "$TEMP_ROOT/project" || exit 2
+    fi
+    python3 - "$source_dir" "$TEMP_ROOT/project" <<'PY' || exit 2
+import os, shutil, sys
+source, target = map(os.path.realpath, sys.argv[1:])
+if os.path.commonpath((source, target)) == source:
+    raise SystemExit('ERROR: probe temporary directory must be outside the supplied project')
+for name in os.listdir(target):
+    if name == '.git': continue
+    path = os.path.join(target, name)
+    if os.path.isdir(path) and not os.path.islink(path): shutil.rmtree(path)
+    else: os.unlink(path)
+shutil.copytree(source, target, dirs_exist_ok=True, symlinks=False,
+                ignore=shutil.ignore_patterns('.git'))
+PY
+    PROBE_WORKDIR="$TEMP_ROOT/project/$relative_dir"
     return
   fi
 
-  PROBE_WORKDIR="${TMPDIR:-/tmp}/livingware-codex-probe-$RUN_ID"
-  rm -rf "$PROBE_WORKDIR"
+  PROBE_WORKDIR="$TEMP_ROOT/project"
   mkdir -p "$PROBE_WORKDIR/src" "$PROBE_WORKDIR/tests"
 
   cat > "$PROBE_WORKDIR/package.json" <<'JSON'
@@ -48,12 +78,11 @@ setup_fixture
 mkdir -p "$RUN_DIR"
 SUMMARY="$RUN_DIR/summary.tsv"
 printf 'probe-workdir\t%s\n' "$PROBE_WORKDIR" > "$RUN_DIR/run-info.tsv"
+printf 'codex-version\t%s\n' "$(timeout --kill-after=5 "$TIMEOUT_SECONDS" "$CODEX_BIN" --version 2>/dev/null | head -1 || true)" >> "$RUN_DIR/run-info.tsv"
 printf 'scenario\trequired_skill\tforbidden_skills\trouting\tbehavior\truntime\tattempts\tduration_seconds\tinput-count\tcached-input-count\tuncached-input-count\toutput-count\treasoning-output-count\tjsonl\tstderr\n' > "$SUMMARY"
 
 command -v "$CODEX_BIN" >/dev/null 2>&1 || { echo "ERROR: Codex CLI not found: $CODEX_BIN" >&2; exit 2; }
 command -v timeout >/dev/null 2>&1 || { echo "ERROR: GNU timeout is required" >&2; exit 2; }
-[[ "$RETRIES" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: CODEX_PROBE_RETRIES must be positive" >&2; exit 2; }
-[[ "$TIMEOUT_SECONDS" =~ ^[1-9][0-9]*$ ]] || { echo "ERROR: CODEX_PROBE_TIMEOUT must be positive" >&2; exit 2; }
 
 scenario_names=("baseline" "unexplained-failure" "implementation" "completion-claim")
 required_skills=("none" "systematic-debugging" "test-driven-development" "verification-before-completion")
@@ -228,7 +257,7 @@ probe_one() {
   for ((attempt=1; attempt<=RETRIES; attempt++)); do
     local json_file="$scenario_dir/attempt-${attempt}.jsonl" err_file="$scenario_dir/attempt-${attempt}.stderr.log"
     start="$(date +%s)"
-    timeout "$TIMEOUT_SECONDS" "$CODEX_BIN" exec --json --ephemeral --sandbox "$sandbox_mode" -C "$PROBE_WORKDIR" "$prompt" >"$json_file" 2>"$err_file"
+    timeout --kill-after=5 "$TIMEOUT_SECONDS" "$CODEX_BIN" exec --json --ephemeral --sandbox "$sandbox_mode" -C "$PROBE_WORKDIR" "$prompt" >"$json_file" 2>"$err_file"
     rc=$?; end="$(date +%s)"; duration=$((end-start))
 
     if [[ "$rc" -eq 0 ]]; then

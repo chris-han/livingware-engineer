@@ -98,7 +98,8 @@ def main() -> int:
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
         probe_paths = ["tests/codex/probe-isolation.sh", "tests/codex/live-progressive-skill-probe.sh", "tests/codex/live-ia-via-mvl-probe.sh", "tests/eval-skills/live-skill-runtime-eval.sh", "scripts/compile-live-skill-eval.py", "package.json"]
         require(all(p in paths for p in probe_paths), "archive includes isolated probes, callers, and runtime dependencies")
-        require(not any(p.startswith("docs/") for p in paths), "archive excludes source-only documentation")
+        allowed_source_paths = set(probe_paths) | {"scripts/update-installed-codex-plugin.sh", "tests/codex", "tests/eval-skills"}
+        require(not any((p.startswith(("tests/", "docs/", "scripts/")) and p not in allowed_source_paths) for p in paths), "archive excludes other source-only paths")
 
         with zipfile.ZipFile(out_zip) as zf:
             require(all(zf.read(path) == (ROOT / path).read_bytes() for path in probe_paths), "archive preserves probe code and dependencies exactly")

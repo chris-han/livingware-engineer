@@ -1,0 +1,79 @@
+# Historical observation; null = not reported/unknown, not zero.
+comparison_schema: 1
+observation_id: semantier-qwen-byok-production-recovery-2026-11-08
+observation_sequence: 1
+recorded_from: Semantier archived execution plan plus user-reported final goal accounting
+baseline_id: semantier-windows-provider-query-only-2026-11-07
+baseline_ref: docs/engineering-economics/2026-11-07-windows-provider-query-only-baseline.md
+next_run:
+  goal: Qwen BYOK production recovery after previous rollback
+  plan_path: docs/plans/archive/2026-11-08-qwen-byok-production-recovery-v1.md
+  methodology_version: 6.15.3
+  methodology_commit: 56d61a17490bb496c4f9bd3b37210ebadeeb949f
+  installed_plugin_cache_version_observed: 6.15.4
+  model: null
+  effort: null
+  harness: Codex TUI
+  harness_version: null
+  source_commit: 9683d791e948253bd94a15498a34564cefae7cee
+  integrated_commit: 60b06063939802074a290458d99d0a9bdbb9491a
+  terminal_evidence_ref: docs/plans/archive/2026-11-08-qwen-byok-production-recovery-v1.md
+  terminal_outcome: GREEN
+  terminal_disposition: PRODUCTION_GREEN
+  acceptance_equivalence: DIFFERENT
+  scope_and_risk_notes: >
+    Existing qualified Qwen BYOK app and image artifacts were reused to
+    resolve production approved-origin configuration and Weixin readiness
+    sentinel; the Windows discovery baseline implemented new desktop model
+    discovery functionality. Recovery-run accounting excludes earlier BYOK
+    repair and failed rollout, and no matched causal comparison is possible.
+  token_accounting_definition: Host-reported final goal tokens; detailed split unknown; excludes subsequent bookkeeping
+  tokens:
+    planning_and_review: null
+    implementation_and_verification: null
+    input_uncached: null
+    cache_read: null
+    cache_write: null
+    output: null
+    total_reported: 301595
+  wall_seconds: 3931
+  wall_minutes: 65.5166666667
+  money_spent_usd: null
+  pre_activation_material_risks_found: null
+  post_integration_rework_cycles: null
+  duplicate_same_sha_full_file_reads: null
+  avoidable_test_reruns: null
+  native_fixture_setups: null
+  application_image_rebuilds: 0
+  rollback_used_this_run: false
+  paid_inference_performed: false
+  user_phone_confirmation_performed: false
+  tested_runtime_image: sha256:f0f2505b10722dba305b438a649d85db34b19fa8be74e6457890a0193bbb77d3
+  tested_workspace_image: sha256:691964e2c2974f06ab4a8815d398aeea5a4de2f0058ed93e25076c290cc7d25c
+  test_evidence_reused:
+    - prior_commit: 9683d791e948253bd94a15498a34564cefae7cee
+      scope: Prior qualified application-source and two-image controls
+      why_unchanged: No app rebuild or production app-source modification
+  production_scope_passed:
+    - authenticated_qwen_save_discovery_selection_restart_readback
+    - managed_origin_selection_token_and_billing_controls
+    - weixin_post_restart_public_http3_qr
+    - timeout_negative_isolation_and_secrets_controls
+    - caddy_postgresql_customers_and_winman_preservation
+  nonclaims:
+    - concurrency_browser_load_not_qualified
+    - no_per_phase_token_attribution
+    - no_causal_livingware_token_savings_claim
+    - excludes_prior_repair_and_failed_rollout
+comparison:
+  denominator_tokens: 860727
+  denominator_wall_minutes: 144
+  comparable: false
+  token_ratio: null
+  wall_ratio: null
+  token_reduction_percent: null
+  verdict: NOT_COMPARABLE
+  caveats: >
+    Different project, acceptance scope, reuse opportunity and accounting
+    envelope. Historical baseline model and token split unknown. One
+    post-optimization observation cannot establish methodology effectiveness.

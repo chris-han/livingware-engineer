@@ -1,6 +1,6 @@
 ---
 name: using-git-worktrees
-description: Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback
+description: Use when choosing workspace isolation for feature work or implementation plans, or separating shared WSL source from a native Windows desktop build environment.
 ---
 
 # Using Git Worktrees
@@ -61,6 +61,10 @@ Use `finishing-a-development-branch` to perform merge, parent/submodule pointer 
 
 Apply [Plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md). `MERGED` alone is not plan completion: cleanup must reach `RETIRED` for workflow-owned execution worktrees unless a user/repository exception is bound. Do not set preservation or cleanup-denial metadata merely to manufacture an earlier stopping point.
 
+
+## Shared WSL source and Windows build environments
+
+For shared-source Windows builds, read [generic source/build isolation](references/windows-source-and-build.md). The consuming project owns concrete source/cache paths, supported shells, toolchains and build/release procedures in its project skill and existing operator. Keep the maintained source separate from disposable execution state; preserve reusable caches and verify owned-stage cleanup.
 
 ## Step 0: Detect Existing Isolation
 

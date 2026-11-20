@@ -3,325 +3,44 @@ name: writing-plans
 description: Use when you have a spec or requirements for a multi-step task, before touching code
 ---
 
-# Writing Plans
+# Writing Plans — Minimal Executable Contract
 
-## MVL Law 1 — Fast-to-Aha
+**Enter:** accepted requirements/design require a genuine multi-step implementation plan. **Do not activate for an already specified bounded reversible fix, routine debugging, or a completion claim.** Design judgment belongs to `brainstorming` before planning; active implementation belongs to `executing-plans` afterward; verify only on the actual completion boundary.
 
-For product MVLs where governance is in the path, treat time-to-first-useful-result as an acceptance criterion. Distinguish recorded default-pass gates from blocking gates; ordinary low-risk journeys must not stop for approval ceremony. A user-intervention gate is allowed only when the User Intervention Necessity Test in `docs/mvl-laws.md` is satisfied after applying any standing user delegation.
+## Purpose and authority
 
-Classify every planned gate as either **autonomous** or **user-intervention-required**. Autonomous gates include tests, typecheck, lint, build, contract checks, service/browser fixtures, integration/E2E evidence, deterministic review findings, and ordinary reversible engineering rulings; they advance automatically when satisfied and never require a human checkpoint. A user-intervention-required gate is allowed only when standing delegation plus the User Intervention Necessity Test says the next required action genuinely depends on user-owned judgment, authority, access, credentials, or consequential external action. Do not create approval or checkpoint tasks merely to mark a phase boundary.
+Write the smallest plan that names affected owners/files, dependencies, current behavior, necessary delta, tests, user-visible goal and exact **authorized stopping criterion**. Record permitted **terminal dispositions** near the top. The plan is a completion contract; a task PASS, sprint, test or code commit is non-terminal unless its declared outcome is actually met.
 
-Apply [first real loop before breadth](../../docs/mvl-laws.md#engineering-execution-first-real-loop-before-breadth): schedule the smallest real user-journey smoke as the first implementation milestone, naming its bounded attempt, observable pass/fail and indispensable prerequisites. Put the full acceptance matrix after that initial proof; do not turn it into a front-loaded execution checklist.
+Preserve one mutable plan in the repository's declared authoritative checkout/location (default `docs/superpowers/plans/YYYY-MM-DD-<feature>.md` only if no project policy specifies otherwise). Execution/worktrees are separate. Reuse existing requirements/specifications and source evidence by reference, not by copying chat, logs, whole tests or a second task ledger.
 
-## Overview
+## Plan minimal frontier
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+- **What is known:** current owner and real call path; checked source, usable fixtures, already qualified evidence and exact claim limitations.
+- **What changes:** smallest source/contract delta and applicable implementation/testing owner; name any real integration and changed downstream caller.
+- **What unlocks expansion:** a demonstrated error, changed contract, unknown owner, protected boundary or material risk. No speculative repo-wide search, new infrastructure or hypothetical test campaign.
+- **Which surface:** distinguish user-visible frontend/product and delivery phase from implementation host, browser and platform-specific acceptance. Never imply a Windows/native capability from a web-only test or file format.
+- **Requirements:** preserve effective accepted requirements and constraints; when materially unclear use [requirements workflow](../requirements-clarification/references/requirements-workflow.md), not an automatic elicitation round.
 
-Keep useful step-by-step detail; eliminate duplicated work, not implementation steps. Reference existing specifications, interfaces, fixtures, and shared procedures by exact path and symbol/section. Include inline code when it resolves a real ambiguity, rather than copying an existing implementation or contract into each task.
+## Applicable engineering checks
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+### MVL and user value
 
-**Communication:** deliver the useful plan or material decision directly; do not generate a ceremonial standalone status message merely to announce skill use. Follow the host's explicit progress-reporting requirements when they apply.
+For real product features, define the smallest user task, target user and first useful result, value hypothesis, eligible evidence, feedback/recovery, and a bounded outcome claim. Low-risk exploration stays Fast-to-Aha/default-pass. Maintenance/security/internal deterministic fixes may record `MVL: NOT_APPLICABLE` without inventing business evidence. Only value/market-pull claims need [product value validation](references/product-value-validation.md), if that reference is actually present and applicable.
 
-**Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
+### Architecture and UI
 
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
+For a material architecture/cross-owner/storage change, apply `docs/architecture-delta-principle.md` and bind the verified delta to tasks. UNKNOWN is an investigation, not proof of missing architecture; `NO_CHANGE_REQUIRED` never creates implementation scope. For material UI task-flow/IA work, follow `docs/ia-before-ui.md` and `frontend-design`; record `GO_FOR_UI | REVISE_IA | NOT_APPLICABLE` in the plan, reusing existing IA for unchanged paths. Do not preload the UI craft tool merely because the plan mentions a UI stage.
 
-**Plan authority:** Keep the single mutable plan in the repository’s main-branch checkout, in the location required by the repository. Draft, activate, update, and archive that authority on main; bind any isolated implementation worktree separately. A branch-worktree copy is a historical snapshot, not another plan authority. Preserve concurrent main-checkout edits. Explicit user or repository instructions for a different authority location take precedence.
+### Verification Impact Analysis
 
-## Execution Continuity Contract
+Choose tests by the actual changed production impact radius (R0–R3), not diff size. Focused behavior/component checks run during implementation. Required real-component and browser verification runs at the goal/integration boundary, normally as **one consolidated E2E campaign** on the integrated candidate; rerun only failed/invalidated paths. Retain security/authority and actual final-acceptance requirements. Link [Verification Impact Analysis](../../docs/verification-impact-analysis-v1.md) only for unresolved scope; do not create per-PASS receipts or parallel coverage matrices.
 
-Every executable multi-step plan MUST declare near the top an **authorized stopping criterion** and any **permitted terminal dispositions**. The plan is a completion contract, not merely an ordered checklist.
+### Preconditions, risky transitions and cost
 
-Bind the stopping criterion to [Plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md): successful execution includes local integration, merged-result verification and cleanup. Name the integration target and evidence needed to prove retirement. A preservation, qualification-only or PR handoff exception must cite the originating user instruction or repository policy; never introduce one merely because the plan uses an isolated worktree. Push and production/runtime activation remain separate authority boundaries.
+A genuinely new dependency must be named/pinned and its minimum real behavior proven before consumer code relies on it; do not build a fake in-repo replacement. For cross-owner/high-risk, asynchronous, native-lifecycle, tenant/identity, or irreversible changes, do one bounded [pre-execution failure review](references/pre-execution-failure-review.md); skip for routine local edits. Autonomous tests, reversible decisions and ordinary repair are not user-approval gates. Parallel competing implementations need the explicit [authorization boundary](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization).
 
+## Plan output and handoff
 
-Unless the user or repository explicitly bounds the scope, intermediate tasks, gates, reviews, test/browser/integration passes, commits, and workstream completion are non-terminal progress evidence. After every non-terminal observation, advance to the next dependency-ready obligation. Recoverable failures route to debugging, repair, retry, bounded replanning, or verification rather than back to the user. Concise progress updates are non-blocking and do not wait for acknowledgment. A declared negative or inconclusive outcome may be terminal when its predeclared predicate is satisfied. User involvement is permitted only when the User Intervention Necessity Test is satisfied.
+Tasks should be independently testable, preserve source/owner and relevant dependencies, and converge on the real user outcome. Reuse an existing plan/review block; add only applicable scope, risk, architecture, IA and acceptance deltas. Do not mechanically fill template sections or write a standalone plan for each micro-step. For detailed template options, scope decomposition and exceptional requirements, read [planning reference](references/detailed-plan-workflow.md) only when actually needed.
 
-If the authorized scope is intentionally bounded, state it explicitly—for example, “stop after W1 evidence is sealed.” Otherwise an intermediate GREEN MUST NOT be interpreted as plan completion.
-
-When the host provides a persistent objective or goal primitive, keep it as the outer objective. The plan supplies its executable completion contract; it must not create a competing goal authority or mark the host objective complete from an intermediate gate.
-
-## Requirement Basis Before Task Decomposition
-
-Consume the effective requirement basis under [the shared requirements workflow contract](../requirements-clarification/references/requirements-workflow.md). Reuse source/version references, accepted dispositions, assumptions, unresolved questions and affected acceptance criteria; do not reopen settled answers or copy the conversation into a new ledger. Resolve a material conflict before scheduling the action that depends on it, while independent safe tasks remain eligible.
-
-When the feature itself supports long-running elicitation/modeling/review, carry its runtime state owner, checkpoint/reload and receipt-recovery requirements into implementation and acceptance. The coding plan's progress is not the product workflow's persistence, and completing a plan task does not grant product admission/activation authority.
-
-## Risk-based pre-execution failure review
-
-For R2/R3 or cross-owner tasks involving async state, profile/tenant boundaries, caches, timeouts, native lifecycle or external adapters, perform **one bounded adversarial review before plan activation**. First freeze a small source-owner map and existing-evidence census; then test the plan's riskiest assumptions against concrete cold/warm, profile-change, delayed-response, failure, empty-result, auth and timeout counterexamples as applicable. Use an independent reviewer/fresh scoped context when available, not a second competing implementation. Document the top material findings in the *existing* plan as `REVISE | TEST_EARLY | ACCEPT_WITH_REASON`. Put the highest-value real-component/native synthetic smoke **before the first expensive merge/integration where feasible**; still complete the final verification contract. See [Pre-Execution Failure Review](references/pre-execution-failure-review.md).
-
-This is an **autonomous and proportionate** quality/efficiency check, not a universal approval gate or a requirement to consume more tokens. Skip it for ordinary bounded fixes. Stop reviewing when no new material risk remains, and do not make a percentage token quota mandatory. If execution economics is being compared, reference the historical [Semantier Windows baseline](../../docs/engineering-economics/2026-11-07-windows-provider-query-only-baseline.md), recording actual comparability limitations rather than claiming causal savings.
-
-## Architecture Delta Before Architecture Work
-
-For a plan that introduces or changes a subsystem, service, store, contract, interface, ownership boundary, cross-component data flow, runtime responsibility, or structural architecture, apply `docs/architecture-delta-principle.md` before creating implementation tasks. Carry forward the design's current-state evidence and Architecture Delta Review rather than re-inventing the architecture from the spec title.
-
-The plan may contain architecture-changing tasks only when the review disposition is `PROCEED_WITH_DELTA`. `UNKNOWN` is an investigation state, not a missing-capability claim; `NO_CHANGE_REQUIRED` is terminal and the plan must not manufacture implementation tasks. Every architecture-changing task must trace to at least one verified delta item, remain inside the declared scope fence, and name the evidence that will close that delta.
-
-This is a machine-verifiable structural gate, not a default human-approval checkpoint. For work with no architecture effect, record `NOT_APPLICABLE` briefly and continue.
-
-## MVL Is the Feature-Development Unit
-
-For product features, plan a **Minimum Viable Loop (MVL)**, not merely an implementation slice.
-
-**MVL is the feature-development unit, not a test unit.** Unit tests, integration tests, browser tests, and E2E tests are verification evidence inside the implementation of an MVL.
-
-The same feature contract must survive every later phase:
-
-```text
-Target user + job + value hypothesis
-  -> smallest real user journey
-  -> realistic trial inputs
-  -> prerequisites / dependencies
-  -> Architecture Delta when architecture-affecting
-  -> IA-before-UI when material user-facing structure changes
-  -> implementation
-  -> TDD
-  -> Verification Impact Analysis
-  -> real-component integration when impact radius requires it
-  -> real-browser UI verification when applicable
-  -> technical + UX measurement
-  -> feedback / diagnosis
-  -> improvement
-  -> comparable re-test
-```
-
-Do not create a plan whose terminal state is only "code complete" or "tests pass" when the work is a product feature. Implementation correctness is necessary evidence inside the MVL; it is not the feature-development unit itself.
-
-Every feature plan MUST define, near the top:
-
-- **Target user / job-to-be-done**
-- **Value hypothesis** — what useful change this feature is expected to create
-- **Smallest real user journey** — the narrowest end-to-end path that demonstrates that value
-- **Realistic trial inputs**
-- **Technical success metrics**
-- **UX success metrics**
-- **Feedback / telemetry capture**
-- **Improvement levers** — code, model, prompt, rules, data, knowledge, UI, workflow, thresholds, configuration, architecture
-- **Re-evaluation method** — same surface used before and after improvement
-- **Stopping criterion for this MVL iteration**
-
-These are not a separate skill or optional appendix. They are part of the plan contract and constrain task design, dependency readiness, test design, integration scope, and completion evidence.
-
-### Product Value Validation
-
-For product features whose justification depends on user value, adoption, activation, retention, workflow insertion, or market pull, apply the Product Value Validation contract in `references/product-value-validation.md` before implementation tasks are admitted.
-
-The review must distinguish:
-
-- **problem evidence** from an internal assumption;
-- **value proposition** from implementation description;
-- **Aha** from onboarding or technical completion;
-- **behavioral/economic evidence** from stated preference;
-- **feature success** from product-market fit.
-
-Record the strongest supported value-evidence level (`E0` through `E5`), a falsifiable value hypothesis, the first observable Aha event and time-to-Aha target when meaningful, counter-evidence that would weaken the hypothesis, and the product-level PMF signal the feature may contribute to without claiming that the feature itself establishes PMF.
-
-Use `READY_TO_PLAN`, `VALIDATE_FIRST`, or `NOT_APPLICABLE`. `VALIDATE_FIRST` changes the plan target to the smallest useful validation experiment; it is not a human-approval checkpoint. For verified defects, behavior-preserving refactors, dependency/platform maintenance, mandatory security/legal/contractual work, architecture-integrity work, or technical qualification with no user-value claim, record `NOT_APPLICABLE` with the authoritative requirement source or reason rather than inventing a value proposition.
-
-For non-product maintenance work where no user-learning loop exists, state `MVL: not applicable — <reason>` rather than inventing one.
-
-## IA Before UI
-
-For any UI design or review, carry forward or establish the `IA-Before-UI Review` from `docs/ia-before-ui.md` before detailed visual design or production UI tasks. Start with the JTBD and cognitive-work allocation, establish the task flow and hierarchy, then map it to current `DESIGN.md` / `design.md`, template/showcase sources and shared primitives. For Asimov work, apply `skills/frontend-design/references/asimov-alignment.md`; do not substitute a generic layout or stale showcase example.
-
-When an IA review is required, only `GO_FOR_UI` admits production UI tasks. Missing workload allocation, unresolved duplicated semantic ownership, implementation-model leakage, ambiguous action semantics, missing state ownership, responsive ambiguity, or unresolved design-source mapping yields `REVISE_IA`. Repair the IA rather than scheduling the unresolved design decision after coding.
-
-This is a machine-verifiable structural gate, not a default human-approval checkpoint. Use the policy's narrow `NOT_APPLICABLE` exception for IA-preserving corrections with a reason. Reuse valid design evidence and put the review in the existing plan, not a separate ledger. Bind UI tasks and browser acceptance to the same JTBD, source mapping and task-effort target; report human usability as unmeasured unless supported by actual human evidence.
-
-When context, hierarchy, disclosure, cross-panel state or recovery is affected, select applicable checks from `skills/frontend-design/references/ia-ux-checklist.md` through the existing frontend-design entry. Carry their IDs, actual scope/object basis and required evidence into the same IA review and acceptance tasks; do not copy the whole checklist. Separate inferred effort targets, automated task evidence and actual human measurement, preserving any explicitly required human-benefit acceptance condition.
-
-## Impact Radius Before Test Scope
-
-Verification Impact Analysis (VIA) chooses the smallest verification surface capable of falsifying the implementation claim. Do **not** choose integration/E2E scope from diff size or intuition alone.
-
-Use relationship-aware discovery when it materially improves the impact assessment. Prefer an available current code graph; check coverage and fall back to targeted source for gaps. Do not make whole-repository indexing a prerequisite for a bounded change. Useful graph tools include:
-
-- `search_graph`
-- `trace_path`
-- `query_graph`
-- `search_code`
-- `get_code_snippet`
-
-Assess the changed production surface for callers, callees, downstream consumers, DI/factory wiring, routes, persistence/schema edges, async/event boundaries, trust boundaries, frontend consumers, and user paths.
-
-Classify the observed radius:
-
-```text
-R0 local only        -> focused TDD / unit-level behavior test
-R1 one seam          -> focused integration across that seam
-R2 multi-component   -> real-component integration through affected path
-R3 user/cross-boundary/UI -> vertical/E2E + real-browser verification for UI
-```
-
-Use the **smallest sufficient verification scope**. Do not wake the full integration/E2E stack for a small local change whose graph impact is R0.
-
-Preserve the verification cadence distinction:
-
-- D0 deterministic invariants — cheap mechanical checks on every relevant mutation;
-- D1 local semantic sentinels — focused behavior/integration selected from current impact radius;
-- D2 broad semantic audits — broad or expensive suites for release, high-risk, periodic, or genuinely broad/uncertain changes.
-
-Read `docs/verification-impact-analysis-v1.md` and `../test-driven-development/impact-radius-testing.md` for the detailed policy.
-
-## Dependency and Prerequisite Contract
-
-A new feature may rely on a package, service, runtime, browser, database, CLI, model, plugin, system library, or other prerequisite that does not yet exist in the project. **The plan must make that dependency explicit before feature code depends on it.**
-
-Do not let implementation agents discover and install dependencies ad hoc in the middle of a task.
-
-For every new or materially changed dependency, the plan must record:
-
-- exact package/tool/service name
-- exact version, compatible range, commit, image tag, or other pin when practical
-- why it is needed for this MVL journey
-- where it will be declared (`pyproject.toml`, `package.json`, lockfile, Docker image, system setup, plugin manifest, etc.)
-- exact install/setup command
-- required configuration/environment variables without embedding secrets
-- compatibility constraints with the existing stack
-- whether it changes runtime, build, test, deployment, licensing, security, or platform assumptions
-- a **dependency smoke/contract test** proving the real dependency is usable before feature code relies on it
-- cleanup/removal steps if an obsolete dependency is being replaced
-
-Dependency readiness is a prerequisite gate:
-
-```text
-select dependency
-  -> declare/pin it
-  -> install it
-  -> prove it loads/connects/executes
-  -> prove the minimum API/behavior the feature relies on
-  -> only then build feature code on top of it
-```
-
-A package merely appearing in a manifest or lockfile is **not** sufficient evidence. The plan must specify an executable check appropriate to the dependency.
-
-If the dependency itself is an in-repo production component or local service, do not fake it merely to unblock development. Install or implement the prerequisite first, then verify it with the real implementation.
-
-If a dependency is genuinely external or nondeterministic, a local/sandbox substitute may stand in for the remote side, but the in-repo adapter/client must remain real where practical.
-
-**Dependency test scope is separate from feature integration scope.** A new dependency always needs enough smoke/contract evidence to prove it is usable, while broader integration/E2E still follows the R0–R3 impact-radius decision.
-
-## Scope Check
-
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
-
-For a product feature, prefer the smallest loop that can generate reliable learning. Do not broaden architecture, governance, ontology, edge-case coverage, or generalized platform support beyond what is required to make the smallest real journey credible and learnable.
-
-## File Structure
-
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
-
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns.
-
-## Task Right-Sizing
-
-A task is the smallest implementation unit that carries its own focused test cycle and an independently testable deliverable. Fold setup, configuration, scaffolding, and documentation into the task whose deliverable needs them. Group related tasks for integrated sprint review; use an earlier task review when its risk or an explicit repository requirement warrants it. Small implementation steps are not separate review gates.
-
-Task boundaries MUST preserve the MVL journey. Do not decompose the work in a way that leaves the final integration task reconstructing a user path from mutually inconsistent local assumptions.
-
-## Plan Document Header
-
-Every plan must include the relevant review blocks before implementation tasks:
-
-```markdown
-## Product Value Validation
-
-**Applicability:** REQUIRED | NOT_APPLICABLE
-**Target user / triggering situation:** ...
-**Job-to-be-done:** ...
-**Current workaround / cost:** ...
-**Evidence provenance:** OBSERVED | INFERRED | ASSUMED | ...
-**Evidence level:** E0 | E1 | E2 | E3 | E4 | E5
-**Value proposition:** ...
-**Start event:** ...
-**Aha event:** ...
-**Target time-to-Aha:** ...
-**Pre-Aha friction:** ...
-**Hypothesis:** ...
-**Positive evidence:** ...
-**Counter-evidence / falsifier:** ...
-**Minimum validation surface:** ...
-**PMF-relevant signal:** ...
-**Claim boundary:** ...
-**Disposition:** READY_TO_PLAN | VALIDATE_FIRST | NOT_APPLICABLE
-
-## Architecture Delta Review
-
-**Applicability:** REQUIRED | NOT_APPLICABLE
-**Intent:** ...
-**Evidence basis:** ...
-**Observed architecture:** ...
-**Required properties:** ...
-**Verified delta:** ...
-**Scope fence / does not change:** ...
-**Closing evidence:** ...
-**Disposition:** PROCEED_WITH_DELTA | NO_CHANGE_REQUIRED | INVESTIGATE_UNKNOWN | REFRESH_CONTEXT | REDUCE_SCOPE | NOT_APPLICABLE
-
-## IA-Before-UI Review
-
-**Applicability:** REQUIRED | NOT_APPLICABLE
-**User task / JTBD:** target user, trigger, desired outcome, observable success; evidence vs assumptions
-**Cognitive-work allocation:** user burden → system support → remaining user judgment and reason
-**Primary domain objects:** ...
-**Canonical semantic owners:** ...
-**Task flow / proposed region hierarchy:** ...
-**Design-source mapping:** exact DESIGN.md/design.md sections, current template/showcase paths, shared primitives/variants and token owners; resolved drift
-**Fast-to-Aha path:** ...
-**Task-effort check:** baseline if available, target, verification method and evidence provenance
-**States/recovery ownership:** ...
-**Responsive constraints:** ...
-**Verification evidence:** ...
-**Stop conditions checked:** PASS | BLOCKED
-**Blocking findings:** none | ...
-**Disposition:** GO_FOR_UI | REVISE_IA | NOT_APPLICABLE
-
-## Verification Impact Analysis
-
-**Source:** codebase-memory-mcp | equivalent | manual fallback
-**Changed surfaces:** ...
-**Direct consumers:** ...
-**Affected boundaries:** ...
-**User paths at risk:** ...
-**Uncertainty:** low | medium | high
-**Radius:** R0 | R1 | R2 | R3
-**Selected tests:** ...
-**Omitted broad suites:** ...
-```
-
-For architecture-affecting work, only `PROCEED_WITH_DELTA` may precede implementation tasks; `NO_CHANGE_REQUIRED` is terminal, `INVESTIGATE_UNKNOWN` requires evidence gathering, `REFRESH_CONTEXT` requires current-state reconstruction, and `REDUCE_SCOPE` requires a smaller candidate change. For non-architecture work, Architecture Delta may be `NOT_APPLICABLE`. For non-UI work, IA may be `NOT_APPLICABLE`, but VIA still selects test scope. For material UI work, `GO_FOR_UI` must precede implementation. These are machine-verifiable structural dispositions and do not imply human approval ceremony.
-
-## Self-Review
-
-After writing the plan, check:
-
-1. Spec coverage.
-2. MVL continuity.
-3. Product Value Validation applicability, evidence level, Aha contract, falsifier, PMF claim boundary, and disposition.
-4. Dependency readiness.
-5. Architecture Delta applicability, evidence, minimality, and disposition.
-6. IA-before-UI applicability, JTBD/cognitive-work allocation, design-source mapping, task-effort check and disposition.
-7. Verification Impact Analysis and R0–R3 scope.
-8. Integration credibility.
-9. Placeholder scan.
-10. Type consistency.
-11. Authorized stopping criterion and permitted terminal dispositions are explicit.
-12. Intermediate gates cannot be mistaken for terminal states.
-13. Any user-intervention gate satisfies the User Intervention Necessity Test.
-14. A host persistent goal/objective, when present, remains the outer objective.
-
-If required Product Value Validation is missing or has unresolved material value uncertainty while claiming `READY_TO_PLAN`, if architecture-affecting work lacks a verified non-empty delta, if a material UI change lacks an IA review, or if VIA is missing/unsupported, the plan is incomplete.
-
-## Execution Handoff
-
-Before handing off execution, ensure the existing plan or its authoritative references preserve the current effective user requirements, confirmed requirement changes, key constraints, decision rationale that affects implementation tradeoffs, and acceptance criteria. Distinguish confirmed decisions from unverified assumptions; never treat an agent's inference as a user-approved requirement. Reuse precise file and section references and fill only missing information, rather than copying full conversations or creating a parallel decision ledger.
-
-When proposing concurrent implementation agents or multiple competing implementations, apply [Parallel implementation and candidate authorization](../executing-plans/SKILL.md#parallel-implementation-and-candidate-authorization). Keep the disclosed cost basis, counts, comparison criteria, budget/stopping limits, and approval reference in this plan or its existing authority source; the plan cannot authorize its own parallel strategy. Default to the single-path approach until the required approval exists.
-
-After saving the plan, continue with the execution approach already authorized by the user. Autonomous gates advance automatically; involve the user only when the User Intervention Necessity Test is met.
+**At the planning exit:** save the one authoritative plan, freeze current owner/requirements/evidence references, the integration target, target surface, stop/disposition conditions and execution authorization. Then leave this skill and invoke `executing-plans` only when actual implementation begins. Do not load final verification or branch retirement before that state.

@@ -1,65 +1,38 @@
-# Detailed Playbook
+# Detailed Verification Playbook
 
-This reference preserves the expanded workflow guidance. Load it only when the compact root contract is insufficient for the current risk/complexity.
+Load only the section needed to resolve a specific question left open by the compact skill. [Verification Impact Analysis](../../../docs/verification-impact-analysis-v1.md) owns cadence, incremental evidence and tool-output budgets; this reference does not schedule another E2E campaign.
 
-# Verification Before Completion
+## Evidence validity
 
-## Lifecycle Boundary
+Bind a reused result to the relevant implementation, tests, dependencies, configuration, fixtures, environment and acceptance contract at production time, not merely its reporting time. Use runner/CI/Git metadata already available. If the contract changed, distinguish `EXACT_REUSE`, `PARTIAL_REUSE` and `STALE` where useful; new or strengthened requirements need direct support. Uncertain identity is not a passing result. Live external claims need current observations.
 
-**Entry:** a correctness, completion, integration, merge, or release claim is imminent. **Exit:** the claim is supported, falsified, or narrowed to the evidence. A newly unexplained failure returns to debugging; a known implementation gap returns to the implementation/TDD workflow. Do not keep verification active during ordinary implementation loops.
+Inspect the assertion's meaning: inputs, expected outcome, oracle, real components, forbidden substitutes and any required repeats/thresholds. A test name, metadata validator or green command list alone does not establish coverage. One run can cover many requirements; retain one result and reference the relevant assertions only for unresolved questions. Do not manufacture a parallel evidence package.
 
-Before claiming correctness or completion:
+## Final acceptance and integration
 
-1. **Name the scope of the claim.** Distinguish a focused task, integrated implementation, and completion of a declared MVL Contract.
-2. **Identify the check that can falsify it.** Choose the smallest check capable of catching the mistake; cover real component boundaries when the claim depends on them.
-3. **Run that check, or reuse a valid unchanged-state result.** Run the full selected command, not a partial substitute.
-4. **Read the result and update the actual state.** Inspect the output, exit code, failures, and relevant measurements. A failed or unverified required check means the claimed scope is not complete. Record/report passing scope and remaining gaps concisely, then continue immediately to the next actionable repair or verification step unless the User Intervention Necessity Test in `docs/mvl-laws.md` is met. Reporting status is never itself a stop condition.
+Use established coverage plus the current delta and gap list. Read the original acceptance source when first establishing coverage or resolving change/ambiguity; do not reread every referenced document at each phase. Confirm no required condition is failed or unverified before declaring the goal achieved. An incomplete checkpoint requires targeted reconstruction, not assumed coverage.
 
-## Result Validity and Scope
+Connected journey evidence must exercise the real components on the required shared state, including restart/reopen when specified. Disconnected passing unit tests cannot substitute for it. UI acceptance starts from the actual UI through CDP or its qualified adapter; backend inspection corroborates effects rather than bypassing user actions. Use the [browser lifecycle contract](../../test-driven-development/remote-cdp-browser-lifecycle.md) for the actual required browser/native target and owned cleanup.
 
-Reuse an observed passing result when the relevant code, tests, dependencies, configuration, fixtures, and execution environment are unchanged and the result/output is available to inspect. If relevant state changed or its identity is uncertain, rerun affected checks. Live or time-sensitive external claims require a current check.
+Run the consolidated campaign at the integration-ready candidate. A later merge needs affected revalidation only when relevant state changed; preserve valid results instead of starting a second full campaign. Apply [Plan integration and retirement](../../finishing-a-development-branch/references/plan-integration-and-retirement.md) to target contents/reachability, required local integration, retained evidence and owned-resource cleanup. A narrower preservation/PR handoff exception must come from actual user/repository authority, not agent-authored plan text.
 
-Run focused tests during implementation and expensive integration at coherent sprint exits, with earlier checks for demonstrated boundary risk. Before claiming integrated completion, verify the final assembled state with the required affected integration/browser checks. A focused pass is not a full-suite pass.
+Keep plan disposition separate from the host goal. A predeclared negative/inconclusive disposition may close that run without establishing the requested outcome. Continue authorized repair/recovery; involve the user only when the User Intervention Necessity Test is met. Never mark complete to satisfy a linter. Retract disproved completion claims and restore editable status to incomplete, noting any host status that cannot be reopened.
 
-Do not rerun checks merely to send a progress update, delegate an independent task, express a non-technical acknowledgment, or enter another workflow phase.
+## Match the claim
 
-Verification decides technical claims, not whether execution should pause. A green gate advances automatically. A red gate normally creates repair/debug work. An unverified gate creates the next verification action. None of these require user judgment unless the remaining decision passes the User Intervention Necessity Test.
+| Claim | Necessary support |
+|---|---|
+| Tests/build/lint pass | Actual successful result for that scope and valid state |
+| Bug fixed | Original defect reproducer/negative control passes after the fix |
+| Behavior preserved | Adequate before/after characterization, not artificial RED ritual |
+| Architecture implemented | Real-component production wiring, not internal mocks |
+| UI goal complete | Required real-UI connected journey and effects on the integrated candidate |
+| Delegated work complete | Actual scoped diff and applicable results, not an agent assertion |
 
-Use existing test output and version history. Do not create duplicate verification packages, intermediate reports, or status ledgers unless the user or repository explicitly requires them. Required product audit/replay, persistence, and recovery contracts remain intact.
+A focused result is not full-suite success. Preserve the declared MVL's target user/job, trial inputs, technical/UX measures, feedback, justified improvement, comparable retest and stopping criterion when applicable; do not invent an MVL for maintenance. Automated clicks/screenshots cannot establish measured human benefit.
 
-## Match the Check to the Claim
+## Required artifacts and records
 
-| Claim | Required result | Does not establish it |
-|-------|-----------------|-----------------------|
-| Tests pass | Observed zero failures for the claimed scope and valid verified state | “Should pass,” unavailable or stale output |
-| Linter clean / build succeeds | The corresponding command completes successfully | A different tool passing or partial output |
-| Bug fixed | Original symptom reproduced by a test/control, then passing after the fix | Code changed or unrelated tests passing |
-| Behavior preserved | Adequate characterization/regression coverage passes before and after | An artificial RED phase or current-only pass |
-| Requirements met | Check the actual requirements against implemented behavior and applicable results | Tests passing without covering the requirements |
-| Architecture implemented | Real-component integration through production wiring | Unit tests that mock the internal architecture |
-| Frontend complete | Real-browser verification of the changed user path | jsdom, snapshots, mocked children, or source inspection alone |
-| Delegated work complete | Inspect the actual diff and applicable verification results | The agent's success assertion alone |
+When the requested deliverable is a human-readable evidence/research artifact, independently inspect its provenance, denominators, limitations, stopping reason and demonstrated versus unproved claims. This does not require an extra report about that inspection. Governance hashes attest to a performed review; recomputing a hash is not reviewing the changed content. Refresh only affected reviewed bindings.
 
-Use the test cycle selected by `superpowers:test-driven-development`: meaningful failing behavior/control for new behavior and bug fixes; adequate green-before/green-after coverage for behavior-preserving refactors. Inspect delegated results under the same reuse rule; an independent inspection does not automatically require rerunning unchanged checks.
-
-## Browser Results
-
-Before attaching a completion claim to a persistent browser, use the [browser selection and lifecycle contract](../test-driven-development/remote-cdp-browser-lifecycle.md). It owns engine selection, startup, process ownership, shared-browser protection, and cleanup.
-
-For shared Chrome rendering checks, measure and capture the same target at its natural viewport, confirm no active fixture override, clean up owned pages/sessions/clients, and confirm the shared endpoint remains reachable. A screenshot from an overridden or stale target does not establish the intended rendering result.
-
-## Declared MVL Completion
-
-Implementation completion requires verified local behavior, real-component integration where applicable, real-browser UI verification for frontend changes, and vertical/E2E verification when required.
-
-When the plan declares an MVL Contract, passing implementation checks alone does not establish MVL completion. Compare results with that contract:
-
-- Same target user / JTBD and smallest real journey.
-- Same realistic trial inputs, or documented representative fixtures.
-- Required technical and UX measurements.
-- Feedback capture that records usable data.
-- Required improvement justified by those results.
-- Comparable re-test on the same surface after improvement.
-- The declared stopping criterion satisfied.
-
-If these remain open or the journey has drifted, report implementation and MVL status separately. Resolve the mismatch with the plan/spec before claiming MVL completion; do not introduce an MVL process for work that has no such contract.
+Preserve required product audit, financial/security/replay records and useful failure evidence at their existing owner. Keeping a raw log locally does not require loading it into model context. Default to bounded summaries and inspect deeper only for the current unresolved failure. Stop when the declared claim is sufficiently supported.

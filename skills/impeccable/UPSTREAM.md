@@ -1,16 +1,16 @@
-# Upstream Impeccable Snapshot
+# Impeccable 4.9.2 — Livingware frontend-design base
 
-Livingware Engineer vendors Impeccable as its generic frontend craft and anti-slop design layer.
+The **single discoverable skill** is `skills/frontend-design/SKILL.md`, derived from Impeccable v4.9.2 with Livingware's additional IA/JTBD, cognitive-work allocation, canonical semantic ownership, evidence continuity, and governed-action boundaries.
 
-- Repository: https://github.com/pbakaus/impeccable
-- Imported commit: `b0594c72d18006b5865c70eb3a97e8b04064e600`
-- Imported source path: `.agents/skills/impeccable`
-- Upstream skill version: `4.1.2`
-- Imported on: `2026-08-29`
-- Imported file count: `168`
-- Original upstream tree SHA256: `e0121aaeb04b7c43cdc788d1ee15e15c53220a7101d49c4954af8ad4793f8cd2`
-- Tree SHA256: `89f240d32accbb8f0c43e0c95d44d920e1e95149075236a4b832fe959a0ed61d`
-- License: Apache-2.0; see `LICENSE.upstream`
-- Notice: see `NOTICE.upstream`
+- Original: https://github.com/pbakaus/impeccable
+- Upstream source ref: `main` commit/tree `d41d9860b0094dcb68030657da63461212835aaa`
+- Original skill: `.pi/skills/impeccable/SKILL.md` (`name: impeccable`, version `4.9.2`)
+- Original toolkit: `.pi/skills/impeccable/reference/`, `.pi/skills/impeccable/scripts/`
+- Livingware toolkit: `skills/impeccable/reference/`, `skills/impeccable/scripts/` (internal assets; **no `skills/impeccable/SKILL.md`**)
+- Imported on: 2026-11-17
+- Imported toolkit file count: 62; every bundled toolkit blob matches the selected upstream source by Git SHA; executable mode on `scripts/impeccable` is preserved.
+- Licenses: upstream Apache-2.0; see `LICENSE.upstream`, `NOTICE.upstream`.
 
-The snapshot contains 168 files. `SKILL.md` has two historical Livingware adaptations: commit `bba7da9` added the Fast-to-Aha law, and commit `2b652ae` narrowed the activation description and normalized the final newline. The original upstream digest is retained above; Tree SHA256 binds the currently bundled adapted tree. All other upstream files remain unchanged. Further Livingware-specific design behavior belongs in `skills/frontend-design/SKILL.md`, not in the vendored tree. To update Impeccable, replace the complete upstream snapshot from a selected commit, update this record, and rerun the frontend-design tests plus the cross-harness plugin tests.
+The upstream 4.9.2 root is retained *semantically*, with name, description, toolkit paths and Livingware-specific IA obligations integrated into `frontend-design/SKILL.md`. `skills/impeccable/` is not a separate skill and should never be activated as one. Do not revive the legacy 4.1.2 Node orchestration as a compatibility fallback. The 4.9.2 launcher uses the upstream self-contained executable distribution; actual launcher download/execution still requires an eligible test environment and must not be inferred from source parity alone.
+
+Upstream updates should version-pin a selected new commit, compare command/tool/resource contracts, update the toolkit and unified root together, and verify one discoverable skill and at least one real UI execution path before promotion. Do not automatically update `main` because upstream changed.

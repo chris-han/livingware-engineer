@@ -157,7 +157,7 @@ def read_version(stage: Path) -> str:
 
 
 def seed_metadata(stage: Path, metadata: Path) -> int:
-    skills = sorted(p for p in (stage / "skills").iterdir() if p.is_dir())
+    skills = sorted(p for p in (stage / "skills").iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
     missing = []
     for skill_dir in skills:
         src = metadata / "skills" / skill_dir.name / "agents" / "openai.yaml"

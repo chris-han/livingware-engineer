@@ -25,12 +25,16 @@ assert_not_contains() {
   fi
 }
 
-# Browser evidence lanes remain explicit and non-duplicative.
-assert_contains "$WRITING_GOOD_TESTS" 'BEHAVIOR:'
-assert_contains "$WRITING_GOOD_TESTS" 'Lightpanda at `http://127.0.0.1:9223`'
-assert_contains "$WRITING_GOOD_TESTS" 'RENDERING:'
-assert_contains "$WRITING_GOOD_TESTS" 'remote Windows Chrome at `http://127.0.0.1:9222`'
-assert_contains "$WRITING_GOOD_TESTS" 'run both only when the acceptance criterion genuinely requires independent behavior and rendering evidence'
+# Verify the generic policy resolves product/host and leaves engine selection to the project.
+assert_contains "$WRITING_GOOD_TESTS" 'project-qualified real browser'
+assert_contains "$WRITING_GOOD_TESTS" 'project-qualified rendering browser'
+assert_contains "$REMOTE_LIFECYCLE" 'product surface'
+assert_contains "$REMOTE_LIFECYCLE" 'project-controlled'
+assert_contains "$WRITING_GOOD_TESTS" 'actual app only for native acceptance'
+assert_not_contains "$REMOTE_LIFECYCLE" 'Lightpanda at '
+assert_not_contains "$WRITING_GOOD_TESTS" 'remote Windows Chrome at '
+assert_not_contains "$WRITING_GOOD_TESTS" 'Lightpanda :9223'
+assert_not_contains "$REMOTE_LIFECYCLE" '127.0.0.1:9222'
 
 # Authenticated browser fixtures must not depend on human/external login setup.
 assert_contains "$WRITING_GOOD_TESTS" '### Authenticated Frontend Fixture Rule'
@@ -49,4 +53,4 @@ assert_contains "$WRITING_GOOD_TESTS" 'remote-cdp-browser-lifecycle.md'
 assert_not_contains "$WRITING_GOOD_TESTS" 'use Chrome for all frontend tests'
 assert_not_contains "$WRITING_GOOD_TESTS" 'use Lightpanda for rendering correctness'
 
-echo "PASS: browser evidence selection and authenticated fixture policy"
+echo "PASS: project-selected browser/host evidence and authenticated fixture policy"

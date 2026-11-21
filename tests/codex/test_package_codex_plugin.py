@@ -96,7 +96,7 @@ def main() -> int:
         research_services = "skills/research-methodology/references/research-services.md"
         require(research_services in paths, "archive includes the shared research-service contract")
         require("skills/brainstorming/agents/openai.yaml" in paths, "archive includes OpenAI metadata")
-        probe_paths = ["tests/codex/probe-isolation.sh", "tests/codex/live-progressive-skill-probe.sh", "tests/codex/live-ia-via-mvl-probe.sh", "tests/eval-skills/live-skill-runtime-eval.sh", "scripts/compile-live-skill-eval.py", "package.json"]
+        probe_paths = ["tests/codex/probe-isolation.sh", "tests/codex/verify-windows-probe.ps1", "tests/codex/live-progressive-skill-probe.sh", "tests/codex/live-ia-via-mvl-probe.sh", "tests/eval-skills/live-skill-runtime-eval.sh", "scripts/compile-live-skill-eval.py", "package.json"]
         require(all(p in paths for p in probe_paths), "archive includes isolated probes, callers, and runtime dependencies")
         allowed_source_paths = set(probe_paths) | {"scripts/update-installed-codex-plugin.sh", "tests/codex", "tests/eval-skills"}
         require(not any((p.startswith(("tests/", "docs/", "scripts/")) and p not in allowed_source_paths) for p in paths), "archive excludes other source-only paths")

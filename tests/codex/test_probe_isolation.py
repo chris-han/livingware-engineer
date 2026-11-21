@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -77,6 +78,19 @@ print(json.dumps({'text': 'OK root cause investigation regression test implement
         self.assertEqual((self.codex / 'config.toml').read_bytes(), self.original)
         self.assertEqual((self.codex / 'plugins/cache/fixture').read_text(), 'plugin')
         self.assertEqual((self.codex / 'auth.json').read_text(), '{"fixture": true}')
+
+    def test_explicit_interpreter_is_used_and_invalid_one_fails(self):
+        wrapper = self.root / 'chosen-python'
+        log = self.root / 'python-used'
+        wrapper.write_text('#!/bin/sh\necho invoked >> "' + str(log) + '"\nexec "' + sys.executable + '" "$@"\n')
+        wrapper.chmod(0o755)
+        result = self.run_probe(CODEX_PROBE_PYTHON=str(wrapper))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(log.exists())
+        result = self.run_probe(CODEX_PROBE_PYTHON=str(self.root / 'missing-python'))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Python 3.8 or newer is required', result.stderr)
+        self.assert_user_unchanged()
 
     def test_repeated_and_concurrent_runs(self):
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:

@@ -27,6 +27,7 @@ SOURCE_PATHS = [
     "scripts/compile-live-skill-eval.py",
     "scripts/update-installed-codex-plugin.sh",
     "tests/codex/probe-isolation.sh",
+    "tests/codex/verify-windows-probe.ps1",
     "tests/codex/live-progressive-skill-probe.sh",
     "tests/codex/live-ia-via-mvl-probe.sh",
     "tests/eval-skills/live-skill-runtime-eval.sh",

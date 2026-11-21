@@ -25,13 +25,13 @@ setup_fixture() {
     local source_dir="$PROBE_WORKDIR" git_root relative_dir="."
     git_root="$(git -C "$source_dir" rev-parse --show-toplevel 2>/dev/null || true)"
     if [[ -n "$git_root" ]]; then
-      relative_dir="$(python3 -c 'import os,sys; print(os.path.relpath(os.path.realpath(sys.argv[1]), os.path.realpath(sys.argv[2])))' "$source_dir" "$git_root")" || exit 2
+      relative_dir="$("$PYTHON_BIN" -c 'import os,sys; print(os.path.relpath(os.path.realpath(sys.argv[1]), os.path.realpath(sys.argv[2])))' "$source_dir" "$git_root")" || exit 2
       source_dir="$git_root"
       git clone --quiet --no-hardlinks -- "$source_dir" "$TEMP_ROOT/project" || exit 2
     else
       mkdir -p "$TEMP_ROOT/project" || exit 2
     fi
-    python3 - "$source_dir" "$TEMP_ROOT/project" <<'PY' || exit 2
+    "$PYTHON_BIN" - "$source_dir" "$TEMP_ROOT/project" <<'PY' || exit 2
 import os, shutil, sys
 source, target = map(os.path.realpath, sys.argv[1:])
 if os.path.commonpath((source, target)) == source:
@@ -111,7 +111,7 @@ classify_runtime_failure() {
 }
 
 extract_usage_counts() {
-  python3 - "$1" <<'PY'
+  "$PYTHON_BIN" - "$1" <<'PY'
 import json, sys
 latest=None
 for line in open(sys.argv[1], encoding='utf-8', errors='ignore'):
@@ -135,7 +135,7 @@ PY
 
 observed_skill_event() {
   local json_file="$1" skill="$2"
-  python3 - "$json_file" "$skill" <<'PY'
+  "$PYTHON_BIN" - "$json_file" "$skill" <<'PY'
 import json, re, sys
 
 json_file, skill = sys.argv[1], sys.argv[2]
@@ -222,7 +222,7 @@ routing_oracle() {
 
 behavior_oracle() {
   local name="$1" json_file="$2" text
-  text="$(python3 - "$json_file" <<'PY'
+  text="$("$PYTHON_BIN" - "$json_file" <<'PY'
 import json,sys
 out=[]
 for line in open(sys.argv[1], encoding='utf-8', errors='ignore'):

@@ -24,7 +24,7 @@ prompts=(
 )
 
 extract_text() {
-  python3 - "$1" <<'PY'
+  "$PYTHON_BIN" - "$1" <<'PY'
 import json, sys
 out=[]
 for line in open(sys.argv[1], encoding='utf-8', errors='ignore'):

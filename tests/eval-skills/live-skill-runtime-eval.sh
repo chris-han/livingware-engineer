@@ -12,8 +12,18 @@ RUN_ID="${OUT_DIR##*/}"
 RESULT="$OUT_DIR/eval-run.json"
 CODEX_BIN="${CODEX_BIN:-codex}"
 
+PYTHON_BIN="${CODEX_PROBE_PYTHON:-}"
+if [[ -z "$PYTHON_BIN" ]]; then
+  for candidate in python3 python; do
+    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' >/dev/null 2>&1; then
+      PYTHON_BIN="$(command -v "$candidate")"; break
+    fi
+  done
+fi
+[[ -n "$PYTHON_BIN" ]] && "$PYTHON_BIN" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' >/dev/null 2>&1 || { echo "ERROR: Python 3.8 or newer is required" >&2; exit 2; }
+export CODEX_PROBE_PYTHON="$PYTHON_BIN"
 repository_commit="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
-livingware_version="$(python3 - "$ROOT/package.json" <<'PY'
+livingware_version="$("$PYTHON_BIN" - "$ROOT/package.json" <<'PY'
 import json, sys
 print(json.load(open(sys.argv[1], encoding="utf-8"))["version"])
 PY
@@ -35,7 +45,7 @@ if [[ -z "$summary" || ! -f "$summary" ]]; then
 fi
 codex_version="$(sed -n $'s/^codex-version\t//p' "${summary%/*}/run-info.tsv" | head -1)"
 
-python3 "$ROOT/scripts/compile-live-skill-eval.py" \
+"$PYTHON_BIN" "$ROOT/scripts/compile-live-skill-eval.py" \
   "$summary" "$RESULT" \
   --probe-exit-code "$probe_rc" \
   --run-id "$RUN_ID" \

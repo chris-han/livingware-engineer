@@ -34,7 +34,12 @@ setup_fixture() {
     "$PYTHON_BIN" - "$source_dir" "$TEMP_ROOT/project" <<'PY' || exit 2
 import os, shutil, sys
 source, target = map(os.path.realpath, sys.argv[1:])
-if os.path.commonpath((source, target)) == source:
+try:
+    nested = os.path.commonpath((source, target)) == source
+except ValueError:
+    # Absolute paths on different Windows drives cannot contain each other.
+    nested = False
+if nested:
     raise SystemExit('ERROR: probe temporary directory must be outside the supplied project')
 for name in os.listdir(target):
     if name == '.git': continue

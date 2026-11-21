@@ -1,12 +1,20 @@
 # Run in a real Windows PowerShell session, not CodexSandboxOnline.
 param(
     [Parameter(Mandatory=$true)][string]$Python,
+    [Parameter(Mandatory=$true)][string]$ExpectedCommit,
     [string]$Bash = "$env:ProgramFiles\Git\bin\bash.exe"
 )
 $ErrorActionPreference = 'Stop'
 $Python = (Resolve-Path -LiteralPath $Python).Path
 $Bash = (Resolve-Path -LiteralPath $Bash).Path
 $probe = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot 'probe-isolation.sh')).Path
+$repo = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
+$git = (Resolve-Path -LiteralPath "$env:ProgramFiles\Git\cmd\git.exe").Path
+$actualCommit = (& $git -C $repo rev-parse HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or $actualCommit -ne $ExpectedCommit) { throw "Unexpected qualification commit: $actualCommit" }
+& $git -C $repo diff --quiet HEAD -- tests/codex/probe-isolation.sh tests/codex/verify-windows-probe.ps1 tests/codex/live-progressive-skill-probe.sh tests/codex/live-ia-via-mvl-probe.sh
+if ($LASTEXITCODE -ne 0) { throw 'Qualification source files differ from HEAD' }
+Write-Output "WINDOWS PROBE QUALIFICATION COMMIT: $actualCommit"
 $env:LW_QUAL_BASH = $Bash
 $env:LW_QUAL_PYTHON = $Python
 $env:LW_QUAL_PROBE = $probe
@@ -74,6 +82,42 @@ exit "$8"
         paths = list(pool.map(normal, ('concurrent1', 'concurrent2')))
     assert paths[0] != paths[1]
     normal('retained', keep='1')
+    # Exercise the real progressive caller, with its source on the checkout's
+    # drive and private state on the system temporary drive.
+    checkout = pathlib.Path(probe).resolve().parents[2]
+    assert checkout.drive.lower() != root.drive.lower(), (
+        'Cross-drive qualification requires the checkout and TEMP on different drives', checkout, root)
+    fake_py = root / 'fake-codex.py'
+    fake_py.write_text('''import json, os, pathlib, sys
+if '--version' in sys.argv:
+    print('codex fixture')
+    raise SystemExit(0)
+project = pathlib.Path(sys.argv[sys.argv.index('-C') + 1])
+(project / 'generated').write_text('isolated')
+print(json.dumps({'text': 'OK root cause investigation regression test implementation change fix evidence claim ready'}))
+''')
+    fake_sh = root / 'fake-codex.sh'
+    fake_sh.write_text('#!/usr/bin/env bash\nexec "$CODEX_PROBE_PYTHON" "$LW_FAKE_PY" "$@"\n')
+    with tempfile.TemporaryDirectory(prefix='livingware-cross-drive-', dir=str(checkout.parent)) as source_dir:
+        project = pathlib.Path(source_dir)
+        (project / 'keep').write_text('original')
+        live_source = r'''set -u
+SCRIPT=$(cygpath -u "$1"); PROFILE=$(cygpath -u "$2"); PRIVATE=$(cygpath -u "$3")
+PROJECT=$(cygpath -u "$4"); FAKE=$(cygpath -u "$5"); OUTPUT=$(cygpath -u "$6")
+chmod +x "$FAKE"
+export HOME="$PROFILE" CODEX_HOME="$PROFILE/.codex" TMPDIR="$PRIVATE"
+export CODEX_PROBE_PYTHON="$7" LW_FAKE_PY="$8" CODEX_BIN="$FAKE"
+export CODEX_PROBE_WORKDIR="$PROJECT" CODEX_PROBE_OUTPUT_DIR="$OUTPUT"
+export CODEX_PROBE_RETRIES=1 CODEX_PROBE_TIMEOUT=10 CODEX_PROBE_BACKOFF=0 CODEX_PROBE_KEEP_TEMP=0
+exec bash "$SCRIPT"
+'''
+        live = subprocess.run([bash, '--noprofile', '--norc', '-c', live_source, '_',
+                               str(checkout / 'tests/codex/live-progressive-skill-probe.sh'),
+                               str(profile), str(temp), str(project), str(fake_sh),
+                               str(root / 'output'), python, str(fake_py)],
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
+        assert live.returncode == 0, (live.returncode, live.stderr.decode(errors='replace'))
+        assert (project / 'keep').read_text() == 'original' and not (project / 'generated').exists()
     p, ready = start('terminated', delay='4')
     path = wait_ready(p, ready)
     deadline = time.monotonic() + 10

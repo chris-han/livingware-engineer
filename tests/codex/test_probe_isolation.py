@@ -149,6 +149,30 @@ print(json.dumps({'text': 'OK root cause investigation regression test implement
         self.assertFalse(list(self.temp.iterdir()))
         self.assertEqual(len(list((self.root / 'output').glob('*/summary.tsv'))), 2)
 
+    def test_supplied_workdir_on_another_drive_is_snapshotted(self):
+        # Native Windows commonpath raises ValueError across drives. Inject that
+        # platform condition at the Python boundary while exercising the real probe.
+        project = self.root / 'cross-drive-project'
+        project.mkdir()
+        (project / 'keep').write_text('untouched')
+        startup = self.root / 'python-startup'
+        startup.mkdir()
+        (startup / 'sitecustomize.py').write_text("""
+import os
+original = os.path.commonpath
+def commonpath(paths):
+    paths = tuple(paths)
+    if len(paths) == 2 and paths[0].endswith('cross-drive-project') and paths[1].endswith('/project'):
+        raise ValueError('Paths do not have the same drive')
+    return original(paths)
+os.path.commonpath = commonpath
+""")
+        result = self.run_probe(CODEX_PROBE_WORKDIR=str(project), PYTHONPATH=str(startup))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((project / 'keep').read_text(), 'untouched')
+        self.assert_user_unchanged()
+        self.assertFalse(list(self.temp.iterdir()))
+
     def test_supplied_workdir_is_never_removed(self):
         project = self.root / 'user-project'
         project.mkdir()
@@ -156,6 +180,13 @@ print(json.dumps({'text': 'OK root cause investigation regression test implement
         result = self.run_probe(CODEX_PROBE_WORKDIR=str(project))
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual((project / 'keep').read_text(), 'untouched')
+        self.assertFalse(list(self.temp.iterdir()))
+
+    def test_temporary_directory_inside_supplied_workdir_is_rejected(self):
+        result = self.run_probe(CODEX_PROBE_WORKDIR=str(self.root))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('probe temporary directory must be outside the supplied project', result.stderr)
+        self.assert_user_unchanged()
         self.assertFalse(list(self.temp.iterdir()))
 
     def test_supplied_git_workdir_is_snapshotted_for_concurrent_runs(self):

@@ -1,3 +1,7 @@
+# 6.17.2 (2026-11-21)
+
+- Fix isolated Codex probe snapshots when the supplied project and temporary state are on different Windows drives.
+
 # 6.17.1 (2026-11-21)
 
 - Isolate Codex live probes from user configuration, sessions and temporary state.

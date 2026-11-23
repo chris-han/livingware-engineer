@@ -35,7 +35,7 @@ def test_plan_integration_authority_contract():
  ):
   assert invariant in policy, invariant
  for skill in ("writing-plans", "executing-plans", "finishing-a-development-branch", "verification-before-completion", "using-git-worktrees"):
-  assert "references/plan-integration-and-retirement.md" in t(f"skills/{skill}/SKILL.md"),skill
+  assert "references/plan-integration-and-retirement.md" in phase(skill),skill
 
 
 def test_plan_completion_requires_retirement_evidence():

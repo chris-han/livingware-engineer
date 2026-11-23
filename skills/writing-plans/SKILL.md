@@ -19,7 +19,7 @@ Preserve one mutable plan in the repository's declared authoritative checkout/lo
 - **What changes:** smallest source/contract delta and applicable implementation/testing owner; name any real integration and changed downstream caller.
 - **What unlocks expansion:** a demonstrated error, changed contract, unknown owner, protected boundary or material risk. No speculative repo-wide search, new infrastructure or hypothetical test campaign.
 - **Which surface:** distinguish user-visible frontend/product and delivery phase from implementation host, browser and platform-specific acceptance. Never imply a Windows/native capability from a web-only test or file format.
-- **Requirements:** preserve effective accepted requirements and constraints; when materially unclear use [requirements workflow](../requirements-clarification/references/requirements-workflow.md), not an automatic elicitation round.
+- **Requirements:** preserve effective accepted requirements and constraints; when materially unclear use [requirements workflow](../requirements-clarification/references/requirements-workflow.md), not an automatic elicitation round. When an existing authoritative behavioral spec has an accepted material change, reference the affected requirement delta and acceptance observations at their owner; map to applicable existing tests/results before adding any verification task. Do not copy specs into the plan, mandate scenarios for unchanged requirements or add a spec-validation phase.
 
 ## Applicable engineering checks
 

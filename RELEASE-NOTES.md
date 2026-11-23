@@ -1,3 +1,9 @@
+# 6.17.4 (2026-11-24)
+
+- Add conditional behavioral-spec evolution to existing requirements, planning and verification skills; preserve accepted behavior, applicability context, source identity and promotion authority when requirements materially change.
+- Reuse existing authoritative specs, tests and acceptance evidence. No OpenSpec CLI, separate spec registry, automatic scenario/test/E2E campaigns, new approval gate, traceability matrix or additional report.
+- Qualification: static contract checks and version-manifest consistency only; no live agent-behavior or token/latency improvement claims.
+
 # 6.17.3 (2026-11-23)
 
 - Tighten `executing-plans` goal-preserving recovery: distinguish failed implementation paths, blocked acceptance gates and genuinely blocked end goals. Require proof that no useful authorized independent work remains before whole-goal STOP.

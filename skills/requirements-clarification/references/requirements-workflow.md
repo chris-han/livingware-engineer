@@ -72,6 +72,14 @@ Ask only the smallest question whose alternatives change the next decision and c
 
 After a material answer or revision, recheck the affected dependency set, including exceptions and downstream acceptance criteria. Preserve unaffected valid evidence. Continue parsing, candidate modeling and independent analysis where safe; hold only an action whose correctness or authority actually depends on the unresolved item. Diagnostics, assessment, admission and activation remain separate.
 
+### Bounded behavioral-spec evolution (conditional)
+
+When a durable, externally observable behavior requirement materially changes and an authoritative specification already exists, record only the affected requirements at that owner. `ADDED`, `MODIFIED`, `REMOVED`, and `RENAMED` are optional change labels, not a mandated schema or tool dependency. For `MODIFIED`, retain the full resulting requirement, including unchanged scope, conditions, exceptions and acceptance observations; for `RENAMED`, preserve source/identity mappings; for `REMOVED`, preserve the reason and governing authority. Context-limited nonapplicability is not global removal. An unaccepted proposal or unresolved interpretation is not the operative spec, and external binding sources remain unchanged.
+
+Use a concrete scenario only when it clarifies material behavior or exposes a real acceptance-evidence gap. Reuse an existing scenario, test or applicable result before asking for more verification; scenarios never automatically require new tests. Do not create spec deltas for behavior-preserving refactors, fixes that restore the accepted contract, or work with no relevant authoritative behavioral spec. Do not introduce a second spec, traceability matrix, report, review gate or archive workflow.
+
+After the existing authorized disposition and applicable engineering verification, reconcile the accepted change within the authoritative specification under its normal version/ownership rules. A completed task, passing test or archived change does not alone authorize normative promotion. Preserve historical references and unresolved conditions; recheck only affected dependencies and evidence.
+
 ## 5. Preserve continuity when work can outlive the conversation
 
 For work spanning sessions, waiting, interruption or effects that must not be repeated, bind progress to an existing durable task/workflow owner. The skill contains reusable procedure; it does not become a second authority for task state.

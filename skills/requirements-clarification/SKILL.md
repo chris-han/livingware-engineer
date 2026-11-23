@@ -19,7 +19,7 @@ Enter at the actual unresolved state: elicit missing intent, clarify meaning, te
 2. Make material actors, outcomes, system boundaries, control, interfaces, real-world constraints, conditions, exceptions, time and acceptance observations explicit enough to assess the next decision.
 3. Check relevant requirements together before polishing their wording. Distinguish a verified contradiction, a suspected conflict, ambiguity, incomplete coverage and a supported exception or precedence resolution.
 4. Resolve from existing authority/evidence and standing delegation first. Ask the smallest decision-changing question only when user-owned input is still necessary; continue independent safe work.
-5. Record the disposition and rationale at the existing owner. Treat a proposed repair separately from an accepted change, preserve unresolved items, and recheck affected requirements after a material answer or edit.
+5. Record the disposition and rationale at the existing owner. Treat a proposed repair separately from an accepted change, preserve unresolved items, and recheck affected requirements after a material answer or edit. When an existing authoritative behavioral specification materially changes, apply the shared contract's bounded spec-delta rules at that owner; do not create a separate spec or gate.
 6. For work that spans interruption, sessions, waiting or consequential effects, recover from the authoritative task/artifact basis under the shared continuity contract. Reuse committed results and exact versions.
 
 ## Exit and handoff

@@ -65,7 +65,7 @@ require "$LEARNING_REF" "REAL_REEXECUTION" "learning contract distinguishes real
 # Progressive phase entry is a routing invariant, not a word-count contest.
 require "$DESIGN" "Do not preload planning, implementation, or verification skills" "design remains the active phase until settled"
 require "$PLANNING" "Do not preload the UI craft tool" "planning does not preload visual craft"
-require "$PLANNING" "invoke `executing-plans` only when actual implementation begins" "planning exits before execution"
+require "$PLANNING" 'invoke `executing-plans` only when actual implementation begins' "planning exits before execution"
 require "$EXECUTING" "Do not preload verification" "execution does not preload completion verification"
 require "$EXECUTING" "No parallel tracker." "execution reuses the plan as authority"
 require "$FINAL" "Do not preload during implementation" "final verification is a claim check only"

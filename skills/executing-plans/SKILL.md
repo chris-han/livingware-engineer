@@ -40,6 +40,19 @@ Only actual unavailable user-owned access, authorization, consequential external
 
 For nonroutine execution economics compare complete loop cost, not just tokens: reuse [execution economics](references/execution-economics.md) and [token-efficient policy](../using-superpowers/references/token-efficient-execution.md) only when needed. No automatic telemetry reporting, huge model/CDP traces or speculative performance claim; inaccessible token counts are UNKNOWN.
 
+## Goal-preserving recovery — STOP has the burden of proof
+
+**Keep the outcome and acceptance conditions fixed; let the implementation path change.** Distinguish four different dispositions instead of promoting a failed prerequisite into whole-goal failure:
+
+- `PATH_FAILED` — one selected approach, tool, environment or prerequisite fails. Diagnose its actual mismatch and pursue the smallest other **authorized** route; Plan A/Plan B examples are not an exhaustive menu.
+- `GATE_BLOCKED` — one required acceptance gate cannot currently pass without a protected external dependency. Preserve that gate as unverified and **continue dependency-independent, materially useful work** toward the same goal.
+- `GOAL_BLOCKED` — the goal is still unverified **and** no remaining authorized, dependency-ready work can materially advance it; the exact missing external access, authority, credential or non-delegable decision is identified.
+- `GOAL_VERIFIED` — the whole declared outcome, required real-path evidence and integration obligations are satisfied. A code change, test count or recovered route alone is not this state.
+
+**Before declaring `GOAL_BLOCKED`, prove the stop condition rather than just listing failed paths.** Recheck the original goal and remaining gates; distinguish genuine financial/identity/provider limits from repairable engineering faults. Evaluate the smallest safe alternative within scope and the next independently executable gate (including source, authorization, delegated-tool and deterministic verification work when live provider access is absent). Perform that work if useful; do not ask for permission already delegated. If nothing remains, name the exact unavailable input, the alternatives ruled out, the independent work already completed or legitimately inapplicable, and the condition that would resume execution. Record this briefly in the **existing plan**, not a separate STOP dossier.
+
+**Counterexample:** A model provider cannot be admitted, but a protected agent's delegated tool interface and idempotency can still be implemented and tested without model calls. The provider gate is `GATE_BLOCKED`; stopping the whole goal before that independent work is done is premature. This does **not** permit fabricated paid inference, model-selection traces, source evidence, credentials, funds, or bypassed security. Do not explore unlimited speculative alternatives: select bounded, outcome-relevant work, and respect real user-owned limits and explicitly terminal negative/research predicates.
+
 ## Completion transition (not an eager skill)
 
 At the actual goal/merge/release boundary, use `verification-before-completion` only to resolve evidence sufficiency. Once implementation is ready and the authorized integration action is known, enter `finishing-a-development-branch` for integration and owned retirement, applying [plan integration and retirement](../finishing-a-development-branch/references/plan-integration-and-retirement.md). Preserve the plan's actual `execution_commit`/integrated SHA and any required parent/submodule gitlink. Do not rerun a satisfied E2E on a skill transition or create a second completion matrix.

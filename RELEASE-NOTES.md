@@ -1,3 +1,9 @@
+# 6.17.3 (2026-11-23)
+
+- Tighten `executing-plans` goal-preserving recovery: distinguish failed implementation paths, blocked acceptance gates and genuinely blocked end goals. Require proof that no useful authorized independent work remains before whole-goal STOP.
+- Clarify the MVL intervention boundary and add focused Codex source-contract regression assertions; preserve security, financial, evidence, bounded-research and delegated-execution limits.
+- Qualification in this GitHub-only update: deterministic source assertions and version-manifest consistency inspected; no live Codex agent behavior comparison or installed-plugin activation has been run.
+
 # 6.17.2 (2026-11-21)
 
 - Fix isolated Codex probe snapshots when the supplied project and temporary state are on different Windows drives.

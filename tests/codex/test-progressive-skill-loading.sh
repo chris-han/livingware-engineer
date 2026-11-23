@@ -36,9 +36,11 @@ ROUTER="$CONTRACT_ROOT/skills/using-superpowers/SKILL.md"
 DEBUG="$CONTRACT_ROOT/skills/systematic-debugging/SKILL.md"
 TDD="$CONTRACT_ROOT/skills/test-driven-development/SKILL.md"
 VERIFY="$CONTRACT_ROOT/skills/verification-before-completion/SKILL.md"
+EXECUTE="$CONTRACT_ROOT/skills/executing-plans/SKILL.md"
+MVL_LAWS="$CONTRACT_ROOT/docs/mvl-laws.md"
 PROGRESSIVE="$CONTRACT_ROOT/skills/using-superpowers/references/progressive-skill-loading.md"
 
-for f in "$ROUTER" "$DEBUG" "$TDD" "$VERIFY" "$PROGRESSIVE"; do
+for f in "$ROUTER" "$DEBUG" "$TDD" "$VERIFY" "$EXECUTE" "$MVL_LAWS" "$PROGRESSIVE"; do
   [[ -f "$f" ]] || fail "missing progressive-loading contract: $f"
 done
 pass "all progressive-loading contract files exist"
@@ -85,6 +87,20 @@ require_text "$PROGRESSIVE" "At most one should govern current reasoning except 
   "progressive contract limits active workflow ownership"
 require_text "$PROGRESSIVE" "Pass compact state across transitions" \
   "progressive contract requires compact handoff"
+
+require_text "$EXECUTE" "## Goal-preserving recovery — STOP has the burden of proof" \
+  "executing-plans owns goal-preserving STOP check"
+require_text "$EXECUTE" "`PATH_FAILED`" "one failed path does not terminate the goal"
+require_text "$EXECUTE" "`GATE_BLOCKED`" "a blocked prerequisite is gate-scoped"
+require_text "$EXECUTE" "`GOAL_BLOCKED`" "whole-goal stop is explicitly distinguished"
+require_text "$EXECUTE" "continue dependency-independent, materially useful work" \
+  "blocked live-provider gate must not stop independent tool work"
+require_text "$EXECUTE" "Before declaring `GOAL_BLOCKED`, prove the stop condition" \
+  "STOP requires proof of exhausted in-scope recovery"
+require_text "$EXECUTE" "does **not** permit fabricated paid inference" \
+  "goal recovery preserves protected financial and evidence gates"
+require_text "$MVL_LAWS" "**STOP requires exhaustion evidence**" \
+  "cross-cutting MVL law rejects premature whole-goal STOP"
 
 if [[ "${LIVE_CODEX:-0}" == "1" ]]; then
   "$ROOT/tests/codex/live-progressive-skill-probe.sh"

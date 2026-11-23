@@ -22,6 +22,12 @@ An early bounded real-path diagnostic smoke is justified only by a named unresol
 
 On failure, repair the failed seam and rerun the affected journey or checks rather than expanding the plan or repeating unrelated evidence. First-loop success is progress, not goal completion; all required acceptance and integration conditions still apply.
 
+### Goal-preserving recovery and blocker levels
+
+**A failed execution path is not a failed goal; a blocked gate is not permission to stop all work.** Keep the original acceptance contract and authority boundaries fixed while adapting the implementation, including safe alternatives not enumerated in an initial Plan A/B. Label a failed approach `PATH_FAILED`, a presently unprovable gate `GATE_BLOCKED`, and an entire execution `GOAL_BLOCKED` only after checking that no independent, authorized, dependency-ready action still materially advances the outcome. When external credentials, funding, supplier availability or approvals block a real E2E result, implement and verify any remaining independent source/tool/authorization work rather than claiming an E2E pass or declaring premature whole-goal STOP. Do not search indefinitely or exceed an explicit scope, spend, authority or real-world safety limit.
+
+**STOP requires exhaustion evidence**, not a long process report: in the existing plan state the exact unmet gate, the protected missing dependency, the compliant alternatives considered, and why no useful authorized work remains. A bounded experiment with a predeclared negative or inconclusive terminal may close at its declared predicate without claiming the larger product goal. Follow [executing-plans](../skills/executing-plans/SKILL.md#goal-preserving-recovery--stop-has-the-burden-of-proof) for the compact execution contract.
+
 ### User Intervention Necessity Test
 
 User intervention is a scarce input, not a generic workflow gate. Apply standing user delegation first. A running plan or workflow may interrupt the user only when all three are true:

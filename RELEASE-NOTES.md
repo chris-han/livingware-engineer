@@ -1,3 +1,9 @@
+# 6.17.5 (2026-11-25)
+
+- Make minimum sufficient change operational at design and execution decisions: additional defensive code, edge cases and verification must follow a binding requirement or credible failure mechanism on the intended path, considering consequences and existing controls.
+- Preserve preventive treatment of credible threats at real trust boundaries and all binding security, safety, integrity, authority and correctness constraints. Do not add speculative hardening, new gates, risk matrices, skills or evidence artifacts.
+- Qualification: static change and version-manifest checks only; no live Codex behavior, installed-plugin activation or measured token/cost improvement claim.
+
 # 6.17.4 (2026-11-24)
 
 - Add conditional behavioral-spec evolution to existing requirements, planning and verification skills; preserve accepted behavior, applicability context, source identity and promotion authority when requirements materially change.
